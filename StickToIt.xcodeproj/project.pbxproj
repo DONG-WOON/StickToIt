@@ -36,6 +36,8 @@
 		729AC47A2AC6EB4200E910D5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4792AC6EB4200E910D5 /* User.swift */; };
 		729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */; };
 		729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47D2AC6EBA100E910D5 /* Plan.swift */; };
+		729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4812AC6F68900E910D5 /* Entity+Mapping.swift */; };
+		729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4832AC6F69400E910D5 /* Model+Mapping.swift */; };
 		729AC4872AC7286400E910D5 /* ShowPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */; };
 		729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
@@ -68,6 +70,8 @@
 		729AC4792AC6EB4200E910D5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlan.swift; sourceTree = "<group>"; };
 		729AC47D2AC6EBA100E910D5 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
+		729AC4812AC6F68900E910D5 /* Entity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entity+Mapping.swift"; sourceTree = "<group>"; };
+		729AC4832AC6F69400E910D5 /* Model+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+Mapping.swift"; sourceTree = "<group>"; };
 		729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPlanUseCase.swift; sourceTree = "<group>"; };
 		729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlan.swift; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				729AC4852AC726AA00E910D5 /* UseCase */,
+				729AC47F2AC6F65500E910D5 /* Mapper */,
 				729AC4502AC496EB00E910D5 /* Repositories_Interface */,
 				7217B0092AC2BB7F002C3112 /* Model */,
 			);
@@ -225,6 +230,15 @@
 				729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		729AC47F2AC6F65500E910D5 /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				729AC4812AC6F68900E910D5 /* Entity+Mapping.swift */,
+				729AC4832AC6F69400E910D5 /* Model+Mapping.swift */,
+			);
+			path = Mapper;
 			sourceTree = "<group>";
 		};
 		729AC4852AC726AA00E910D5 /* UseCase */ = {
@@ -378,8 +392,10 @@
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
+				729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */,
 				72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */,
 				7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */,
+				729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */,
 				729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */,
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
 				729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */,
