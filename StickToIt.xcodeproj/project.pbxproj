@@ -18,6 +18,10 @@
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
+		729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC46F2AC5A95800E910D5 /* PlanEntity.swift */; };
+		729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4712AC5AA9100E910D5 /* UserEntity.swift */; };
+		729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */; };
+		729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */; };
 		729AC47A2AC6EB4200E910D5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4792AC6EB4200E910D5 /* User.swift */; };
 		729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */; };
 		729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47D2AC6EBA100E910D5 /* Plan.swift */; };
@@ -41,6 +45,10 @@
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		729AC46F2AC5A95800E910D5 /* PlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEntity.swift; sourceTree = "<group>"; };
+		729AC4712AC5AA9100E910D5 /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
+		729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanEntity.swift; sourceTree = "<group>"; };
+		729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlanEntity.swift; sourceTree = "<group>"; };
 		729AC4792AC6EB4200E910D5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlan.swift; sourceTree = "<group>"; };
 		729AC47D2AC6EBA100E910D5 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
@@ -82,7 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				7217AFF82AC2AF09002C3112 /* Tab */,
-				7217AFF52AC2AEC3002C3112 /* Scene */,
 			);
 			path = "Presentation-Layer";
 			sourceTree = "<group>";
@@ -90,7 +97,7 @@
 		7217AFF32AC2AE9A002C3112 /* Domain-Layer */ = {
 			isa = PBXGroup;
 			children = (
-				7217B0092AC2BB7F002C3112 /* Domain */,
+				7217B0092AC2BB7F002C3112 /* Model */,
 			);
 			path = "Domain-Layer";
 			sourceTree = "<group>";
@@ -98,6 +105,7 @@
 		7217AFF42AC2AE9F002C3112 /* Data-Layer */ = {
 			isa = PBXGroup;
 			children = (
+				729AC46E2AC5A94000E910D5 /* Entities */,
 			);
 			path = "Data-Layer";
 			sourceTree = "<group>";
@@ -157,10 +165,18 @@
 		};
 			isa = PBXGroup;
 			children = (
-				7217B0072AC2BB79002C3112 /* WeeklyPlanDomain.swift */,
-				7217B00A2AC2C407002C3112 /* WeeklyPlanQuery.swift */,
 			);
-			path = Domain;
+		729AC46E2AC5A94000E910D5 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				729AC4712AC5AA9100E910D5 /* UserEntity.swift */,
+				729AC46F2AC5A95800E910D5 /* PlanEntity.swift */,
+				729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */,
+				729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
 			sourceTree = "<group>";
 		};
 		72A976012ABB2A8E0021291C = {
@@ -278,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
+				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				72A976122ABB2A8E0021291C /* ViewController.swift in Sources */,
@@ -291,7 +308,10 @@
 				72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */,
 				7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */,
 				729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */,
+				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
+				729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
+				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
