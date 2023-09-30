@@ -12,6 +12,9 @@ final class TabBarController: UITabBarController {
 
     // MARK: Properties
     
+    let homeVC = HomeViewController()
+        .configureTabBarItem(title: "Home", image: UIImage(systemName: Const.Image.houseFill))
+        .embedNavigationController()
     
     
     // MARK: View Life Cycle
@@ -33,6 +36,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.viewControllers = [homeVC]
     }
 }
 
