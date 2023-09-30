@@ -36,6 +36,7 @@
 		729AC47A2AC6EB4200E910D5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4792AC6EB4200E910D5 /* User.swift */; };
 		729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */; };
 		729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47D2AC6EBA100E910D5 /* Plan.swift */; };
+		729AC4872AC7286400E910D5 /* ShowPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */; };
 		729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
@@ -67,6 +68,7 @@
 		729AC4792AC6EB4200E910D5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlan.swift; sourceTree = "<group>"; };
 		729AC47D2AC6EBA100E910D5 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
+		729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPlanUseCase.swift; sourceTree = "<group>"; };
 		729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlan.swift; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A9760D2ABB2A8E0021291C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		7217AFF32AC2AE9A002C3112 /* Domain-Layer */ = {
 			isa = PBXGroup;
 			children = (
+				729AC4852AC726AA00E910D5 /* UseCase */,
 				729AC4502AC496EB00E910D5 /* Repositories_Interface */,
 				7217B0092AC2BB7F002C3112 /* Model */,
 			);
@@ -222,6 +225,14 @@
 				729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		729AC4852AC726AA00E910D5 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */,
+			);
+			path = UseCase;
 			sourceTree = "<group>";
 		};
 			sourceTree = "<group>";
@@ -362,6 +373,7 @@
 				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* PlanDatabaseManager.swift in Sources */,
 				7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */,
+				729AC4872AC7286400E910D5 /* ShowPlanUseCase.swift in Sources */,
 				729AC44D2AC4960E00E910D5 /* Repository.swift in Sources */,
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
