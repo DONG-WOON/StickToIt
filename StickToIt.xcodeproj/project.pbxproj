@@ -18,6 +18,8 @@
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
+		729AC44D2AC4960E00E910D5 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC44C2AC4960E00E910D5 /* Repository.swift */; };
+		729AC4522AC4973C00E910D5 /* DefaultPlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4512AC4973C00E910D5 /* DefaultPlanRepository.swift */; };
 		729AC4592AC4981D00E910D5 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC4582AC4981D00E910D5 /* RxBlocking */; };
 		729AC45B2AC4981D00E910D5 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC45A2AC4981D00E910D5 /* RxCocoa */; };
 		729AC45D2AC4981D00E910D5 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC45C2AC4981D00E910D5 /* RxRelay */; };
@@ -54,6 +56,8 @@
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		729AC44C2AC4960E00E910D5 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		729AC4512AC4973C00E910D5 /* DefaultPlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultPlanRepository.swift; sourceTree = "<group>"; };
 		729AC4692AC5479D00E910D5 /* PlanDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDatabaseManager.swift; sourceTree = "<group>"; };
 		729AC46B2AC5499600E910D5 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		729AC46F2AC5A95800E910D5 /* PlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEntity.swift; sourceTree = "<group>"; };
@@ -115,6 +119,7 @@
 		7217AFF32AC2AE9A002C3112 /* Domain-Layer */ = {
 			isa = PBXGroup;
 			children = (
+				729AC4502AC496EB00E910D5 /* Repositories_Interface */,
 				7217B0092AC2BB7F002C3112 /* Model */,
 			);
 			path = "Domain-Layer";
@@ -124,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				729AC46E2AC5A94000E910D5 /* Entities */,
+				729AC44E2AC4961100E910D5 /* Repositories */,
 				729AC4532AC4978500E910D5 /* Database */,
 			);
 			path = "Data-Layer";
@@ -185,7 +191,19 @@
 		729AC44E2AC4961100E910D5 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				729AC4512AC4973C00E910D5 /* DefaultPlanRepository.swift */,
 			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		729AC4502AC496EB00E910D5 /* Repositories_Interface */ = {
+			isa = PBXGroup;
+			children = (
+				729AC44C2AC4960E00E910D5 /* Repository.swift */,
+			);
+			path = Repositories_Interface;
+			sourceTree = "<group>";
+		};
 		729AC4532AC4978500E910D5 /* Database */ = {
 			isa = PBXGroup;
 			children = (
@@ -334,6 +352,7 @@
 			files = (
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
+				729AC4522AC4973C00E910D5 /* DefaultPlanRepository.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				72A976122ABB2A8E0021291C /* ViewController.swift in Sources */,
@@ -343,6 +362,7 @@
 				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* PlanDatabaseManager.swift in Sources */,
 				7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */,
+				729AC44D2AC4960E00E910D5 /* Repository.swift in Sources */,
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
