@@ -11,21 +11,19 @@ import RxCocoa
 
 final class HomeViewController: UIViewController {
     
-    enum Section: Int, CaseIterable {
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
+    
+    private enum Section: Int, CaseIterable {
         case main = 0
         case last
     }
-    
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
-    typealias HomeDataSource = UICollectionViewDiffableDataSource<Section, String>
     
     let viewModel = HomeViewModel(
         showPlanUseCase: DefaultShowPlanUseCase(
             planRepository: DefaultPlanRepository(
                 networkService: nil,
-                databaseManager: PlanDatabaseManager(
-                    queue: .init(label: "default.serial")
-                )
+                databaseManager: PlanDatabaseManager()
             )
         )
     )
@@ -78,9 +76,10 @@ final class HomeViewController: UIViewController {
     )
 
     
+//    private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     private let weeklyPlansPhotoCollectionView = HomeImageCollectionView()
-    var dataSource: HomeDataSource!
+    private var dataSource: DataSource!
     
     // MARK: View Life Cycle
     
@@ -91,13 +90,14 @@ final class HomeViewController: UIViewController {
         bindViewModel()
         viewModel.viewDidLoad()
         configureViews()
+        setAttributes()
         setConstraints()
         
         // 네비게이션
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: calendarButton)
         
-       takeSnapshot()
+        takeSnapshot()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -107,7 +107,7 @@ final class HomeViewController: UIViewController {
     // MARK: Methods
     
     func bindViewModel() {
-            
+        
         viewModel.userPlanList
             .subscribe { [weak self] userPlans in
                 guard let self else { return }
@@ -179,10 +179,12 @@ extension HomeViewController {
     private func configureViews() {
         view.addSubview(currentWeekTitleButton)
         view.addSubview(weeklyPlansPhotoCollectionView)
+//        view.addSubview(activityIndicator)
     }
     
     private func setAttributes() {
-        
+//        activityIndicator.isHidden = true
+
     }
     
     private func setConstraints() {
@@ -194,29 +196,54 @@ extension HomeViewController {
             make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(weeklyPlansPhotoCollectionView.snp.width)
         }
+//        activityIndicator.snp.makeConstraints { make in
+//            make.center.equalTo(view)
+//        }
     }
     
-   private func configureDataSource() {
-       
-       let cellRegistration = UICollectionView
-           .CellRegistration<HomeImageCollectionViewCell, String>
-       {
-               cell, indexPath, item in
-
-           cell.label.text = item
-           cell.contentView.backgroundColor = .green
+    private func configureDataSource() {
         
-       }
-       
-       self.dataSource = HomeDataSource(collectionView: weeklyPlansPhotoCollectionView,
-                                        cellProvider: {
-           collectionView, indexPath, item in
-           
-           let cell = collectionView
-               .dequeueConfiguredReusableCell(using: cellRegistration,
-                                              for: indexPath,
-                                              item: item)
-           return cell
-       })
-   }
+        let cellRegistration = UICollectionView
+            .CellRegistration<HomeImageCollectionViewCell, String>
+        { cell, indexPath, item in
+            cell.contentView.backgroundColor = .green
+        }
+        
+        self.dataSource = DataSource(
+            collectionView: weeklyPlansPhotoCollectionView,
+            cellProvider: { collectionView, indexPath, item in
+                let cell = collectionView.dequeueConfiguredReusableCell(
+                    using: cellRegistration,
+                    for: indexPath,
+                    item: item
+                )
+                cell.delegate = self
+                return cell
+            }
+        )
+    }
+}
+
+extension HomeViewController: HomeImageCollectionViewCellDelegate {
+    
+    func addImageButtonDidTapped() {
+        let vc = ImageSelectionViewController(authorization: .authorized)
+            .embedNavigationController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+    }
+    
+    func editImageButtonDidTapped() {
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let edit = UIAlertAction(title: "편집", style: .default)
+        let delete = UIAlertAction(title: "삭제", style: .destructive)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(edit)
+        alert.addAction(delete)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true)
+    }
 }
