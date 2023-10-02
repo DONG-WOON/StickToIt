@@ -33,42 +33,51 @@ final class HomeViewController: UIViewController {
     private var disposeBag = DisposeBag()
     
     // MARK: UI Properties
-    private lazy var planListButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage(systemName: Const.Image.listBullet)
-        configuration.baseForegroundColor = .label
+    
+    private lazy var planTitleButton: ResizableButton = {
+        let button = ResizableButton(
+            title: "계획 설정",
+            image: UIImage(systemName: Const.Image.chevronDown),
+            symbolSize: 15, font: .systemFont(ofSize: 20),
+            tintColor: .label,
+            imageAlignment: .forceRightToLeft,
+            target: self,
+            action: #selector(planTitleButtonDidTapped)
+        )
         
-        let button = UIButton(configuration: configuration)
+        button.menu = UIMenu(children:[
+            UIAction(
+                title: "내 계획 설정하기",
+                image: UIImage(systemName: Const.Image.gear),
+                handler: { _ in
+                    let vc = UIViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            )
+        ])
         button.changesSelectionAsPrimaryAction = false
         button.showsMenuAsPrimaryAction = true
-        
         return button
     }()
     
-    private lazy var calendarButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage(systemName: Const.Image.calendar)
-        configuration.baseForegroundColor = .label
-        
-        let button = UIButton(configuration: configuration)
-        button.addTarget(self, action: #selector(calendarButtonDidTapped),
-                         for: .touchUpInside)
-        return button
-    }()
+    private lazy var calendarButton = ResizableButton(
+        image: UIImage(systemName: Const.Image.calendar),
+        symbolSize: 25,
+        tintColor: .label,
+        target: self,
+        action: #selector(calendarButtonDidTapped)
+    )
     
-    private lazy var currentWeekTitleButton: UIButton = {
-        let button = UIButton(type: .system)
-        
-        button.titleLabel?.font = .boldSystemFont(ofSize: 35)
-        button.tintColor = .label
-        button.setImage(UIImage(systemName: Const.Image.chevronDown), for: .normal)
-        button.setTitle("WEEK 1 ", for: .normal)
-        button.semanticContentAttribute = .forceRightToLeft
-        button.changesSelectionAsPrimaryAction = false
-        button.showsMenuAsPrimaryAction = true
+    private lazy var currentWeekTitleButton = ResizableButton(
+        title: "WEEK 1",
+        image: UIImage(systemName: Const.Image.chevronRight),
+        symbolSize: 30, font: .boldSystemFont(ofSize: 35),
+        tintColor: .label, imageAlignment: .forceRightToLeft,
+        target: self,
+        action: #selector(currentWeekTitleButtonDidTapped)
+    )
+
     
-        return button
-    }()
     
     private let weeklyPlansPhotoCollectionView = HomeImageCollectionView()
     var dataSource: HomeDataSource!
@@ -85,8 +94,7 @@ final class HomeViewController: UIViewController {
         setConstraints()
         
         // 네비게이션
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planListButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: calendarButton)
         
        takeSnapshot()
@@ -103,15 +111,17 @@ final class HomeViewController: UIViewController {
         viewModel.userPlanList
             .subscribe { [weak self] userPlans in
                 guard let self else { return }
-                let children = userPlans.map { planQuery in
+                guard let menu = planTitleButton.menu else { return }
+                var menuElements = menu.children
+                
+                let planActions = userPlans.map { planQuery in
                     UIAction(title: planQuery.planName) { action in
                         self.viewModel.fetchPlan(planQuery)
                     }
                 }
-                
-                let menu = UIMenu(children: children)
-                
-                planListButton.menu = menu
+                menuElements.insert(contentsOf: planActions, at: 0)
+               
+                planTitleButton.menu = UIMenu(children: menuElements)
             }
             .disposed(by: disposeBag)
         
@@ -120,7 +130,7 @@ final class HomeViewController: UIViewController {
             .subscribe { [weak self] week in
                 guard let self else { return }
                 let children = (1...week).map { week in
-                    UIAction(title: "WEEK \(week) ") { action in
+                    UIAction(title: "WEEK \(week)") { action in
                         self.viewModel.currentWeek.onNext(week)
                     }
                 }
@@ -144,16 +154,26 @@ final class HomeViewController: UIViewController {
         dataSource.apply(snapshot)
     }
 }
+// MARK: - @objc Method
 
 extension HomeViewController {
     
-    // MARK:  Method
+    @objc private func planTitleButtonDidTapped() {
+        
+    }
     
     @objc private func calendarButtonDidTapped() {
         let vc = UIViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    @objc private func currentWeekTitleButtonDidTapped() {
+        let vc = UIViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension HomeViewController {
     // MARK: Configure
     
     private func configureViews() {

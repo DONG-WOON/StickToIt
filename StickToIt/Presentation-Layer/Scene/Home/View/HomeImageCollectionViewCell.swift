@@ -9,7 +9,17 @@ import UIKit
 
 final class HomeImageCollectionViewCell: UICollectionViewCell {
     let imageView = UIImageView()
-    let label = UILabel()
+    lazy var editImageButton = ResizableButton(
+        image: UIImage(systemName: Const.Image.ellipsis),
+        symbolSize: 20, scale: .large,
+        tintColor: .label, action: editImageButtonAction
+    )
+    
+    lazy var addImageButton = ResizableButton(
+        image: UIImage(systemName: Const.Image.plus),
+        symbolSize: 30, scale: .large,
+        tintColor: .label, action: addImageButtonAction
+    )
     
     override init(frame: CGRect) {
         super.init(frame: frame)
