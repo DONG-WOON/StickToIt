@@ -40,6 +40,7 @@
 		729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4832AC6F69400E910D5 /* Model+Mapping.swift */; };
 		729AC4872AC7286400E910D5 /* ShowPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */; };
 		729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */; };
+		729AC4AF2AC9672500E910D5 /* ImagePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4AE2AC9672500E910D5 /* ImagePickerManager.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
 		72A976122ABB2A8E0021291C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A976112ABB2A8E0021291C /* ViewController.swift */; };
@@ -74,6 +75,7 @@
 		729AC4832AC6F69400E910D5 /* Model+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+Mapping.swift"; sourceTree = "<group>"; };
 		729AC4862AC7286400E910D5 /* ShowPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPlanUseCase.swift; sourceTree = "<group>"; };
 		729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlan.swift; sourceTree = "<group>"; };
+		729AC4AE2AC9672500E910D5 /* ImagePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerManager.swift; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A9760D2ABB2A8E0021291C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 		7217AFF32AC2AE9A002C3112 /* Domain-Layer */ = {
 			isa = PBXGroup;
 			children = (
+				729AC4AD2AC9671700E910D5 /* Shared */,
 				729AC4852AC726AA00E910D5 /* UseCase */,
 				729AC47F2AC6F65500E910D5 /* Mapper */,
 				729AC4502AC496EB00E910D5 /* Repositories_Interface */,
@@ -258,6 +261,14 @@
 			path = Scene;
 			sourceTree = "<group>";
 		};
+		729AC4AD2AC9671700E910D5 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				729AC4AE2AC9672500E910D5 /* ImagePickerManager.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		72A976012ABB2A8E0021291C = {
 			isa = PBXGroup;
 			children = (
@@ -388,6 +399,7 @@
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				72A976122ABB2A8E0021291C /* ViewController.swift in Sources */,
+				729AC4AF2AC9672500E910D5 /* ImagePickerManager.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,
