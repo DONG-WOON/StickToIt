@@ -20,7 +20,7 @@ final class PlanDatabaseManager: DatabaseManager {
     
     private let asyncRealm: Realm
     
-    init?(queue: DispatchQueue) {
+    init?() {
         do {
             guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw RealmError.invalidDirectory }
             let realmURL = directory.appendingPathComponent("default.realm")
@@ -29,7 +29,7 @@ final class PlanDatabaseManager: DatabaseManager {
             { (migration, oldSchemaVersion) in
                 
             }
-            self.asyncRealm = try Realm(configuration: configuration, queue: .main)
+            self.asyncRealm = try Realm(configuration: configuration)
         } catch {
             return nil
         }
