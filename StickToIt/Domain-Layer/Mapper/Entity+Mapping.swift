@@ -32,6 +32,7 @@ extension PlanEntity {
 extension WeeklyPlanEntity {
     func toDomain() -> WeeklyPlan {
         return .init(
+            week: week,
             dayPlans: dayPlans.map { $0.toDomain() }
         )
     }

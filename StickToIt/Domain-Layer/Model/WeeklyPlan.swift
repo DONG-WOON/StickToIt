@@ -8,9 +8,14 @@
 import Foundation
 
 struct WeeklyPlan {
-   var dayPlans: [DayPlan]
+    let week: Int
+    var dayPlans: [DayPlan]
     
-    init(dayPlans: [DayPlan]) {
+    init(
+        week: Int,
+        dayPlans: [DayPlan]
+    ) {
+        self.week = week
         self.dayPlans = dayPlans
     }
 }

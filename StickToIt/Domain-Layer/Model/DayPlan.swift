@@ -15,7 +15,12 @@ final class DayPlan {
     
     #warning("image Data or image file 결정")
     
-    init(_id: UUID, date: Date, imageURL: String, content: String) {
+    init(
+        _id: UUID,
+         date: Date,
+         imageURL: String,
+        content: String
+    ) {
         self._id = _id
         self.date = date
         self.imageURL = imageURL

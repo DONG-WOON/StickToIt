@@ -13,7 +13,11 @@ final class User: Equatable {
     
     var plans: [Plan]
     
-    init(_id: UUID, name: String, plans: [Plan]) {
+    init(
+        _id: UUID,
+         name: String,
+         plans: [Plan]
+    ) {
         self._id = _id
         self.name = name
         self.plans = plans

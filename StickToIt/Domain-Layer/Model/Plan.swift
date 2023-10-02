@@ -16,7 +16,11 @@ final class Plan {
     //    let endDate: String // startDate 기점으로 시간결졍?
     var weeklyPlans: [WeeklyPlan]
     
-    convenience init(title: String, targetWeek: Int, startDate: Date) {
+    convenience init(
+        title: String,
+        targetWeek: Int,
+        startDate: Date
+    ) {
         self.init(
             _id: UUID(),
             title: title,
@@ -26,7 +30,13 @@ final class Plan {
         )
     }
     
-    init(_id: UUID, title: String, targetWeek: Int, startDate: Date, weeklyPlans: [WeeklyPlan]) {
+    init(
+        _id: UUID,
+        title: String,
+        targetWeek: Int,
+        startDate: Date,
+        weeklyPlans: [WeeklyPlan]
+    ) {
         self._id = _id
         self.title = title
         self.targetWeek = targetWeek
