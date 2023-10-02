@@ -13,5 +13,10 @@ enum Const {
         static let listBullet = "list.bullet"
         static let calendar = "calendar"
         static let chevronDown = "chevron.down"
+        static let chevronRight = "chevron.right"
+        static let ellipsis = "ellipsis"
+        static let plus = "plus"
+        static let gear = "gearshape.fill"
+        static let xmark = "xmark"
     }
 }
