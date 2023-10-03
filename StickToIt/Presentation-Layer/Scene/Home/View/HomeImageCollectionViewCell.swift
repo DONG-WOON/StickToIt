@@ -63,7 +63,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         }
         
         editImageButton.snp.makeConstraints { make in
-            make.top.trailing.equalTo(contentView).inset(10)
+            make.top.equalTo(contentView).inset(10)
+            make.trailing.equalTo(contentView).inset(15)
         }
         
         addImageButton.snp.makeConstraints { make in

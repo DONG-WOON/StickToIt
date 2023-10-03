@@ -46,9 +46,13 @@
 		729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4B72AC9DE2B00E910D5 /* ImageSelectionViewController.swift */; };
 		729AC4BD2ACA7F8800E910D5 /* ImageSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4BC2ACA7F8800E910D5 /* ImageSelectionViewModel.swift */; };
 		729AC4BF2ACA81B100E910D5 /* ImageSelectionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4BE2ACA81B100E910D5 /* ImageSelectionDeniedView.swift */; };
+		729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4C02ACAFD2800E910D5 /* GradientCircleView.swift */; };
+		729AC4C32ACAFD8200E910D5 /* AchievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4C22ACAFD8200E910D5 /* AchievementView.swift */; };
+		729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4C62ACB012400E910D5 /* NetworkService.swift */; };
+		729AC4D02ACB1DFE00E910D5 /* MKRingProgressView in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */; };
+		729AC4D22ACB986600E910D5 /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4D12ACB986600E910D5 /* Extension+UIView.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
-		72A976122ABB2A8E0021291C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A976112ABB2A8E0021291C /* ViewController.swift */; };
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
 		72A976172ABB2A910021291C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72A976162ABB2A910021291C /* Assets.xcassets */; };
 		72A9761A2ABB2A910021291C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976182ABB2A910021291C /* LaunchScreen.storyboard */; };
@@ -86,10 +90,13 @@
 		729AC4B72AC9DE2B00E910D5 /* ImageSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectionViewController.swift; sourceTree = "<group>"; };
 		729AC4BC2ACA7F8800E910D5 /* ImageSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectionViewModel.swift; sourceTree = "<group>"; };
 		729AC4BE2ACA81B100E910D5 /* ImageSelectionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectionDeniedView.swift; sourceTree = "<group>"; };
+		729AC4C02ACAFD2800E910D5 /* GradientCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientCircleView.swift; sourceTree = "<group>"; };
+		729AC4C22ACAFD8200E910D5 /* AchievementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementView.swift; sourceTree = "<group>"; };
+		729AC4C62ACB012400E910D5 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		729AC4D12ACB986600E910D5 /* Extension+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+UIView.swift"; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A9760D2ABB2A8E0021291C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		72A976112ABB2A8E0021291C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		72A976142ABB2A8E0021291C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		72A976162ABB2A910021291C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A976192ABB2A910021291C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -108,6 +115,7 @@
 				729AC45F2AC4981D00E910D5 /* RxSwift in Frameworks */,
 				729AC4622AC4983600E910D5 /* Alamofire in Frameworks */,
 				729AC45D2AC4981D00E910D5 /* RxRelay in Frameworks */,
+				729AC4D02ACB1DFE00E910D5 /* MKRingProgressView in Frameworks */,
 				729AC4592AC4981D00E910D5 /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +130,7 @@
 				729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */,
 				729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */,
 				729AC4032AC32ED400E910D5 /* ContentsView.swift */,
+				729AC4C22ACAFD8200E910D5 /* AchievementView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -151,6 +160,7 @@
 		7217AFF42AC2AE9F002C3112 /* Data-Layer */ = {
 			isa = PBXGroup;
 			children = (
+				729AC4C52ACB012400E910D5 /* NetworkService */,
 				729AC46E2AC5A94000E910D5 /* Entities */,
 				729AC44E2AC4961100E910D5 /* Repositories */,
 				729AC4532AC4978500E910D5 /* Database */,
@@ -186,6 +196,7 @@
 		7217AFFB2AC2B130002C3112 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				729AC4D12ACB986600E910D5 /* Extension+UIView.swift */,
 				7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */,
 			);
 			path = Extension;
@@ -285,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				729AC4B32AC9B84600E910D5 /* ResizableButton.swift */,
+				729AC4C02ACAFD2800E910D5 /* GradientCircleView.swift */,
 			);
 			path = DesignComponents;
 			sourceTree = "<group>";
@@ -316,6 +328,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		729AC4C52ACB012400E910D5 /* NetworkService */ = {
+			isa = PBXGroup;
+			children = (
+				729AC4C62ACB012400E910D5 /* NetworkService.swift */,
+			);
+			path = NetworkService;
+			sourceTree = "<group>";
+		};
 		72A976012ABB2A8E0021291C = {
 			isa = PBXGroup;
 			children = (
@@ -343,7 +363,6 @@
 				7217AFF42AC2AE9F002C3112 /* Data-Layer */,
 				7217AFF32AC2AE9A002C3112 /* Domain-Layer */,
 				7217AFF22AC2AE8B002C3112 /* Presentation-Layer */,
-				72A976112ABB2A8E0021291C /* ViewController.swift */,
 				72A976132ABB2A8E0021291C /* Main.storyboard */,
 				72A976162ABB2A910021291C /* Assets.xcassets */,
 				72A976182ABB2A910021291C /* LaunchScreen.storyboard */,
@@ -377,6 +396,7 @@
 				729AC4612AC4983600E910D5 /* Alamofire */,
 				729AC4642AC4989300E910D5 /* Realm */,
 				729AC4662AC4989300E910D5 /* RealmSwift */,
+				729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */,
 			);
 			productName = StickToIt;
 			productReference = 72A9760A2ABB2A8E0021291C /* StickToIt.app */;
@@ -411,6 +431,7 @@
 				729AC4572AC4981D00E910D5 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				729AC4602AC4983600E910D5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				729AC4632AC4989300E910D5 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				729AC4CE2ACB1DFE00E910D5 /* XCRemoteSwiftPackageReference "MKRingProgressView" */,
 			);
 			productRefGroup = 72A9760B2ABB2A8E0021291C /* Products */;
 			projectDirPath = "";
@@ -442,10 +463,11 @@
 			files = (
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
+				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				729AC4522AC4973C00E910D5 /* DefaultPlanRepository.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
-				72A976122ABB2A8E0021291C /* ViewController.swift in Sources */,
+				729AC4C32ACAFD8200E910D5 /* AchievementView.swift in Sources */,
 				729AC4AF2AC9672500E910D5 /* ImagePickerManager.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
@@ -459,11 +481,13 @@
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
+				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,
 				729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */,
 				72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */,
 				729AC4B62AC9D97500E910D5 /* ImageSelectionView.swift in Sources */,
 				7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */,
 				729AC4BF2ACA81B100E910D5 /* ImageSelectionDeniedView.swift in Sources */,
+				729AC4D22ACB986600E910D5 /* Extension+UIView.swift in Sources */,
 				729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */,
 				729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */,
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
@@ -626,9 +650,9 @@
 				INFOPLIST_FILE = StickToIt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "작심삼일";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "이 앱이 사용자의 앨범에 접근하는 것을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -661,9 +685,9 @@
 				INFOPLIST_FILE = StickToIt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "작심삼일";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "이 앱이 사용자의 앨범에 접근하는 것을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -740,6 +764,14 @@
 				minimumVersion = 10.42.4;
 			};
 		};
+		729AC4CE2ACB1DFE00E910D5 /* XCRemoteSwiftPackageReference "MKRingProgressView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maxkonovalov/MKRingProgressView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -782,6 +814,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 729AC4632AC4989300E910D5 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 729AC4CE2ACB1DFE00E910D5 /* XCRemoteSwiftPackageReference "MKRingProgressView" */;
+			productName = MKRingProgressView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

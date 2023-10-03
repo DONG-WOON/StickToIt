@@ -36,7 +36,7 @@ final class HomeViewController: UIViewController {
         let button = ResizableButton(
             title: "계획 설정",
             image: UIImage(systemName: Const.Image.chevronDown),
-            symbolSize: 15, font: .systemFont(ofSize: 20),
+            symbolSize: 15, font: .systemFont(ofSize: 17),
             tintColor: .label,
             imageAlignment: .forceRightToLeft,
             target: self,
@@ -75,7 +75,7 @@ final class HomeViewController: UIViewController {
         action: #selector(currentWeekTitleButtonDidTapped)
     )
 
-    
+    private lazy var homeAchievementView = AchievementView()
 //    private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     private let weeklyPlansPhotoCollectionView = HomeImageCollectionView()
@@ -92,6 +92,7 @@ final class HomeViewController: UIViewController {
         configureViews()
         setAttributes()
         setConstraints()
+        homeAchievementView.circleView.animate()
         
         // 네비게이션
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
@@ -180,6 +181,7 @@ extension HomeViewController {
         view.addSubview(currentWeekTitleButton)
         view.addSubview(weeklyPlansPhotoCollectionView)
 //        view.addSubview(activityIndicator)
+        view.addSubview(homeAchievementView)
     }
     
     private func setAttributes() {
@@ -199,6 +201,11 @@ extension HomeViewController {
 //        activityIndicator.snp.makeConstraints { make in
 //            make.center.equalTo(view)
 //        }
+        homeAchievementView.snp.makeConstraints { make in
+            make.top.equalTo(currentWeekTitleButton.snp.bottom).offset(20)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.bottom.equalTo(weeklyPlansPhotoCollectionView.snp.top).offset(-20)
+        }
     }
     
     private func configureDataSource() {
@@ -206,7 +213,8 @@ extension HomeViewController {
         let cellRegistration = UICollectionView
             .CellRegistration<HomeImageCollectionViewCell, String>
         { cell, indexPath, item in
-            cell.contentView.backgroundColor = .green
+            cell.rounded(cornerRadius: 20)
+            cell.contentView.backgroundColor = .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1)
         }
         
         self.dataSource = DataSource(
