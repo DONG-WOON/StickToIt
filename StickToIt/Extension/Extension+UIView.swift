@@ -31,6 +31,18 @@ extension UIView {
         return String(describing: Self.self)
     }
     
+    convenience init(backgroundColor: UIColor) {
+        self.init()
+        
+        self.backgroundColor = backgroundColor
+    }
+    
+    convenience init(cornerRadius: CGFloat, borderWidth: CGFloat, borderColor: UIColor) {
+        self.init()
+
+        self.bordered(cornerRadius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
+    }
+    
     func bordered(cornerRadius: CGFloat = 5, borderWidth: CGFloat, borderColor: UIColor) {
         self.rounded(cornerRadius: cornerRadius)
         self.layer.borderWidth = borderWidth
