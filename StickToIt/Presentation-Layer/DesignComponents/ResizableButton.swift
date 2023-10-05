@@ -13,97 +13,38 @@ final class ResizableButton: UIButton {
     convenience init(
         title: String? = nil,
         image: UIImage? = nil,
-        symbolSize: CGFloat,
+        symbolConfiguration: UIImage.SymbolConfiguration? = .init(scale: .default),
         font: UIFont? = nil,
-        weight: UIImage.SymbolWeight = .regular,
-        scale: UIImage.SymbolScale = .default,
-        tintColor: UIColor,
-        imageAlignment: UISemanticContentAttribute
-    ) {
-        self.init()
-        
-        self.setPreferredSymbolConfiguration(
-            .init(
-                pointSize: symbolSize,
-                weight: weight,
-                scale: scale),
-            forImageIn: .normal
-        )
-        
-        self.setImage(image, for: .normal)
-        if let title {
-            self.setTitle(title + " ", for: .normal)
-        }
-        self.setTitleColor(tintColor, for: .normal)
-        self.titleLabel?.font = font
-        self.tintColor = tintColor
-        self.semanticContentAttribute = imageAlignment
-    }
-    
-    // MARK: Add Action
-    convenience init(
-        title: String? = nil,
-        image: UIImage? = nil,
-        symbolSize: CGFloat,
-        font: UIFont? = nil,
-        weight: UIImage.SymbolWeight = .regular,
-        scale: UIImage.SymbolScale = .default,
-        tintColor: UIColor,
-        imageAlignment: UISemanticContentAttribute = .forceLeftToRight,
-        action: UIAction
-    ) {
-        self.init(
-            title: title, image: image,
-            symbolSize: symbolSize, font: font,
-            weight: weight, scale: scale,
-            tintColor: tintColor, imageAlignment: imageAlignment
-        )
-        self.addAction(action, for: .touchUpInside)
-    }
-    
-    // MARK: Add Target
-    convenience init(
-        title: String? = nil,
-        image: UIImage? = nil,
-        symbolSize: CGFloat,
-        font: UIFont? = nil,
-        weight: UIImage.SymbolWeight = .regular,
-        scale: UIImage.SymbolScale = .default,
-        tintColor: UIColor,
-        imageAlignment: UISemanticContentAttribute = .forceLeftToRight,
+        tintColor: UIColor?,
+        backgroundColor: UIColor? = .systemBackground,
+        imageAlignment: UISemanticContentAttribute? = .forceLeftToRight,
         target: Any?,
         action: Selector
     ) {
-        self.init(
-            title: title, image: image,
-            symbolSize: symbolSize, font: font,
-            weight: weight, scale: scale,
-            tintColor: tintColor, imageAlignment: imageAlignment
-        )
+        self.init()
+        
+        if let symbolConfiguration {
+            self.setPreferredSymbolConfiguration(
+                symbolConfiguration,
+                forImageIn: .normal
+            )
+        }
+        
+        if let title {
+            self.setTitle(title + " ", for: .normal)
+        }
+        
+        if let imageAlignment {
+            self.semanticContentAttribute = imageAlignment
+        }
+        
+        self.backgroundColor = backgroundColor
+        self.setTitleColor(tintColor, for: .normal)
+        self.titleLabel?.font = font
+        self.tintColor = tintColor
+        
+        self.setImage(image, for: .normal)
+        
         self.addTarget(target, action: action, for: .touchUpInside)
     }
-    
-//    convenience init(
-//        type: UIButton.Configuration,
-//        image: UIImage? = nil,
-//        title: String? = nil,
-//        tintColor: UIColor,
-//        buttonSize: UIButton.Configuration.Size,
-//        target: Any?,
-//        action: Selector
-//    ) {
-//        self.init()
-//        
-//        var configuration = type
-//        configuration.title = title
-//        configuration.image = image?.withTintColor(tintColor)
-//        configuration.buttonSize = buttonSize
-//        configuration.baseForegroundColor = tintColor
-//        configuration.imagePadding = 10
-//        configuration.imagePlacement = .trailing
-//        
-//        self.configuration = configuration
-//        self.addTarget(target, action: action, for: .touchUpInside)
-//        self.font
-//    }
 }

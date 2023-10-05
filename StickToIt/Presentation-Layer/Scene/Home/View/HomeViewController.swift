@@ -36,7 +36,7 @@ final class HomeViewController: UIViewController {
         let button = ResizableButton(
             title: "계획 설정",
             image: UIImage(systemName: Const.Image.chevronDown),
-            symbolSize: 15, font: .systemFont(ofSize: 17),
+            symbolConfiguration: .init(font: .systemFont(ofSize: 17), scale: .small),
             tintColor: .label,
             imageAlignment: .forceRightToLeft,
             target: self,
@@ -60,7 +60,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var calendarButton = ResizableButton(
         image: UIImage(systemName: Const.Image.calendar),
-        symbolSize: 25,
+        symbolConfiguration: .init(scale: .large),
         tintColor: .label,
         target: self,
         action: #selector(calendarButtonDidTapped)
@@ -69,7 +69,8 @@ final class HomeViewController: UIViewController {
     private lazy var currentWeekTitleButton = ResizableButton(
         title: "WEEK 1",
         image: UIImage(systemName: Const.Image.chevronRight),
-        symbolSize: 30, font: .boldSystemFont(ofSize: 35),
+        symbolConfiguration: .init(scale: .large),
+        font: .boldSystemFont(ofSize: 30),
         tintColor: .label, imageAlignment: .forceRightToLeft,
         target: self,
         action: #selector(currentWeekTitleButtonDidTapped)

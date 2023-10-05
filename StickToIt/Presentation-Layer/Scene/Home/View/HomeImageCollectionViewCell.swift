@@ -19,23 +19,17 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     lazy var editImageButton = ResizableButton(
         image: UIImage(systemName: Const.Image.ellipsis),
-        symbolSize: 20, scale: .large,
-        tintColor: .label, action: editImageButtonAction
-    )
+        symbolConfiguration: .init(scale: .large),
+        tintColor: .label,
+        target: self, action: #selector(editImageButtonAction)
+        )
+        
     
     lazy var addImageButton = ResizableButton(
         image: UIImage(systemName: Const.Image.plus),
-        symbolSize: 30, scale: .large,
-        tintColor: .label, action: addImageButtonAction
-    )
-    
-    private lazy var editImageButtonAction = UIAction { _ in
-        self.delegate?.editImageButtonDidTapped()
-    }
-    
-    private lazy var addImageButtonAction = UIAction { _ in
-        self.delegate?.addImageButtonDidTapped()
-    }
+        symbolConfiguration: .init(scale: .large),
+        tintColor: .label, target: self, action: #selector(addImageButtonAction)
+        )
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,6 +48,9 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     }
 
     private func configure() {
+        
+        self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
+        
         contentView.addSubview(imageView)
         contentView.addSubview(editImageButton)
         contentView.addSubview(addImageButton)

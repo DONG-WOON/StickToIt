@@ -31,7 +31,8 @@ final class ImageSelectionViewController: UIViewController {
     private let mainView: UIView
     private lazy var dismissButton = ResizableButton(
         image: UIImage(systemName: Const.Image.xmark),
-        symbolSize: 20, tintColor: .label, target: self,
+        symbolConfiguration: .init(scale: .large),
+        tintColor: .label, target: self,
         action: #selector(dismissButtonDidTapped)
     )
     
