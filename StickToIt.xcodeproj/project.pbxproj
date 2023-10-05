@@ -52,6 +52,8 @@
 		729AC4D02ACB1DFE00E910D5 /* MKRingProgressView in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */; };
 		729AC4D22ACB986600E910D5 /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4D12ACB986600E910D5 /* Extension+UIView.swift */; };
 		729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */; };
+		729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5072ACD342C00E910D5 /* StickToItCalendar.swift */; };
+		729AC50B2ACD34C900E910D5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC50A2ACD34C900E910D5 /* FSCalendar */; };
 		729AC50D2ACD3F5E00E910D5 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */; };
 		729AC5152ACE91AD00E910D5 /* HomePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5142ACE91AD00E910D5 /* HomePlanUseCase.swift */; };
 		729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5172ACE91F200E910D5 /* CreatePlanUseCase.swift */; };
@@ -99,6 +101,7 @@
 		729AC4C62ACB012400E910D5 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		729AC4D12ACB986600E910D5 /* Extension+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+UIView.swift"; sourceTree = "<group>"; };
 		729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedTextField.swift; sourceTree = "<group>"; };
+		729AC5072ACD342C00E910D5 /* StickToItCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickToItCalendar.swift; sourceTree = "<group>"; };
 		729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
 		729AC5142ACE91AD00E910D5 /* HomePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePlanUseCase.swift; sourceTree = "<group>"; };
 		729AC5172ACE91F200E910D5 /* CreatePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanUseCase.swift; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 				729AC4672AC4989300E910D5 /* RealmSwift in Frameworks */,
 				729AC4652AC4989300E910D5 /* Realm in Frameworks */,
 				729AC45B2AC4981D00E910D5 /* RxCocoa in Frameworks */,
+				729AC50B2ACD34C900E910D5 /* FSCalendar in Frameworks */,
 				7217B00E2AC2D5F6002C3112 /* SnapKit in Frameworks */,
 				729AC45F2AC4981D00E910D5 /* RxSwift in Frameworks */,
 				729AC4622AC4983600E910D5 /* Alamofire in Frameworks */,
@@ -309,6 +313,7 @@
 				729AC4C02ACAFD2800E910D5 /* GradientCircleView.swift */,
 				729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */,
 				729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */,
+				729AC5072ACD342C00E910D5 /* StickToItCalendar.swift */,
 			);
 			path = DesignComponents;
 			sourceTree = "<group>";
@@ -441,6 +446,7 @@
 				729AC4642AC4989300E910D5 /* Realm */,
 				729AC4662AC4989300E910D5 /* RealmSwift */,
 				729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */,
+				729AC50A2ACD34C900E910D5 /* FSCalendar */,
 			);
 			productName = StickToIt;
 			productReference = 72A9760A2ABB2A8E0021291C /* StickToIt.app */;
@@ -476,6 +482,7 @@
 				729AC4602AC4983600E910D5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				729AC4632AC4989300E910D5 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				729AC4CE2ACB1DFE00E910D5 /* XCRemoteSwiftPackageReference "MKRingProgressView" */,
+				729AC5092ACD34C900E910D5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			productRefGroup = 72A9760B2ABB2A8E0021291C /* Products */;
 			projectDirPath = "";
@@ -513,6 +520,7 @@
 				729AC4522AC4973C00E910D5 /* DefaultPlanRepository.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
+				729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */,
 				729AC4C32ACAFD8200E910D5 /* AchievementView.swift in Sources */,
 				729AC4AF2AC9672500E910D5 /* ImagePickerManager.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
@@ -820,6 +828,14 @@
 				minimumVersion = 2.3.0;
 			};
 		};
+		729AC5092ACD34C900E910D5 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -867,6 +883,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 729AC4CE2ACB1DFE00E910D5 /* XCRemoteSwiftPackageReference "MKRingProgressView" */;
 			productName = MKRingProgressView;
+		};
+		729AC50A2ACD34C900E910D5 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 729AC5092ACD34C900E910D5 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
