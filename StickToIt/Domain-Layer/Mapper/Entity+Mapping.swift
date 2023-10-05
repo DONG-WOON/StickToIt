@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 extension UserEntity {
     func toDomain() -> User {
@@ -19,11 +20,13 @@ extension UserEntity {
 
 extension PlanEntity {
     func toDomain() -> Plan {
+
         return .init(
             _id: _id,
-            title: title,
-            targetWeek: targetWeek,
+            name: name,
+            targetPeriod: targetPeriod,
             startDate: startDate,
+            executionDaysOfWeek: Set(executionDaysOfWeek),
             weeklyPlans: weeklyPlans.map { $0.toDomain() }
         )
     }

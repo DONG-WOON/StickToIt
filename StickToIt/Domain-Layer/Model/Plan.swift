@@ -8,40 +8,28 @@
 import Foundation
 
 
-final class Plan {
+struct Plan {
     private(set) var _id: UUID
-    var title: String
-    var targetWeek: Int
+    var name: String
+    var targetPeriod: Int
     var startDate: Date
+    var executionDaysOfWeek: Set<Week>
     //    let endDate: String // startDate 기점으로 시간결졍?
     var weeklyPlans: [WeeklyPlan]
     
-    convenience init(
-        title: String,
-        targetWeek: Int,
-        startDate: Date
-    ) {
-        self.init(
-            _id: UUID(),
-            title: title,
-            targetWeek: targetWeek,
-            startDate: startDate,
-            weeklyPlans: []
-        )
-    }
-    
     init(
         _id: UUID,
-        title: String,
-        targetWeek: Int,
+        name: String,
+        targetPeriod: Int,
         startDate: Date,
+        executionDaysOfWeek: Set<Week>,
         weeklyPlans: [WeeklyPlan]
     ) {
         self._id = _id
-        self.title = title
-        self.targetWeek = targetWeek
+        self.name = name
+        self.targetPeriod = targetPeriod
         self.startDate = startDate
+        self.executionDaysOfWeek = executionDaysOfWeek
         self.weeklyPlans = weeklyPlans
     }
 }
-

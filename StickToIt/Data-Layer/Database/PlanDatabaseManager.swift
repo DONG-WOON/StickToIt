@@ -48,11 +48,7 @@ final class PlanDatabaseManager: DatabaseManager {
     func create(model: Model, to entity: Entity.Type, onFailure: @escaping (Error?) -> Void) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(
-                Entity(
-                    title: model.title,
-                    targetWeek: model.targetWeek,
-                    startDate: model.startDate
-                )
+                model.toEntity()
             )
         } onComplete: { error in
             onFailure(error)
@@ -63,8 +59,8 @@ final class PlanDatabaseManager: DatabaseManager {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         asyncRealm.writeAsync {
             fetchedEntity.startDate = model.startDate
-            fetchedEntity.targetWeek = model.targetWeek
-            fetchedEntity.title = model.title
+            fetchedEntity.targetPeriod = model.targetPeriod
+            fetchedEntity.name = model.name
         } onComplete: { error in
             print(error as Any)
         }

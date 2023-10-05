@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class DayPlan {
+struct DayPlan {
     var _id: UUID
     var date: Date
     var imageURL: String

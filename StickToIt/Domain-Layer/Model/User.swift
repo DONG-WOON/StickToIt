@@ -7,10 +7,9 @@
 
 import Foundation
 
-final class User: Equatable {
+struct User: Equatable {
     var _id: UUID
     var name: String
-    
     var plans: [Plan]
     
     init(
