@@ -51,6 +51,8 @@
 		729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4C62ACB012400E910D5 /* NetworkService.swift */; };
 		729AC4D02ACB1DFE00E910D5 /* MKRingProgressView in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */; };
 		729AC4D22ACB986600E910D5 /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4D12ACB986600E910D5 /* Extension+UIView.swift */; };
+		729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */; };
+		729AC50D2ACD3F5E00E910D5 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
@@ -94,6 +96,8 @@
 		729AC4C22ACAFD8200E910D5 /* AchievementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementView.swift; sourceTree = "<group>"; };
 		729AC4C62ACB012400E910D5 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		729AC4D12ACB986600E910D5 /* Extension+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+UIView.swift"; sourceTree = "<group>"; };
+		729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedTextField.swift; sourceTree = "<group>"; };
+		729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A9760D2ABB2A8E0021291C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -297,6 +301,8 @@
 			children = (
 				729AC4B32AC9B84600E910D5 /* ResizableButton.swift */,
 				729AC4C02ACAFD2800E910D5 /* GradientCircleView.swift */,
+				729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */,
+				729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */,
 			);
 			path = DesignComponents;
 			sourceTree = "<group>";
@@ -462,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
+				729AC50D2ACD3F5E00E910D5 /* BorderedView.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				729AC4522AC4973C00E910D5 /* DefaultPlanRepository.swift in Sources */,
@@ -478,6 +485,7 @@
 				729AC4872AC7286400E910D5 /* ShowPlanUseCase.swift in Sources */,
 				729AC44D2AC4960E00E910D5 /* Repository.swift in Sources */,
 				729AC4B42AC9B84600E910D5 /* ResizableButton.swift in Sources */,
+				729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */,
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
