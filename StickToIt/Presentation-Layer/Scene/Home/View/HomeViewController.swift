@@ -31,14 +31,22 @@ final class HomeViewController: UIViewController {
     
     private var disposeBag = DisposeBag()
     
-    private lazy var settingAction = UIAction(
-        title: "내 계획 설정하기",
-        image: UIImage(systemName: Const.Image.gear),
+    private lazy var createPlanAction = UIAction(
+        title: "계획 추가하기",
+        image: UIImage(systemName: Const.Image.plus),
         handler: { _ in
             let vc = CreatePlanViewController()
                 .embedNavigationController()
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true)
+        }
+    )
+    
+    private lazy var settingAction = UIAction(
+        title: "내 계획 설정하기",
+        image: UIImage(systemName: Const.Image.gear),
+        handler: { _ in
+
         }
     )
     
@@ -136,7 +144,7 @@ final class HomeViewController: UIViewController {
                 
                 let bottomMenu = UIMenu(
                     options: .displayInline,
-                    children: [_self.settingAction]
+                    children: [_self.createPlanAction, _self.settingAction]
                 )
                 actions.append(bottomMenu)
                 
