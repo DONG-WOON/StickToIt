@@ -12,7 +12,7 @@ import RxCocoa
 final class CreatePlanViewController: UIViewController {
     
     let viewModel = CreatePlanViewModel(
-        createPlanUseCase: DefaultShowPlanUseCase(
+        createPlanUseCase: CreatePlanUseCase(
             planRepository: DefaultPlanRepository(
                 networkService: nil,
                 databaseManager: PlanDatabaseManager(queue: .main)

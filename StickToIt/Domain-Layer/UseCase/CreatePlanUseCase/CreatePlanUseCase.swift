@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 final class CreatePlanUseCase {
 
     private let planRepository: PlanRepository
