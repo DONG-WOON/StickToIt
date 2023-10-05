@@ -23,12 +23,24 @@ final class HomeViewController: UIViewController {
         showPlanUseCase: DefaultShowPlanUseCase(
             planRepository: DefaultPlanRepository(
                 networkService: nil,
-                databaseManager: PlanDatabaseManager()
+                databaseManager: PlanDatabaseManager(queue: .main)
             )
         )
     )
+    private var dataSource: DataSource!
     
     private var disposeBag = DisposeBag()
+    
+    private lazy var settingAction = UIAction(
+        title: "내 계획 설정하기",
+        image: UIImage(systemName: Const.Image.gear),
+        handler: { _ in
+            let vc = CreatePlanViewController()
+                .embedNavigationController()
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
+        }
+    )
     
     // MARK: UI Properties
     
@@ -43,16 +55,8 @@ final class HomeViewController: UIViewController {
             action: #selector(planTitleButtonDidTapped)
         )
         
-        button.menu = UIMenu(children:[
-            UIAction(
-                title: "내 계획 설정하기",
-                image: UIImage(systemName: Const.Image.gear),
-                handler: { _ in
-                    let vc = UIViewController()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            )
-        ])
+        let bottomMenu = UIMenu(title: "", options: .displayInline, children: [settingAction])
+        button.menu = UIMenu(children:[bottomMenu])
         button.changesSelectionAsPrimaryAction = false
         button.showsMenuAsPrimaryAction = true
         return button
@@ -80,7 +84,6 @@ final class HomeViewController: UIViewController {
 //    private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     private let weeklyPlansPhotoCollectionView = HomeImageCollectionView()
-    private var dataSource: DataSource!
     
     // MARK: View Life Cycle
     
@@ -90,20 +93,25 @@ final class HomeViewController: UIViewController {
         configureDataSource()
         bindViewModel()
         viewModel.viewDidLoad()
+        
         configureViews()
         setAttributes()
-        setConstraints()
-        homeAchievementView.circleView.animate()
         
-        // 네비게이션
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: calendarButton)
+        homeAchievementView.circleView.animate()
         
         takeSnapshot()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.reload()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        setConstraints()
     }
     
     // MARK: Methods
@@ -111,40 +119,42 @@ final class HomeViewController: UIViewController {
     func bindViewModel() {
         
         viewModel.userPlanList
-            .subscribe { [weak self] userPlans in
-                guard let self else { return }
-                guard let menu = planTitleButton.menu else { return }
-                var menuElements = menu.children
+            .subscribe(with: self) { (_self, userPlanQueries) in
+                var actions: [UIMenuElement] = []
                 
-                let planActions = userPlans.map { planQuery in
-                    UIAction(title: planQuery.planName) { action in
-                        self.viewModel.fetchPlan(planQuery)
-                    }
+                userPlanQueries.forEach { planQuery in
+                    actions.append(
+                        UIAction(title: planQuery.planName) { _ in
+                        _self.viewModel.fetchPlan(planQuery)
+                    })
                 }
-                menuElements.insert(contentsOf: planActions, at: 0)
-               
-                planTitleButton.menu = UIMenu(children: menuElements)
+                
+                guard let firstPlanQuery = userPlanQueries.first else { return }
+                
+                _self.viewModel.fetchPlan(firstPlanQuery)
+                _self.planTitleButton.setTitle(firstPlanQuery.planName + " ", for: .normal)
+                
+                let bottomMenu = UIMenu(
+                    options: .displayInline,
+                    children: [_self.settingAction]
+                )
+                actions.append(bottomMenu)
+                
+                _self.planTitleButton.menu = UIMenu(children: actions)
             }
             .disposed(by: disposeBag)
         
         viewModel.currentPlan
-            .map { $0.targetWeek }
-            .subscribe { [weak self] week in
-                guard let self else { return }
-                let children = (1...week).map { week in
-                    UIAction(title: "WEEK \(week)") { action in
-                        self.viewModel.currentWeek.onNext(week)
-                    }
-                }
-                
-                currentWeekTitleButton.menu = UIMenu(children: children)
+            .map { $0.targetPeriod / 7 < 1 ? 1 : $0.targetPeriod / 7 }
+            .subscribe(with: self) { (_self, week) in
+                #warning("현재 몇주차인지~")
+                _self.currentWeekTitleButton.setTitle("WEEK \(week)", for: .normal)
             }
             .disposed(by: disposeBag)
         
         viewModel.currentWeek
-            .subscribe { [weak self] week in
-                guard let self else { return }
-                viewModel.fetchWeeklyPlan(of: week)
+            .subscribe(with: self) { (_self, week) in
+                _self.viewModel.fetchWeeklyPlan(of: week)
             }
             .disposed(by: disposeBag)
     }
@@ -183,6 +193,9 @@ extension HomeViewController {
         view.addSubview(weeklyPlansPhotoCollectionView)
 //        view.addSubview(activityIndicator)
         view.addSubview(homeAchievementView)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: calendarButton)
     }
     
     private func setAttributes() {
@@ -214,8 +227,6 @@ extension HomeViewController {
         let cellRegistration = UICollectionView
             .CellRegistration<HomeImageCollectionViewCell, String>
         { cell, indexPath, item in
-            cell.rounded(cornerRadius: 20)
-            cell.contentView.backgroundColor = .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1)
         }
         
         self.dataSource = DataSource(

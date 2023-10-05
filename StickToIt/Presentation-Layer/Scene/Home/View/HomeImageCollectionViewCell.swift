@@ -56,7 +56,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(addImageButton)
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.top.horizontalEdges.equalTo(contentView)
+            make.height.equalTo(contentView).multipliedBy(0.6)
         }
         
         editImageButton.snp.makeConstraints { make in
@@ -68,4 +69,16 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
             make.center.equalTo(contentView)
         }
     }
+}
+
+extension HomeImageCollectionViewCell {
+    
+    @objc private func editImageButtonAction() {
+        self.delegate?.editImageButtonDidTapped()
+    }
+    
+    @objc private func addImageButtonAction() {
+        self.delegate?.addImageButtonDidTapped()
+    }
+    
 }

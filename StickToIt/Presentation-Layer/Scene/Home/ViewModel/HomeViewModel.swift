@@ -11,25 +11,23 @@ import RxCocoa
 
 final class HomeViewModel {
 
-    private let showPlanUseCase: ShowPlanUseCase
+    let showPlanUseCase: PlanUseCase
     private let mainQueue: DispatchQueue
     
-    var userPlanList = PublishSubject<[PlanQuery]>()
-    var currentPlan = PublishSubject<Plan>()
+    var userPlanList = PublishRelay<[PlanQuery]>()
+    var currentPlan = PublishRelay<Plan>()
     var currentWeeklyPlan = PublishSubject<WeeklyPlan>()
     var currentWeek = BehaviorSubject<Int>(value: 1)
     
     private var disposeBag = DisposeBag()
     
     init(
-        showPlanUseCase: ShowPlanUseCase,
+        showPlanUseCase: PlanUseCase,
         mainQueue: DispatchQueue = .main
     ) {
         self.showPlanUseCase = showPlanUseCase
         self.mainQueue = mainQueue
-         
-//        showPlanUseCase.savePlan(Plan(title: "달리기", targetWeek: 1, startDate: Date()))
-        // 레포로 부터 위클리 계획을 가져와
+        
         // 계획이 있으면 이름을 리스트에 추가하고, 아닐경우 emptyView를 보여주거나, 생성화면으로 이동
         
         // 사용자가 장기간 앱을 사용하지않은경우 날짜가 지난지 어떻게 알것인지.
@@ -41,22 +39,17 @@ final class HomeViewModel {
     
     func viewDidLoad() {
         
-        fetchWeeklyPlanQueries()
-        userPlanList.subscribe(onNext: { queries in
-            guard let query = queries.first else { return }
-            self.fetchPlan(query)
-        }, onError: { print($0) }, onCompleted: { print("complete") } )
-        .disposed(by: disposeBag)
+        fetchAllPlanQueries()
     }
     
     func reload() {
-        
+        fetchAllPlanQueries()
     }
     
     func fetchPlan(_ query: PlanQuery) {
         // 쿼리로 현재 플랜에 대한 정보 가져오기
         showPlanUseCase.fetchPlan(query: query) { plan in
-            self.currentPlan.onNext(plan)
+            self.currentPlan.accept(plan)
         }
     }
     
@@ -75,18 +68,19 @@ final class HomeViewModel {
     }
     
     func save(_ plan: Plan) {
-        showPlanUseCase.savePlan(plan)
+        showPlanUseCase.createPlan(plan)
     }
     
     // MARK: internal Method
     
-    private func fetchWeeklyPlanQueries() {
+    private func fetchAllPlanQueries() {
         showPlanUseCase.fetchAllPlans { [weak self] plans in
             let planQueries = plans.map {
                 PlanQuery(planID: $0._id,
-                          planName: $0.title)
+                          planName: $0.name)
             }
-            self?.userPlanList.onNext(planQueries)
+            
+            self?.userPlanList.accept(planQueries)
         }
     }
 
