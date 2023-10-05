@@ -16,7 +16,7 @@ class GradientCircleView: RingProgressView {
         super.init(frame: frame)
         
         self.startColor = .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1)
-        self.endColor = .init(red: 99/255, green: 125/255, blue: 227/255, alpha: 1)
+        self.endColor = .systemIndigo
         self.ringWidth = 20
         self.progress = 0.0
     }
@@ -27,7 +27,7 @@ class GradientCircleView: RingProgressView {
     
     func animate() {
         UIView.animate(withDuration: 1) {
-            self.progress = 0.25
+            self.progress = 0.9
         }
     }
 }

@@ -11,7 +11,7 @@ final class AchievementView: UIView {
     
     let percentageLabel: UILabel = {
         let label = UILabel()
-        label.text = "25%"
+        label.text = "90%"
         label.font = .boldSystemFont(ofSize: 25)
         label.textColor = .init(red: 99/255, green: 125/255, blue: 227/255, alpha: 1)
         label.textAlignment = .center
@@ -34,7 +34,7 @@ final class AchievementView: UIView {
     private func configureViews() {
         self.backgroundColor = .systemBackground
         
-        self.bordered(cornerRadius: 20, borderWidth: 1.5, borderColor: .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1))
+        self.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
         
         addSubview(percentageLabel)
         addSubview(circleView)
