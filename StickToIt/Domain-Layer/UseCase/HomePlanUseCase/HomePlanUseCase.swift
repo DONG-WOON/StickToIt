@@ -1,19 +1,13 @@
 //
-//  ShowPlanUseCase.swift
+//  HomePlanUseCase.swift
 //  StickToIt
 //
-//  Created by 서동운 on 9/30/23.
+//  Created by 서동운 on 10/5/23.
 //
 
 import Foundation
 
-protocol ShowPlanUseCase {
-    func fetchAllPlans(completion: @escaping ([Plan]) -> Void)
-    func fetchPlan(query: PlanQuery, completion: @escaping (Plan) -> Void)
-    func savePlan(_ model: Plan)
-}
-
-final class DefaultShowPlanUseCase: ShowPlanUseCase {
+final class HomePlanUseCase {
     
     private let planRepository: PlanRepository
     
@@ -22,9 +16,12 @@ final class DefaultShowPlanUseCase: ShowPlanUseCase {
     ) {
         self.planRepository = planRepository
     }
+}
+
+extension HomePlanUseCase: PlanUseCase {
     
-    func savePlan(_ model: Plan) {
-        planRepository.save(model: model) { result in
+    func createPlan(_ model: Plan) {
+        planRepository.create(model: model) { result in
             switch result {
             case .success:
                 print("save", model._id)

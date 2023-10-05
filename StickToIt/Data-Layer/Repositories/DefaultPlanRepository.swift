@@ -7,21 +7,14 @@
 
 import Foundation
 
-protocol PlanRepository: Repository {
-    
-    func fetchAll() -> Result<[Plan], Error>
-    func fetch(query: PlanQuery) -> Result<Plan, Error>
-    func create(model: Plan, completion: @escaping (Result<Bool, Error>) -> Void)
-}
-
 final class DefaultPlanRepository {
     
     private let networkService: NetworkService?
-    private let databaseManager: (any DatabaseManager)?
+    private let databaseManager: PlanDatabaseManager?
     
     init(
         networkService: NetworkService?,
-        databaseManager: (some DatabaseManager)?
+        databaseManager: PlanDatabaseManager?
     ) {
         self.networkService = networkService
         self.databaseManager = databaseManager
@@ -31,17 +24,17 @@ final class DefaultPlanRepository {
 extension DefaultPlanRepository: PlanRepository {
     
     func fetchAll() -> Result<[Plan], Error> {
-        guard let entities = (databaseManager as? PlanDatabaseManager)?.fetchAll() else { return .failure((NSError(domain: "fetchAll Error", code: 1000))) }
+        guard let entities = databaseManager?.fetchAll() else { return .failure((NSError(domain: "fetchAll Error", code: 1000))) }
         return .success(entities.map { $0.toDomain() })
     }
     
     func fetch(query: PlanQuery) -> Result<Plan, Error> {
-        guard let entity = (databaseManager as? PlanDatabaseManager)?.fetch(key: query.planID) as? PlanEntity else { return .failure(NSError(domain: "fetch Error", code: 1000)) }
+        guard let entity = databaseManager?.fetch(key: query.planID) as? PlanEntity else { return .failure(NSError(domain: "fetch Error", code: 1000)) }
         return .success(entity.toDomain())
     }
     
     func create(model: Plan, completion: @escaping (Result<Bool, Error>) -> Void) {
-        (databaseManager as? PlanDatabaseManager)?.create(model: model, to: PlanEntity.self, onFailure: { error in
+        databaseManager?.create(model: model, to: PlanEntity.self, onFailure: { error in
             if let error {
                 return completion(.failure(error))
             }

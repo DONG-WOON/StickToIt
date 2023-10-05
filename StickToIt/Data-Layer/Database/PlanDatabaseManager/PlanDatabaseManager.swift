@@ -12,7 +12,7 @@ enum RealmError: Error {
     case invalidDirectory
 }
 
-final class PlanDatabaseManager: DatabaseManager {
+final class PlanDatabaseManager {
     
     typealias ResultsType = Results<PlanEntity>
     typealias Model = Plan
@@ -20,7 +20,7 @@ final class PlanDatabaseManager: DatabaseManager {
     
     private let asyncRealm: Realm
     
-    init?() {
+    init?(queue: DispatchQueue) {
         do {
             guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw RealmError.invalidDirectory }
             let realmURL = directory.appendingPathComponent("default.realm")
@@ -29,11 +29,14 @@ final class PlanDatabaseManager: DatabaseManager {
             { (migration, oldSchemaVersion) in
                 
             }
-            self.asyncRealm = try Realm(configuration: configuration)
+            self.asyncRealm = try Realm(configuration: configuration, queue: queue)
         } catch {
             return nil
         }
     }
+}
+
+extension PlanDatabaseManager: DatabaseManager {
     
     func fetchAll() -> Results<PlanEntity> {
         let objects = asyncRealm.objects(PlanEntity.self)
