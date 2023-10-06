@@ -65,6 +65,7 @@
 		729AC51C2ACEA1C300E910D5 /* SelectableImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC51B2ACEA1C300E910D5 /* SelectableImageCell.swift */; };
 		729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */; };
 		729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5202ACEC3A100E910D5 /* CameraCell.swift */; };
+		729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
@@ -121,6 +122,7 @@
 		729AC51B2ACEA1C300E910D5 /* SelectableImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableImageCell.swift; sourceTree = "<group>"; };
 		729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImage.swift"; sourceTree = "<group>"; };
 		729AC5202ACEC3A100E910D5 /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
+		729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+CGSize.swift"; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A9760D2ABB2A8E0021291C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */,
 				729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */,
 				729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */,
+				729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -618,6 +621,7 @@
 				729AC5112ACD4F1200E910D5 /* Extension+DateFormatter.swift in Sources */,
 				729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */,
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
+				729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */,
 				729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
