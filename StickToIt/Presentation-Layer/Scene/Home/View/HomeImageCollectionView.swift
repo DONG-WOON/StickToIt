@@ -50,20 +50,38 @@ extension HomeImageCollectionView {
                 widthDimension: .fractionalWidth(0.8),
                 heightDimension: .fractionalHeight(1.0)
             )
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
-                subitem: item,
-                count: 1
-            )
             
-            group.interItemSpacing = .fixed(spacing)
-            
-            let section = NSCollectionLayoutSection(group: group)
-            
-            section.orthogonalScrollingBehavior = .groupPagingCentered
-            section.contentInsets = edgeInset
-            
-            return section
+            if #available(iOS 16.0, *) {
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    repeatingSubitem: item,
+                    count: 1
+                )
+                
+                group.interItemSpacing = .fixed(spacing)
+                
+                let section = NSCollectionLayoutSection(group: group)
+                
+                section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.contentInsets = edgeInset
+                
+                return section
+            } else {
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    subitem: item,
+                    count: 1
+                )
+                
+                group.interItemSpacing = .fixed(spacing)
+                
+                let section = NSCollectionLayoutSection(group: group)
+                
+                section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.contentInsets = edgeInset
+                
+                return section
+            }
         }
         return layout
     }
