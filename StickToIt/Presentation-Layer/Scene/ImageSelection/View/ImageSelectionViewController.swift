@@ -9,8 +9,8 @@ import UIKit
 
 final class ImageSelectionViewController: UIViewController {
     
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Data>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Data>
     
     private enum Section: Int {
         case main = 0
@@ -66,7 +66,7 @@ final class ImageSelectionViewController: UIViewController {
         configureDataSource()
         
         if let deniedView = mainView as? ImageSelectionDeniedView {
-            deniedView.deniedButtonDelegate = self
+            deniedView.delegate = self
         }
         configureViews()
         takeSnapshot()
@@ -149,9 +149,9 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
     }
 }
 
-extension ImageSelectionViewController: DeniedButtonDelegate {
+extension ImageSelectionViewController: SettingButtonDelegate {
     func goToSetting() {
-        print("해해")
+        imageManager.goToSetting()
     }
 }
 

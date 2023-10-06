@@ -6,13 +6,13 @@
 //
 
 import UIKit
-protocol DeniedButtonDelegate: AnyObject {
+protocol SettingButtonDelegate: AnyObject {
     func goToSetting()
 }
 
 final class ImageSelectionDeniedView: UIView {
     
-    weak var deniedButtonDelegate: DeniedButtonDelegate?
+    weak var delegate: SettingButtonDelegate?
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -85,6 +85,6 @@ final class ImageSelectionDeniedView: UIView {
         }
     }
     @objc private func goToSettingButtonDidTapped() {
-        deniedButtonDelegate?.goToSetting()
+        delegate?.goToSetting()
     }
 }
