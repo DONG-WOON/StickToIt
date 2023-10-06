@@ -43,10 +43,10 @@ extension UIView {
         self.bordered(cornerRadius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
     }
     
-    func bordered(cornerRadius: CGFloat = 5, borderWidth: CGFloat, borderColor: UIColor) {
+    func bordered(cornerRadius: CGFloat = 5, borderWidth: CGFloat, borderColor: UIColor? = nil) {
         self.rounded(cornerRadius: cornerRadius)
         self.layer.borderWidth = borderWidth
-        self.layer.borderColor = borderColor.cgColor
+        self.layer.borderColor = borderColor?.cgColor
     }
     
     func rounded(cornerRadius: CGFloat = 5) {
