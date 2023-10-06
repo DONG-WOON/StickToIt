@@ -255,8 +255,12 @@ extension HomeViewController {
 extension HomeViewController: HomeImageCollectionViewCellDelegate {
     
     func addImageButtonDidTapped() {
-        let vc = ImageSelectionViewController(authorization: .authorized)
+        let vc = ImageSelectionViewController(
+            imageManager: ImagePickerManager(),
+            cameraManager: CameraManager()
+            )
             .embedNavigationController()
+        
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

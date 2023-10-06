@@ -15,14 +15,9 @@ final class ImageSelectionViewController: UIViewController {
     private enum Section: Int {
         case main = 0
     }
-    
-    enum ImageAuthorization {
-        case authorized
-        case limited
-        case denied
-    }
-    
-    private let currentAuth: ImageAuthorization
+    private var currentAuth: PHAuthorizationStatus
+    private var cameraManager: CameraManageable?
+    private let imageManager: ImageManageable
     private var dataSource: DataSource?
     
     let viewModel = ImageSelectionViewModel()
@@ -37,16 +32,21 @@ final class ImageSelectionViewController: UIViewController {
     )
     
     // MARK: - View Life Cycle
-    init(authorization: ImageAuthorization) {
+    init(imageManager: ImageManageable, cameraManager: CameraManageable) {
+        self.imageManager = imageManager
+        
+        let authorization = imageManager.checkAuth()
+        
         self.currentAuth = authorization
         
         switch authorization {
-        case .authorized:
+        case .authorized, .limited, .notDetermined:
+            self.cameraManager = cameraManager
             mainView = ImageSelectionView()
-        case .limited:
-            mainView = ImageSelectionView()
-        case .denied:
+        case .denied, .restricted:
             mainView = ImageSelectionDeniedView()
+        @unknown default:
+            fatalError()
         }
         
         super.init(nibName: nil, bundle: nil)
