@@ -8,16 +8,19 @@
 import Foundation
 
 enum Const {
-    enum Image {
-        static let houseFill = "house.fill"
-        static let listBullet = "list.bullet"
-        static let calendar = "calendar"
-        static let chevronDown = "chevron.down"
-        static let chevronRight = "chevron.right"
-        static let chevronLeft = "chevron.left"
-        static let ellipsis = "ellipsis"
-        static let plus = "plus"
-        static let gear = "gearshape.fill"
-        static let xmark = "xmark"
+    enum Image: String {
+        case houseFill = "house.fill"
+        case listBullet = "list.bullet"
+        case calendar = "calendar"
+        case chevronDown = "chevron.down"
+        case chevronRight = "chevron.right"
+        case chevronLeft = "chevron.left"
+        case ellipsis = "ellipsis"
+        case plus = "plus"
+        case gear = "gearshape.fill"
+        case xmark = "xmark"
+        case uncheckedCircle = "checkmark.circle"
+        case checkedCircle = "checkmark.circle.fill"
+        case camera = "camera.shutter.button.fill"
     }
 }

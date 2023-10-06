@@ -62,6 +62,7 @@
 		729AC5112ACD4F1200E910D5 /* Extension+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */; };
 		729AC5152ACE91AD00E910D5 /* HomePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5142ACE91AD00E910D5 /* HomePlanUseCase.swift */; };
 		729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5172ACE91F200E910D5 /* CreatePlanUseCase.swift */; };
+		729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
@@ -115,6 +116,7 @@
 		729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+DateFormatter.swift"; sourceTree = "<group>"; };
 		729AC5142ACE91AD00E910D5 /* HomePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePlanUseCase.swift; sourceTree = "<group>"; };
 		729AC5172ACE91F200E910D5 /* CreatePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanUseCase.swift; sourceTree = "<group>"; };
+		729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImage.swift"; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A9760D2ABB2A8E0021291C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				729AC4D12ACB986600E910D5 /* Extension+UIView.swift */,
 				7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */,
 				729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */,
+				729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -585,6 +588,7 @@
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
+				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,

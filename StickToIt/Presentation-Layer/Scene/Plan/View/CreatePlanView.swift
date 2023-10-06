@@ -65,7 +65,7 @@ final class CreatePlanView: UIScrollView {
     }()
     
     lazy var targetPeriodSettingButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.calendar),
+        image: UIImage(resource: .calendar),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label,
         target: self,

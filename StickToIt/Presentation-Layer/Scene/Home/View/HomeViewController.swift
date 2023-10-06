@@ -33,7 +33,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var createPlanAction = UIAction(
         title: "계획 추가하기",
-        image: UIImage(systemName: Const.Image.plus),
+        image: UIImage(resource: .plus),
         handler: { _ in
             let vc = CreatePlanViewController()
                 .embedNavigationController()
@@ -44,7 +44,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var settingAction = UIAction(
         title: "내 계획 설정하기",
-        image: UIImage(systemName: Const.Image.gear),
+        image: UIImage(resource: .gear),
         handler: { _ in
 
         }
@@ -55,7 +55,7 @@ final class HomeViewController: UIViewController {
     private lazy var planTitleButton: ResizableButton = {
         let button = ResizableButton(
             title: "계획 설정",
-            image: UIImage(systemName: Const.Image.chevronDown),
+            image: UIImage(resource: .chevronDown),
             symbolConfiguration: .init(font: .systemFont(ofSize: 17), scale: .small),
             tintColor: .label,
             imageAlignment: .forceRightToLeft,
@@ -71,7 +71,7 @@ final class HomeViewController: UIViewController {
     }()
     
     private lazy var calendarButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.calendar),
+        image: UIImage(resource: .calendar),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label,
         target: self,
@@ -80,7 +80,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var currentWeekTitleButton = ResizableButton(
         title: "WEEK 1",
-        image: UIImage(systemName: Const.Image.chevronRight),
+        image: UIImage(resource: .chevronRight),
         symbolConfiguration: .init(scale: .large),
         font: .boldSystemFont(ofSize: 30),
         tintColor: .label, imageAlignment: .forceRightToLeft,

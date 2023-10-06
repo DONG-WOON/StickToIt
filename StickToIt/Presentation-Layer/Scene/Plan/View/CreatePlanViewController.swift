@@ -27,7 +27,7 @@ final class CreatePlanViewController: UIViewController {
     let mainView = CreatePlanView()
     
     private lazy var dismissButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.xmark),
+        image: UIImage(resource: .xmark),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label, target: self,
         action: #selector(dismissButtonDidTapped)

@@ -13,7 +13,7 @@ final class TabBarController: UITabBarController {
     // MARK: Properties
     
     let homeVC = HomeViewController()
-        .configureTabBarItem(title: "Home", image: UIImage(systemName: Const.Image.houseFill))
+        .configureTabBarItem(title: "Home", image: UIImage(resource: .houseFill))
         .embedNavigationController()
     
     

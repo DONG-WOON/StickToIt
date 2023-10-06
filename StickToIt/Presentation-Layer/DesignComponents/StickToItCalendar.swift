@@ -37,12 +37,12 @@ final class StickToItCalendar: UIView {
     }()
     
     private lazy var leftButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.chevronLeft),
+        image: UIImage(resource: .chevronLeft),
         symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
         target: self, action: #selector(moveToPreviousMonth)
     )
     private lazy var rightButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.chevronRight),
+        image: UIImage(resource: .chevronRight),
         symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
         target: self, action: #selector(moveToNextMonth)
     )

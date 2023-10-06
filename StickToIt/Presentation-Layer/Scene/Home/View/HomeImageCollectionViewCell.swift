@@ -18,7 +18,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     weak var delegate: HomeImageCollectionViewCellDelegate?
     
     lazy var editImageButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.ellipsis),
+        image: UIImage(resource: .ellipsis),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label,
         target: self, action: #selector(editImageButtonAction)
@@ -26,7 +26,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         
     
     lazy var addImageButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.plus),
+        image: UIImage(resource: .plus),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label, target: self, action: #selector(addImageButtonAction)
         )
