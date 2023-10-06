@@ -93,25 +93,41 @@ final class ImageSelectionViewController: UIViewController {
     
     private func configureDataSource() {
         guard let _mainView = mainView as? UICollectionView else { return }
-        let cellRegistration = UICollectionView
-            .CellRegistration<UICollectionViewCell, String>
+        
+        #warning("항상 고정으로 존재하는 사진찍기 이미지 Cell인데 이런식으로 셀을 등록해서 사용할 필요가 있나.")
+        let cameraCellRegistration = UICollectionView
+            .CellRegistration<CameraCell, Data>
         { cell, indexPath, item in
             
-            cell.contentView.backgroundColor = .green
-            if item == "사진찍기" {
-                cell.contentView.backgroundColor = .red
+           
+        }
+        
+        let selectableImageCellRegistration = UICollectionView
+            .CellRegistration<SelectableImageCell, Data>
+        { cell, indexPath, item in
+            DispatchQueue.main.async {
+                cell.imageView.image = UIImage(data: item)
             }
         }
         
         self.dataSource = DataSource(
             collectionView: _mainView,
             cellProvider: { collectionView, indexPath, item in
-                let cell = collectionView.dequeueConfiguredReusableCell(
-                    using: cellRegistration,
-                    for: indexPath,
-                    item: item
-                )
-                return cell
+                if indexPath.item == 0 {
+                    let cell = collectionView.dequeueConfiguredReusableCell(
+                        using: cameraCellRegistration,
+                        for: indexPath,
+                        item: item
+                    )
+                    return cell
+                } else {
+                    let cell = collectionView.dequeueConfiguredReusableCell(
+                        using: selectableImageCellRegistration,
+                        for: indexPath,
+                        item: item
+                    )
+                    return cell
+                }
             }
         )
     }
