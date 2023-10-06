@@ -7,57 +7,65 @@
 
 import Foundation
 import PhotosUI
+import RxSwift
+import RxCocoa
 
-protocol ImageManageable {
-    static var shared: ImageManageable { get }
+protocol ImageManageable: AnyObject {
+    func checkAuth() -> PHAuthorizationStatus
     
-    func getImage(_ viewController: UIViewController, completion: @escaping (UIImage?) -> Void)
-    func requestAuth(_ viewController: UIViewController)
-    func checkAuth(_ viewController: UIViewController)
+    func getImage<T: UIViewController>(
+        _ viewController: T,
+        completion: @escaping ([Data]) -> Void)
+    where T: PHPhotoLibraryChangeObserver
     
-    func showGoToSettingAlert(_ viewController: UIViewController)
-    func showImagePicker(_ viewController: UIViewController)
+    func photoLibraryDidChange<T: UIViewController>(
+        _ viewController: T,
+        _ changeInstance: PHChange)
+    where T: PHPhotoLibraryChangeObserver
+
+    func goToSetting()
+    func showPHPicker(_ viewController: UIViewController)
+}
+
+final class ImagePickerManager {
+    
+    var currentImageDatas = BehaviorRelay<[Data]>(value: [])
+    var currentImageCountToFetch = BehaviorSubject<Int>(value: 0)
+    var completion: (([Data]) -> Void)?
+    
+    var disposeBag = DisposeBag()
+    
+    init() {
+        _ = Observable.combineLatest(currentImageDatas.map { $0.count }, currentImageCountToFetch.map{ $0 })
+            .filter { $0.0 == $0.1 && $0 != (0,0) }
+            .observe(on:MainScheduler.asyncInstance)
+            .subscribe(with: self) { (_self, bool) in
+                _self.completion?(_self.currentImageDatas.value)
+                _self.currentImageDatas.accept([])
+            }
+            .disposed(by: disposeBag)
+    }
 }
 
 
-final class ImagePickerManager: ImageManageable {
-    static let shared: ImageManageable = ImagePickerManager()
+extension ImagePickerManager: ImageManageable {
     
-    private init() { }
-    private var imageSelectAction: ((UIImage?) -> Void)?
-    
-    private var imagesID = [String]()
-    
-    func getImage(_ viewController: UIViewController, completion: @escaping (UIImage?) -> Void) {
-        imageSelectAction = completion
-        checkAuth(viewController)
-    }
-    
-    func checkAuth(_ viewController: UIViewController) {
-        let auth = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-        
-        switch auth {
-        case .notDetermined:
-            print("notDetermined")
-            requestAuth(viewController)
-        case .restricted:
-            print("restricted")
-            showGoToSettingAlert(viewController)
-        case .denied:
-            print("denied")
-            showGoToSettingAlert(viewController)
-        case .authorized:
-            print("authorized")
-            showImagePicker(viewController)
-        case .limited:
-            print("limited")
-            requestAuth(viewController)
-        @unknown default:
-            fatalError("PhotoLibAuth need update")
+    func getImage<T: UIViewController>(_ viewController: T, completion: @escaping ([Data]) -> Void) where T: PHPhotoLibraryChangeObserver {
+        self.completion = completion
+        requestAuth(viewController) { [weak self] in
+            self?.getImageThatUserSelected()
         }
     }
-
-    func requestAuth(_ viewController: UIViewController) {
+    
+    func checkAuth() -> PHAuthorizationStatus {
+        let auth = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        return auth
+    }
+    
+    private func requestAuth<T: UIViewController>(
+        _ viewController: T,
+        completion: @escaping () -> Void)
+    where T: PHPhotoLibraryChangeObserver {
         DispatchQueue.main.async { [weak self] in
             PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
                 switch status {
@@ -65,9 +73,12 @@ final class ImagePickerManager: ImageManageable {
                     break
                 case .authorized:
                     print("authorized")
-                    self?.showImagePicker(viewController)
+                    completion()
+                    self?.showPHPicker(viewController)
                 case .limited:
-                    break
+                    print("limited")
+                    completion()
+                    PHPhotoLibrary.shared().register(viewController)
                 @unknown default:
                     fatalError()
                 }
@@ -75,11 +86,18 @@ final class ImagePickerManager: ImageManageable {
         }
     }
     
-    func showImagePicker(_ viewController: UIViewController) {
+    func photoLibraryDidChange<T: UIViewController>(
+        _ viewController: T,
+        _ changeInstance: PHChange)
+    where T: PHPhotoLibraryChangeObserver {
+        viewController.photoLibraryDidChange(changeInstance)
+    }
+    
+    func showPHPicker(_ viewController: UIViewController) {
         DispatchQueue.main.async {
             var configuration = PHPickerConfiguration(photoLibrary: .shared())
             
-            configuration.preselectedAssetIdentifiers = self.imagesID
+//            configuration.preselectedAssetIdentifiers = self.imagesID
             
             configuration.selectionLimit = 1
             let picker = PHPickerViewController(configuration: configuration)
@@ -89,30 +107,31 @@ final class ImagePickerManager: ImageManageable {
         }
     }
     
-    func showGoToSettingAlert(_ viewController: UIViewController) {
+    private func getImageThatUserSelected() {
+        let fetchOptions = PHFetchOptions()
+        let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
+        let requestOptions = PHImageRequestOptions()
+        let phImageManager = PHImageManager()
+        
+        requestOptions.isSynchronous = true
+
+        currentImageCountToFetch.onNext(fetchResult.count)
+        
+        fetchResult.enumerateObjects { (asset, index, _) in
+            
+            phImageManager.requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, string, orientation, info) in
+                guard let _data = data else { return }
+                
+                self.currentImageDatas.accept(self.currentImageDatas.value + [_data])
+            }
+        }
+    }
+    
+    func goToSetting() {
         DispatchQueue.main.async {
-            let alert = UIAlertController(
-                title: "현재 앨범에 대한 접근 권한이 없습니다.",
-                message: "설정 > 작심삼일 > 사진 탭에서 앨범 접근을 활성화 할 수 있습니다.",
-                preferredStyle: .alert
-            )
-            
-            let cancel = UIAlertAction(title: "취소",
-                                            style: .cancel) { _ in
-                alert.dismiss(animated: true, completion: nil)
-            }
-            
-            let goToSetting = UIAlertAction(title: "설정",
-                                                 style: .default) { _ in
-                guard let settingURL = URL(string: UIApplication.openSettingsURLString),
-                      UIApplication.shared.canOpenURL(settingURL) else { return }
-                UIApplication.shared.open(settingURL, options: [:])
-            }
-            
-            alert.addAction(cancel)
-            alert.addAction(goToSetting)
-            
-            viewController.present(alert, animated: true)
+            guard let settingURL = URL(string: UIApplication.openSettingsURLString),
+                  UIApplication.shared.canOpenURL(settingURL) else { return }
+            UIApplication.shared.open(settingURL, options: [:])
         }
     }
 }
@@ -124,15 +143,15 @@ extension ImagePickerManager: PHPickerViewControllerDelegate {
         if let itemProvider = results.first?.itemProvider,
            itemProvider.canLoadObject(ofClass: UIImage.self) { // 3
             itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in // 4
-                if let _image = image as? UIImage {
-                    DispatchQueue.main.async {
-                        self.imageSelectAction?(_image)
-                    }
-                }
+//                if let _image = image as? UIImage {
+//                    DispatchQueue.main.async {
+//                        self.imageSelectAction?(_image)
+//                    }
+//                }
             }
         } else {
             // TODO: Handle empty results or item provider not being able load UIImage
         }
     }
-
+    
 }
