@@ -13,10 +13,12 @@ import RxCocoa
 protocol ImageManageable: AnyObject {
     func checkAuth() -> PHAuthorizationStatus
     
-    func getImage<T: UIViewController>(
+    func getImageAssets<T: UIViewController>(
         _ viewController: T,
-        completion: @escaping ([Data]) -> Void)
-    where T: PHPhotoLibraryChangeObserver
+        completion: @escaping ([PHAsset]) -> Void) where T: PHPhotoLibraryChangeObserver
+    
+   
+    func getImage(for asset: PHAsset, completion: @escaping (UIImage?) -> Void)
     
     func photoLibraryDidChange<T: UIViewController>(
         _ viewController: T,
@@ -24,24 +26,25 @@ protocol ImageManageable: AnyObject {
     where T: PHPhotoLibraryChangeObserver
 
     func goToSetting()
-    func showPHPicker(_ viewController: UIViewController)
+//    func showPHPicker(_ viewController: UIViewController)
 }
 
 final class ImagePickerManager {
     
-    var currentImageDatas = BehaviorRelay<[Data]>(value: [])
-    var currentImageCountToFetch = BehaviorSubject<Int>(value: 0)
-    var completion: (([Data]) -> Void)?
+    private let phImageManager = PHImageManager()
+    var imageAssets = BehaviorRelay<[PHAsset]>(value: [])
+    var currentImageCountToFetch = BehaviorRelay<Int>(value: 0)
+    var completion: (([PHAsset]) -> Void)?
     
     var disposeBag = DisposeBag()
     
     init() {
-        _ = Observable.combineLatest(currentImageDatas.map { $0.count }, currentImageCountToFetch.map{ $0 })
+        _ = Observable.combineLatest(imageAssets.map { $0.count }, currentImageCountToFetch.map{ $0 })
             .filter { $0.0 == $0.1 && $0 != (0,0) }
-            .observe(on:MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, bool) in
-                _self.completion?(_self.currentImageDatas.value)
-                _self.currentImageDatas.accept([])
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(with: self) { (_self, isEnabled) in
+                _self.completion?(_self.imageAssets.value)
+                _self.imageAssets.accept([])
             }
             .disposed(by: disposeBag)
     }
@@ -50,11 +53,22 @@ final class ImagePickerManager {
 
 extension ImagePickerManager: ImageManageable {
     
-    func getImage<T: UIViewController>(_ viewController: T, completion: @escaping ([Data]) -> Void) where T: PHPhotoLibraryChangeObserver {
+    func getImageAssets<T: UIViewController>(_ viewController: T, completion: @escaping ([PHAsset]) -> Void) where T: PHPhotoLibraryChangeObserver {
         self.completion = completion
         requestAuth(viewController) { [weak self] in
             self?.getImageThatUserSelected()
         }
+    }
+    
+    @MainActor
+    func getImage(for asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.isSynchronous = true
+        
+        
+        self.phImageManager.requestImage(for: asset, targetSize: CGSize.thumbnail, contentMode: .aspectFit, options: requestOptions, resultHandler: { (image, info) in
+            completion(image)
+        })
     }
     
     func checkAuth() -> PHAuthorizationStatus {
@@ -74,7 +88,7 @@ extension ImagePickerManager: ImageManageable {
                 case .authorized:
                     print("authorized")
                     completion()
-                    self?.showPHPicker(viewController)
+//                    self?.showPHPicker(viewController)
                 case .limited:
                     print("limited")
                     completion()
@@ -93,37 +107,16 @@ extension ImagePickerManager: ImageManageable {
         viewController.photoLibraryDidChange(changeInstance)
     }
     
-    func showPHPicker(_ viewController: UIViewController) {
-        DispatchQueue.main.async {
-            var configuration = PHPickerConfiguration(photoLibrary: .shared())
-            
-//            configuration.preselectedAssetIdentifiers = self.imagesID
-            
-            configuration.selectionLimit = 1
-            let picker = PHPickerViewController(configuration: configuration)
-            picker.delegate = self
-            
-            viewController.present(picker, animated: true)
-        }
-    }
-    
     private func getImageThatUserSelected() {
         let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
-        let requestOptions = PHImageRequestOptions()
-        let phImageManager = PHImageManager()
+        let imageCount = fetchResult.countOfAssets(with: .image)
         
-        requestOptions.isSynchronous = true
-
-        currentImageCountToFetch.onNext(fetchResult.count)
+        currentImageCountToFetch.accept(imageCount)
         
-        fetchResult.enumerateObjects { (asset, index, _) in
-            
-            phImageManager.requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, string, orientation, info) in
-                guard let _data = data else { return }
-                
-                self.currentImageDatas.accept(self.currentImageDatas.value + [_data])
-            }
+        fetchResult.enumerateObjects { [self] (asset, _, _) in
+            self.imageAssets.accept(self.imageAssets.value + [asset])
         }
     }
     

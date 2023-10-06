@@ -6,15 +6,18 @@
 //
 
 import UIKit
+import Photos
+import RxSwift
 
 final class ImageSelectionViewController: UIViewController {
     
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Data>
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Data>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
     
     private enum Section: Int {
         case main = 0
     }
+    
     private var currentAuth: PHAuthorizationStatus
     private var cameraManager: CameraManageable?
     private let imageManager: ImageManageable
@@ -22,10 +25,12 @@ final class ImageSelectionViewController: UIViewController {
     
     let viewModel = ImageSelectionViewModel()
     
+    private var disposeBag = DisposeBag()
+    
     // MARK: - UI Properties
     private let mainView: UIView
     private lazy var dismissButton = ResizableButton(
-        image: UIImage(systemName: Const.Image.xmark),
+        image: UIImage(resource: .xmark),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label, target: self,
         action: #selector(dismissButtonDidTapped)
@@ -63,32 +68,44 @@ final class ImageSelectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureDataSource()
-        
         if let deniedView = mainView as? ImageSelectionDeniedView {
             deniedView.delegate = self
+        } else {
+            configureDataSource()
         }
+    
         configureViews()
-        takeSnapshot()
+        
+        bindUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     // MARK: - Methods
     
-    func takeSnapshot() {
+    private func takeSnapshot(item: [String]? = nil , toSection section: Section) {
         guard let dataSource else { return }
+        
         var snapshot = Snapshot()
         
         snapshot.appendSections([.main])
+        snapshot.appendItems([UUID().uuidString], toSection: section)
         
-        switch currentAuth {
         case .authorized, .limited:
-            snapshot.appendItems(["사진찍기"], toSection: .main)
-        case .denied:
-            break
-        }
         snapshot.appendItems(viewModel.selectedImage, toSection: .main)
+        return snapshot
     
-        dataSource.apply(snapshot)
+    private func bindUI() {
+        
+        viewModel.imageDataList
+            .bind(with: self) { (_self, datas) in
+                let id = datas.map { $0.localIdentifier }
+                _self.takeSnapshot(item: id, toSection: .main)
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     private func configureDataSource() {
@@ -96,19 +113,26 @@ final class ImageSelectionViewController: UIViewController {
         
         #warning("항상 고정으로 존재하는 사진찍기 이미지 Cell인데 이런식으로 셀을 등록해서 사용할 필요가 있나.")
         let cameraCellRegistration = UICollectionView
-            .CellRegistration<CameraCell, Data>
+            .CellRegistration<CameraCell, String>
         { cell, indexPath, item in
             
            
         }
         
         let selectableImageCellRegistration = UICollectionView
-            .CellRegistration<SelectableImageCell, Data>
-        { cell, indexPath, item in
+            .CellRegistration<SelectableImageCell, String>
+        { cell, indexPath, id in
+            
+            let imageAssets = self.viewModel.imageDataList.value
+            let asset = imageAssets[indexPath.item - 1]
+            
             DispatchQueue.main.async {
-                cell.imageView.image = UIImage(data: item)
+                self.imageManager.getImage(for: asset) { image in
+                    cell.imageView.image = image
+                }
             }
         }
+        
         
         self.dataSource = DataSource(
             collectionView: _mainView,
@@ -145,8 +169,41 @@ extension ImageSelectionViewController {
 
 extension ImageSelectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        if indexPath.item == 0 {
+            cameraManager?.requestAuth(in: self)
+        } else {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
+            
+            cell.cellIsSelected.toggle()
+            
+            if cell.cellIsSelected {
+                viewModel.selectedImageData.accept(indexPath.item - 1)
+            } else {
+                viewModel.selectedImageData.accept(nil)
+            }
+        }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if indexPath.item != 0 {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
+            
+            cell.cellIsSelected = false
+        }
+    }
+}
+
+extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+    
+        imageManager.getImageAssets(self) { [weak self] datas in
+            self?.viewModel.imageDataList.accept(datas)
+        }
+    }
+}
+
+extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
 }
 
 extension ImageSelectionViewController: SettingButtonDelegate {
