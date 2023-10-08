@@ -9,11 +9,11 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class CreatePlanViewModel<UseCase: CreatePlanUseCase>
-where UseCase.Model == Plan
+final class CreatePlanViewModel<PlanUseCase: CreatePlanUseCase>
+where PlanUseCase.Model == Plan
 {
     // MARK: Properties
-    private let useCase: UseCase
+    private let useCase: PlanUseCase
     private let mainQueue: DispatchQueue
     
     // MARK: Properties
@@ -27,7 +27,7 @@ where UseCase.Model == Plan
     
     // MARK: Life Cycle
     init(
-        useCase: UseCase,
+        useCase: PlanUseCase,
         mainQueue: DispatchQueue = .main
     ) {
         self.useCase = useCase
