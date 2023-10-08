@@ -38,7 +38,7 @@
 		729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4812AC6F68900E910D5 /* Entity+Mapping.swift */; };
 		729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4832AC6F69400E910D5 /* Model+Mapping.swift */; };
 		729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */; };
-		729AC4AF2AC9672500E910D5 /* ImagePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4AE2AC9672500E910D5 /* ImagePickerManager.swift */; };
+		729AC4AF2AC9672500E910D5 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4AE2AC9672500E910D5 /* ImageManager.swift */; };
 		729AC4B42AC9B84600E910D5 /* ResizableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4B32AC9B84600E910D5 /* ResizableButton.swift */; };
 		729AC4B62AC9D97500E910D5 /* ImageSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4B52AC9D97500E910D5 /* ImageSelectionView.swift */; };
 		729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4B72AC9DE2B00E910D5 /* ImageSelectionViewController.swift */; };
@@ -103,7 +103,7 @@
 		729AC4812AC6F68900E910D5 /* Entity+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entity+Mapping.swift"; sourceTree = "<group>"; };
 		729AC4832AC6F69400E910D5 /* Model+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+Mapping.swift"; sourceTree = "<group>"; };
 		729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlan.swift; sourceTree = "<group>"; };
-		729AC4AE2AC9672500E910D5 /* ImagePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerManager.swift; sourceTree = "<group>"; };
+		729AC4AE2AC9672500E910D5 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		729AC4B32AC9B84600E910D5 /* ResizableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizableButton.swift; sourceTree = "<group>"; };
 		729AC4B52AC9D97500E910D5 /* ImageSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectionView.swift; sourceTree = "<group>"; };
 		729AC4B72AC9DE2B00E910D5 /* ImageSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectionViewController.swift; sourceTree = "<group>"; };
@@ -327,7 +327,7 @@
 		729AC4AD2AC9671700E910D5 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				729AC4AE2AC9672500E910D5 /* ImagePickerManager.swift */,
+				729AC4AE2AC9672500E910D5 /* ImageManager.swift */,
 				729AC5242ACEEBAF00E910D5 /* CameraManager.swift */,
 			);
 			path = Shared;
@@ -616,8 +616,8 @@
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */,
 				729AC4C32ACAFD8200E910D5 /* AchievementView.swift in Sources */,
-				729AC4AF2AC9672500E910D5 /* ImagePickerManager.swift in Sources */,
 				72FA8DE92AD19AB000F19568 /* CreatePlanRepository.swift in Sources */,
+				729AC4AF2AC9672500E910D5 /* ImageManager.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,

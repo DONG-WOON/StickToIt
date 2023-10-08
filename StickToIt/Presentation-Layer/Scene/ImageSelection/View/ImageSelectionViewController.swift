@@ -14,21 +14,17 @@ final class ImageSelectionViewController: UIViewController {
     private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
     
-    private enum Section: Int {
-        case main = 0
-    }
-    
-    private var currentAuth: PHAuthorizationStatus
-    private var cameraManager: CameraManageable?
-    private let imageManager: ImageManageable
-    private var dataSource: DataSource?
+    private enum Section: Int { case main = 0 }
     
     let viewModel = ImageSelectionViewModel()
     
-    private var disposeBag = DisposeBag()
+    private var imageManager: ImageManager
+    private var dataSource: DataSource?
+    private let disposeBag = DisposeBag()
     
     // MARK: - UI Properties
     private let mainView: UIView
+    
     private lazy var dismissButton = ResizableButton(
         image: UIImage(resource: .xmark),
         symbolConfiguration: .init(scale: .large),
@@ -36,17 +32,35 @@ final class ImageSelectionViewController: UIViewController {
         action: #selector(dismissButtonDidTapped)
     )
     
-    // MARK: - View Life Cycle
-    init(imageManager: ImageManageable, cameraManager: CameraManageable) {
+    // MARK: - Life Cycle
+    init(imageManager: ImageManager) {
         self.imageManager = imageManager
+        
+        imageManager.requestAuth { status in
+            switch status {
+            case .notDetermined:
+                print("notDetar")
+            case .restricted:
+                print("restricted")
+            case .denied:
+                print("denied")
+            case .authorized:
+                print("authorized")
+            case .limited:
+                print("limited")
+            @unknown default:
+                fatalError()
+            }
+        }
         
         let authorization = imageManager.checkAuth()
         
-        self.currentAuth = authorization
-        
         switch authorization {
-        case .authorized, .limited, .notDetermined:
-            self.cameraManager = cameraManager
+        case .notDetermined:
+            mainView = ImageSelectionView()
+        case .limited:
+            mainView = ImageSelectionView()
+        case .authorized:
             mainView = ImageSelectionView()
         case .denied, .restricted:
             mainView = ImageSelectionDeniedView()
@@ -58,7 +72,7 @@ final class ImageSelectionViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("error")
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func loadView() {
@@ -68,56 +82,64 @@ final class ImageSelectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let deniedView = mainView as? ImageSelectionDeniedView {
-            deniedView.delegate = self
-        } else {
-            configureDataSource()
-        }
-    
-        configureViews()
-        
+        viewModel.viewDidLoad()
+        setViewsAndDelegate()
         bindUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if mainView is ImageSelectionView {
+            imageManager.getImageAssets { [weak self] imageAssets in
+                self?.viewModel.imageDataList.accept(imageAssets)
+            }
+        }
     }
     
     // MARK: - Methods
     
-    private func takeSnapshot(item: [String]? = nil , toSection section: Section) {
-        guard let dataSource else { return }
-        
-        var snapshot = Snapshot()
-        
-        snapshot.appendSections([.main])
-        snapshot.appendItems([UUID().uuidString], toSection: section)
-        
-        case .authorized, .limited:
-        snapshot.appendItems(viewModel.selectedImage, toSection: .main)
-        return snapshot
-    
     private func bindUI() {
-        
         viewModel.imageDataList
             .bind(with: self) { (_self, datas) in
                 let id = datas.map { $0.localIdentifier }
                 _self.takeSnapshot(item: id, toSection: .main)
             }
             .disposed(by: disposeBag)
-        
     }
     
-    private func configureDataSource() {
-        guard let _mainView = mainView as? UICollectionView else { return }
+    func setViewsAndDelegate() {
+        if let _mainView = mainView as? ImageSelectionView {
+            configureDataSource(of: _mainView)
+            _mainView.delegate = self
+            imageManager.register(viewController: self)
+            
+        }
         
+        if mainView is ImageSelectionDeniedView {
+            (mainView as? ImageSelectionDeniedView)?.delegate = self
+        }
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+    }
+}
+
+
+extension ImageSelectionViewController {
+    @objc private func dismissButtonDidTapped() {
+        self.dismiss(animated: true)
+    }
+}
+
+// MARK: CollectionViewDataSource
+
+extension ImageSelectionViewController {
+    private func configureDataSource(of collectionView: UICollectionView) {
+
         #warning("항상 고정으로 존재하는 사진찍기 이미지 Cell인데 이런식으로 셀을 등록해서 사용할 필요가 있나.")
         let cameraCellRegistration = UICollectionView
             .CellRegistration<CameraCell, String>
-        { cell, indexPath, item in
-            
-           
-        }
+        { cell, indexPath, item in }
         
         let selectableImageCellRegistration = UICollectionView
             .CellRegistration<SelectableImageCell, String>
@@ -126,8 +148,8 @@ final class ImageSelectionViewController: UIViewController {
             let imageAssets = self.viewModel.imageDataList.value
             let asset = imageAssets[indexPath.item - 1]
             
-            DispatchQueue.main.async {
-                self.imageManager.getImage(for: asset) { image in
+            DispatchQueue.main.async { [weak self] in
+                self?.imageManager.getImage(for: asset) { image in
                     cell.imageView.image = image
                 }
             }
@@ -135,7 +157,7 @@ final class ImageSelectionViewController: UIViewController {
         
         
         self.dataSource = DataSource(
-            collectionView: _mainView,
+            collectionView: collectionView,
             cellProvider: { collectionView, indexPath, item in
                 if indexPath.item == 0 {
                     let cell = collectionView.dequeueConfiguredReusableCell(
@@ -156,17 +178,21 @@ final class ImageSelectionViewController: UIViewController {
         )
     }
     
-    private func configureViews() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+    private func takeSnapshot(item: [String]? = nil , toSection section: Section) {
+        var snapshot = Snapshot()
+        
+        snapshot.appendSections([section])
+        snapshot.appendItems([UUID().uuidString], toSection: section)
+        
+        if let item {
+            snapshot.appendItems(item, toSection: section)
+        }
+        
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 }
 
-extension ImageSelectionViewController {
-    @objc private func dismissButtonDidTapped() {
-        self.dismiss(animated: true)
-    }
-}
-
+// MARK: UICollectionViewDelegate
 extension ImageSelectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item == 0 {
@@ -193,11 +219,12 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
     }
 }
 
+
+// MARK: PHPhotoLibraryChangeObserver
 extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-    
-        imageManager.getImageAssets(self) { [weak self] datas in
-            self?.viewModel.imageDataList.accept(datas)
+        imageManager.getImageAssets { [weak self] imageAssets in
+            self?.viewModel.imageDataList.accept(imageAssets)
         }
     }
 }
