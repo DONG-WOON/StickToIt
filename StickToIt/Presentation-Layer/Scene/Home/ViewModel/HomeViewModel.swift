@@ -9,9 +9,23 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class HomeViewModel {
+//protocol PlanViewModel {
+//    associatedtype UseCase = FetchPlanUseCase<FetchPlanRepository>
+//
+//    init(
+//        planUseCase: UseCase,
+//        mainQueue: DispatchQueue
+//    )
+//
+//    func fetchPlan(_ query: PlanQuery)
+//    func fetchWeeklyPlan(of week: Int)
+//}
 
-    let showPlanUseCase: PlanUseCase
+final class HomeViewModel<UseCase: FetchPlanUseCase>
+where UseCase.Model == Plan, UseCase.Query == PlanQuery
+{
+
+    private let useCase: UseCase
     private let mainQueue: DispatchQueue
     
     var userPlanList = PublishRelay<[PlanQuery]>()
@@ -19,13 +33,13 @@ final class HomeViewModel {
     var currentWeeklyPlan = PublishSubject<WeeklyPlan>()
     var currentWeek = BehaviorSubject<Int>(value: 1)
     
-    private var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     init(
-        showPlanUseCase: PlanUseCase,
+        useCase: UseCase,
         mainQueue: DispatchQueue = .main
     ) {
-        self.showPlanUseCase = showPlanUseCase
+        self.useCase = useCase
         self.mainQueue = mainQueue
         
         // 계획이 있으면 이름을 리스트에 추가하고, 아닐경우 emptyView를 보여주거나, 생성화면으로 이동
@@ -48,7 +62,7 @@ final class HomeViewModel {
     
     func fetchPlan(_ query: PlanQuery) {
         // 쿼리로 현재 플랜에 대한 정보 가져오기
-        showPlanUseCase.fetchPlan(query: query) { plan in
+        useCase.fetch(query: query) { plan in
             self.currentPlan.accept(plan)
         }
     }
@@ -67,14 +81,11 @@ final class HomeViewModel {
             .disposed(by: disposeBag)
     }
     
-    func save(_ plan: Plan) {
-        showPlanUseCase.createPlan(plan)
-    }
-    
     // MARK: internal Method
     
     private func fetchAllPlanQueries() {
-        showPlanUseCase.fetchAllPlans { [weak self] plans in
+        let result = useCase.fetchAllR()
+        useCase.fetchAll { [weak self] plans in
             let planQueries = plans.map {
                 PlanQuery(planID: $0._id,
                           planName: $0.name)

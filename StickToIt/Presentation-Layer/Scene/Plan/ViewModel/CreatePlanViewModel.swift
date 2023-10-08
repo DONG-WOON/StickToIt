@@ -9,27 +9,28 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class CreatePlanViewModel {
-    
-    private let createPlanUseCase: PlanUseCase
+final class CreatePlanViewModel<UseCase: CreatePlanUseCase>
+where UseCase.Model == Plan
+{
+    // MARK: Properties
+    private let useCase: UseCase
     private let mainQueue: DispatchQueue
     
+    // MARK: Properties
     var planName = BehaviorRelay<String>(value: "")
     var targetPeriod = BehaviorRelay<Int>(value: 3)
-    
     private var startDate: Date = Date()
     private var endDate: Date = Calendar.current.date(byAdding: .day, value: 3, to: Date.now)!
     var executionDaysOfWeek = BehaviorSubject<Set<Week>>(value: [.monday, .tuesday, .wednesday, .thursday, .friday])
-    
     var planIsValidated = BehaviorRelay(value: false)
+    private let disposeBag = DisposeBag()
     
-    private var disposeBag = DisposeBag()
-    
+    // MARK: Life Cycle
     init(
-        createPlanUseCase: PlanUseCase,
+        useCase: UseCase,
         mainQueue: DispatchQueue = .main
     ) {
-        self.createPlanUseCase = createPlanUseCase
+        self.useCase = useCase
         self.mainQueue = mainQueue
         
         _ = Observable.combineLatest(
@@ -39,6 +40,7 @@ final class CreatePlanViewModel {
         }).disposed(by: disposeBag)
     }
     
+    // MARK: Methods
     func createPlan() {
         
         let planName = planName.value
@@ -47,7 +49,7 @@ final class CreatePlanViewModel {
         
         var userPlan = Plan(_id: UUID(), name: planName, targetPeriod: targetPeriod, startDate: startDate, executionDaysOfWeek: executionDaysOfWeek, weeklyPlans: [])
 
-        createPlanUseCase.createPlan(userPlan)
+        useCase.create(userPlan)
     }
     
     func planNameTextNumberValidate() {

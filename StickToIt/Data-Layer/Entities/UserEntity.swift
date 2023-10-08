@@ -8,11 +8,9 @@
 import Foundation
 import RealmSwift
 
-
 final class UserEntity: Object {
     @Persisted(primaryKey: true) var _id: UUID
     @Persisted var name: String
-    
     @Persisted var plans: List<PlanEntity>
     
     convenience init(

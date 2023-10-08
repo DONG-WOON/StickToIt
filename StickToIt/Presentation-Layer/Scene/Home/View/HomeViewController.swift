@@ -20,10 +20,10 @@ final class HomeViewController: UIViewController {
     }
     
     let viewModel = HomeViewModel(
-        showPlanUseCase: HomePlanUseCase(
-            planRepository: DefaultPlanRepository(
+        useCase: FetchPlanUseCaseImpl(
+            repository: FetchPlanRepositoryImpl(
                 networkService: nil,
-                databaseManager: PlanDatabaseManager(queue: .main)
+                databaseManager: PlanDatabaseManager()
             )
         )
     )

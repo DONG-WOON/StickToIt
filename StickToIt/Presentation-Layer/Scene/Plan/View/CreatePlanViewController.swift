@@ -12,15 +12,15 @@ import RxCocoa
 final class CreatePlanViewController: UIViewController {
     
     let viewModel = CreatePlanViewModel(
-        createPlanUseCase: CreatePlanUseCase(
-            planRepository: DefaultPlanRepository(
+        useCase: CreatePlanUseCaseImpl(
+            repository: CreatePlanRepositoryImpl(
                 networkService: nil,
-                databaseManager: PlanDatabaseManager(queue: .main)
+                databaseManager: PlanDatabaseManager()
             )
         )
     )
     
-    private var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
     
