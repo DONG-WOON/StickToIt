@@ -206,23 +206,7 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
         if indexPath.item == 0 {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
-            
-            cell.cellIsSelected.toggle()
-            
-            if cell.cellIsSelected {
-                viewModel.selectedImageData.accept(indexPath.item - 1)
-            } else {
-                viewModel.selectedImageData.accept(nil)
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if indexPath.item != 0 {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
-            
-            cell.cellIsSelected = false
+            // 이미지 확대, 이동
         }
     }
 }
@@ -237,7 +221,7 @@ extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
     }
 }
 
-}
+
 // MARK: UIImagePickerControllerDelegate
 
 extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate { }

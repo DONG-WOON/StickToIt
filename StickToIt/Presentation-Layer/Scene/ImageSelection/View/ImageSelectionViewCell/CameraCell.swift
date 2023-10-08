@@ -18,16 +18,6 @@ final class CameraCell: UICollectionViewCell {
         view.contentMode = .scaleAspectFill
         return view
     }()
-    
-    let cameralabel: UILabel = {
-        let view = UILabel()
-        view.font = .systemFont(ofSize: 18, weight: .semibold)
-        view.tintColor = .label
-        view.textAlignment = .center
-        view.text = "사진 찍기"
-        view.numberOfLines = 1
-        return view
-    }()
     // MARK: Life Cycle
     
     override init(frame: CGRect) {
@@ -50,19 +40,12 @@ extension CameraCell {
     private func configureViews() {
         contentView.bordered(borderWidth: 1, borderColor: .gray)
         contentView.addSubview(cameraImageView)
-        contentView.addSubview(cameralabel)
-        
     }
     
     private func setConstraints() {
         cameraImageView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(contentView).inset(40)
+            make.center.equalTo(contentView)
+            make.width.height.equalTo(contentView).multipliedBy(0.5)
         }
-        cameralabel.snp.makeConstraints { make in
-            make.top.equalTo(cameraImageView.snp.bottom).offset(10)
-            make.bottom.horizontalEdges.equalTo(contentView).inset(25)
-            make.height.equalTo(30)
-        }
-        
     }
 }
