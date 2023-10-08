@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import Photos
 
-final class ImageSelectionViewModel {
+final class ImageSelectionViewModel<ImageUseCase: FetchImageUseCase, CameraUseCase: OpenCameraUseCase> {
     
     var selectedImageData: BehaviorRelay<Int?> = BehaviorRelay(value: nil)
     var imageDataList: BehaviorRelay<[PHAsset]> = BehaviorRelay(value: [])

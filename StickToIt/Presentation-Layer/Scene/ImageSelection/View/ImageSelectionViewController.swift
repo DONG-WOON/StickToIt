@@ -19,6 +19,7 @@ final class ImageSelectionViewController: UIViewController {
     let viewModel = ImageSelectionViewModel()
     
     private var imageManager: ImageManager
+    private var cameraManager: CameraManager?
     private var dataSource: DataSource?
     private let disposeBag = DisposeBag()
     
@@ -58,8 +59,10 @@ final class ImageSelectionViewController: UIViewController {
         switch authorization {
         case .notDetermined:
             mainView = ImageSelectionView()
+            self.cameraManager = CameraManager()
         case .limited:
             mainView = ImageSelectionView()
+            self.cameraManager = CameraManager()
         case .authorized:
             mainView = ImageSelectionView()
         case .denied, .restricted:
@@ -196,7 +199,7 @@ extension ImageSelectionViewController {
 extension ImageSelectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item == 0 {
-            cameraManager?.requestAuth(in: self)
+            cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
             
@@ -229,13 +232,15 @@ extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
     }
 }
 
-extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
 }
+// MARK: UIImagePickerControllerDelegate
+
+extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate { }
+
 
 extension ImageSelectionViewController: SettingButtonDelegate {
-    func goToSetting() {
-        imageManager.goToSetting()
+    func settingButtonDidTapped() {
+        self.goToSetting()
     }
 }
 

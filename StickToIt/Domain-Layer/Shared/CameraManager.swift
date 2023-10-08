@@ -8,30 +8,23 @@
 import UIKit
 import AVFoundation
 
-protocol CameraManageable: AnyObject {
-
-    func requestAuth<T: UIViewController>(in viewController: T) where T: UIImagePickerControllerDelegate & UINavigationControllerDelegate
-    func openCamera<T: UIViewController>(in viewController: T) where T: UIImagePickerControllerDelegate & UINavigationControllerDelegate
+final class CameraManager {
     
-}
-
-final class CameraManager: CameraManageable {
+    typealias CameraManagerDelegate = UIViewController & UIImagePickerControllerDelegate & UINavigationControllerDelegate
     
-    func requestAuth<T: UIViewController>(in viewController: T) where T: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    func requestAuthAndOpenCamera(in viewController: CameraManagerDelegate) {
         AVCaptureDevice.requestAccess(for: .video) { [weak self] isAuthorized in
-            print(isAuthorized)
-            
+           
             guard isAuthorized else {
                 self?.showGoToSettingAlert(viewController)
                 return
             }
-            
+
             self?.openCamera(in: viewController)
         }
     }
     
-    func openCamera<T: UIViewController>(in viewController: T) where T: UIImagePickerControllerDelegate & UINavigationControllerDelegate
-    {
+    private func openCamera(in viewController: CameraManagerDelegate) {
         DispatchQueue.main.async {
             let picker = UIImagePickerController()
             
@@ -45,7 +38,7 @@ final class CameraManager: CameraManageable {
         }
     }
     
-    func showGoToSettingAlert(_ viewController: UIViewController) {
+    private func showGoToSettingAlert(_ viewController: CameraManagerDelegate) {
         DispatchQueue.main.async {
             let alert = UIAlertController(
                 title: "현재 카메라에 대한 접근 권한이 없습니다.",
