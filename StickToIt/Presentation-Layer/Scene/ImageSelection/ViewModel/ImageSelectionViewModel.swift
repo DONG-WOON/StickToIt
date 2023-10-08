@@ -12,6 +12,37 @@ import Photos
 
 final class ImageSelectionViewModel<ImageUseCase: FetchImageUseCase, CameraUseCase: OpenCameraUseCase> {
     
-    var selectedImageData: BehaviorRelay<Int?> = BehaviorRelay(value: nil)
-    var imageDataList: BehaviorRelay<[PHAsset]> = BehaviorRelay(value: [])
+    private let imageUseCase: ImageUseCase
+    private let cameraUseCase: CameraUseCase
+    private let mainQueue: DispatchQueue
+    
+    var imageDataList: BehaviorRelay<ImageAssets> = BehaviorRelay(value: [])
+    
+    init(imageUseCase: ImageUseCase,
+         cameraUseCase: CameraUseCase,
+         mainQueue: DispatchQueue
+    ) {
+        self.imageUseCase = imageUseCase
+        self.cameraUseCase = cameraUseCase
+        self.mainQueue = mainQueue
+    }
+    
+    func viewDidLoad() {
+        
+    }
+    
+    func fetchImage() {
+        
+    }
+    
+    func fetchImageAssets() {
+    
+    }
+    
+    func fetchImageAsset() {
+        
+    }
+    
+    func requestCameraAuth() {
+    }
 }

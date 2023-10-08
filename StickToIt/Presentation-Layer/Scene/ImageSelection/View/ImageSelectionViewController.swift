@@ -16,7 +16,11 @@ final class ImageSelectionViewController: UIViewController {
     
     private enum Section: Int { case main = 0 }
     
-    let viewModel = ImageSelectionViewModel()
+    private let viewModel = ImageSelectionViewModel(
+        imageUseCase: FetchImageUseCaseImpl(),
+        cameraUseCase: OpenCameraUseCaseImpl(),
+        mainQueue: .main
+    )
     
     private var imageManager: ImageManager
     private var cameraManager: CameraManager?
@@ -65,6 +69,7 @@ final class ImageSelectionViewController: UIViewController {
             self.cameraManager = CameraManager()
         case .authorized:
             mainView = ImageSelectionView()
+            self.cameraManager = CameraManager()
         case .denied, .restricted:
             mainView = ImageSelectionDeniedView()
         @unknown default:

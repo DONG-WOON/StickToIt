@@ -76,6 +76,8 @@
 		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
 		72FA8DE92AD19AB000F19568 /* CreatePlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* CreatePlanRepository.swift */; };
 		72FA8DEB2AD19AC500F19568 /* FetchPlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEA2AD19AC500F19568 /* FetchPlanRepository.swift */; };
+		72FA8DED2AD19C7A00F19568 /* ImageQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */; };
+		72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */; };
 		72FA8DF32AD1A07400F19568 /* EditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DF22AD1A07400F19568 /* EditService.swift */; };
 /* End PBXBuildFile section */
 
@@ -141,6 +143,8 @@
 		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
 		72FA8DE82AD19AB000F19568 /* CreatePlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanRepository.swift; sourceTree = "<group>"; };
 		72FA8DEA2AD19AC500F19568 /* FetchPlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPlanRepository.swift; sourceTree = "<group>"; };
+		72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQuery.swift; sourceTree = "<group>"; };
+		72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCameraUseCase.swift; sourceTree = "<group>"; };
 		72FA8DF22AD1A07400F19568 /* EditService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -263,6 +267,7 @@
 				729AC47D2AC6EBA100E910D5 /* Plan.swift */,
 				729AC4882AC81E7600E910D5 /* WeeklyPlan.swift */,
 				729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */,
+				72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -497,10 +502,21 @@
 		72FA8DE12AD10FAE00F19568 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				72FA8DF02AD19F9400F19568 /* EditImage */,
+				72FA8DE22AD1103700F19568 /* FetchImage */,
 				729AC5122ACE918500E910D5 /* FetchPlan */,
 				729AC5132ACE919B00E910D5 /* CreatePlan */,
+				72FA8DF12AD1A01B00F19568 /* OpenCamera */,
 			);
 			path = UseCase;
+			sourceTree = "<group>";
+		};
+		72FA8DE22AD1103700F19568 /* FetchImage */ = {
+			isa = PBXGroup;
+			children = (
+				72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */,
+			);
+			path = FetchImage;
 			sourceTree = "<group>";
 		};
 		72FA8DE72AD19A9600F19568 /* Repository_Interface */ = {
@@ -510,6 +526,21 @@
 				72FA8DEA2AD19AC500F19568 /* FetchPlanRepository.swift */,
 			);
 			path = Repository_Interface;
+			sourceTree = "<group>";
+		};
+		72FA8DF02AD19F9400F19568 /* EditImage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = EditImage;
+			sourceTree = "<group>";
+		};
+		72FA8DF12AD1A01B00F19568 /* OpenCamera */ = {
+			isa = PBXGroup;
+			children = (
+				72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */,
+			);
+			path = OpenCamera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -633,12 +664,14 @@
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
+				72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */,
 				729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,
+				72FA8DED2AD19C7A00F19568 /* ImageQuery.swift in Sources */,
 				729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */,
 				72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */,
 				729AC4B62AC9D97500E910D5 /* ImageSelectionView.swift in Sources */,
@@ -658,6 +691,7 @@
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				72FA8DEB2AD19AC500F19568 /* FetchPlanRepository.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
+				72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */,
 				729AC4BD2ACA7F8800E910D5 /* ImageSelectionViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
