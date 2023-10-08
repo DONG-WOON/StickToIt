@@ -27,9 +27,9 @@ final class HomeViewController: UIViewController {
             )
         )
     )
-    private var dataSource: DataSource!
     
-    private var disposeBag = DisposeBag()
+    private var dataSource: DataSource!
+    private let disposeBag = DisposeBag()
     
     private lazy var createPlanAction = UIAction(
         title: "계획 추가하기",
@@ -63,7 +63,7 @@ final class HomeViewController: UIViewController {
             action: #selector(planTitleButtonDidTapped)
         )
         
-        let bottomMenu = UIMenu(title: "", options: .displayInline, children: [settingAction])
+        let bottomMenu = UIMenu(title: "", options: .displayInline, children: [createPlanAction,settingAction])
         button.menu = UIMenu(children:[bottomMenu])
         button.changesSelectionAsPrimaryAction = false
         button.showsMenuAsPrimaryAction = true
@@ -156,7 +156,7 @@ final class HomeViewController: UIViewController {
             .map { $0.targetPeriod / 7 < 1 ? 1 : $0.targetPeriod / 7 }
             .subscribe(with: self) { (_self, week) in
                 #warning("현재 몇주차인지~")
-                _self.currentWeekTitleButton.setTitle("WEEK \(week)", for: .normal)
+//                _self.currentWeekTitleButton.setTitle("WEEK \(week)", for: .normal)
             }
             .disposed(by: disposeBag)
         
