@@ -7,7 +7,7 @@
 
 import UIKit
 protocol SettingButtonDelegate: AnyObject {
-    func goToSetting()
+    func settingButtonDidTapped()
 }
 
 final class ImageSelectionDeniedView: UIView {
@@ -85,6 +85,6 @@ final class ImageSelectionDeniedView: UIView {
         }
     }
     @objc private func goToSettingButtonDidTapped() {
-        delegate?.goToSetting()
+        delegate?.settingButtonDidTapped()
     }
 }

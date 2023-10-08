@@ -12,4 +12,10 @@ extension UIViewController {
         let navigationController = UINavigationController(rootViewController: self)
         return navigationController
     }
+    
+    func goToSetting() {
+        guard let settingURL = URL(string: UIApplication.openSettingsURLString),
+              UIApplication.shared.canOpenURL(settingURL) else { return }
+        UIApplication.shared.open(settingURL, options: [:])
+    }
 }
