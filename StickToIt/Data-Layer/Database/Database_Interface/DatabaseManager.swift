@@ -6,23 +6,19 @@
 //
 
 import Foundation
-import RealmSwift
 
 protocol DatabaseManager {
+    
     associatedtype Model
     associatedtype Entity
-    associatedtype ResultsType
+    associatedtype ResultType
+    associatedtype Key
     
-    func fetchAll() -> ResultsType
-    func fetch(key: UUID) -> Entity?
+    // MARK: Methods
+    func fetchAll() -> ResultType
+    func fetch(key: Key) -> Entity?
     func create(model: Model, to entity: Entity.Type, onFailure: @escaping (Error?) -> Void)
     func update(entity: Entity.Type, matchingWith model: Model)
     func delete(entity: Entity.Type, matchingWith model: Model)
     func deleteAll()
-}
-
-extension DatabaseManager {
-    func deleteAll() {
-        #warning("전체삭제를 미리 구현해놓고 싶지만 Realm 객체를 DatabaseManager의 private property로 관리하고 있음")
-    }
 }

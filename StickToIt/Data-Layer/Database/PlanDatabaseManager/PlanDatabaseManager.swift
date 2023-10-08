@@ -12,14 +12,12 @@ enum RealmError: Error {
     case invalidDirectory
 }
 
-final class PlanDatabaseManager {
+struct PlanDatabaseManager {
     
-    typealias ResultsType = Results<PlanEntity>
-    typealias Model = Plan
-    typealias Entity = PlanEntity
-    
+    // MARK: Properties
     private let asyncRealm: Realm
     
+    // MARK: Life Cycle
     init?(queue: DispatchQueue) {
         do {
             guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw RealmError.invalidDirectory }
@@ -31,12 +29,18 @@ final class PlanDatabaseManager {
             }
             self.asyncRealm = try Realm(configuration: configuration, queue: queue)
         } catch {
+            fatalError("\(error)")
             return nil
         }
     }
 }
 
 extension PlanDatabaseManager: DatabaseManager {
+    
+    typealias Model = Plan
+    typealias Entity = PlanEntity
+    typealias ResultType = Results<PlanEntity>
+    typealias Key = UUID
     
     func fetchAll() -> Results<PlanEntity> {
         let objects = asyncRealm.objects(PlanEntity.self)
@@ -82,5 +86,9 @@ extension PlanDatabaseManager: DatabaseManager {
             self.asyncRealm.delete(weeklyPlans)
             self.asyncRealm.delete(fetchedEntity)
         }
+    }
+    
+    func deleteAll() {
+        asyncRealm.deleteAll()
     }
 }
