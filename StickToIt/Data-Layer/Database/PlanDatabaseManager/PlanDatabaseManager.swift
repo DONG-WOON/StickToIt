@@ -16,9 +16,11 @@ struct PlanDatabaseManager {
     
     // MARK: Properties
     private let asyncRealm: Realm
+    private let realmQueue = DispatchQueue(label: "realm.Queue")
+    private let underlyingQueue: DispatchQueue
     
     // MARK: Life Cycle
-    init?(queue: DispatchQueue) {
+    init?(underlyingQueue: DispatchQueue = .main) {
         do {
             guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw RealmError.invalidDirectory }
             let realmURL = directory.appendingPathComponent("default.realm")
@@ -27,7 +29,8 @@ struct PlanDatabaseManager {
             { (migration, oldSchemaVersion) in
                 
             }
-            self.asyncRealm = try Realm(configuration: configuration, queue: queue)
+            self.underlyingQueue = underlyingQueue
+            self.asyncRealm = try Realm(configuration: configuration, queue: underlyingQueue)
         } catch {
             fatalError("\(error)")
             return nil
@@ -52,28 +55,32 @@ extension PlanDatabaseManager: DatabaseManager {
         return object
     }
     
-    func create(model: Model, to entity: Entity.Type, onFailure: @escaping (Error?) -> Void) {
+    func create(model: Model, to entity: Entity.Type, onFailure: @Sendable @escaping (Error?) -> Void) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(
                 model.toEntity()
             )
         } onComplete: { error in
-            onFailure(error)
+            underlyingQueue.async {
+                onFailure(error)
+            }
         }
     }
     
-    func update(entity: Entity.Type, matchingWith model: Plan) {
+    func update(entity: Entity.Type, matchingWith model: Plan, onFailure: @Sendable @escaping (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         asyncRealm.writeAsync {
             fetchedEntity.startDate = model.startDate
             fetchedEntity.targetPeriod = model.targetPeriod
             fetchedEntity.name = model.name
         } onComplete: { error in
-            print(error as Any)
+            underlyingQueue.async {
+                onFailure(error)
+            }
         }
     }
     
-    func delete(entity: Entity.Type, matchingWith model: Plan) {
+    func delete(entity: Entity.Type, matchingWith model: Plan, onFailure: @Sendable @escaping (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         
         //삭제는 동기로 해야할지도!
@@ -85,6 +92,10 @@ extension PlanDatabaseManager: DatabaseManager {
             }
             self.asyncRealm.delete(weeklyPlans)
             self.asyncRealm.delete(fetchedEntity)
+        } onComplete: { error in
+            underlyingQueue.async {
+                onFailure(error)
+            }
         }
     }
     
