@@ -15,6 +15,9 @@
 		7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217B0052AC2BAB4002C3112 /* HomeViewModel.swift */; };
 		7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217B00A2AC2C407002C3112 /* PlanQuery.swift */; };
 		7217B00E2AC2D5F6002C3112 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7217B00D2AC2D5F6002C3112 /* SnapKit */; };
+		7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278495E2AD5249600433753 /* EditImageViewController.swift */; };
+		727849612AD524C300433753 /* EditImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849602AD524C300433753 /* EditImageUseCase.swift */; };
+		727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849622AD524CF00433753 /* EditImageViewModel.swift */; };
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
@@ -89,6 +92,9 @@
 		7217B0032AC2B7AD002C3112 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7217B0052AC2BAB4002C3112 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7217B00A2AC2C407002C3112 /* PlanQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanQuery.swift; sourceTree = "<group>"; };
+		7278495E2AD5249600433753 /* EditImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewController.swift; sourceTree = "<group>"; };
+		727849602AD524C300433753 /* EditImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageUseCase.swift; sourceTree = "<group>"; };
+		727849622AD524CF00433753 /* EditImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewModel.swift; sourceTree = "<group>"; };
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -272,6 +278,31 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		7278495B2AD5247300433753 /* EditImage */ = {
+			isa = PBXGroup;
+			children = (
+				7278495D2AD5248A00433753 /* View */,
+				7278495C2AD5248500433753 /* VIewModel */,
+			);
+			path = EditImage;
+			sourceTree = "<group>";
+		};
+		7278495C2AD5248500433753 /* VIewModel */ = {
+			isa = PBXGroup;
+			children = (
+				727849622AD524CF00433753 /* EditImageViewModel.swift */,
+			);
+			path = VIewModel;
+			sourceTree = "<group>";
+		};
+		7278495D2AD5248A00433753 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7278495E2AD5249600433753 /* EditImageViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		729AC44E2AC4961100E910D5 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +353,7 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				7278495B2AD5247300433753 /* EditImage */,
 				729AC4D32ACBA1C000E910D5 /* Plan */,
 				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
 				7217AFF72AC2AEE3002C3112 /* Home */,
@@ -531,6 +563,7 @@
 		72FA8DF02AD19F9400F19568 /* EditImage */ = {
 			isa = PBXGroup;
 			children = (
+				727849602AD524C300433753 /* EditImageUseCase.swift */,
 			);
 			path = EditImage;
 			sourceTree = "<group>";
@@ -658,9 +691,11 @@
 				72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */,
 				72FA8DF32AD1A07400F19568 /* EditService.swift in Sources */,
 				7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */,
+				727849612AD524C300433753 /* EditImageUseCase.swift in Sources */,
 				729AC4B42AC9B84600E910D5 /* ResizableButton.swift in Sources */,
 				729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */,
 				729AC4D72ACBA20400E910D5 /* CreatePlanViewController.swift in Sources */,
+				727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */,
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
@@ -690,6 +725,7 @@
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				72FA8DEB2AD19AC500F19568 /* FetchPlanRepository.swift in Sources */,
+				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
 				72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */,
 				729AC4BD2ACA7F8800E910D5 /* ImageSelectionViewModel.swift in Sources */,
