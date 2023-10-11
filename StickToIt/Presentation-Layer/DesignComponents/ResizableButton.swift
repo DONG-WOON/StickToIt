@@ -19,7 +19,7 @@ final class ResizableButton: UIButton {
         backgroundColor: UIColor? = .systemBackground,
         imageAlignment: UISemanticContentAttribute? = .forceLeftToRight,
         target: Any?,
-        action: Selector
+        action: Selector? = nil
     ) {
         self.init()
         
@@ -45,6 +45,8 @@ final class ResizableButton: UIButton {
         
         self.setImage(image, for: .normal)
         
-        self.addTarget(target, action: action, for: .touchUpInside)
+        if let action {
+            self.addTarget(target, action: action, for: .touchUpInside)
+        }
     }
 }
