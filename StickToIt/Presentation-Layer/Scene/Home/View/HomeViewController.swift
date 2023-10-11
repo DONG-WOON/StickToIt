@@ -90,7 +90,7 @@ final class HomeViewController: UIViewController {
     private lazy var homeAchievementView = AchievementView()
 //    private let activityIndicator = UIActivityIndicatorView(style: .large)
     
-    private let weeklyPlansPhotoCollectionView = HomeImageCollectionView()
+    private let collectionView = HomeImageCollectionView()
     
     // MARK: View Life Cycle
     
@@ -206,7 +206,7 @@ extension HomeViewController {
     
     private func configureViews() {
         view.addSubview(currentWeekTitleButton)
-        view.addSubview(weeklyPlansPhotoCollectionView)
+        view.addSubview(collectionView)
 //        view.addSubview(activityIndicator)
         view.addSubview(homeAchievementView)
         
@@ -224,9 +224,9 @@ extension HomeViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
-        weeklyPlansPhotoCollectionView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(weeklyPlansPhotoCollectionView.snp.width)
+            make.height.equalTo(collectionView.snp.width)
         }
 //        activityIndicator.snp.makeConstraints { make in
 //            make.center.equalTo(view)
@@ -234,7 +234,7 @@ extension HomeViewController {
         homeAchievementView.snp.makeConstraints { make in
             make.top.equalTo(currentWeekTitleButton.snp.bottom).offset(20)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
-            make.bottom.equalTo(weeklyPlansPhotoCollectionView.snp.top).offset(-20)
+            make.bottom.equalTo(collectionView.snp.top).offset(-20)
         }
     }
     
@@ -246,14 +246,16 @@ extension HomeViewController {
         }
         
         self.dataSource = DataSource(
-            collectionView: weeklyPlansPhotoCollectionView,
+            collectionView: collectionView,
             cellProvider: { collectionView, indexPath, item in
                 let cell = collectionView.dequeueConfiguredReusableCell(
                     using: cellRegistration,
                     for: indexPath,
                     item: item
                 )
+                
                 cell.delegate = self
+                
                 return cell
             }
         )
