@@ -33,7 +33,7 @@ final class EditImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         configureViews()
         setConstraints()
     }
@@ -46,8 +46,8 @@ extension EditImageViewController {
     }
 }
 
-extension EditImageViewController {
-    private func configureViews() {
+extension EditImageViewController: BaseViewConfigurable {
+    func configureViews() {
         view.backgroundColor = .systemBackground
         
         view.addSubview(imageView)
@@ -55,7 +55,7 @@ extension EditImageViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editCompleteButton)
     }
     
-    private func setConstraints() {
+    func setConstraints() {
         imageView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
