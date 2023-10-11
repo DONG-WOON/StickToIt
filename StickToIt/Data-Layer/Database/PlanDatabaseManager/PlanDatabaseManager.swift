@@ -71,7 +71,7 @@ extension PlanDatabaseManager: DatabaseManager {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         asyncRealm.writeAsync {
             fetchedEntity.startDate = model.startDate
-            fetchedEntity.targetPeriod = model.targetPeriod
+            fetchedEntity.targetNumberOfDays = model.targetNumberOfDays
             fetchedEntity.name = model.name
         } onComplete: { error in
             underlyingQueue.async {
@@ -86,11 +86,9 @@ extension PlanDatabaseManager: DatabaseManager {
         //삭제는 동기로 해야할지도!
         asyncRealm.writeAsync {
             // db 삭제 chaining delete
-            let weeklyPlans = fetchedEntity.weeklyPlans
-            weeklyPlans.forEach { weeklyPlan in
-                self.asyncRealm.delete(weeklyPlan.dayPlans)
-            }
-            self.asyncRealm.delete(weeklyPlans)
+            let dayPlans = fetchedEntity.dayPlans
+
+            self.asyncRealm.delete(dayPlans)
             self.asyncRealm.delete(fetchedEntity)
         } onComplete: { error in
             underlyingQueue.async {

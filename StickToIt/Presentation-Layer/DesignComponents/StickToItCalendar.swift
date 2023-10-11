@@ -19,7 +19,7 @@ final class StickToItCalendar: UIView {
     
     private var minimumDate: Date? { didSet { calendar.reloadData() } }
     private var maximumDate: Date? { didSet { calendar.reloadData() } }
-    var currentDate: Date = Date()
+    var currentDate: Date = Date.now
     
     private let calendar = FSCalendar()
     weak var delegate: StickToItCalendarDelegate?
@@ -82,6 +82,7 @@ final class StickToItCalendar: UIView {
     func select(date: Date?) {
         guard let date = date else { return }
         monthLabel.text = DateFormatter.monthYearFormatter.string(from: date)
+        print("✅ ",date)
         calendar.select(date)
     }
     
@@ -104,7 +105,7 @@ final class StickToItCalendar: UIView {
         
         calendar.headerHeight = 0
         calendar.appearance.headerMinimumDissolvedAlpha = 0
-        calendar.locale = Locale(identifier: "ko_KR")
+        
         calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: CustomCalendarCell.identifier)
     }
     

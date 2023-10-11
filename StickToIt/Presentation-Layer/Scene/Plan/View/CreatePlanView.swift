@@ -64,12 +64,12 @@ final class CreatePlanView: UIScrollView {
         return view
     }()
     
-    lazy var targetPeriodSettingButton = ResizableButton(
+    lazy var targetNumberOfDaysSettingButton = ResizableButton(
         image: UIImage(resource: .calendar),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label,
         target: self,
-        action: #selector(targetPeriodSettingButtonDidTapped)
+        action: #selector(targetNumberOfDaysSettingButtonDidTapped)
     )
     
     let planRequiredDoingDayLabel: UILabel = {
@@ -157,7 +157,7 @@ final class CreatePlanView: UIScrollView {
         addSubview(planNameMaximumTextNumberLabel)
         addSubview(planTargetPeriodLabel)
         addSubview(numberOfDaysToAchieveLabel)
-        addSubview(targetPeriodSettingButton)
+        addSubview(targetNumberOfDaysSettingButton)
         addSubview(planRequiredDoingDayLabel)
         addSubview(planRequiredDoingDayStackView)
         addSubview(descriptionLabel)
@@ -191,7 +191,7 @@ final class CreatePlanView: UIScrollView {
             make.leading.equalTo(self.contentLayoutGuide).inset(20)
         }
         
-        targetPeriodSettingButton.snp.makeConstraints { make in
+        targetNumberOfDaysSettingButton.snp.makeConstraints { make in
             make.leading.greaterThanOrEqualTo(numberOfDaysToAchieveLabel.snp.trailing).offset(-10)
             make.centerY.equalTo(numberOfDaysToAchieveLabel)
             make.trailing.equalTo(contentLayoutGuide).inset(30)
@@ -221,7 +221,7 @@ final class CreatePlanView: UIScrollView {
 }
 
 extension CreatePlanView {
-    @objc func targetPeriodSettingButtonDidTapped() {
+    @objc func targetNumberOfDaysSettingButtonDidTapped() {
         buttonDelegate?.calendarButtonDidTapped()
     }
     

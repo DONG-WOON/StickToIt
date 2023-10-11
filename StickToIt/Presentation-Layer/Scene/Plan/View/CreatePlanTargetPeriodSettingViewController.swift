@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol PlanTargetPeriodSettingDelegate: AnyObject {
-    func planTargetPeriodSetting(_ data: (date: Date?, day: Int?))
+protocol PlanTargetNumberOfDaysSettingDelegate: AnyObject {
+    func planTargetNumberOfDaysSetting(_ data: (date: Date?, day: Int?))
 }
 
 final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     
-    weak var delegate: PlanTargetPeriodSettingDelegate?
+    weak var delegate: PlanTargetNumberOfDaysSettingDelegate?
     
     var selectedDateAndDay: (date: Date?, day: Int?)
     
@@ -24,12 +24,12 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     }()
     
     let calendar = StickToItCalendar(backgroundColor: .systemBackground)
-    
+
     private let dDayLabel: BorderedView<UILabel> = {
         let view = BorderedView<UILabel>()
         view.rounded()
         view.backgroundColor = .systemIndigo
-        view.innerView.text = "3일"
+        view.innerView.text = "오늘부터 시작, 3일 동안"
         view.innerView.textAlignment = .center
         view.innerView.textColor = .white
         return view
@@ -62,8 +62,8 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
         setConstraints()
         
         calendar.delegate = self
-        calendar.setMinimumDate(Calendar(identifier: .gregorian) .date(byAdding: .day, value: 1, to: Date.now))
-        calendar.select(date: Calendar(identifier: .gregorian).date(byAdding: .day, value: 3, to: Date.now))
+        calendar.setMinimumDate(Calendar.current.date(byAdding: .day, value: 1, to: Date.now))
+        calendar.select(date: Calendar.current.date(byAdding: .day, value: 2, to: Date.now))
     }
     
     @objc private func dismissButtonDidTapped() {
@@ -71,16 +71,17 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     }
     
     @objc private func okButtonDidTapped() {
-        delegate?.planTargetPeriodSetting(selectedDateAndDay)
+        delegate?.planTargetNumberOfDaysSetting(selectedDateAndDay)
         self.dismiss(animated: true)
     }
 }
 
 extension CreatePlanTargetPeriodSettingViewController: StickToItCalendarDelegate {
     func calendarView(didSelectAt date: Date) {
-        guard let day = Calendar(identifier: .gregorian).dateComponents([.day], from: Date.now, to: date).day else { return }
-        self.selectedDateAndDay = (date, day)
-        self.dDayLabel.innerView.text = "\(day)일"
+        guard let day = Calendar.current.dateComponents([.day], from: calendar.currentDate, to: date).day else { return }
+        let dayContainsToday = day + 1
+        self.selectedDateAndDay = (date, dayContainsToday)
+        self.dDayLabel.innerView.text = "오늘부터 시작, \(dayContainsToday)일 동안"
     }
 }
 

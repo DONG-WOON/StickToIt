@@ -24,18 +24,10 @@ extension PlanEntity {
         return .init(
             _id: _id,
             name: name,
-            targetPeriod: targetPeriod,
+            targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
+            endDate: endDate,
             executionDaysOfWeek: Set(executionDaysOfWeek),
-            weeklyPlans: weeklyPlans.map { $0.toDomain() }
-        )
-    }
-}
-
-extension WeeklyPlanEntity {
-    func toDomain() -> WeeklyPlan {
-        return .init(
-            week: week,
             dayPlans: dayPlans.map { $0.toDomain() }
         )
     }
@@ -46,7 +38,8 @@ extension DayPlanEntity {
         return .init(
             _id: _id,
             date: date,
-            imageURL: imageURL,
+            week: week,
+            imageData: imageData,
             content: content
         )
     }

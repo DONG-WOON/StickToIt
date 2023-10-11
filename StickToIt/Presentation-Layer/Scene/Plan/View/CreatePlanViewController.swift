@@ -9,6 +9,10 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol CreatePlanCompletedDelegate: AnyObject {
+    func createPlanCompleted()
+}
+
 final class CreatePlanViewController: UIViewController {
     
     let viewModel = CreatePlanViewModel(
@@ -19,6 +23,8 @@ final class CreatePlanViewController: UIViewController {
             )
         )
     )
+    
+    weak var delegate: CreatePlanCompletedDelegate?
     
     private let disposeBag = DisposeBag()
     
@@ -80,7 +86,7 @@ final class CreatePlanViewController: UIViewController {
             .bind(with: self) { (_self, _week) in
                 _self.viewModel
                     .executionDaysOfWeek
-                    .onNext(_week)
+                    .accept(_week)
                 print(_week)
             }
             .disposed(by: disposeBag)
@@ -135,6 +141,7 @@ final class CreatePlanViewController: UIViewController {
     @objc private func createButtonDidTapped() {
         viewModel.createPlan()
         #warning("성공메세지 보여주기")
+        delegate?.createPlanCompleted()
         self.dismiss(animated: true)
     }
 }
@@ -150,13 +157,13 @@ extension CreatePlanViewController: CalendarButtonProtocol {
     }
 }
 
-extension CreatePlanViewController: PlanTargetPeriodSettingDelegate {
-    func planTargetPeriodSetting(_ data: (date: Date?, day: Int?)) {
+extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
+    func planTargetNumberOfDaysSetting(_ data: (date: Date?, day: Int?)) {
         if let date = data.date {
-            print(date)
+            self.viewModel.endDate = date
         }
         if let day = data.day {
-            self.viewModel.targetPeriod.accept(day)
+            self.viewModel.targetNumberOfDays.accept(day)
             self.mainView.numberOfDaysToAchieveLabel.innerView.text = "\(day)일"
         }
     }

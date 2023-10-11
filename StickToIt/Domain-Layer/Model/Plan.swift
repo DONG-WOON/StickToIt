@@ -10,26 +10,41 @@ import Foundation
 
 struct Plan {
     private(set) var _id: UUID
-    var name: String
-    var targetPeriod: Int
-    var startDate: Date
-    var executionDaysOfWeek: Set<Week>
-    //    let endDate: String // startDate 기점으로 시간결졍?
-    var weeklyPlans: [WeeklyPlan]
+    let name: String
+    let targetNumberOfDays: Int
+    let startDate: Date
+    let endDate: Date
+    let executionDaysOfWeek: Set<Week>
+    var dayPlans: [DayPlan]
+    
+    var totalWeek: Int {
+        return targetNumberOfDays / 7 == 0 ? 1 : targetNumberOfDays / 7
+    }
+    
+    var currentWeek: Int {
+        let weekOfYear = Calendar.current.dateComponents([.weekOfYear], from: startDate, to: Date.now).weekOfYear
+        guard let weekOfYear else { return 1 }
+        return weekOfYear < 1 ? 1 : weekOfYear
+    }
+    
+//    var completed
     
     init(
         _id: UUID,
         name: String,
-        targetPeriod: Int,
+        targetNumberOfDays: Int,
         startDate: Date,
+        endDate: Date,
         executionDaysOfWeek: Set<Week>,
-        weeklyPlans: [WeeklyPlan]
+        dayPlans: [DayPlan]
     ) {
         self._id = _id
         self.name = name
-        self.targetPeriod = targetPeriod
+        self.targetNumberOfDays = targetNumberOfDays
         self.startDate = startDate
+        self.endDate = endDate
         self.executionDaysOfWeek = executionDaysOfWeek
-        self.weeklyPlans = weeklyPlans
+        self.dayPlans = dayPlans
     }
+    
 }

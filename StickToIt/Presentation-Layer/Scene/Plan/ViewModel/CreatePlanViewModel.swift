@@ -18,10 +18,10 @@ where PlanUseCase.Model == Plan
     
     // MARK: Properties
     var planName = BehaviorRelay<String>(value: "")
-    var targetPeriod = BehaviorRelay<Int>(value: 3)
+    var targetNumberOfDays = BehaviorRelay<Int>(value: 3)
     private var startDate: Date = Date()
-    private var endDate: Date = Calendar.current.date(byAdding: .day, value: 3, to: Date.now)!
-    var executionDaysOfWeek = BehaviorSubject<Set<Week>>(value: [.monday, .tuesday, .wednesday, .thursday, .friday])
+    var endDate: Date = Calendar.current.date(byAdding: .day, value: 3, to: Date.now)!
+    var executionDaysOfWeek = BehaviorRelay<Set<Week>>(value: [.monday, .tuesday, .wednesday, .thursday, .friday])
     var planIsValidated = BehaviorRelay(value: false)
     private let disposeBag = DisposeBag()
     
@@ -34,9 +34,11 @@ where PlanUseCase.Model == Plan
         self.mainQueue = mainQueue
         
         _ = Observable.combineLatest(
-            planName.map { $0.count > 0 },
-            executionDaysOfWeek.map { $0.count != 0 }
-        ).subscribe(with: self, onNext: { (self, data) in self.planIsValidated.accept(data.0 && data.1)
+            planName,
+            executionDaysOfWeek
+        )
+        .map { $0.count > 0 && $1.count != 0 }
+        .subscribe(with: self, onNext: { (self, isValied) in self.planIsValidated.accept(isValied)
         }).disposed(by: disposeBag)
     }
     
@@ -44,12 +46,18 @@ where PlanUseCase.Model == Plan
     func createPlan() {
         
         let planName = planName.value
-        let targetPeriod = targetPeriod.value
-        let executionDaysOfWeek = try! executionDaysOfWeek.value()
+        let targetNumberOfDays = targetNumberOfDays.value
+        let executionDaysOfWeek = executionDaysOfWeek.value
         
-        var userPlan = Plan(_id: UUID(), name: planName, targetPeriod: targetPeriod, startDate: startDate, executionDaysOfWeek: executionDaysOfWeek, weeklyPlans: [])
-
+        
+        let minimumRequiredDayOfDayPlans = targetNumberOfDays < 7 ? targetNumberOfDays : 7
+        
+        
+        let dayPlans = (1...minimumRequiredDayOfDayPlans).map { _ in DayPlan(_id: UUID(), date: nil, week: 1, imageData: nil, content: nil) }
+        
+        let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate, executionDaysOfWeek: executionDaysOfWeek, dayPlans: dayPlans)
         useCase.create(userPlan)
+        
     }
     
     func planNameTextNumberValidate() {

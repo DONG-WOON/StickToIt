@@ -20,37 +20,39 @@ extension Plan {
         let _executionDaysOfWeek = MutableSet<Week>()
         _executionDaysOfWeek.insert(objectsIn: executionDaysOfWeek)
         
-        let _weeklyPlans = List<WeeklyPlanEntity>()
-        _weeklyPlans.append(objectsIn: weeklyPlans.map { $0.toEntity() })
-        
-        return .init(
-            name: name,
-            targetPeriod: targetPeriod,
-            startDate: startDate,
-            executionDaysOfWeek: _executionDaysOfWeek,
-            weeklyPlans: _weeklyPlans
-        )
-    }
-}
-
-extension WeeklyPlan {
-    func toEntity() -> WeeklyPlanEntity {
-        
         let _dayPlans = List<DayPlanEntity>()
         _dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
         
         return .init(
-            week: week,
+            name: name,
+            targetNumberOfDays: targetNumberOfDays,
+            startDate: startDate,
+            endDate: endDate,
+            executionDaysOfWeek: _executionDaysOfWeek,
             dayPlans: _dayPlans
         )
     }
 }
+//
+//extension WeeklyPlan {
+//    func toEntity() -> WeeklyPlanEntity {
+//
+//        let _dayPlans = List<DayPlanEntity>()
+//        _dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
+//
+//        return .init(
+//            week: week,
+//            dayPlans: _dayPlans
+//        )
+//    }
+//}
 
 extension DayPlan {
     func toEntity() -> DayPlanEntity {
         return .init(
             date: date,
-            imageURL: imageURL,
+            week: week,
+            imageData: imageData,
             content: content
         )
     }

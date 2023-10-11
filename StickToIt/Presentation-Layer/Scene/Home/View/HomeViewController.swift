@@ -11,12 +11,11 @@ import RxCocoa
 
 final class HomeViewController: UIViewController {
     
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Week>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Week>
     
     private enum Section: Int, CaseIterable {
         case main = 0
-        case last
     }
     
     let viewModel = HomeViewModel(
@@ -34,7 +33,7 @@ final class HomeViewController: UIViewController {
     private lazy var createPlanAction = UIAction(
         title: "계획 추가하기",
         image: UIImage(resource: .plus),
-        handler: { _ in
+        handler: { [weak self] _ in
             let vc = CreatePlanViewController()
                 .embedNavigationController()
             vc.modalPresentationStyle = .fullScreen
@@ -129,18 +128,25 @@ final class HomeViewController: UIViewController {
         viewModel.userPlanList
             .subscribe(with: self) { (_self, userPlanQueries) in
                 var actions: [UIMenuElement] = []
+    
+                let queryActions = userPlanQueries
+                    .prefix(2)
+                    .map { query in
+                        UIAction(
+                            title: query.planName
+                        ) { _ in
+                            _self.title = query.planName
+                            _self.viewModel.fetchPlan(query)
+                        }
+                    }
+                        
+                actions.append(contentsOf: queryActions)
                 
-                userPlanQueries.forEach { planQuery in
-                    actions.append(
-                        UIAction(title: planQuery.planName) { _ in
-                        _self.viewModel.fetchPlan(planQuery)
-                    })
-                }
-                
+                #warning("나중에 userdefaults에서 불러오기")
                 guard let firstPlanQuery = userPlanQueries.first else { return }
                 
+                _self.title = firstPlanQuery.planName
                 _self.viewModel.fetchPlan(firstPlanQuery)
-                _self.planTitleButton.setTitle(firstPlanQuery.planName + " ", for: .normal)
                 
                 let bottomMenu = UIMenu(
                     options: .displayInline,
@@ -153,10 +159,9 @@ final class HomeViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.currentPlan
-            .map { $0.targetPeriod / 7 < 1 ? 1 : $0.targetPeriod / 7 }
-            .subscribe(with: self) { (_self, week) in
-                #warning("현재 몇주차인지~")
-//                _self.currentWeekTitleButton.setTitle("WEEK \(week)", for: .normal)
+            .subscribe(with: self) { (_self, plan) in
+                _self.viewModel.currentWeek.accept(plan.currentWeek)
+                _self.currentWeekTitleButton.setTitle("WEEK \(plan.currentWeek)", for: .normal)
             }
             .disposed(by: disposeBag)
         
@@ -170,26 +175,29 @@ final class HomeViewController: UIViewController {
     func takeSnapshot() {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(["1", "2", "3", "4", "5"] + ["last"], toSection: .main)
+        snapshot.appendItems(Week.allCases, toSection: .main)
         dataSource.apply(snapshot)
     }
 }
 // MARK: - @objc Method
 
 extension HomeViewController {
-    
-    @objc private func planTitleButtonDidTapped() {
-        
-    }
-    
+
     @objc private func calendarButtonDidTapped() {
         let vc = UIViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func currentWeekTitleButtonDidTapped() {
-        let vc = UIViewController()
+        let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
+        vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension HomeViewController: PlanWeekSelectDelegate {
+    func planWeekSelected(week: Int) {
+        self.viewModel.currentWeek.accept(week)
     }
 }
 

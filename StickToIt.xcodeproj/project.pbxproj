@@ -18,6 +18,8 @@
 		7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278495E2AD5249600433753 /* EditImageViewController.swift */; };
 		727849612AD524C300433753 /* EditImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849602AD524C300433753 /* EditImageUseCase.swift */; };
 		727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849622AD524CF00433753 /* EditImageViewModel.swift */; };
+		7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */; };
+		7278496D2AD5702500433753 /* PlanRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278496C2AD5702500433753 /* PlanRepositoryImpl.swift */; };
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
@@ -73,12 +75,10 @@
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
 		72A976172ABB2A910021291C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72A976162ABB2A910021291C /* Assets.xcassets */; };
 		72A9761A2ABB2A910021291C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976182ABB2A910021291C /* LaunchScreen.storyboard */; };
-		72FA8DDB2AD07B2B00F19568 /* CreatePlanRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DDA2AD07B2B00F19568 /* CreatePlanRepositoryImpl.swift */; };
 		72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */; };
 		72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE32AD1221200F19568 /* FetchService.swift */; };
 		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
-		72FA8DE92AD19AB000F19568 /* CreatePlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* CreatePlanRepository.swift */; };
-		72FA8DEB2AD19AC500F19568 /* FetchPlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEA2AD19AC500F19568 /* FetchPlanRepository.swift */; };
+		72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* PlanRepository.swift */; };
 		72FA8DED2AD19C7A00F19568 /* ImageQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */; };
 		72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */; };
 		72FA8DF32AD1A07400F19568 /* EditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DF22AD1A07400F19568 /* EditService.swift */; };
@@ -95,6 +95,8 @@
 		7278495E2AD5249600433753 /* EditImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewController.swift; sourceTree = "<group>"; };
 		727849602AD524C300433753 /* EditImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageUseCase.swift; sourceTree = "<group>"; };
 		727849622AD524CF00433753 /* EditImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewModel.swift; sourceTree = "<group>"; };
+		7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanWeekSelectViewController.swift; sourceTree = "<group>"; };
+		7278496C2AD5702500433753 /* PlanRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepositoryImpl.swift; sourceTree = "<group>"; };
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -143,12 +145,10 @@
 		72A976162ABB2A910021291C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A976192ABB2A910021291C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72A9761B2ABB2A910021291C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		72FA8DDA2AD07B2B00F19568 /* CreatePlanRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanRepositoryImpl.swift; sourceTree = "<group>"; };
 		72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageUseCase.swift; sourceTree = "<group>"; };
 		72FA8DE32AD1221200F19568 /* FetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchService.swift; sourceTree = "<group>"; };
 		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
-		72FA8DE82AD19AB000F19568 /* CreatePlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanRepository.swift; sourceTree = "<group>"; };
-		72FA8DEA2AD19AC500F19568 /* FetchPlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPlanRepository.swift; sourceTree = "<group>"; };
+		72FA8DE82AD19AB000F19568 /* PlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepository.swift; sourceTree = "<group>"; };
 		72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQuery.swift; sourceTree = "<group>"; };
 		72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCameraUseCase.swift; sourceTree = "<group>"; };
 		72FA8DF22AD1A07400F19568 /* EditService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditService.swift; sourceTree = "<group>"; };
@@ -303,11 +303,19 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		727849692AD56F4700433753 /* PlanWeekSelect */ = {
+			isa = PBXGroup;
+			children = (
+				7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */,
+			);
+			path = PlanWeekSelect;
+			sourceTree = "<group>";
+		};
 		729AC44E2AC4961100E910D5 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
 				729AC4512AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift */,
-				72FA8DDA2AD07B2B00F19568 /* CreatePlanRepositoryImpl.swift */,
+				7278496C2AD5702500433753 /* PlanRepositoryImpl.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -356,6 +364,7 @@
 				7278495B2AD5247300433753 /* EditImage */,
 				729AC4D32ACBA1C000E910D5 /* Plan */,
 				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
+				727849692AD56F4700433753 /* PlanWeekSelect */,
 				7217AFF72AC2AEE3002C3112 /* Home */,
 			);
 			path = Scene;

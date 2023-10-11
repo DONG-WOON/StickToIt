@@ -11,10 +11,12 @@ import RealmSwift
 final class PlanEntity: Object {
     @Persisted(primaryKey: true) var _id: UUID
     @Persisted var name: String
-    @Persisted var targetPeriod: Int
+    @Persisted var targetNumberOfDays: Int
     @Persisted var startDate: Date
+    @Persisted var endDate: Date
+    
     @Persisted var executionDaysOfWeek: MutableSet<Week>
-    @Persisted var weeklyPlans: List<WeeklyPlanEntity>
+    @Persisted var dayPlans: List<DayPlanEntity>
     
     @Persisted(originProperty: "plans") var user: LinkingObjects<UserEntity>
     
@@ -22,18 +24,20 @@ final class PlanEntity: Object {
     
     convenience init(
         name: String,
-        targetPeriod: Int,
+        targetNumberOfDays: Int,
         startDate: Date,
+        endDate: Date,
         executionDaysOfWeek: MutableSet<Week>,
-        weeklyPlans: List<WeeklyPlanEntity>
+        dayPlans: List<DayPlanEntity>
         ) {
             self.init()
             
             self.name = name
-            self.targetPeriod = targetPeriod
+            self.targetNumberOfDays = targetNumberOfDays
             self.startDate = startDate
+            self.endDate = endDate
             self.executionDaysOfWeek = executionDaysOfWeek
-            self.weeklyPlans = weeklyPlans
+            self.dayPlans = dayPlans
         }
 }
 
