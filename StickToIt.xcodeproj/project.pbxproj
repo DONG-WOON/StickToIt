@@ -20,6 +20,8 @@
 		727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849622AD524CF00433753 /* EditImageViewModel.swift */; };
 		7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */; };
 		7278496D2AD5702500433753 /* PlanRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278496C2AD5702500433753 /* PlanRepositoryImpl.swift */; };
+		727849722AD6964A00433753 /* UpdateDayPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849712AD6964A00433753 /* UpdateDayPlanViewController.swift */; };
+		727849742AD6969E00433753 /* UpdateDayPlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849732AD6969E00433753 /* UpdateDayPlanViewModel.swift */; };
 		727849772AD697FB00433753 /* BaseViewConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849762AD697FB00433753 /* BaseViewConfigurable.swift */; };
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
@@ -98,6 +100,8 @@
 		727849622AD524CF00433753 /* EditImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewModel.swift; sourceTree = "<group>"; };
 		7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanWeekSelectViewController.swift; sourceTree = "<group>"; };
 		7278496C2AD5702500433753 /* PlanRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepositoryImpl.swift; sourceTree = "<group>"; };
+		727849712AD6964A00433753 /* UpdateDayPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDayPlanViewController.swift; sourceTree = "<group>"; };
+		727849732AD6969E00433753 /* UpdateDayPlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDayPlanViewModel.swift; sourceTree = "<group>"; };
 		727849762AD697FB00433753 /* BaseViewConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewConfigurable.swift; sourceTree = "<group>"; };
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
@@ -314,6 +318,31 @@
 			path = PlanWeekSelect;
 			sourceTree = "<group>";
 		};
+		7278496E2AD6962400433753 /* UpdateDayPlan */ = {
+			isa = PBXGroup;
+			children = (
+				727849702AD6963E00433753 /* ViewModel */,
+				7278496F2AD6963A00433753 /* View */,
+			);
+			path = UpdateDayPlan;
+			sourceTree = "<group>";
+		};
+		7278496F2AD6963A00433753 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				727849712AD6964A00433753 /* UpdateDayPlanViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		727849702AD6963E00433753 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				727849732AD6969E00433753 /* UpdateDayPlanViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		727849752AD697F200433753 /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,6 +401,7 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				7278496E2AD6962400433753 /* UpdateDayPlan */,
 				7278495B2AD5247300433753 /* EditImage */,
 				729AC4D32ACBA1C000E910D5 /* Plan */,
 				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
@@ -718,8 +748,10 @@
 				727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */,
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */,
+				727849722AD6964A00433753 /* UpdateDayPlanViewController.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
 				72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */,
+				727849742AD6969E00433753 /* UpdateDayPlanViewModel.swift in Sources */,
 				729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,

@@ -13,4 +13,10 @@ extension DateFormatter {
         formatter.dateFormat = "MMM yyyy"
         return formatter
     }()
+    
+    static let dayPlanFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd"
+        return formatter
+    }()
 }

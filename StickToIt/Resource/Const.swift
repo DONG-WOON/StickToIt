@@ -22,5 +22,6 @@ enum Const {
         case uncheckedCircle = "checkmark.circle"
         case checkedCircle = "checkmark.circle.fill"
         case camera = "camera.shutter.button.fill"
+        case pencil = "pencil"
     }
 }
