@@ -35,37 +35,45 @@ final class HomeViewController: UIViewController {
         image: UIImage(resource: .plus),
         handler: { [weak self] _ in
             let vc = CreatePlanViewController()
-                .embedNavigationController()
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
+            vc.delegate = self
+            
+            let nav = vc.embedNavigationController()
+            nav.modalPresentationStyle = .fullScreen
+            
+            self?.present(nav, animated: true)
         }
     )
     
     private lazy var settingAction = UIAction(
         title: "내 계획 설정하기",
         image: UIImage(resource: .gear),
-        handler: { _ in
-
+        handler: { [weak self] _ in
+            let vc = UIViewController()
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
     )
-    
+
     // MARK: UI Properties
     
-    private lazy var planTitleButton: ResizableButton = {
-        let button = ResizableButton(
-            title: "계획 설정",
-            image: UIImage(resource: .chevronDown),
-            symbolConfiguration: .init(font: .systemFont(ofSize: 17), scale: .small),
-            tintColor: .label,
-            imageAlignment: .forceRightToLeft,
-            target: self,
-            action: #selector(planTitleButtonDidTapped)
+    private lazy var planTitleButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.imagePadding = 7
+        configuration.image = UIImage(resource: .listBullet)
+        configuration.preferredSymbolConfigurationForImage = .init(scale: .medium)
+        configuration.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 0)
+        configuration.titleAlignment = .leading
+        configuration.baseForegroundColor = .label
+        
+        let bottomMenu = UIMenu(
+            options: .displayInline,
+            children: [createPlanAction, settingAction]
         )
         
-        let bottomMenu = UIMenu(title: "", options: .displayInline, children: [createPlanAction,settingAction])
-        button.menu = UIMenu(children:[bottomMenu])
+        let button = UIButton(configuration: configuration)
+        button.menu = UIMenu(children: [bottomMenu])
         button.changesSelectionAsPrimaryAction = false
         button.showsMenuAsPrimaryAction = true
+        
         return button
     }()
     
@@ -111,8 +119,7 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        viewModel.reload()
+
     }
     
     override func viewWillLayoutSubviews() {
@@ -184,14 +191,21 @@ final class HomeViewController: UIViewController {
 extension HomeViewController {
 
     @objc private func calendarButtonDidTapped() {
-        let vc = UIViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
+//        vc.delegate = self
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func currentWeekTitleButtonDidTapped() {
         let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension HomeViewController: CreatePlanCompletedDelegate {
+    func createPlanCompleted() {
+        self.viewModel.reload()
     }
 }
 
@@ -241,8 +255,22 @@ extension HomeViewController {
     private func configureDataSource() {
         
         let cellRegistration = UICollectionView
-            .CellRegistration<HomeImageCollectionViewCell, String>
-        { cell, indexPath, item in
+            .CellRegistration<HomeImageCollectionViewCell, Week>
+        { [weak self] cell, indexPath, item in
+            
+            guard let _self = self else { return }
+            
+            let dayPlans = _self.viewModel.currentWeeklyPlan.value
+            guard let dayOfWeek = Week(rawValue: indexPath.item) else { return }
+            
+            cell.label.innerView.text = dayOfWeek.kor
+            cell.setBorder(_self.viewModel.daysOfWeek.contains(dayOfWeek))
+            
+            guard dayPlans.count != 0 else { return }
+            guard let theDay = dayPlans.first(where: { $0.week == indexPath.item }) else { return }
+            guard let imageData = theDay.imageData else { return }
+    
+            cell.imageView.image = UIImage(data: imageData)
         }
         
         self.dataSource = DataSource(
