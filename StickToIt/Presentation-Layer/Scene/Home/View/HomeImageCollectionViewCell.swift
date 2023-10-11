@@ -21,8 +21,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let label: BorderedView<UILabel> = {
-        let view = BorderedView<UILabel>()
+    let label: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
         view.innerView.font = .systemFont(ofSize: 17)
         view.innerView.textColor = .label
         view.backgroundColor = .tertiaryLabel.withAlphaComponent(0.1)

@@ -1,5 +1,5 @@
 //
-//  BorderedView.swift
+//  PaddingView.swift
 //  StickToIt
 //
 //  Created by 서동운 on 10/4/23.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BorderedView<T: UIView>: UIView {
+class PaddingView<T: UIView>: UIView {
     
     let innerView = T()
     

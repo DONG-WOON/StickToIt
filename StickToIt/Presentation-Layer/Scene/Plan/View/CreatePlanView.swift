@@ -54,8 +54,8 @@ final class CreatePlanView: UIScrollView {
         return view
     }()
     
-    let numberOfDaysToAchieveLabel: BorderedView<UILabel> = {
-        let view = BorderedView<UILabel>()
+    let numberOfDaysToAchieveLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
         view.rounded()
         view.backgroundColor = .systemIndigo
         view.innerView.text = "3일"

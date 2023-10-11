@@ -61,7 +61,7 @@
 		729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */; };
 		729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5072ACD342C00E910D5 /* StickToItCalendar.swift */; };
 		729AC50B2ACD34C900E910D5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC50A2ACD34C900E910D5 /* FSCalendar */; };
-		729AC50D2ACD3F5E00E910D5 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */; };
+		729AC50D2ACD3F5E00E910D5 /* PaddingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC50C2ACD3F5E00E910D5 /* PaddingView.swift */; };
 		729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC50E2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift */; };
 		729AC5112ACD4F1200E910D5 /* Extension+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */; };
 		729AC5152ACE91AD00E910D5 /* FetchPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5142ACE91AD00E910D5 /* FetchPlanUseCase.swift */; };
@@ -130,7 +130,7 @@
 		729AC4DB2ACBA4D500E910D5 /* CreatePlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanView.swift; sourceTree = "<group>"; };
 		729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedTextField.swift; sourceTree = "<group>"; };
 		729AC5072ACD342C00E910D5 /* StickToItCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickToItCalendar.swift; sourceTree = "<group>"; };
-		729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
+		729AC50C2ACD3F5E00E910D5 /* PaddingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingView.swift; sourceTree = "<group>"; };
 		729AC50E2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanTargetPeriodSettingViewController.swift; sourceTree = "<group>"; };
 		729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+DateFormatter.swift"; sourceTree = "<group>"; };
 		729AC5142ACE91AD00E910D5 /* FetchPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPlanUseCase.swift; sourceTree = "<group>"; };
@@ -395,7 +395,7 @@
 			children = (
 				729AC4B32AC9B84600E910D5 /* ResizableButton.swift */,
 				729AC4C02ACAFD2800E910D5 /* GradientCircleView.swift */,
-				729AC50C2ACD3F5E00E910D5 /* BorderedView.swift */,
+				729AC50C2ACD3F5E00E910D5 /* PaddingView.swift */,
 				729AC4DD2ACBBB1A00E910D5 /* BorderedTextField.swift */,
 				729AC5072ACD342C00E910D5 /* StickToItCalendar.swift */,
 			);
@@ -690,7 +690,7 @@
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
 				729AC5152ACE91AD00E910D5 /* FetchPlanUseCase.swift in Sources */,
 				729AC51C2ACEA1C300E910D5 /* SelectableImageCell.swift in Sources */,
-				729AC50D2ACD3F5E00E910D5 /* BorderedView.swift in Sources */,
+				729AC50D2ACD3F5E00E910D5 /* PaddingView.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
 				729AC4DC2ACBA4D500E910D5 /* CreatePlanView.swift in Sources */,
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,

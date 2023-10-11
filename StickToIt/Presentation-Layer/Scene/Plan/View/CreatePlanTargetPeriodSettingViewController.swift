@@ -25,8 +25,8 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     
     let calendar = StickToItCalendar(backgroundColor: .systemBackground)
 
-    private let dDayLabel: BorderedView<UILabel> = {
-        let view = BorderedView<UILabel>()
+    private let dDayLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
         view.rounded()
         view.backgroundColor = .systemIndigo
         view.innerView.text = "오늘부터 시작, 3일 동안"
