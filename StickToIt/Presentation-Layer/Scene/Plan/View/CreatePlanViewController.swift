@@ -17,7 +17,7 @@ final class CreatePlanViewController: UIViewController {
     
     let viewModel = CreatePlanViewModel(
         useCase: CreatePlanUseCaseImpl(
-            repository: CreatePlanRepositoryImpl(
+            repository: PlanRepositoryImpl(
                 networkService: nil,
                 databaseManager: PlanDatabaseManager()
             )

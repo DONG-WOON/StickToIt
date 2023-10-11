@@ -563,8 +563,7 @@
 		72FA8DE72AD19A9600F19568 /* Repository_Interface */ = {
 			isa = PBXGroup;
 			children = (
-				72FA8DE82AD19AB000F19568 /* CreatePlanRepository.swift */,
-				72FA8DEA2AD19AC500F19568 /* FetchPlanRepository.swift */,
+				72FA8DE82AD19AB000F19568 /* PlanRepository.swift */,
 			);
 			path = Repository_Interface;
 			sourceTree = "<group>";
@@ -689,8 +688,9 @@
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */,
 				729AC4C32ACAFD8200E910D5 /* AchievementView.swift in Sources */,
-				72FA8DE92AD19AB000F19568 /* CreatePlanRepository.swift in Sources */,
+				72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */,
 				729AC4AF2AC9672500E910D5 /* ImageManager.swift in Sources */,
+				7278496D2AD5702500433753 /* PlanRepositoryImpl.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,
@@ -714,6 +714,7 @@
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
+				7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,
 				72FA8DED2AD19C7A00F19568 /* ImageQuery.swift in Sources */,
 				729AC4842AC6F69400E910D5 /* Model+Mapping.swift in Sources */,
@@ -727,13 +728,11 @@
 				729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */,
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
 				729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */,
-				72FA8DDB2AD07B2B00F19568 /* CreatePlanRepositoryImpl.swift in Sources */,
 				729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
-				72FA8DEB2AD19AC500F19568 /* FetchPlanRepository.swift in Sources */,
 				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
 				72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */,

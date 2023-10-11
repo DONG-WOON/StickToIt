@@ -28,10 +28,15 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     private let useCase: UseCase
     private let mainQueue: DispatchQueue
     
-    var userPlanList = PublishRelay<[PlanQuery]>()
+    var userPlanList = BehaviorRelay(value: [PlanQuery]())
     var currentPlan = PublishRelay<Plan>()
-    var currentWeeklyPlan = PublishSubject<WeeklyPlan>()
-    var currentWeek = BehaviorSubject<Int>(value: 1)
+    var currentWeeklyPlan = BehaviorRelay(value: [DayPlan]())
+    var currentWeek = BehaviorRelay<Int>(value: 1)
+    var currentPlanData: Plan?
+    
+    var daysOfWeek: Set<Week> {
+        return currentPlanData?.executionDaysOfWeek ?? []
+    }
     
     private let disposeBag = DisposeBag()
     
@@ -64,27 +69,29 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
         // 쿼리로 현재 플랜에 대한 정보 가져오기
         useCase.fetch(query: query) { plan in
             self.currentPlan.accept(plan)
+            self.currentPlanData = plan
         }
     }
     
     func fetchWeeklyPlan(of week: Int) {
+        
         currentPlan
-            .map { $0.weeklyPlans }
-            .map { weeklyPlans in
-                weeklyPlans.first(where: { $0.week == week } )
-            }
+            .map { $0.dayPlans }
+            .map { $0.filter { $0.week == week }}
             .ifEmpty(default: nil)
-            .subscribe(onNext: { weeklyPlan in
-                guard let weeklyPlan else { return }
-                self.currentWeeklyPlan.onNext(weeklyPlan)
+            .subscribe(onNext: { weeklyDayPlan in
+                guard let weeklyDayPlan else { return }
+                self.currentWeeklyPlan.accept(weeklyDayPlan)
             })
             .disposed(by: disposeBag)
     }
     
+    
+    
     // MARK: internal Method
     
     private func fetchAllPlanQueries() {
-        let result = useCase.fetchAllR()
+
         useCase.fetchAll { [weak self] plans in
             let planQueries = plans.map {
                 PlanQuery(planID: $0._id,
@@ -94,5 +101,4 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
             self?.userPlanList.accept(planQueries)
         }
     }
-
 }

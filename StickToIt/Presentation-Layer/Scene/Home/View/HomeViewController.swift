@@ -20,7 +20,7 @@ final class HomeViewController: UIViewController {
     
     let viewModel = HomeViewModel(
         useCase: FetchPlanUseCaseImpl(
-            repository: FetchPlanRepositoryImpl(
+            repository: PlanRepositoryImpl(
                 networkService: nil,
                 databaseManager: PlanDatabaseManager()
             )

@@ -12,7 +12,7 @@ protocol CreatePlanUseCase: CreateService {
 }
 
 final class CreatePlanUseCaseImpl<
-    Repository: CreatePlanRepository<Plan, PlanEntity, PlanQuery>
+    Repository: PlanRepository<Plan, PlanEntity, PlanQuery>
 >: CreatePlanUseCase {
     
     typealias Repository = Repository

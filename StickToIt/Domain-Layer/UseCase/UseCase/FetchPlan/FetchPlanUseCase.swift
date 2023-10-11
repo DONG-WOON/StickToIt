@@ -8,11 +8,11 @@
 import Foundation
 
 protocol FetchPlanUseCase: FetchService {
-    func fetchAllR() -> Result<[Plan], Error>
+    
 }
 
 final class FetchPlanUseCaseImpl
-< Repository: FetchPlanRepository<Plan, PlanEntity, PlanQuery> >
+< Repository: PlanRepository<Plan, PlanEntity, PlanQuery> >
 : FetchPlanUseCase
 {
     
@@ -25,9 +25,9 @@ final class FetchPlanUseCaseImpl
     init(repository: Repository) {
         self.repository = repository
     }
-    func fetchAllR() -> Result<[Plan], Error> {
-        return repository.fetchAll()
-    }
+//    func fetchAllR() -> Result<[Plan], Error> {
+//        return repository.fetchAll()
+//    }
     
     func fetchAll(completion: @escaping ([Plan]) -> Void) {
         let result = repository.fetchAll()
