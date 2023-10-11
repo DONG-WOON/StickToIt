@@ -206,7 +206,10 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
         if indexPath.item == 0 {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
-            // 이미지 확대, 이동
+            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
+            let vc = EditImageViewController()
+            vc.imageView.image = cell.imageView.image
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
