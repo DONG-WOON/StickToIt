@@ -14,7 +14,6 @@ protocol PlanWeekSelectDelegate: AnyObject {
 
 final class PlanWeekSelectViewController: UIViewController {
     
-    let week: Int
     var currentWeek: Int
     weak var delegate: PlanWeekSelectDelegate?
     
@@ -22,8 +21,7 @@ final class PlanWeekSelectViewController: UIViewController {
     
     private let tableView = UITableView()
     
-    init(week: Int, currentWeek: Int) {
-        self.week = week
+    init(currentWeek: Int) {
         self.currentWeek = currentWeek
         
         super.init(nibName: nil, bundle: nil)
@@ -46,7 +44,7 @@ final class PlanWeekSelectViewController: UIViewController {
 extension PlanWeekSelectViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return week
+        return currentWeek
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

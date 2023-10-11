@@ -197,7 +197,7 @@ extension HomeViewController {
     }
     
     @objc private func currentWeekTitleButtonDidTapped() {
-        let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
+        let vc = PlanWeekSelectViewController(currentWeek: viewModel.currentWeek.value)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -261,16 +261,10 @@ extension HomeViewController {
             guard let _self = self else { return }
             
             let dayPlans = _self.viewModel.currentWeeklyPlan.value
-            guard let dayOfWeek = Week(rawValue: indexPath.item) else { return }
+            guard dayPlans.count > 0 else { return }
+            let dayPlan = dayPlans[indexPath.item]
             
-            cell.label.innerView.text = dayOfWeek.kor
-            cell.setBorder(_self.viewModel.daysOfWeek.contains(dayOfWeek))
-            
-            guard dayPlans.count != 0 else { return }
-            guard let theDay = dayPlans.first(where: { $0.week == indexPath.item }) else { return }
-            guard let imageData = theDay.imageData else { return }
-    
-            cell.imageView.image = UIImage(data: imageData)
+            cell.update(data: dayPlan)
         }
         
         self.dataSource = DataSource(
@@ -282,6 +276,7 @@ extension HomeViewController {
                     item: item
                 )
                 
+                cell.updateUI(dayOfWeek: item)
                 cell.delegate = self
                 
                 return cell
@@ -292,15 +287,14 @@ extension HomeViewController {
 
 extension HomeViewController: HomeImageCollectionViewCellDelegate {
     
-    func addImageButtonDidTapped() {
-        let vc = ImageSelectionViewController(imageManager: ImageManager())
-            .embedNavigationController()
+    func addImageButtonDidTapped(_ week: Week) {
+        
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
     
-    func editImageButtonDidTapped() {
+    func editImageButtonDidTapped(_ week: Week) {
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let edit = UIAlertAction(title: "편집", style: .default)

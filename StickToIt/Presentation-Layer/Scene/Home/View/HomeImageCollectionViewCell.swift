@@ -8,11 +8,14 @@
 import UIKit
 
 protocol HomeImageCollectionViewCellDelegate: AnyObject {
-    func addImageButtonDidTapped()
-    func editImageButtonDidTapped()
+    func addImageButtonDidTapped(_ week: Week)
+    func editImageButtonDidTapped(_ week: Week)
 }
 
 final class HomeImageCollectionViewCell: UICollectionViewCell {
+    
+    private var week: Week = .monday
+    
     let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -48,9 +51,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configure()
-        
-        editImageButton.isHidden = imageView.image != nil
+        configureViews()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -59,6 +61,17 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+    func updateUI(dayOfWeek: Week) {
+        self.week = dayOfWeek
+        label.innerView.text = dayOfWeek.kor
+    }
+    
+    func update(data: DayPlan) {
+        
+        setBorder(data.isRequired)
+        
+        guard let imageData = data.imageData else { return }
+        imageView.image = UIImage(data: imageData)
     }
     
     func setBorder(_ isTrue: Bool) {
@@ -69,8 +82,21 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
             self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
         }
     }
+}
 
-    private func configure() {
+extension HomeImageCollectionViewCell {
+    
+    @objc private func editImageButtonAction() {
+        self.delegate?.editImageButtonDidTapped(week)
+    }
+    
+    @objc private func addImageButtonAction() {
+        self.delegate?.addImageButtonDidTapped(week)
+    }
+}
+
+extension HomeImageCollectionViewCell {
+    private func configureViews() {
         
         self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
         
@@ -78,7 +104,9 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(label)
         contentView.addSubview(editImageButton)
         contentView.addSubview(addImageButton)
-        
+    }
+    
+    private func setConstraints() {
         imageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView)
             make.height.equalTo(contentView).multipliedBy(0.8)
@@ -97,16 +125,5 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         addImageButton.snp.makeConstraints { make in
             make.center.equalTo(contentView)
         }
-    }
-}
-
-extension HomeImageCollectionViewCell {
-    
-    @objc private func editImageButtonAction() {
-        self.delegate?.editImageButtonDidTapped()
-    }
-    
-    @objc private func addImageButtonAction() {
-        self.delegate?.addImageButtonDidTapped()
     }
 }
