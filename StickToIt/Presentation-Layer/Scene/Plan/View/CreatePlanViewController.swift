@@ -139,10 +139,15 @@ final class CreatePlanViewController: UIViewController {
     }
     
     @objc private func createButtonDidTapped() {
-        viewModel.createPlan()
-        #warning("성공메세지 보여주기")
-        delegate?.createPlanCompleted()
-        self.dismiss(animated: true)
+        viewModel.createPlan { [weak self] result in
+            switch result {
+            case .success:
+                self?.delegate?.createPlanCompleted()
+                self?.dismiss(animated: true)
+            case .failure:
+                print("생성에 실패, 잠시 후 다시 시도해주세요!")
+            }
+        }
     }
 }
 

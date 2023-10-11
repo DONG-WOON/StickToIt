@@ -43,7 +43,7 @@ where PlanUseCase.Model == Plan
     }
     
     // MARK: Methods
-    func createPlan() {
+    func createPlan(completion: @escaping (Result<Bool, Error>) -> Void) {
         
         let planName = planName.value
         let targetNumberOfDays = targetNumberOfDays.value
@@ -53,10 +53,11 @@ where PlanUseCase.Model == Plan
         let minimumRequiredDayOfDayPlans = targetNumberOfDays < 7 ? targetNumberOfDays : 7
         
         
-        let dayPlans = (1...minimumRequiredDayOfDayPlans).map { _ in DayPlan(_id: UUID(), date: nil, week: 1, imageData: nil, content: nil) }
+        
+        let dayPlans = (0..<minimumRequiredDayOfDayPlans).map { day in DayPlan(_id: UUID(), isRequired: executionDaysOfWeek.contains(Week(rawValue: day)!), date: nil, week: 1, imageData: nil, content: nil) }
         
         let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate, executionDaysOfWeek: executionDaysOfWeek, dayPlans: dayPlans)
-        useCase.create(userPlan)
+        useCase.create(userPlan, completion: completion)
         
     }
     

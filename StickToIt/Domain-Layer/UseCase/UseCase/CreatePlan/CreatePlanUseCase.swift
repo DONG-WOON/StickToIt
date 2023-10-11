@@ -26,15 +26,7 @@ final class CreatePlanUseCaseImpl<
         self.repository = repository
     }
     
-    func create(_ model: Model) {
-        repository.create(model: model) { result in
-            switch result {
-            case .success:
-                print("save", model._id)
-                return
-            case .failure(let error):
-                print(error)
-            }
-        }
+    func create(_ model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
+        repository.create(model: model, completion: completion)
     }
 }
