@@ -13,7 +13,21 @@ protocol HomeImageCollectionViewCellDelegate: AnyObject {
 }
 
 final class HomeImageCollectionViewCell: UICollectionViewCell {
-    let imageView = UIImageView()
+    let imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.layer.borderColor = UIColor.systemIndigo.cgColor
+        view.layer.borderWidth = 0.4
+        return view
+    }()
+    
+    let label: BorderedView<UILabel> = {
+        let view = BorderedView<UILabel>()
+        view.innerView.font = .systemFont(ofSize: 17)
+        view.innerView.textColor = .label
+        view.backgroundColor = .tertiaryLabel.withAlphaComponent(0.1)
+        return view
+    }()
     
     weak var delegate: HomeImageCollectionViewCellDelegate?
     
@@ -36,7 +50,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         
         configure()
         
-//        editImageButton.isHidden = imageView.image == nil
+        editImageButton.isHidden = imageView.image != nil
     }
     
     required init?(coder: NSCoder) {
@@ -46,18 +60,33 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
     }
+    
+    func setBorder(_ isTrue: Bool) {
+        
+        if isTrue {
+            self.bordered(cornerRadius: 20, borderWidth: 2, borderColor: .systemIndigo)
+        } else {
+            self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
+        }
+    }
 
     private func configure() {
         
         self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
         
         contentView.addSubview(imageView)
+        contentView.addSubview(label)
         contentView.addSubview(editImageButton)
         contentView.addSubview(addImageButton)
         
         imageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView)
-            make.height.equalTo(contentView).multipliedBy(0.6)
+            make.height.equalTo(contentView).multipliedBy(0.8)
+        }
+        
+        label.snp.makeConstraints { make in
+            make.top.leading.equalTo(contentView)
+            
         }
         
         editImageButton.snp.makeConstraints { make in
@@ -80,5 +109,4 @@ extension HomeImageCollectionViewCell {
     @objc private func addImageButtonAction() {
         self.delegate?.addImageButtonDidTapped()
     }
-    
 }
