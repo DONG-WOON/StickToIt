@@ -61,6 +61,12 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        imageView.image = nil
+    }
+    
+    // MARK: Methods
+    
     func updateUI(dayOfWeek: Week) {
         self.week = dayOfWeek
         label.innerView.text = dayOfWeek.kor

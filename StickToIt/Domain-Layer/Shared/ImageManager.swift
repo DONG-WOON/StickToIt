@@ -44,7 +44,10 @@ final class ImageManager {
     }
     
     func checkAuth() -> PHAuthorizationStatus {
-        let auth = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        let auth = PHPhotoLibrary
+            .authorizationStatus(
+                for: .addOnly
+            )
         return auth
     }
     
@@ -55,7 +58,10 @@ final class ImageManager {
     func requestAuth(
         completion: @escaping (PHAuthorizationStatus) -> Void
     ) {
-        PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: completion)
+        PHPhotoLibrary.requestAuthorization(
+            for: .readWrite,
+            handler: completion
+        )
     }
     
     func getImageAssets(
@@ -66,7 +72,7 @@ final class ImageManager {
     }
     
     @MainActor
-    func getImage(
+    func getThumbnailImage(
         for asset: PHAsset,
         completion: @escaping (UIImage?) -> Void
     ) -> PHImageRequestID {
@@ -77,6 +83,23 @@ final class ImageManager {
         return self.phImageManager.requestImage(for: asset, targetSize: CGSize.thumbnail, contentMode: .aspectFit, options: requestOptions, resultHandler: { (image, info) in
             completion(image)
         })
+    }
+    
+    func getImage(
+        for asset: PHAsset,
+        completion: @escaping (Data?) -> Void
+    ) -> PHImageRequestID {
+        
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.isSynchronous = true
+        
+        return self.phImageManager
+            .requestImageDataAndOrientation(
+                for: asset,
+                options: requestOptions
+            ) { data, uti, orientation, info in
+            completion(data)
+        }
     }
 }
 
@@ -91,7 +114,8 @@ extension ImageManager {
         currentImageCountToFetch.accept(imageCount)
         
         fetchResult.enumerateObjects { [self] (asset, _, _) in
-            self.imageAssets.accept(self.imageAssets.value + [asset])
+            self.imageAssets
+                .accept(self.imageAssets.value + [asset])
         }
     }
 }
