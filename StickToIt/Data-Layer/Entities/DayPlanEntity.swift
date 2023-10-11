@@ -10,6 +10,7 @@ import RealmSwift
 
 final class DayPlanEntity: Object {
     @Persisted(primaryKey: true) var _id: UUID
+    @Persisted var isRequired: Bool
     @Persisted var date: Date?
     @Persisted var week: Int
     @Persisted var imageData: Data?
@@ -20,6 +21,7 @@ final class DayPlanEntity: Object {
     
     convenience init(
         date: Date?,
+        isRequired: Bool,
         week: Int,
         imageData: Data?,
         content: String?
@@ -27,6 +29,7 @@ final class DayPlanEntity: Object {
         self.init()
         
         self.date = date
+        self.isRequired = isRequired
         self.week = week
         self.imageData = imageData
         self.content = content

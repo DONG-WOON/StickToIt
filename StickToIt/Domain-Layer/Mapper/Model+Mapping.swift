@@ -51,6 +51,7 @@ extension DayPlan {
     func toEntity() -> DayPlanEntity {
         return .init(
             date: date,
+            isRequired: isRequired,
             week: week,
             imageData: imageData,
             content: content
