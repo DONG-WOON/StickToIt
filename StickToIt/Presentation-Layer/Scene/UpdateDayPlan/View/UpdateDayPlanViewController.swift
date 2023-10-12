@@ -8,12 +8,12 @@
 import UIKit
 
 final class UpdateDayPlanViewController: UIViewController {
- 
-    private let viewModel: UpdateDayPlanViewModel
+    
+    private let viewModel: UpdateDayPlanViewModel<UpdatePlanUseCaseImpl<DayPlanRepositoryImpl>>
     
     // MARK: UI Properties
     
-//    private let mainView: UIView
+    //    private let mainView: UIView
     
     let borderContainerView: UIView = {
         let view = UIView()
@@ -23,7 +23,7 @@ final class UpdateDayPlanViewController: UIViewController {
     
     let imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
         view.layer.borderColor = UIColor.systemIndigo.cgColor
         view.layer.borderWidth = 0.4
         return view
@@ -73,11 +73,38 @@ final class UpdateDayPlanViewController: UIViewController {
         return view
     }()
     
+    private lazy var createButton: ResizableButton = {
+        let button = ResizableButton(
+            title: "목표 생성하기",
+            font: .boldSystemFont(ofSize: 20),
+            tintColor: .white,
+            backgroundColor: .systemIndigo,
+            target: self,
+            action: #selector(createButtonDidTapped)
+        )
+        button.rounded(cornerRadius: 20)
+        return button
+    }()
+    
+    private lazy var dismissButton = ResizableButton(
+        image: UIImage(resource: .xmark),
+        symbolConfiguration: .init(scale: .large),
+        tintColor: .label, target: self,
+        action: #selector(dismissButtonDidTapped)
+    )
+    
     
     // MARK: Life Cycle
     
-    init(viewModel: UpdateDayPlanViewModel) {
-        self.viewModel = viewModel
+    init(dayPlan: DayPlan) {
+        viewModel = UpdateDayPlanViewModel(
+            dayPlan: dayPlan,
+            useCase: UpdatePlanUseCaseImpl(
+                repository: DayPlanRepositoryImpl(
+                    networkService: nil,
+                    databaseManager: DayPlanDataBaseManager())
+            )
+        )
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -86,10 +113,17 @@ final class UpdateDayPlanViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         viewModel.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateImageToUpload), name: .updateImageToUpload, object: nil)
+        
         configureViews()
         setConstraints()
         bind()
@@ -103,10 +137,12 @@ final class UpdateDayPlanViewController: UIViewController {
         }
         
         if let imageData = viewModel.dayPlan.imageData {
-            self.imageView.isHidden = true
+            self.addImageButton.isHidden = true
+            self.editImageButton.isHidden = false
             self.imageView.image = UIImage(data: imageData)
         } else {
-            self.imageView.isHidden = false
+            self.addImageButton.isHidden = false
+            self.editImageButton.isHidden = true
         }
     }
 }
@@ -116,11 +152,16 @@ extension UpdateDayPlanViewController: BaseViewConfigurable {
     func configureViews() {
         view.backgroundColor = .systemBackground
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
         view.addSubview(borderContainerView)
+        view.addSubview(editImageButton)
+        view.addSubview(createButton)
         
         borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(dateLabel)
         borderContainerView.addSubview(addImageButton)
+        
+        
     }
     
     func setConstraints() {
@@ -145,6 +186,16 @@ extension UpdateDayPlanViewController: BaseViewConfigurable {
             make.centerX.equalTo(imageView)
             make.centerY.equalTo(imageView).offset(20)
         }
+        editImageButton.snp.makeConstraints { make in
+            make.bottom.equalTo(borderContainerView.snp.top).offset(-10)
+            make.trailing.equalTo(borderContainerView)
+        }
+        
+        createButton.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
+        }
     }
 }
 
@@ -152,13 +203,51 @@ extension UpdateDayPlanViewController: BaseViewConfigurable {
 extension UpdateDayPlanViewController {
     
     @objc private func editImageButtonAction() {
-//        self.delegate?.editImageButtonDidTapped()
+        //        self.delegate?.editImageButtonDidTapped()
     }
-//
+    //
     @objc private func addImageButtonAction() {
         let vc = ImageSelectionViewController(imageManager: ImageManager())
             .embedNavigationController()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
+    }
+    
+    @objc private func updateImageToUpload(_ notification: Notification) {
+        let image = notification.userInfo?[Const.Key.imageToUpload] as? UIImage
+        self.imageView.image = image
+        
+        if image != nil {
+            self.addImageButton.isHidden = true
+            self.editImageButton.isHidden = false
+        } else {
+            self.addImageButton.isHidden = false
+            self.editImageButton.isHidden = true
+        }
+    }
+    
+    @objc private func createButtonDidTapped() {
+        viewModel.dayPlan.imageData = imageView.image?.pngData()
+        viewModel.save { result in
+            switch result {
+            case .success(let success):
+                print(success)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    @objc private func dismissButtonDidTapped() {
+        let alert = UIAlertController(title: "주의", message: "지금 나가면 편집 내용이 사라질 수 도 있습니다. 나가시겠습니까?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "나가기", style: .destructive) { _ in
+            self.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
     }
 }

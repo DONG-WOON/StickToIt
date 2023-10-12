@@ -288,14 +288,11 @@ extension HomeViewController {
 extension HomeViewController: HomeImageCollectionViewCellDelegate {
     
     func addImageButtonDidTapped(_ week: Week) {
-        
         let vc = UpdateDayPlanViewController(
-            viewModel: UpdateDayPlanViewModel(
-                dayPlan: viewModel
+            dayPlan: viewModel
                     .currentWeeklyPlan
                     .value[week.rawValue]
-            )
-        ).embedNavigationController()
+            ).embedNavigationController()
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
