@@ -27,6 +27,7 @@
 		727849822AD76A4600433753 /* DayPlanDataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849812AD76A4600433753 /* DayPlanDataBaseManager.swift */; };
 		727849852AD77E2000433753 /* UpdatePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849842AD77E2000433753 /* UpdatePlanUseCase.swift */; };
 		727849872AD77E4B00433753 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849862AD77E4B00433753 /* UpdateService.swift */; };
+		7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849892AD79FB400433753 /* Extension+Notification.swift */; };
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
@@ -111,6 +112,7 @@
 		727849812AD76A4600433753 /* DayPlanDataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanDataBaseManager.swift; sourceTree = "<group>"; };
 		727849842AD77E2000433753 /* UpdatePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlanUseCase.swift; sourceTree = "<group>"; };
 		727849862AD77E4B00433753 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
+		727849892AD79FB400433753 /* Extension+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Notification.swift"; sourceTree = "<group>"; };
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				729AC5102ACD4F1200E910D5 /* Extension+DateFormatter.swift */,
 				729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */,
 				729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */,
+				727849892AD79FB400433753 /* Extension+Notification.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -740,6 +743,7 @@
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
 				729AC5152ACE91AD00E910D5 /* FetchPlanUseCase.swift in Sources */,
 				729AC51C2ACEA1C300E910D5 /* SelectableImageCell.swift in Sources */,
+				7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */,
 				729AC50D2ACD3F5E00E910D5 /* PaddingView.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
 				729AC4DC2ACBA4D500E910D5 /* CreatePlanView.swift in Sources */,

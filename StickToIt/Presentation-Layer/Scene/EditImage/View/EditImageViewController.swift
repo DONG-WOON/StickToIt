@@ -41,7 +41,10 @@ final class EditImageViewController: UIViewController {
 
 extension EditImageViewController {
     @objc private func editCompleteButtonDidTapped() {
+        NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.Key.imageToUpload: imageView.image])
+        
         viewModel.upload(data: imageView.image?.pngData())
+        
         self.dismiss(animated: true)
     }
 }

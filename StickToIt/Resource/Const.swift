@@ -24,4 +24,8 @@ enum Const {
         case camera = "camera.shutter.button.fill"
         case pencil = "pencil"
     }
+    
+    enum Key {
+        static let imageToUpload = "imageToUpload"
+    }
 }
