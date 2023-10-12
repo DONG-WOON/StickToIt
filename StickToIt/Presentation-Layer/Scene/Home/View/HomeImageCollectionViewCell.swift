@@ -24,29 +24,54 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let label: PaddingView<UILabel> = {
+    let dayNameLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
         view.innerView.font = .systemFont(ofSize: 17)
         view.innerView.textColor = .label
-        view.backgroundColor = .tertiaryLabel.withAlphaComponent(0.1)
+        view.innerView.setGradient(color1: .tertiaryLabel.withAlphaComponent(0.1), color2: .clear, startPoint: .init(x: 0, y: 0), endPoint: .init(x: 1, y: 1))
         return view
     }()
     
+    lazy var requiredLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
+        view.innerView.text = "Required"
+        view.innerView.textColor = .white
+        view.innerView.textAlignment = .center
+        view.rounded(cornerRadius: 15)
+        view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
+        return view
+    }()
+    
+//    let checkMarkImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.backgroundColor = .clear
+//        imageView.tintColo
+//        imageView.image = UIImage(resource: .checkedCircle)
+//        return imageView
+//    }()
+    
     weak var delegate: HomeImageCollectionViewCellDelegate?
     
-    lazy var editImageButton = ResizableButton(
-        image: UIImage(resource: .ellipsis),
-        symbolConfiguration: .init(scale: .large),
-        tintColor: .label,
-        target: self, action: #selector(editImageButtonAction)
+    lazy var editImageButton: ResizableButton = {
+        let button = ResizableButton(
+            image: UIImage(resource: .ellipsis),
+            symbolConfiguration: .init(scale: .large),
+            tintColor: .label,
+            target: self, action: #selector(editImageButtonAction)
         )
-        
+        button.backgroundColor = .clear
+        return button
+    }()
     
-    lazy var addImageButton = ResizableButton(
-        image: UIImage(resource: .plus),
-        symbolConfiguration: .init(scale: .large),
-        tintColor: .label, target: self, action: #selector(addImageButtonAction)
+    lazy var addImageButton: ResizableButton = {
+        let button = ResizableButton(
+            image: UIImage(resource: .plus),
+            symbolConfiguration: .init(scale: .large),
+            tintColor: .label, target: self, action: #selector(addImageButtonAction)
         )
+        button.backgroundColor = .clear
+        return button
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,30 +88,40 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         
         imageView.image = nil
+        requiredLabel.isHidden = true
+        dayNameLabel.innerView.textColor = .label
+        dayNameLabel.innerView.text = nil
+        addImageButton.isHidden = false
+        editImageButton.tintColor = .label
     }
     
     // MARK: Methods
     
     func updateUI(dayOfWeek: Week) {
         self.week = dayOfWeek
-        label.innerView.text = dayOfWeek.kor
+        if dayOfWeek == .none {
+            dayNameLabel.innerView.text = "옵션"
+            requiredLabel.isHidden = true
+        } else {
+            dayNameLabel.innerView.text = dayOfWeek.kor
+            requiredLabel.isHidden = false
+        }
     }
     
-    func update(data: DayPlan) {
-        
-        setBorder(data.isRequired)
-        
-        guard let imageData = data.imageData else { return }
+    func update(imageData: Data?) {
+        guard let imageData = imageData else { return }
+        addImageButton.isHidden = true
         imageView.image = UIImage(data: imageData)
     }
     
-    func setBorder(_ isTrue: Bool) {
+    func update(dayPlan: DayPlan) {
         
-        if isTrue {
-            self.bordered(cornerRadius: 20, borderWidth: 2, borderColor: .systemIndigo)
-        } else {
-            self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
-        }
+        checkDayPlanIsRequired(dayPlan.isRequired)
+    }
+    
+    func checkDayPlanIsRequired(_ isRequired: Bool) {
+    
+        requiredLabel.isHidden = !isRequired
     }
 }
 
@@ -107,7 +142,8 @@ extension HomeImageCollectionViewCell {
         self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
         
         contentView.addSubview(imageView)
-        contentView.addSubview(label)
+        contentView.addSubview(requiredLabel)
+        contentView.addSubview(dayNameLabel)
         contentView.addSubview(editImageButton)
         contentView.addSubview(addImageButton)
     }
@@ -118,9 +154,13 @@ extension HomeImageCollectionViewCell {
             make.height.equalTo(contentView).multipliedBy(0.8)
         }
         
-        label.snp.makeConstraints { make in
+        dayNameLabel.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView)
-            
+        }
+        
+        requiredLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(imageView).offset(-5)
+            make.leading.equalTo(contentView).inset(5)
         }
         
         editImageButton.snp.makeConstraints { make in

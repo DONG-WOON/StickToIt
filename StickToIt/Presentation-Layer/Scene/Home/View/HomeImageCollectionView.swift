@@ -47,7 +47,7 @@ extension HomeImageCollectionView {
             item.contentInsets = edgeInset
             
             let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.8),
+                widthDimension: .fractionalWidth(0.9),
                 heightDimension: .fractionalHeight(1.0)
             )
             
