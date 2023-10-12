@@ -1,31 +1,32 @@
 //
-//  PlanRepositoryImpl.swift
+//  DayPlanRepositoryImpl.swift
 //  StickToIt
 //
-//  Created by 서동운 on 10/10/23.
+//  Created by 서동운 on 10/12/23.
 //
 
 import Foundation
 
-struct PlanRepositoryImpl {
+struct DayPlanRepositoryImpl {
 
     // MARK: Properties
     private let networkService: NetworkService?
-    private let databaseManager: PlanDatabaseManager?
+    private let databaseManager: DayPlanDataBaseManager?
 
     // MARK: Life Cycle
     init(
         networkService: NetworkService?,
-        databaseManager: PlanDatabaseManager?
+        databaseManager: DayPlanDataBaseManager?
     ) {
         self.networkService = networkService
         self.databaseManager = databaseManager
     }
 }
 
-extension PlanRepositoryImpl: PlanRepository {
-    typealias Model = Plan
-    typealias Entity = PlanEntity
+extension DayPlanRepositoryImpl: PlanRepository {
+   
+    typealias Model = DayPlan
+    typealias Entity = DayPlanEntity
     typealias Query = PlanQuery
     
     func fetchAll() -> Result<[Model], Error> {
@@ -34,12 +35,12 @@ extension PlanRepositoryImpl: PlanRepository {
     }
     
     func fetch(query: PlanQuery) -> Result<Model, Error> {
-        guard let entity = databaseManager?.fetch(key: query.planID) as? PlanEntity else { return .failure(NSError(domain: "fetch Error", code: 1000)) }
+        guard let entity = databaseManager?.fetch(key: query.planID) as? DayPlanEntity else { return .failure(NSError(domain: "fetch Error", code: 1000)) }
         return .success(entity.toDomain())
     }
     
     func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
-        databaseManager?.create(model: model, to: PlanEntity.self, onFailure: { error in
+        databaseManager?.create(model: model, to: DayPlanEntity.self, onFailure: { error in
             if let error {
                 return completion(.failure(error))
             }
@@ -47,9 +48,7 @@ extension PlanRepositoryImpl: PlanRepository {
         })
     }
     
-    func update(entity: PlanEntity.Type, matchingWith model: Plan, onFailure: @escaping @Sendable (Error?) -> Void) {
+    func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, onFailure: @escaping @Sendable (Error?) -> Void) {
         databaseManager?.update(entity: entity, matchingWith: model, onFailure: onFailure)
     }
-    
-    
 }
