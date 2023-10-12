@@ -30,7 +30,7 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     
     var userPlanList = BehaviorRelay(value: [PlanQuery]())
     var currentPlan = PublishRelay<Plan>()
-    var currentWeeklyPlan = BehaviorRelay(value: [DayPlan]())
+    var currentDayPlans = BehaviorRelay(value: [DayPlan]())
     var currentWeek = BehaviorRelay<Int>(value: 1)
     var currentPlanData: Plan?
     
@@ -79,11 +79,18 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
             .map { $0.dayPlans }
             .map { $0.filter { $0.week == week }}
             .ifEmpty(default: nil)
-            .subscribe(onNext: { weeklyDayPlan in
-                guard let weeklyDayPlan else { return }
-                self.currentWeeklyPlan.accept(weeklyDayPlan)
+            .subscribe(onNext: { _dayPlans in
+                guard let _dayPlans = _dayPlans else { return }
+                self.currentDayPlans.accept(_dayPlans)
             })
             .disposed(by: disposeBag)
+    }
+    
+    func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
+        
+        useCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
+            completion(data)
+        }
     }
     
     

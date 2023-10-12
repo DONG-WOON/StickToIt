@@ -50,11 +50,11 @@ where PlanUseCase.Model == Plan
         let executionDaysOfWeek = executionDaysOfWeek.value
         
         
-        let minimumRequiredDayOfDayPlans = targetNumberOfDays < 7 ? targetNumberOfDays : 7
+//        let minimumRequiredDayOfDayPlans = targetNumberOfDays < 7 ? targetNumberOfDays : 7
+//
         
         
-        
-        let dayPlans = (0..<minimumRequiredDayOfDayPlans).map { day in DayPlan(_id: UUID(), isRequired: executionDaysOfWeek.contains(Week(rawValue: day)!), date: nil, week: 1, imageData: nil, content: nil) }
+        let dayPlans = executionDaysOfWeek.map { day in DayPlan(_id: UUID(), isRequired: true, date: nil, week: 1, executionDaysOfWeek: day, content: nil) }
         
         let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate, executionDaysOfWeek: executionDaysOfWeek, dayPlans: dayPlans)
         useCase.create(userPlan, completion: completion)

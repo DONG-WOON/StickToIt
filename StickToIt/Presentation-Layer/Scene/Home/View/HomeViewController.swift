@@ -130,8 +130,9 @@ final class HomeViewController: UIViewController {
     
     // MARK: Methods
     
+    
     func bindViewModel() {
-        
+    
         viewModel.userPlanList
             .subscribe(with: self) { (_self, userPlanQueries) in
                 var actions: [UIMenuElement] = []
@@ -144,6 +145,7 @@ final class HomeViewController: UIViewController {
                         ) { _ in
                             _self.title = query.planName
                             _self.viewModel.fetchPlan(query)
+                            _self.takeSnapshot()
                         }
                     }
                         
@@ -154,6 +156,7 @@ final class HomeViewController: UIViewController {
                 
                 _self.title = firstPlanQuery.planName
                 _self.viewModel.fetchPlan(firstPlanQuery)
+                _self.takeSnapshot()
                 
                 let bottomMenu = UIMenu(
                     options: .displayInline,
@@ -182,7 +185,8 @@ final class HomeViewController: UIViewController {
     func takeSnapshot() {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(Week.allCases, toSection: .main)
+        snapshot.appendItems(Array(viewModel.daysOfWeek).sorted(), toSection: .main)
+        snapshot.appendItems([.none], toSection: .main)
         dataSource.apply(snapshot)
     }
 }
@@ -206,6 +210,7 @@ extension HomeViewController {
 extension HomeViewController: CreatePlanCompletedDelegate {
     func createPlanCompleted() {
         self.viewModel.reload()
+        takeSnapshot()
     }
 }
 
@@ -257,14 +262,23 @@ extension HomeViewController {
         let cellRegistration = UICollectionView
             .CellRegistration<HomeImageCollectionViewCell, Week>
         { [weak self] cell, indexPath, item in
+            guard item != .none else {
+                return
+            }
             
             guard let _self = self else { return }
             
-            let dayPlans = _self.viewModel.currentWeeklyPlan.value
+            let dayPlans = _self.viewModel.currentDayPlans.value
             guard dayPlans.count > 0 else { return }
-            let dayPlan = dayPlans[indexPath.item]
             
-            cell.update(data: dayPlan)
+            let dayPlan = dayPlans.sorted(by: { $0.executionDaysOfWeek < $1.executionDaysOfWeek }) [indexPath.item]
+            
+            cell.update(dayPlan: dayPlan)
+            
+            _self.viewModel.loadImage(dayPlanID: dayPlan._id) { data in
+                cell.update(imageData: data)
+            }
+            
         }
         
         self.dataSource = DataSource(
@@ -288,10 +302,14 @@ extension HomeViewController {
 extension HomeViewController: HomeImageCollectionViewCellDelegate {
     
     func addImageButtonDidTapped(_ week: Week) {
-        let vc = UpdateDayPlanViewController(
+        guard week != .none else {
+             return
+        }
+        
+        let vc = DayPlanViewController(
             dayPlan: viewModel
-                    .currentWeeklyPlan
-                    .value[week.rawValue]
+                    .currentDayPlans
+                .value.first(where: { $0.executionDaysOfWeek == week })!
             ).embedNavigationController()
         
         vc.modalPresentationStyle = .fullScreen

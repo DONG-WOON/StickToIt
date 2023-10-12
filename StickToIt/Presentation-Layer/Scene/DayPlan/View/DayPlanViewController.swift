@@ -1,15 +1,18 @@
 //
-//  UpdateDayPlanViewController.swift
+//  DayPlanViewController.swift
 //  StickToIt
 //
 //  Created by 서동운 on 10/11/23.
 //
 
 import UIKit
+import RxSwift
 
-final class UpdateDayPlanViewController: UIViewController {
+final class DayPlanViewController: UIViewController {
     
-    private let viewModel: UpdateDayPlanViewModel<UpdatePlanUseCaseImpl<DayPlanRepositoryImpl>>
+    private let viewModel: CreateDayPlanViewModel<CreateDayPlanUseCaseImpl<DayPlanRepositoryImpl>>
+    
+    private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
     
@@ -97,9 +100,10 @@ final class UpdateDayPlanViewController: UIViewController {
     // MARK: Life Cycle
     
     init(dayPlan: DayPlan) {
-        viewModel = UpdateDayPlanViewModel(
+        print(dayPlan)
+        viewModel = CreateDayPlanViewModel(
             dayPlan: dayPlan,
-            useCase: UpdatePlanUseCaseImpl(
+            useCase: CreateDayPlanUseCaseImpl(
                 repository: DayPlanRepositoryImpl(
                     networkService: nil,
                     databaseManager: DayPlanDataBaseManager())
@@ -135,20 +139,28 @@ final class UpdateDayPlanViewController: UIViewController {
         } else {
             self.dateLabel.innerView.text = DateFormatter.dayPlanFormatter.string(from: .now)
         }
-        
-        if let imageData = viewModel.dayPlan.imageData {
-            self.addImageButton.isHidden = true
-            self.editImageButton.isHidden = false
-            self.imageView.image = UIImage(data: imageData)
-        } else {
-            self.addImageButton.isHidden = false
-            self.editImageButton.isHidden = true
+        viewModel.loadImage { data in
+            if let imageData = data {
+                self.addImageButton.isHidden = true
+                self.editImageButton.isHidden = false
+                self.imageView.image = UIImage(data: imageData)
+            } else {
+                self.addImageButton.isHidden = false
+                self.editImageButton.isHidden = true
+            }
         }
+        
+        viewModel.isValidated
+            .subscribe(with: self) { (_self, isValidated) in
+                _self.createButton.isEnabled = isValidated
+                _self.createButton.backgroundColor = isValidated ? .systemIndigo : .gray
+            }
+            .disposed(by: disposeBag)
     }
 }
 
 
-extension UpdateDayPlanViewController: BaseViewConfigurable {
+extension DayPlanViewController: BaseViewConfigurable {
     func configureViews() {
         view.backgroundColor = .systemBackground
         
@@ -160,8 +172,6 @@ extension UpdateDayPlanViewController: BaseViewConfigurable {
         borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(dateLabel)
         borderContainerView.addSubview(addImageButton)
-        
-        
     }
     
     func setConstraints() {
@@ -200,7 +210,7 @@ extension UpdateDayPlanViewController: BaseViewConfigurable {
 }
 
 
-extension UpdateDayPlanViewController {
+extension DayPlanViewController {
     
     @objc private func editImageButtonAction() {
         //        self.delegate?.editImageButtonDidTapped()
@@ -220,6 +230,7 @@ extension UpdateDayPlanViewController {
         if image != nil {
             self.addImageButton.isHidden = true
             self.editImageButton.isHidden = false
+            self.viewModel.isValidated.accept(true)
         } else {
             self.addImageButton.isHidden = false
             self.editImageButton.isHidden = true
@@ -227,11 +238,12 @@ extension UpdateDayPlanViewController {
     }
     
     @objc private func createButtonDidTapped() {
-        viewModel.dayPlan.imageData = imageView.image?.pngData()
+        viewModel.save(imageData: imageView.image?.pngData())
         viewModel.save { result in
             switch result {
             case .success(let success):
                 print(success)
+                self.dismiss(animated: true)
             case .failure(let failure):
                 print(failure)
             }

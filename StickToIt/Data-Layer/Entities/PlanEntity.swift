@@ -50,6 +50,7 @@ enum Week: Int, CaseIterable, PersistableEnum {
     case friday
     case saturday
     case sunday
+    case none
     
     var description: String {
         switch self {
@@ -67,6 +68,8 @@ enum Week: Int, CaseIterable, PersistableEnum {
             return "saturday"
         case .sunday:
             return "sunday"
+        case .none:
+            return "none"
         }
     }
     
@@ -86,6 +89,8 @@ enum Week: Int, CaseIterable, PersistableEnum {
             return "토"
         case .sunday:
             return "일"
+        case .none:
+            return ""
         }
     }
 }
