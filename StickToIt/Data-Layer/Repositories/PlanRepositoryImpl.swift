@@ -24,6 +24,7 @@ struct PlanRepositoryImpl {
 }
 
 extension PlanRepositoryImpl: PlanRepository {
+    
     typealias Model = Plan
     typealias Entity = PlanEntity
     typealias Query = PlanQuery
@@ -51,5 +52,17 @@ extension PlanRepositoryImpl: PlanRepository {
         databaseManager?.update(entity: entity, matchingWith: model, onFailure: onFailure)
     }
     
+    func saveImage(path fileName: String, imageData: Data?) throws {
+        
+    }
     
+    func loadImageFromDocument(fileName: String) throws -> Data? {
+        guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory }
+        let fileURL = documentDirectory.appendingPathComponent(fileName)
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            return try? Data(contentsOf: fileURL)
+        } else {
+            throw FileManagerError.fileIsNil
+        }
+    }
 }

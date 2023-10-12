@@ -40,7 +40,7 @@ extension DayPlanEntity {
             isRequired: isRequired,
             date: date,
             week: week,
-            imageData: imageData,
+            executionDaysOfWeek: executionDaysOfWeek,
             content: content
         )
     }

@@ -53,7 +53,7 @@ extension DayPlan {
             date: date,
             isRequired: isRequired,
             week: week,
-            imageData: imageData,
+            executionDaysOfWeek: executionDaysOfWeek,
             content: content
         )
     }

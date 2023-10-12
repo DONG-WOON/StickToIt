@@ -13,7 +13,7 @@ final class DayPlanEntity: Object {
     @Persisted var isRequired: Bool
     @Persisted var date: Date?
     @Persisted var week: Int
-    @Persisted var imageData: Data?
+    @Persisted var executionDaysOfWeek: Week
     @Persisted var content: String?
     
     @Persisted(originProperty: "dayPlans") var plan: LinkingObjects<PlanEntity>
@@ -23,7 +23,7 @@ final class DayPlanEntity: Object {
         date: Date?,
         isRequired: Bool,
         week: Int,
-        imageData: Data?,
+        executionDaysOfWeek: Week,
         content: String?
     ) {
         self.init()
@@ -31,7 +31,7 @@ final class DayPlanEntity: Object {
         self.date = date
         self.isRequired = isRequired
         self.week = week
-        self.imageData = imageData
+        self.executionDaysOfWeek = executionDaysOfWeek
         self.content = content
     }
 }
