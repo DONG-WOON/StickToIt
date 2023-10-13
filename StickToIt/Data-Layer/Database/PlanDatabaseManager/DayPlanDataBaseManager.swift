@@ -69,6 +69,7 @@ extension DayPlanDataBaseManager: DatabaseManager {
         asyncRealm.writeAsync {
             fetchedEntity.content = model.content
             fetchedEntity.date = model.date
+            fetchedEntity.isComplete = model.isComplete
             fetchedEntity.isRequired = model.isRequired
             fetchedEntity.week = model.week
         } onComplete: { error in

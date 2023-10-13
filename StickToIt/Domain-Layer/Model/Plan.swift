@@ -14,17 +14,16 @@ struct Plan {
     let targetNumberOfDays: Int
     let startDate: Date
     let endDate: Date
-    let executionDaysOfWeek: Set<Week>
+    let executionDaysOfWeekday: Set<Week>
     var dayPlans: [DayPlan]
     
     var totalWeek: Int {
-        return targetNumberOfDays / 7 == 0 ? 1 : targetNumberOfDays / 7
+        return Calendar.current.dateComponents([.weekOfYear], from: startDate, to: endDate).weekOfYear! + 1
     }
     
     var currentWeek: Int {
-        let weekOfYear = Calendar.current.dateComponents([.weekOfYear], from: startDate, to: Date.now).weekOfYear
-        guard let weekOfYear else { return 1 }
-        return weekOfYear < 1 ? 1 : weekOfYear
+        let weekOfYear = Calendar.current.dateComponents([.weekOfYear], from: startDate, to: Date.now).weekOfYear!
+        return weekOfYear + 1
     }
     
 //    var completed
@@ -35,7 +34,7 @@ struct Plan {
         targetNumberOfDays: Int,
         startDate: Date,
         endDate: Date,
-        executionDaysOfWeek: Set<Week>,
+        executionDaysOfWeekday: Set<Week>,
         dayPlans: [DayPlan]
     ) {
         self._id = _id
@@ -43,7 +42,7 @@ struct Plan {
         self.targetNumberOfDays = targetNumberOfDays
         self.startDate = startDate
         self.endDate = endDate
-        self.executionDaysOfWeek = executionDaysOfWeek
+        self.executionDaysOfWeekday = executionDaysOfWeekday
         self.dayPlans = dayPlans
     }
     

@@ -33,10 +33,12 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     }
     
     func save(completion: @escaping (Result<Bool, Error>) -> Void) {
+        dayPlan.isComplete = true
         useCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan, completion: completion)
     }
     
     func save(imageData: Data?) {
+        
         useCase.save(dayPlanID: dayPlan._id, imageData: imageData)
     }
     

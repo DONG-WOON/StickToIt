@@ -73,6 +73,7 @@ extension PlanDatabaseManager: DatabaseManager {
             fetchedEntity.startDate = model.startDate
             fetchedEntity.targetNumberOfDays = model.targetNumberOfDays
             fetchedEntity.name = model.name
+            fetchedEntity.endDate = model.endDate
         } onComplete: { error in
             underlyingQueue.async {
                 onFailure(error)

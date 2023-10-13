@@ -35,7 +35,7 @@ where PlanUseCase.Model == Plan
         
         _ = Observable.combineLatest(
             planName,
-            executionDaysOfWeek
+            executionDaysOfWeekday
         )
         .map { $0.count > 0 && $1.count != 0 }
         .subscribe(with: self, onNext: { (self, isValied) in self.planIsValidated.accept(isValied)
@@ -56,7 +56,7 @@ where PlanUseCase.Model == Plan
         
         let dayPlans = executionDaysOfWeek.map { day in DayPlan(_id: UUID(), isRequired: true, date: nil, week: 1, executionDaysOfWeek: day, content: nil) }
         
-        let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate, executionDaysOfWeek: executionDaysOfWeek, dayPlans: dayPlans)
+        let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)
         useCase.create(userPlan, completion: completion)
         
     }

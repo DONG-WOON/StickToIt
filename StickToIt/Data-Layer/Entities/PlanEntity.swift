@@ -14,8 +14,7 @@ final class PlanEntity: Object {
     @Persisted var targetNumberOfDays: Int
     @Persisted var startDate: Date
     @Persisted var endDate: Date
-    
-    @Persisted var executionDaysOfWeek: MutableSet<Week>
+    @Persisted var executionDaysOfWeekday: MutableSet<Week>
     @Persisted var dayPlans: List<DayPlanEntity>
     
     @Persisted(originProperty: "plans") var user: LinkingObjects<UserEntity>
@@ -27,7 +26,7 @@ final class PlanEntity: Object {
         targetNumberOfDays: Int,
         startDate: Date,
         endDate: Date,
-        executionDaysOfWeek: MutableSet<Week>,
+        executionDaysOfWeekday: MutableSet<Week>,
         dayPlans: List<DayPlanEntity>
         ) {
             self.init()
@@ -36,21 +35,19 @@ final class PlanEntity: Object {
             self.targetNumberOfDays = targetNumberOfDays
             self.startDate = startDate
             self.endDate = endDate
-            self.executionDaysOfWeek = executionDaysOfWeek
+            self.executionDaysOfWeekday = executionDaysOfWeekday
             self.dayPlans = dayPlans
         }
 }
 
-#warning("DateFormatter와 함꼐 사용해보기")
 enum Week: Int, CaseIterable, PersistableEnum {
-    case monday = 0
+    case sunday = 1
+    case monday
     case tuesday
     case wednesday
     case thursday
     case friday
     case saturday
-    case sunday
-    case none
     
     var description: String {
         switch self {
@@ -68,8 +65,6 @@ enum Week: Int, CaseIterable, PersistableEnum {
             return "saturday"
         case .sunday:
             return "sunday"
-        case .none:
-            return "none"
         }
     }
     
@@ -89,8 +84,6 @@ enum Week: Int, CaseIterable, PersistableEnum {
             return "토"
         case .sunday:
             return "일"
-        case .none:
-            return ""
         }
     }
 }
