@@ -7,14 +7,9 @@
 
 import UIKit
 
-enum DateType {
-    case start
-    case end
-}
-
 protocol PlanTargetNumberOfDaysSettingDelegate: AnyObject {
     
-    func okButtonDidTapped(date: Date, dateType: DateType)
+    func okButtonDidTapped(date: Date)
 }
 
 final class CreatePlanTargetPeriodSettingViewController: UIViewController {
@@ -22,8 +17,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     weak var delegate: PlanTargetNumberOfDaysSettingDelegate?
     
     private var date: Date
-    private let dateType: DateType
-    
+
     let containerView: UIView = {
         let view = UIView(backgroundColor: .systemBackground)
         view.rounded(cornerRadius:20)
@@ -34,11 +28,9 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
 
     private let dDayLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
-        view.rounded()
-        view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
-        view.innerView.text = "오늘부터 시작, 3일 동안"
+        view.innerView.text = "오늘부터 3일 동안"
         view.innerView.textAlignment = .center
-        view.innerView.textColor = .white
+         view.innerView.textColor = .systemIndigo.withAlphaComponent(0.7)
         return view
     }()
     
@@ -62,9 +54,8 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
         action: #selector(dismissButtonDidTapped)
     )
     
-    init(date: Date, dateType: DateType) {
+    init(date: Date) {
         self.date = date
-        self.dateType = dateType
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,9 +67,18 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
         super.viewDidLoad()
         
         configureViews()
-        setConstraints()
-        
-        calendar.delegate = self
+         setConstraints()
+         
+         calendar.delegate = self
+         
+         let minimumDate = Calendar.current.date(byAdding: .day, value: 2, to: .now)!
+         
+         calendar.setMinimumDate(minimumDate)
+         calendar.select(date: date)
+         
+         guard let days = Calendar.current.dateComponents([.day], from: .now, to: date).day else { return }
+         
+         self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
     }
     
     @objc private func dismissButtonDidTapped() {
@@ -86,13 +86,23 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     }
     
     @objc private func okButtonDidTapped() {
-        delegate?.okButtonDidTapped(date: date, dateType: dateType)
+        delegate?.okButtonDidTapped(date: date)
         self.dismiss(animated: true)
     }
 }
 
 extension CreatePlanTargetPeriodSettingViewController: StickToItCalendarDelegate {
     func calendarView(didSelectAt date: Date) {
+         guard let days = Calendar.current.dateComponents([.day], from: .now, to: date).day else { return }
+         
+         self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
+         
+         UIView.animate(withDuration: 0.4) {
+              self.dDayLabel.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+         } completion: { _ in
+              self.dDayLabel.transform = .identity
+         }
+         
         self.date = date
     }
 }

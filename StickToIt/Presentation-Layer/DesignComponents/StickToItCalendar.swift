@@ -304,7 +304,7 @@ final class CustomCalendarCell: FSCalendarCell {
     // MARK: - Actions
     
     private func setSelectionLayer() {
-        selectionLayer.fillColor = UIColor.systemIndigo.cgColor
+        selectionLayer.fillColor = UIColor.systemIndigo.withAlphaComponent(0.7).cgColor
         selectionLayer.path = UIBezierPath(roundedRect: self.bounds.insetBy(dx: 6.0, dy: 1.0), cornerRadius: 6).cgPath
         selectionLayer.isHidden = true
         

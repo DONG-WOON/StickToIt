@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 
 protocol CalendarButtonProtocol: AnyObject {
-    func startDateSettingButtonDidTapped()
     func endDateSettingButtonDidTapped()
 }
 
@@ -18,9 +17,7 @@ final class CreatePlanView: UIScrollView {
     
     weak var buttonDelegate: CalendarButtonProtocol?
     
-    var selectedDays = BehaviorSubject<Set<Week>>(value: [
-        .monday, .thursday, .tuesday, .wednesday, .friday
-    ])
+    var selectedDays = BehaviorSubject<Set<Week>>(value: [])
     
     let planNameLabel: UILabel = {
         let view = UILabel()
@@ -54,15 +51,6 @@ final class CreatePlanView: UIScrollView {
         view.font = .boldSystemFont(ofSize: 17)
         return view
     }()
-    
-    let startDateLabel: PaddingView<UILabel> = {
-        let view = PaddingView<UILabel>()
-        view.bordered(cornerRadius: 10, borderWidth: 0.7, borderColor: .systemIndigo)
-        view.innerView.text = "시작일: \(DateFormatter.getFullDateString(from: Date.now))"
-        view.innerView.backgroundColor = .clear
-        view.innerView.textColor = .label
-        return view
-    }()
 
     let endDateLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
@@ -72,19 +60,6 @@ final class CreatePlanView: UIScrollView {
         view.innerView.backgroundColor = .clear
         view.innerView.textColor = .label
         return view
-    }()
-    
-    
-    lazy var startDateSettingButton: ResizableButton = {
-        let button = ResizableButton(
-            image: UIImage(resource: .calendar),
-            symbolConfiguration: .init(scale: .large),
-            tintColor: .white,
-            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
-            target: self,
-            action: #selector(startDateSettingButtonDidTapped)
-        )
-        return button
     }()
     
     lazy var endDateSettingButton: ResizableButton = {
@@ -163,6 +138,31 @@ final class CreatePlanView: UIScrollView {
             .forEach { self.select($0) }
     }
     
+    func disableStackView(weekdayList: [Int]) {
+        let buttons = executionDaysOfWeekdayStackView
+            .arrangedSubviews
+            .compactMap { $0 as? UIButton }
+        buttons
+            .filter {
+                weekdayList.contains($0.tag)
+            }
+            .forEach {
+                $0.isEnabled = true
+                $0.backgroundColor = .systemBackground
+                $0.setTitleColor(.label, for: .normal)
+            }
+        
+        buttons
+            .filter {
+                !weekdayList.contains($0.tag)
+            }
+            .forEach {
+                $0.isEnabled = false
+                $0.backgroundColor = .gray
+                $0.setTitleColor(.systemBackground, for: .normal)
+            }
+    }
+    
     override func setNeedsLayout() {
         super.setNeedsLayout()
         
@@ -175,10 +175,6 @@ final class CreatePlanView: UIScrollView {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.endEditing(true)
-    }
-    
-    @objc func startDateSettingButtonDidTapped() {
-        buttonDelegate?.startDateSettingButtonDidTapped()
     }
     
     @objc func endDateSettingButtonDidTapped() {
@@ -211,14 +207,16 @@ final class CreatePlanView: UIScrollView {
         }
     }
     
+    func updateStackView(from minWeekday: Int, to maxWeekday: Int) {
+        [minWeekday...maxWeekday]
+    }
+    
     func update(plan: Plan) {
         planNameLabel.text = plan.name
         plan.executionDaysOfWeekday.forEach { week in
             (executionDaysOfWeekdayStackView.arrangedSubviews[week.rawValue - 1] as? UIButton)?.isSelected = true
         }
-        startDateLabel.innerView.text = "시작일: \(DateFormatter.getFullDateString(from: plan.startDate))"
-        
-        startDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
+        endDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
     }
 }
 
@@ -230,14 +228,12 @@ extension CreatePlanView {
         addSubview(planNameTextField)
         addSubview(planNameMaximumTextNumberLabel)
         addSubview(planTargetPeriodLabel)
-        addSubview(startDateLabel)
         addSubview(endDateLabel)
         addSubview(planRequiredDoingDayLabel)
         addSubview(executionDaysOfWeekdayStackView)
         addSubview(descriptionLabel)
         addSubview(createButton)
-        
-        startDateLabel.addSubview(startDateSettingButton)
+       
         endDateLabel.addSubview(endDateSettingButton)
     }
     
@@ -266,21 +262,10 @@ extension CreatePlanView {
             make.leading.equalTo(self.contentLayoutGuide).inset(20)
         }
         
-        startDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(15)
-            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
-            make.height.equalTo(40)
-        }
-        
         endDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(startDateLabel.snp.bottom).offset(40)
+            make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
-            make.height.equalTo(40)
-        }
-        
-        startDateSettingButton.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview()
-            make.width.equalTo(startDateSettingButton.snp.height)
+            make.size.equalTo(planNameTextField)
         }
         
         endDateSettingButton.snp.makeConstraints { make in

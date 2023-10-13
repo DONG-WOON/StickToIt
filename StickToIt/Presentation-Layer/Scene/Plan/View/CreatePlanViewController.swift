@@ -58,6 +58,11 @@ final class CreatePlanViewController: UIViewController {
         bindViewModel()
         configureViews()
         setConstraints()
+        
+        // FSCalendar 때문에 하루 뺴줌
+        let date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
+        
+        reload(date: date)
     }
     
     private func bindViewModel() {
@@ -90,7 +95,6 @@ final class CreatePlanViewController: UIViewController {
                 print(_week)
             }
             .disposed(by: disposeBag)
-        
     }
     
     private func configureViews() {
@@ -154,25 +158,9 @@ final class CreatePlanViewController: UIViewController {
 
 extension CreatePlanViewController: CalendarButtonProtocol {
     
-    func startDateSettingButtonDidTapped() {
-        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.startDate, dateType: .start)
-        
-        popupVC.delegate = self
-        popupVC.calendar.setMinimumDate(Calendar.current.date(byAdding: .day, value: 1, to: Date.now))
-        
-        popupVC.modalTransitionStyle = .crossDissolve
-        popupVC.modalPresentationStyle = .overFullScreen
-        
-        present(popupVC, animated: true)
-    }
-    
     func endDateSettingButtonDidTapped() {
-        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.endDate, dateType: .end)
+        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.endDate)
         popupVC.delegate = self
-        
-        let _startDate = viewModel.startDate
-        popupVC.calendar.setMinimumDate(_startDate)
-        popupVC.calendar.select(date: viewModel.endDate)
         
         popupVC.modalTransitionStyle = .crossDissolve
         popupVC.modalPresentationStyle = .overFullScreen
@@ -183,37 +171,38 @@ extension CreatePlanViewController: CalendarButtonProtocol {
 
 extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
     
-    func okButtonDidTapped(date: Date, dateType: DateType) {
-        if dateType == .start {
-            self.viewModel.startDate = date
-            
-            let startDate = DateFormatter.getFullDateString(from: date)
-            self.mainView.startDateLabel.innerView.text = "시작일: \(startDate)"
-            
-            if viewModel.endDate <= date {
-                viewModel.endDate = date
-                self.mainView.endDateLabel.innerView.text = "종료일: \(startDate)"
-            }
-            
-            guard let day = Calendar.current.dateComponents([.day], from: date, to: viewModel.endDate).day else { return }
-            
-            self.viewModel.targetNumberOfDays.accept(day)
+    func okButtonDidTapped(date: Date) {
+        self.viewModel.endDate = date
+        
+        let endDate = DateFormatter.getFullDateString(from: date)
+        self.mainView.endDateLabel.innerView.text = "종료일: \(endDate)"
+        
+        reload(date: date)
+    }
+    
+    func reload(date: Date) {
+        guard let day = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
+        let diffOfStartDateAndEndDate = day + 2
+        self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
+        
+        let datesFromStartDateToEndDate = Array(0...day + 1).map { Calendar.current.date(byAdding: .day, value: $0, to: viewModel.startDate)!
         }
         
-        if dateType == .end {
-            self.viewModel.endDate = date
-            
-            let endDate = DateFormatter.getFullDateString(from: date)
-            self.mainView.endDateLabel.innerView.text = "종료일: \(endDate)"
-    
-            if viewModel.startDate >= date {
-                viewModel.startDate = date
-                self.mainView.startDateLabel.innerView.text = "시작일: \(endDate)"
-            }
-            
-            guard let day = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
-            
-            self.viewModel.targetNumberOfDays.accept(day)
+        let weekdayList = datesFromStartDateToEndDate.map {
+            return Calendar.current.dateComponents([.weekday], from: $0).weekday!
+        }
+        
+        
+        if weekdayList.count < 7 {
+            mainView.disableStackView(weekdayList: weekdayList)
+        } else {
+            mainView.executionDaysOfWeekdayStackView
+                .arrangedSubviews
+                .map { $0 as? UIButton }
+                .forEach {
+                    $0?.isEnabled = true
+                    $0?.backgroundColor = .systemBackground
+                }
         }
     }
 }

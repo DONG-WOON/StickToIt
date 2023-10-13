@@ -21,6 +21,7 @@ final class ImageSelectionDeniedView: UIView {
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
+    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label

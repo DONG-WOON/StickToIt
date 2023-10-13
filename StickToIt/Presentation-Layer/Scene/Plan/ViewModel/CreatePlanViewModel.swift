@@ -19,7 +19,7 @@ where PlanUseCase.Model == Plan
     // MARK: Properties
     
     var planName = BehaviorRelay<String>(value: "")
-    var targetNumberOfDays = BehaviorRelay<Int>(value: 3)
+    var targetNumberOfDays: Int = 3
     var startDate: Date = Date()
     var endDate: Date = Calendar.current.date(byAdding: .day, value: 2, to: Date.now)!
     var executionDaysOfWeekday = BehaviorRelay<Set<Week>>(value: [.monday, .tuesday, .wednesday, .thursday, .friday])
@@ -38,6 +38,7 @@ where PlanUseCase.Model == Plan
             planName,
             executionDaysOfWeekday
         )
+        
         .map { $0.count > 0 && $1.count != 0 }
         .subscribe(with: self, onNext: { (self, isValied) in self.planIsValidated.accept(isValied)
         }).disposed(by: disposeBag)
@@ -47,17 +48,16 @@ where PlanUseCase.Model == Plan
     func createPlan(completion: @escaping (Result<Bool, Error>) -> Void) {
         
         let planName = planName.value
-        let targetNumberOfDays = targetNumberOfDays.value
         let executionDaysOfWeekday = executionDaysOfWeekday.value
     
-        let sevenDaysFromStartDate: [Date] = Array(1...6).map {
-            Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
+        let daysFromStartDateToEndDate = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day!
+        print(daysFromStartDateToEndDate)
+        
+        let datesFromStartDateToEndDate = Array(0...daysFromStartDateToEndDate).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
         }
         
-        let executionDaysIntValue = executionDaysOfWeekday.map { $0.rawValue }
-        
-        let requiredDays = sevenDaysFromStartDate.filter { date in
-            executionDaysIntValue.contains(where: { $0 == Calendar.current.dateComponents([.weekday], from: date).weekday! }
+        let requiredDays = datesFromStartDateToEndDate.filter { date in
+            executionDaysOfWeekday.contains(where: { $0.rawValue == Calendar.current.dateComponents([.weekday], from: date).weekday! }
             )
         }
         
