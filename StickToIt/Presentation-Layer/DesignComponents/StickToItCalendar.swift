@@ -81,7 +81,7 @@ final class StickToItCalendar: UIView {
     // 해당날짜를 선택된 것으로 표시해주는 메소드
     func select(date: Date?) {
         guard let date = date else { return }
-        monthLabel.text = DateFormatter.monthYearFormatter.string(from: date)
+        monthLabel.text = DateFormatter.formatToString(format: .clendarHeader, from: date)
         print("✅ ",date)
         calendar.select(date)
     }
@@ -227,7 +227,7 @@ extension StickToItCalendar: FSCalendarDelegate {
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let today = calendar.currentPage
-        monthLabel.text = DateFormatter.monthYearFormatter.string(from: today)
+        monthLabel.text = DateFormatter.formatToString(format: .clendarHeader, from: today)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {

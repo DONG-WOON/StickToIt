@@ -85,11 +85,12 @@ final class CreatePlanViewController: UIViewController {
         mainView.selectedDays
             .bind(with: self) { (_self, _week) in
                 _self.viewModel
-                    .executionDaysOfWeek
+                    .executionDaysOfWeekday
                     .accept(_week)
                 print(_week)
             }
             .disposed(by: disposeBag)
+        
     }
     
     private func configureViews() {
@@ -152,9 +153,27 @@ final class CreatePlanViewController: UIViewController {
 }
 
 extension CreatePlanViewController: CalendarButtonProtocol {
-    func calendarButtonDidTapped() {
-        let popupVC = CreatePlanTargetPeriodSettingViewController()
+    
+    func startDateSettingButtonDidTapped() {
+        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.startDate, dateType: .start)
+        
         popupVC.delegate = self
+        popupVC.calendar.setMinimumDate(Calendar.current.date(byAdding: .day, value: 1, to: Date.now))
+        
+        popupVC.modalTransitionStyle = .crossDissolve
+        popupVC.modalPresentationStyle = .overFullScreen
+        
+        present(popupVC, animated: true)
+    }
+    
+    func endDateSettingButtonDidTapped() {
+        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.endDate, dateType: .end)
+        popupVC.delegate = self
+        
+        let _startDate = viewModel.startDate
+        popupVC.calendar.setMinimumDate(_startDate)
+        popupVC.calendar.select(date: viewModel.endDate)
+        
         popupVC.modalTransitionStyle = .crossDissolve
         popupVC.modalPresentationStyle = .overFullScreen
         
@@ -163,13 +182,38 @@ extension CreatePlanViewController: CalendarButtonProtocol {
 }
 
 extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
-    func planTargetNumberOfDaysSetting(_ data: (date: Date?, day: Int?)) {
-        if let date = data.date {
-            self.viewModel.endDate = date
-        }
-        if let day = data.day {
+    
+    func okButtonDidTapped(date: Date, dateType: DateType) {
+        if dateType == .start {
+            self.viewModel.startDate = date
+            
+            let startDate = DateFormatter.getFullDateString(from: date)
+            self.mainView.startDateLabel.innerView.text = "시작일: \(startDate)"
+            
+            if viewModel.endDate <= date {
+                viewModel.endDate = date
+                self.mainView.endDateLabel.innerView.text = "종료일: \(startDate)"
+            }
+            
+            guard let day = Calendar.current.dateComponents([.day], from: date, to: viewModel.endDate).day else { return }
+            
             self.viewModel.targetNumberOfDays.accept(day)
-            self.mainView.numberOfDaysToAchieveLabel.innerView.text = "\(day)일"
+        }
+        
+        if dateType == .end {
+            self.viewModel.endDate = date
+            
+            let endDate = DateFormatter.getFullDateString(from: date)
+            self.mainView.endDateLabel.innerView.text = "종료일: \(endDate)"
+    
+            if viewModel.startDate >= date {
+                viewModel.startDate = date
+                self.mainView.startDateLabel.innerView.text = "시작일: \(endDate)"
+            }
+            
+            guard let day = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
+            
+            self.viewModel.targetNumberOfDays.accept(day)
         }
     }
 }

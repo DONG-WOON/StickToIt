@@ -7,15 +7,22 @@
 
 import UIKit
 
+enum DateType {
+    case start
+    case end
+}
+
 protocol PlanTargetNumberOfDaysSettingDelegate: AnyObject {
-    func planTargetNumberOfDaysSetting(_ data: (date: Date?, day: Int?))
+    
+    func okButtonDidTapped(date: Date, dateType: DateType)
 }
 
 final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     
     weak var delegate: PlanTargetNumberOfDaysSettingDelegate?
     
-    var selectedDateAndDay: (date: Date?, day: Int?)
+    private var date: Date
+    private let dateType: DateType
     
     let containerView: UIView = {
         let view = UIView(backgroundColor: .systemBackground)
@@ -55,6 +62,16 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
         action: #selector(dismissButtonDidTapped)
     )
     
+    init(date: Date, dateType: DateType) {
+        self.date = date
+        self.dateType = dateType
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,8 +79,6 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
         setConstraints()
         
         calendar.delegate = self
-        calendar.setMinimumDate(Calendar.current.date(byAdding: .day, value: 1, to: Date.now))
-        calendar.select(date: Calendar.current.date(byAdding: .day, value: 2, to: Date.now))
     }
     
     @objc private func dismissButtonDidTapped() {
@@ -71,17 +86,14 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     }
     
     @objc private func okButtonDidTapped() {
-        delegate?.planTargetNumberOfDaysSetting(selectedDateAndDay)
+        delegate?.okButtonDidTapped(date: date, dateType: dateType)
         self.dismiss(animated: true)
     }
 }
 
 extension CreatePlanTargetPeriodSettingViewController: StickToItCalendarDelegate {
     func calendarView(didSelectAt date: Date) {
-        guard let day = Calendar.current.dateComponents([.day], from: calendar.currentDate, to: date).day else { return }
-        let dayContainsToday = day + 1
-        self.selectedDateAndDay = (date, dayContainsToday)
-        self.dDayLabel.innerView.text = "오늘부터 시작, \(dayContainsToday)일 동안"
+        self.date = date
     }
 }
 
