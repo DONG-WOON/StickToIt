@@ -33,6 +33,12 @@ final class DayPlanViewController: UIViewController {
     }()
     
     let dateLabel: PaddingView<UILabel> = {
+    private lazy var blurView: BlurEffectView  = {
+        let view = BlurEffectView()
+        view.rounded(cornerRadius: 20)
+        return view
+    }()
+
         let view = PaddingView<UILabel>()
         view.innerView.font = .systemFont(ofSize: 17)
         view.innerView.textColor = .label
@@ -170,6 +176,7 @@ extension DayPlanViewController: BaseViewConfigurable {
         view.addSubview(createButton)
         
         borderContainerView.addSubview(imageView)
+        borderContainerView.addSubview(blurView)
         borderContainerView.addSubview(dateLabel)
         borderContainerView.addSubview(addImageButton)
     }
@@ -186,6 +193,10 @@ extension DayPlanViewController: BaseViewConfigurable {
         imageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(borderContainerView)
             make.height.equalTo(borderContainerView).multipliedBy(0.8)
+        blurView.snp.makeConstraints { make in
+            make.bottom.equalTo(borderContainerView).inset(15)
+            make.horizontalEdges.equalTo(borderContainerView).inset(15)
+            make.height.equalTo(50)
         }
         
         dateLabel.snp.makeConstraints { make in

@@ -21,6 +21,9 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         view.contentMode = .scaleAspectFill
         view.layer.borderColor = UIColor.systemIndigo.cgColor
         view.layer.borderWidth = 0.4
+    lazy var blurView: BlurEffectView = {
+        let view = BlurEffectView()
+        view.rounded(cornerRadius: 20)
         return view
     }()
     
@@ -142,6 +145,7 @@ extension HomeImageCollectionViewCell {
         self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
         
         contentView.addSubview(imageView)
+        contentView.addSubview(blurView)
         contentView.addSubview(requiredLabel)
         contentView.addSubview(dayNameLabel)
         contentView.addSubview(editImageButton)
@@ -164,8 +168,8 @@ extension HomeImageCollectionViewCell {
         }
         
         editImageButton.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(10)
-            make.trailing.equalTo(contentView).inset(15)
+            make.trailing.equalTo(blurView).inset(10)
+            make.centerY.equalTo(blurView)
         }
         
         addImageButton.snp.makeConstraints { make in
