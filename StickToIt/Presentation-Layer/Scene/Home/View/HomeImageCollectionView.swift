@@ -15,6 +15,7 @@ final class HomeImageCollectionView: UICollectionView {
             frame: .zero,
             collectionViewLayout: Self.createLayout()
         )
+        self.backgroundColor = .clear
         self.isScrollEnabled = false
     }
     

@@ -9,4 +9,5 @@ import Foundation
 
 extension Notification.Name {
     static let updateImageToUpload = Notification.Name("updateImageToUpload")
+    static let reload = Notification.Name("reload")
 }

@@ -38,12 +38,12 @@ final class StickToItCalendar: UIView {
     
     private lazy var leftButton = ResizableButton(
         image: UIImage(resource: .chevronLeft),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
+        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo.withAlphaComponent(0.6),
         target: self, action: #selector(moveToPreviousMonth)
     )
     private lazy var rightButton = ResizableButton(
         image: UIImage(resource: .chevronRight),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
+        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo.withAlphaComponent(0.6),
         target: self, action: #selector(moveToNextMonth)
     )
     
@@ -113,12 +113,12 @@ final class StickToItCalendar: UIView {
         
         calendar.weekdayHeight = 40
         calendar.appearance.weekdayFont = UIFont.boldSystemFont(ofSize: 16)
-        calendar.appearance.weekdayTextColor = .systemIndigo
+        calendar.appearance.weekdayTextColor = .systemIndigo.withAlphaComponent(0.6)
     }
     
     private func setCalendarDaysView() {
         
-        calendar.appearance.todayColor = .systemIndigo
+        calendar.appearance.todayColor = .systemIndigo.withAlphaComponent(0.6)
         calendar.appearance.titleDefaultColor = .label
         calendar.appearance.titleTodayColor = .systemBackground
         calendar.appearance.titleFont = UIFont.boldSystemFont(ofSize: 16)

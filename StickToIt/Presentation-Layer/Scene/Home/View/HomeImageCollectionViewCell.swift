@@ -8,19 +8,28 @@
 import UIKit
 
 protocol HomeImageCollectionViewCellDelegate: AnyObject {
-    func addImageButtonDidTapped(_ week: Week)
-    func editImageButtonDidTapped(_ week: Week)
+    func addImageButtonDidTapped(_ dayPlan: DayPlan)
+    func editImageButtonDidTapped(_ dayPlan: DayPlan)
 }
 
 final class HomeImageCollectionViewCell: UICollectionViewCell {
     
-    private var week: Week = .monday
+    var dayPlan: DayPlan? {
+        didSet {
+            guard let dayPlan else { return }
+            update(with: dayPlan)
+        }
+    }
     
     let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.layer.borderColor = UIColor.systemIndigo.cgColor
         view.layer.borderWidth = 0.4
+        view.rounded(cornerRadius: 20)
+        return view
+    }()
+    
     lazy var blurView: BlurEffectView = {
         let view = BlurEffectView()
         view.rounded(cornerRadius: 20)
@@ -29,29 +38,29 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     let dayNameLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
-        view.innerView.font = .systemFont(ofSize: 17)
-        view.innerView.textColor = .label
-        view.innerView.setGradient(color1: .tertiaryLabel.withAlphaComponent(0.1), color2: .clear, startPoint: .init(x: 0, y: 0), endPoint: .init(x: 1, y: 1))
+        view.innerView.font = .systemFont(ofSize: 19, weight: .semibold)
+        view.innerView.textColor = .white
         return view
     }()
     
     lazy var requiredLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
-        view.innerView.text = "Required"
+        view.innerView.text = "필수"
         view.innerView.textColor = .white
         view.innerView.textAlignment = .center
-        view.rounded(cornerRadius: 15)
+        view.rounded(cornerRadius: 16)
         view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
         return view
     }()
     
-//    let checkMarkImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.backgroundColor = .clear
-//        imageView.tintColo
-//        imageView.image = UIImage(resource: .checkedCircle)
-//        return imageView
-//    }()
+    let checkMarkImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .clear
+        imageView.tintColor = .systemGreen
+        imageView.image = UIImage(resource: .checkedCircle)
+        imageView.isHidden = true
+        return imageView
+    }()
     
     weak var delegate: HomeImageCollectionViewCellDelegate?
     
@@ -59,7 +68,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         let button = ResizableButton(
             image: UIImage(resource: .ellipsis),
             symbolConfiguration: .init(scale: .large),
-            tintColor: .label,
+            tintColor: .white,
             target: self, action: #selector(editImageButtonAction)
         )
         button.backgroundColor = .clear
@@ -91,25 +100,13 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         
         imageView.image = nil
+        checkMarkImageView.isHidden = true
         requiredLabel.isHidden = true
-        dayNameLabel.innerView.textColor = .label
         dayNameLabel.innerView.text = nil
         addImageButton.isHidden = false
-        editImageButton.tintColor = .label
     }
     
     // MARK: Methods
-    
-    func updateUI(dayOfWeek: Week) {
-        self.week = dayOfWeek
-        if dayOfWeek == .none {
-            dayNameLabel.innerView.text = "옵션"
-            requiredLabel.isHidden = true
-        } else {
-            dayNameLabel.innerView.text = dayOfWeek.kor
-            requiredLabel.isHidden = false
-        }
-    }
     
     func update(imageData: Data?) {
         guard let imageData = imageData else { return }
@@ -117,13 +114,15 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         imageView.image = UIImage(data: imageData)
     }
     
-    func update(dayPlan: DayPlan) {
-        
+    private func update(with dayPlan: DayPlan) {
+        dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: dayPlan.date)
+        requiredLabel.isHidden = !dayPlan.isRequired
         checkDayPlanIsRequired(dayPlan.isRequired)
+        checkMarkImageView.isHidden = !dayPlan.isComplete
     }
     
     func checkDayPlanIsRequired(_ isRequired: Bool) {
-    
+        
         requiredLabel.isHidden = !isRequired
     }
 }
@@ -131,40 +130,64 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
 extension HomeImageCollectionViewCell {
     
     @objc private func editImageButtonAction() {
-        self.delegate?.editImageButtonDidTapped(week)
+        guard let dayPlan else { return }
+        self.delegate?.editImageButtonDidTapped(dayPlan)
     }
     
     @objc private func addImageButtonAction() {
-        self.delegate?.addImageButtonDidTapped(week)
+        guard let dayPlan else { return }
+        self.delegate?.addImageButtonDidTapped(dayPlan)
     }
 }
 
 extension HomeImageCollectionViewCell {
     private func configureViews() {
         
-        self.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
+        self.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
+        
+        self.setGradient(
+            color1: .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1).withAlphaComponent(0.5),
+            color2: .systemIndigo.withAlphaComponent(0.5),
+            startPoint: .init(x: 1, y: 0),
+            endPoint: .init(x: 1, y: 1)
+        )
         
         contentView.addSubview(imageView)
         contentView.addSubview(blurView)
         contentView.addSubview(requiredLabel)
-        contentView.addSubview(dayNameLabel)
-        contentView.addSubview(editImageButton)
         contentView.addSubview(addImageButton)
-    }
+        
+        blurView.addSubview(dayNameLabel)
+        blurView.addSubview(editImageButton)
+        blurView.addSubview(checkMarkImageView)
+        
+        }
     
     private func setConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(contentView)
-            make.height.equalTo(contentView).multipliedBy(0.8)
+            make.edges.equalTo(contentView)
+        }
+        
+        blurView.snp.makeConstraints { make in
+            make.bottom.equalTo(contentView).inset(15)
+            make.horizontalEdges.equalTo(contentView).inset(15)
+            make.height.equalTo(50)
         }
         
         dayNameLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(contentView)
+            make.centerY.equalTo(blurView)
+            make.leading.equalTo(blurView).inset(10)
         }
         
         requiredLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(imageView).offset(-5)
-            make.leading.equalTo(contentView).inset(5)
+            make.top.equalTo(imageView).inset(5)
+            make.leading.equalTo(imageView).inset(5)
+        }
+        
+        checkMarkImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            make.centerY.equalTo(blurView)
+            make.leading.equalTo(dayNameLabel.snp.trailing).offset(15)
         }
         
         editImageButton.snp.makeConstraints { make in
@@ -173,7 +196,7 @@ extension HomeImageCollectionViewCell {
         }
         
         addImageButton.snp.makeConstraints { make in
-            make.center.equalTo(contentView)
+            make.center.equalTo(imageView)
         }
     }
 }

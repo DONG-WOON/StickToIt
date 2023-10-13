@@ -35,7 +35,7 @@ final class CreatePlanViewController: UIViewController {
     private lazy var dismissButton = ResizableButton(
         image: UIImage(resource: .xmark),
         symbolConfiguration: .init(scale: .large),
-        tintColor: .label, target: self,
+        tintColor: .label, backgroundColor: .clear, target: self,
         action: #selector(dismissButtonDidTapped)
     )
     
@@ -65,7 +65,7 @@ final class CreatePlanViewController: UIViewController {
         viewModel.planIsValidated
             .bind(with: self) { (_self, isValidated) in
                 _self.createButton.isEnabled = isValidated
-                _self.createButton.backgroundColor = isValidated ? .systemIndigo : .gray
+                _self.createButton.backgroundColor = isValidated ? .systemIndigo.withAlphaComponent(0.6) : .gray
             }
             .disposed(by: disposeBag)
         

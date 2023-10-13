@@ -35,7 +35,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     private let dDayLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
         view.rounded()
-        view.backgroundColor = .systemIndigo
+        view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
         view.innerView.text = "오늘부터 시작, 3일 동안"
         view.innerView.textAlignment = .center
         view.innerView.textColor = .white
@@ -47,7 +47,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
             title: "확인",
             font: .boldSystemFont(ofSize: 18),
             tintColor: .white,
-            backgroundColor: .systemIndigo,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
             target: self,
             action: #selector(okButtonDidTapped)
         )

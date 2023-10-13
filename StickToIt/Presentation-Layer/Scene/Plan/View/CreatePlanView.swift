@@ -80,7 +80,7 @@ final class CreatePlanView: UIScrollView {
             image: UIImage(resource: .calendar),
             symbolConfiguration: .init(scale: .large),
             tintColor: .white,
-            backgroundColor: .systemIndigo,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
             target: self,
             action: #selector(startDateSettingButtonDidTapped)
         )
@@ -92,7 +92,7 @@ final class CreatePlanView: UIScrollView {
             image: UIImage(resource: .calendar),
             symbolConfiguration: .init(scale: .large),
             tintColor: .white,
-            backgroundColor: .systemIndigo,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
             target: self,
             action: #selector(endDateSettingButtonDidTapped)
         )
@@ -192,7 +192,7 @@ final class CreatePlanView: UIScrollView {
     
     private func select(_ button: UIButton) {
         button.isSelected.toggle()
-        button.backgroundColor = button.isSelected ? .systemIndigo : .systemBackground
+        button.backgroundColor = button.isSelected ? .systemIndigo.withAlphaComponent(0.6) : .systemBackground
         button.setTitleColor(button.isSelected ? .white : .label, for: .normal)
     }
     
@@ -225,7 +225,6 @@ final class CreatePlanView: UIScrollView {
 extension CreatePlanView {
     
     private func configureViews() {
-        backgroundColor = .systemBackground
         
         addSubview(planNameLabel)
         addSubview(planNameTextField)

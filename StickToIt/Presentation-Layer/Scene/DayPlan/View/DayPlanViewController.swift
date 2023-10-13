@@ -16,15 +16,19 @@ final class DayPlanViewController: UIViewController {
     
     // MARK: UI Properties
     
-    //    private let mainView: UIView
-    
-    let borderContainerView: UIView = {
+    private let borderContainerView: UIView = {
         let view = UIView()
-        view.bordered(cornerRadius: 20, borderWidth: 1, borderColor: .systemIndigo)
+        view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
+        view.setGradient(
+            color1: .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1).withAlphaComponent(0.5),
+            color2: .systemIndigo.withAlphaComponent(0.6),
+            startPoint: .init(x: 1, y: 0),
+            endPoint: .init(x: 1, y: 1)
+        )
         return view
     }()
     
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.layer.borderColor = UIColor.systemIndigo.cgColor
@@ -32,27 +36,26 @@ final class DayPlanViewController: UIViewController {
         return view
     }()
     
-    let dateLabel: PaddingView<UILabel> = {
     private lazy var blurView: BlurEffectView  = {
         let view = BlurEffectView()
         view.rounded(cornerRadius: 20)
         return view
     }()
 
+    private let dateLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
-        view.innerView.font = .systemFont(ofSize: 17)
-        view.innerView.textColor = .label
-        view.backgroundColor = .tertiaryLabel.withAlphaComponent(0.05)
+        view.innerView.font = .systemFont(ofSize: 19)
+        view.innerView.textColor = .white
         return view
     }()
     
-    let contentTextView: UITextView = {
+    private let contentTextView: UITextView = {
         let view = UITextView()
         view.text = "달성한 계획을 간략하게 작성해보세요!"
         return view
     }()
     
-    lazy var addImageButton: UIButton = {
+    private lazy var addImageButton: UIButton = {
         
         var configuration = UIButton.Configuration.plain()
         configuration.title = "사진 추가"
@@ -68,13 +71,13 @@ final class DayPlanViewController: UIViewController {
         return view
     }()
     
-    lazy var editImageButton: UIButton = {
+    private lazy var editImageButton: UIButton = {
         
         var configuration = UIButton.Configuration.plain()
         
         configuration.image = UIImage(resource: .pencil)
         configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
-        configuration.baseForegroundColor = .label
+        configuration.baseForegroundColor = .white
         
         let view = UIButton(configuration: configuration)
         view.addTarget(self, action: #selector(editImageButtonAction), for: .touchUpInside)
@@ -87,7 +90,7 @@ final class DayPlanViewController: UIViewController {
             title: "목표 생성하기",
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
-            backgroundColor: .systemIndigo,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
             target: self,
             action: #selector(createButtonDidTapped)
         )
@@ -140,11 +143,8 @@ final class DayPlanViewController: UIViewController {
     }
     
     func bind() {
-        if let date = viewModel.dayPlan.date {
-            self.dateLabel.innerView.text = DateFormatter.dayPlanFormatter.string(from: date)
-        } else {
-            self.dateLabel.innerView.text = DateFormatter.dayPlanFormatter.string(from: .now)
-        }
+        self.dateLabel.innerView.text = DateFormatter.getFullDateString(from: viewModel.dayPlan.date)
+        
         viewModel.loadImage { data in
             if let imageData = data {
                 self.addImageButton.isHidden = true
@@ -159,7 +159,7 @@ final class DayPlanViewController: UIViewController {
         viewModel.isValidated
             .subscribe(with: self) { (_self, isValidated) in
                 _self.createButton.isEnabled = isValidated
-                _self.createButton.backgroundColor = isValidated ? .systemIndigo : .gray
+                _self.createButton.backgroundColor = isValidated ? .systemIndigo.withAlphaComponent(0.6) : .gray
             }
             .disposed(by: disposeBag)
     }
@@ -171,9 +171,12 @@ extension DayPlanViewController: BaseViewConfigurable {
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        
         view.addSubview(borderContainerView)
         view.addSubview(editImageButton)
         view.addSubview(createButton)
+        
+        borderContainerView.addSubview(imageView)
         
         borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(blurView)
@@ -186,13 +189,13 @@ extension DayPlanViewController: BaseViewConfigurable {
         borderContainerView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).inset(50)
             make.centerX.equalTo(view.safeAreaLayoutGuide)
-            make.width.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.7)
-            make.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.5)
+            make.width.height.equalTo(view.safeAreaLayoutGuide.snp.width).multipliedBy(0.9)
         }
         
         imageView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(borderContainerView)
-            make.height.equalTo(borderContainerView).multipliedBy(0.8)
+            make.edges.equalTo(borderContainerView)
+        }
+        
         blurView.snp.makeConstraints { make in
             make.bottom.equalTo(borderContainerView).inset(15)
             make.horizontalEdges.equalTo(borderContainerView).inset(15)
@@ -200,16 +203,18 @@ extension DayPlanViewController: BaseViewConfigurable {
         }
         
         dateLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(borderContainerView)
+            make.leading.equalTo(blurView).inset(10)
+            make.centerY.equalTo(blurView)
         }
         
         addImageButton.snp.makeConstraints { make in
             make.centerX.equalTo(imageView)
             make.centerY.equalTo(imageView).offset(20)
         }
+        
         editImageButton.snp.makeConstraints { make in
-            make.bottom.equalTo(borderContainerView.snp.top).offset(-10)
-            make.trailing.equalTo(borderContainerView)
+            make.centerY.equalTo(blurView)
+            make.trailing.equalTo(blurView).inset(10)
         }
         
         createButton.snp.makeConstraints { make in
@@ -249,11 +254,16 @@ extension DayPlanViewController {
     }
     
     @objc private func createButtonDidTapped() {
+        
         viewModel.save(imageData: imageView.image?.pngData())
+        
+        
+        
         viewModel.save { result in
             switch result {
             case .success(let success):
                 print(success)
+                NotificationCenter.default.post(name: .reload, object: nil)
                 self.dismiss(animated: true)
             case .failure(let failure):
                 print(failure)
