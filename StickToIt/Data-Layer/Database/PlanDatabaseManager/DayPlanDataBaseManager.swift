@@ -1,18 +1,15 @@
 //
-//  PlanDatabaseManager.swift
+//  DayPlanDataBaseManager.swift
 //  StickToIt
 //
-//  Created by 서동운 on 9/28/23.
+//  Created by 서동운 on 10/12/23.
 //
 
 import Foundation
 import RealmSwift
 
-enum RealmError: Error {
-    case invalidDirectory
-}
 
-struct PlanDatabaseManager {
+struct DayPlanDataBaseManager {
     
     // MARK: Properties
     private let asyncRealm: Realm
@@ -38,20 +35,20 @@ struct PlanDatabaseManager {
     }
 }
 
-extension PlanDatabaseManager: DatabaseManager {
-    
-    typealias Model = Plan
-    typealias Entity = PlanEntity
-    typealias ResultType = Results<PlanEntity>
+extension DayPlanDataBaseManager: DatabaseManager {
+   
+    typealias Model = DayPlan
+    typealias Entity = DayPlanEntity
+    typealias ResultType = Results<DayPlanEntity>
     typealias Key = UUID
     
-    func fetchAll() -> Results<PlanEntity> {
-        let objects = asyncRealm.objects(PlanEntity.self)
+    func fetchAll() -> Results<Entity> {
+        let objects = asyncRealm.objects(Entity.self)
         return objects
     }
     
-    func fetch(key: UUID) -> PlanEntity? {
-        let object = asyncRealm.object(ofType: PlanEntity.self, forPrimaryKey: key)
+    func fetch(key: UUID) -> Entity? {
+        let object = asyncRealm.object(ofType: Entity.self, forPrimaryKey: key)
         return object
     }
     
@@ -67,13 +64,14 @@ extension PlanDatabaseManager: DatabaseManager {
         }
     }
     
-    func update(entity: Entity.Type, matchingWith model: Plan, onFailure: @Sendable @escaping (Error?) -> Void) {
+    func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, onFailure: @escaping @Sendable (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         asyncRealm.writeAsync {
-            fetchedEntity.startDate = model.startDate
-            fetchedEntity.targetNumberOfDays = model.targetNumberOfDays
-            fetchedEntity.name = model.name
-            fetchedEntity.endDate = model.endDate
+            fetchedEntity.content = model.content
+            fetchedEntity.date = model.date
+            fetchedEntity.isComplete = model.isComplete
+            fetchedEntity.isRequired = model.isRequired
+            fetchedEntity.week = model.week
         } onComplete: { error in
             underlyingQueue.async {
                 onFailure(error)
@@ -81,16 +79,16 @@ extension PlanDatabaseManager: DatabaseManager {
         }
     }
     
-    func delete(entity: Entity.Type, matchingWith model: Plan, onFailure: @Sendable @escaping (Error?) -> Void) {
+    func delete(entity: DayPlanEntity.Type, matchingWith model: DayPlan, onFailure: @escaping @Sendable (Error?) -> Void) {
+    
         guard let fetchedEntity = fetch(key: model._id) else { return }
         
         //삭제는 동기로 해야할지도!
         asyncRealm.writeAsync {
             // db 삭제 chaining delete
-            let dayPlans = fetchedEntity.dayPlans
+            let dayPlans = fetchedEntity
 
             self.asyncRealm.delete(dayPlans)
-            self.asyncRealm.delete(fetchedEntity)
         } onComplete: { error in
             underlyingQueue.async {
                 onFailure(error)

@@ -15,6 +15,7 @@ final class HomeImageCollectionView: UICollectionView {
             frame: .zero,
             collectionViewLayout: Self.createLayout()
         )
+        self.backgroundColor = .clear
         self.isScrollEnabled = false
     }
     
@@ -47,7 +48,7 @@ extension HomeImageCollectionView {
             item.contentInsets = edgeInset
             
             let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.8),
+                widthDimension: .fractionalWidth(0.9),
                 heightDimension: .fractionalHeight(1.0)
             )
             

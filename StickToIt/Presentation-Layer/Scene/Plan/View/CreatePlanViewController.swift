@@ -35,7 +35,7 @@ final class CreatePlanViewController: UIViewController {
     private lazy var dismissButton = ResizableButton(
         image: UIImage(resource: .xmark),
         symbolConfiguration: .init(scale: .large),
-        tintColor: .label, target: self,
+        tintColor: .label, backgroundColor: .clear, target: self,
         action: #selector(dismissButtonDidTapped)
     )
     
@@ -58,6 +58,11 @@ final class CreatePlanViewController: UIViewController {
         bindViewModel()
         configureViews()
         setConstraints()
+        
+        // FSCalendar 때문에 하루 뺴줌
+        let date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
+        
+        reload(date: date)
     }
     
     private func bindViewModel() {
@@ -65,7 +70,7 @@ final class CreatePlanViewController: UIViewController {
         viewModel.planIsValidated
             .bind(with: self) { (_self, isValidated) in
                 _self.createButton.isEnabled = isValidated
-                _self.createButton.backgroundColor = isValidated ? .systemIndigo : .gray
+                _self.createButton.backgroundColor = isValidated ? .systemIndigo.withAlphaComponent(0.6) : .gray
             }
             .disposed(by: disposeBag)
         
@@ -85,7 +90,7 @@ final class CreatePlanViewController: UIViewController {
         mainView.selectedDays
             .bind(with: self) { (_self, _week) in
                 _self.viewModel
-                    .executionDaysOfWeek
+                    .executionDaysOfWeekday
                     .accept(_week)
                 print(_week)
             }
@@ -139,17 +144,24 @@ final class CreatePlanViewController: UIViewController {
     }
     
     @objc private func createButtonDidTapped() {
-        viewModel.createPlan()
-        #warning("성공메세지 보여주기")
-        delegate?.createPlanCompleted()
-        self.dismiss(animated: true)
+        viewModel.createPlan { [weak self] result in
+            switch result {
+            case .success:
+                self?.delegate?.createPlanCompleted()
+                self?.dismiss(animated: true)
+            case .failure:
+                print("생성에 실패, 잠시 후 다시 시도해주세요!")
+            }
+        }
     }
 }
 
 extension CreatePlanViewController: CalendarButtonProtocol {
-    func calendarButtonDidTapped() {
-        let popupVC = CreatePlanTargetPeriodSettingViewController()
+    
+    func endDateSettingButtonDidTapped() {
+        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.endDate)
         popupVC.delegate = self
+        
         popupVC.modalTransitionStyle = .crossDissolve
         popupVC.modalPresentationStyle = .overFullScreen
         
@@ -158,13 +170,39 @@ extension CreatePlanViewController: CalendarButtonProtocol {
 }
 
 extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
-    func planTargetNumberOfDaysSetting(_ data: (date: Date?, day: Int?)) {
-        if let date = data.date {
-            self.viewModel.endDate = date
+    
+    func okButtonDidTapped(date: Date) {
+        self.viewModel.endDate = date
+        
+        let endDate = DateFormatter.getFullDateString(from: date)
+        self.mainView.endDateLabel.innerView.text = "종료일: \(endDate)"
+        
+        reload(date: date)
+    }
+    
+    func reload(date: Date) {
+        guard let day = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
+        let diffOfStartDateAndEndDate = day + 2
+        self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
+        
+        let datesFromStartDateToEndDate = Array(0...day + 1).map { Calendar.current.date(byAdding: .day, value: $0, to: viewModel.startDate)!
         }
-        if let day = data.day {
-            self.viewModel.targetNumberOfDays.accept(day)
-            self.mainView.numberOfDaysToAchieveLabel.innerView.text = "\(day)일"
+        
+        let weekdayList = datesFromStartDateToEndDate.map {
+            return Calendar.current.dateComponents([.weekday], from: $0).weekday!
+        }
+        
+        
+        if weekdayList.count < 7 {
+            mainView.disableStackView(weekdayList: weekdayList)
+        } else {
+            mainView.executionDaysOfWeekdayStackView
+                .arrangedSubviews
+                .map { $0 as? UIButton }
+                .forEach {
+                    $0?.isEnabled = true
+                    $0?.backgroundColor = .systemBackground
+                }
         }
     }
 }

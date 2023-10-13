@@ -11,8 +11,8 @@ import RxCocoa
 
 final class HomeViewController: UIViewController {
     
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Week>
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Week>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, DayPlan>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, DayPlan>
     
     private enum Section: Int, CaseIterable {
         case main = 0
@@ -81,6 +81,7 @@ final class HomeViewController: UIViewController {
         image: UIImage(resource: .calendar),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label,
+        backgroundColor: .clear,
         target: self,
         action: #selector(calendarButtonDidTapped)
     )
@@ -90,12 +91,26 @@ final class HomeViewController: UIViewController {
         image: UIImage(resource: .chevronRight),
         symbolConfiguration: .init(scale: .large),
         font: .boldSystemFont(ofSize: 30),
-        tintColor: .label, imageAlignment: .forceRightToLeft,
+        tintColor: .label, backgroundColor: .clear,
+        imageAlignment: .forceRightToLeft,
         target: self,
         action: #selector(currentWeekTitleButtonDidTapped)
     )
+    
+    private lazy var addDayPlanButton: ResizableButton = {
+        let button = ResizableButton(
+            image: UIImage(resource: .plus),
+            symbolConfiguration: .init(scale: .large),
+            tintColor: .white,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
+            target: self,
+            action: #selector(addDayPlanButtonDidTapped)
+        )
+        return button
+    }()
 
     private lazy var homeAchievementView = AchievementView()
+    
 //    private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     private let collectionView = HomeImageCollectionView()
@@ -109,12 +124,10 @@ final class HomeViewController: UIViewController {
         bindViewModel()
         viewModel.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: .reload, object: nil)
+        
         configureViews()
         setAttributes()
-        
-        homeAchievementView.circleView.animate()
-        
-        takeSnapshot()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,13 +138,18 @@ final class HomeViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
+//        addDayPlanButton.rounded(cornerRadius: addDayPlanButton.bounds.height / 2)
+//
         setConstraints()
+        
+        addDayPlanButton.rounded(cornerRadius: addDayPlanButton.bounds.height / 2)
     }
     
     // MARK: Methods
     
+    
     func bindViewModel() {
-        
+    
         viewModel.userPlanList
             .subscribe(with: self) { (_self, userPlanQueries) in
                 var actions: [UIMenuElement] = []
@@ -177,18 +195,44 @@ final class HomeViewController: UIViewController {
                 _self.viewModel.fetchWeeklyPlan(of: week)
             }
             .disposed(by: disposeBag)
+        
+        viewModel.currentDayPlans
+            .subscribe(with: self) { (_self, dayPlans) in
+                
+                let requiredDayPlanCount = dayPlans
+                    .filter { $0.isRequired }.count
+                let completeDayPlanCount = dayPlans
+                    .filter { $0.isComplete }.count
+                if requiredDayPlanCount != 0 {
+                    _self.homeAchievementView.setProgress(Double(completeDayPlanCount) / Double(requiredDayPlanCount))
+                }
+                _self.takeSnapshot(dayPlans: dayPlans)
+                
+            }
+            .disposed(by: disposeBag)
     }
     
-    func takeSnapshot() {
+    func takeSnapshot(dayPlans: [DayPlan]) {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(Week.allCases, toSection: .main)
+        snapshot.appendItems(dayPlans, toSection: .main)
         dataSource.apply(snapshot)
     }
 }
+
 // MARK: - @objc Method
 
 extension HomeViewController {
+    
+    @objc private func reload() {
+        self.viewModel.reload()
+    }
+    
+    @objc private func addDayPlanButtonDidTapped() {
+//        let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
+//        vc.delegate = self
+//        navigationController?.pushViewController(vc, animated: true)
+    }
 
     @objc private func calendarButtonDidTapped() {
 //        let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
@@ -197,7 +241,7 @@ extension HomeViewController {
     }
     
     @objc private func currentWeekTitleButtonDidTapped() {
-        let vc = PlanWeekSelectViewController(week: viewModel.currentPlanData?.totalWeek ?? 1, currentWeek: viewModel.currentWeek.value)
+        let vc = PlanWeekSelectViewController(currentWeek: viewModel.currentWeek.value)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -219,8 +263,16 @@ extension HomeViewController {
     // MARK: Configure
     
     private func configureViews() {
+        self.view.setGradient(
+            color1: .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1).withAlphaComponent(0.5),
+            color2: .systemIndigo.withAlphaComponent(0.5),
+            startPoint: .init(x: 1, y: 0),
+            endPoint: .init(x: 1, y: 1)
+        )
+        
         view.addSubview(currentWeekTitleButton)
         view.addSubview(collectionView)
+        view.addSubview(addDayPlanButton)
 //        view.addSubview(activityIndicator)
         view.addSubview(homeAchievementView)
         
@@ -237,40 +289,40 @@ extension HomeViewController {
         currentWeekTitleButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.1)
         }
         collectionView.snp.makeConstraints { make in
             make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(collectionView.snp.width)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.5)
+        }
+        addDayPlanButton.snp.makeConstraints { make in
+            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.bottom.equalTo(collectionView.snp.top).offset(-10)
+            make.height.width.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.05)
         }
 //        activityIndicator.snp.makeConstraints { make in
 //            make.center.equalTo(view)
 //        }
         homeAchievementView.snp.makeConstraints { make in
-            make.top.equalTo(currentWeekTitleButton.snp.bottom).offset(20)
+            make.top.equalTo(currentWeekTitleButton.snp.bottom).offset(10)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
-            make.bottom.equalTo(collectionView.snp.top).offset(-20)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.3)
         }
     }
     
     private func configureDataSource() {
         
         let cellRegistration = UICollectionView
-            .CellRegistration<HomeImageCollectionViewCell, Week>
+            .CellRegistration<HomeImageCollectionViewCell, DayPlan>
         { [weak self] cell, indexPath, item in
             
             guard let _self = self else { return }
             
-            let dayPlans = _self.viewModel.currentWeeklyPlan.value
-            guard let dayOfWeek = Week(rawValue: indexPath.item) else { return }
+            cell.dayPlan = item
             
-            cell.label.innerView.text = dayOfWeek.kor
-            cell.setBorder(_self.viewModel.daysOfWeek.contains(dayOfWeek))
-            
-            guard dayPlans.count != 0 else { return }
-            guard let theDay = dayPlans.first(where: { $0.week == indexPath.item }) else { return }
-            guard let imageData = theDay.imageData else { return }
-    
-            cell.imageView.image = UIImage(data: imageData)
+            _self.viewModel.loadImage(dayPlanID: item._id) { data in
+                cell.update(imageData: data)
+            }
         }
         
         self.dataSource = DataSource(
@@ -281,7 +333,7 @@ extension HomeViewController {
                     for: indexPath,
                     item: item
                 )
-                
+            
                 cell.delegate = self
                 
                 return cell
@@ -292,15 +344,17 @@ extension HomeViewController {
 
 extension HomeViewController: HomeImageCollectionViewCellDelegate {
     
-    func addImageButtonDidTapped() {
-        let vc = ImageSelectionViewController(imageManager: ImageManager())
-            .embedNavigationController()
+    func addImageButtonDidTapped(_ dayPlan: DayPlan) {
+        
+        let vc = DayPlanViewController(
+            dayPlan: dayPlan
+            ).embedNavigationController()
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
     
-    func editImageButtonDidTapped() {
+    func editImageButtonDidTapped(_ dayPlan: DayPlan) {
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let edit = UIAlertAction(title: "편집", style: .default)

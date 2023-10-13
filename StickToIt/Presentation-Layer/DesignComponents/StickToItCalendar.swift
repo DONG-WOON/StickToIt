@@ -38,12 +38,12 @@ final class StickToItCalendar: UIView {
     
     private lazy var leftButton = ResizableButton(
         image: UIImage(resource: .chevronLeft),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
+        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo.withAlphaComponent(0.6),
         target: self, action: #selector(moveToPreviousMonth)
     )
     private lazy var rightButton = ResizableButton(
         image: UIImage(resource: .chevronRight),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
+        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo.withAlphaComponent(0.6),
         target: self, action: #selector(moveToNextMonth)
     )
     
@@ -81,7 +81,7 @@ final class StickToItCalendar: UIView {
     // 해당날짜를 선택된 것으로 표시해주는 메소드
     func select(date: Date?) {
         guard let date = date else { return }
-        monthLabel.text = DateFormatter.monthYearFormatter.string(from: date)
+        monthLabel.text = DateFormatter.formatToString(format: .clendarHeader, from: date)
         print("✅ ",date)
         calendar.select(date)
     }
@@ -113,12 +113,12 @@ final class StickToItCalendar: UIView {
         
         calendar.weekdayHeight = 40
         calendar.appearance.weekdayFont = UIFont.boldSystemFont(ofSize: 16)
-        calendar.appearance.weekdayTextColor = .systemIndigo
+        calendar.appearance.weekdayTextColor = .systemIndigo.withAlphaComponent(0.6)
     }
     
     private func setCalendarDaysView() {
         
-        calendar.appearance.todayColor = .systemIndigo
+        calendar.appearance.todayColor = .systemIndigo.withAlphaComponent(0.6)
         calendar.appearance.titleDefaultColor = .label
         calendar.appearance.titleTodayColor = .systemBackground
         calendar.appearance.titleFont = UIFont.boldSystemFont(ofSize: 16)
@@ -227,7 +227,7 @@ extension StickToItCalendar: FSCalendarDelegate {
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let today = calendar.currentPage
-        monthLabel.text = DateFormatter.monthYearFormatter.string(from: today)
+        monthLabel.text = DateFormatter.formatToString(format: .clendarHeader, from: today)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -304,7 +304,7 @@ final class CustomCalendarCell: FSCalendarCell {
     // MARK: - Actions
     
     private func setSelectionLayer() {
-        selectionLayer.fillColor = UIColor.systemIndigo.cgColor
+        selectionLayer.fillColor = UIColor.systemIndigo.withAlphaComponent(0.7).cgColor
         selectionLayer.path = UIBezierPath(roundedRect: self.bounds.insetBy(dx: 6.0, dy: 1.0), cornerRadius: 6).cgPath
         selectionLayer.isHidden = true
         

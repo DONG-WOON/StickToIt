@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchPlanUseCase: FetchService {
-    
+    func loadImageFromDocument(fileName: String, completion: @escaping (Data?) -> Void)
 }
 
 final class FetchPlanUseCaseImpl
@@ -45,6 +45,15 @@ final class FetchPlanUseCaseImpl
         case .success(let plan):
             completion(plan)
         case .failure(let error):
+            print(error)
+        }
+    }
+    
+    func loadImageFromDocument(fileName: String, completion: @escaping (Data?) -> Void) {
+        do {
+            let data = try repository.loadImageFromDocument(fileName: fileName)
+            completion(data)
+        } catch {
             print(error)
         }
     }

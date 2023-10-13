@@ -30,7 +30,7 @@ final class EditImageUseCaseImpl<Repository: PlanRepository<Plan, PlanEntity, Pl
     func fetch(query: ImageQuery, completion: @escaping (ImageAsset) -> Void) {
     }
     
-    func create(_ model: ImageAsset) {
+    func create(_ model: ImageAsset, completion: @escaping (Result<Bool, Error>) -> Void) {
         
     }
     

@@ -17,8 +17,8 @@ extension User {
 extension Plan {
     func toEntity() -> PlanEntity {
         
-        let _executionDaysOfWeek = MutableSet<Week>()
-        _executionDaysOfWeek.insert(objectsIn: executionDaysOfWeek)
+        let _executionDaysOfWeekday = MutableSet<Week>()
+        _executionDaysOfWeekday.insert(objectsIn: executionDaysOfWeekday)
         
         let _dayPlans = List<DayPlanEntity>()
         _dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
@@ -28,7 +28,7 @@ extension Plan {
             targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
             endDate: endDate,
-            executionDaysOfWeek: _executionDaysOfWeek,
+            executionDaysOfWeekday: _executionDaysOfWeekday,
             dayPlans: _dayPlans
         )
     }
@@ -51,8 +51,9 @@ extension DayPlan {
     func toEntity() -> DayPlanEntity {
         return .init(
             date: date,
+            isRequired: isRequired,
+            isComplete: isComplete,
             week: week,
-            imageData: imageData,
             content: content
         )
     }

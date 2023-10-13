@@ -8,15 +8,16 @@
 import UIKit
 
 protocol PlanTargetNumberOfDaysSettingDelegate: AnyObject {
-    func planTargetNumberOfDaysSetting(_ data: (date: Date?, day: Int?))
+    
+    func okButtonDidTapped(date: Date)
 }
 
 final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     
     weak var delegate: PlanTargetNumberOfDaysSettingDelegate?
     
-    var selectedDateAndDay: (date: Date?, day: Int?)
-    
+    private var date: Date
+
     let containerView: UIView = {
         let view = UIView(backgroundColor: .systemBackground)
         view.rounded(cornerRadius:20)
@@ -25,13 +26,11 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     
     let calendar = StickToItCalendar(backgroundColor: .systemBackground)
 
-    private let dDayLabel: BorderedView<UILabel> = {
-        let view = BorderedView<UILabel>()
-        view.rounded()
-        view.backgroundColor = .systemIndigo
-        view.innerView.text = "오늘부터 시작, 3일 동안"
+    private let dDayLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
+        view.innerView.text = "오늘부터 3일 동안"
         view.innerView.textAlignment = .center
-        view.innerView.textColor = .white
+         view.innerView.textColor = .systemIndigo.withAlphaComponent(0.7)
         return view
     }()
     
@@ -40,7 +39,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
             title: "확인",
             font: .boldSystemFont(ofSize: 18),
             tintColor: .white,
-            backgroundColor: .systemIndigo,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
             target: self,
             action: #selector(okButtonDidTapped)
         )
@@ -55,15 +54,31 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
         action: #selector(dismissButtonDidTapped)
     )
     
+    init(date: Date) {
+        self.date = date
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViews()
-        setConstraints()
-        
-        calendar.delegate = self
-        calendar.setMinimumDate(Calendar.current.date(byAdding: .day, value: 1, to: Date.now))
-        calendar.select(date: Calendar.current.date(byAdding: .day, value: 2, to: Date.now))
+         setConstraints()
+         
+         calendar.delegate = self
+         
+         let minimumDate = Calendar.current.date(byAdding: .day, value: 2, to: .now)!
+         
+         calendar.setMinimumDate(minimumDate)
+         calendar.select(date: date)
+         
+         guard let days = Calendar.current.dateComponents([.day], from: .now, to: date).day else { return }
+         
+         self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
     }
     
     @objc private func dismissButtonDidTapped() {
@@ -71,17 +86,24 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
     }
     
     @objc private func okButtonDidTapped() {
-        delegate?.planTargetNumberOfDaysSetting(selectedDateAndDay)
+        delegate?.okButtonDidTapped(date: date)
         self.dismiss(animated: true)
     }
 }
 
 extension CreatePlanTargetPeriodSettingViewController: StickToItCalendarDelegate {
     func calendarView(didSelectAt date: Date) {
-        guard let day = Calendar.current.dateComponents([.day], from: calendar.currentDate, to: date).day else { return }
-        let dayContainsToday = day + 1
-        self.selectedDateAndDay = (date, dayContainsToday)
-        self.dDayLabel.innerView.text = "오늘부터 시작, \(dayContainsToday)일 동안"
+         guard let days = Calendar.current.dateComponents([.day], from: .now, to: date).day else { return }
+         
+         self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
+         
+         UIView.animate(withDuration: 0.4) {
+              self.dDayLabel.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+         } completion: { _ in
+              self.dDayLabel.transform = .identity
+         }
+         
+        self.date = date
     }
 }
 

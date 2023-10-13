@@ -10,5 +10,5 @@ import Foundation
 protocol CreateService {
     associatedtype Model
     
-    func create(_ model: Model)
+    func create(_ model: Model, completion: @escaping (Result<Bool, Error>) -> Void)
 }

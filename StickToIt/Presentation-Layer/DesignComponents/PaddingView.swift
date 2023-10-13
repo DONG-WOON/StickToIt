@@ -1,5 +1,5 @@
 //
-//  BorderedView.swift
+//  PaddingView.swift
 //  StickToIt
 //
 //  Created by 서동운 on 10/4/23.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BorderedView<T: UIView>: UIView {
+class PaddingView<T: UIView>: UIView {
     
     let innerView = T()
     
@@ -28,7 +28,8 @@ class BorderedView<T: UIView>: UIView {
     
     private func setConstraints() {
         innerView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.top.bottom.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(15)
         }
     }
     

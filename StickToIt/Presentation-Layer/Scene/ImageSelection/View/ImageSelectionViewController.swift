@@ -157,7 +157,7 @@ extension ImageSelectionViewController {
             let asset = imageAssets[indexPath.item - 1]
             
             DispatchQueue.main.async { [weak self] in
-                self?.imageManager.getImage(for: asset) { image in
+                self?.imageManager.getThumbnailImage(for: asset) { image in
                     cell.imageView.image = image
                 }
             }
@@ -208,7 +208,13 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
         } else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
             let vc = EditImageViewController()
-            vc.imageView.image = cell.imageView.image
+            let asset = viewModel.imageDataList.value[indexPath.item - 1]
+            DispatchQueue.main.async { [weak self] in
+                self?.imageManager.getImage(for: asset) { data in
+                    guard let data else { return }
+                    vc.imageView.image = UIImage(data: data)
+                }
+            }
             navigationController?.pushViewController(vc, animated: true)
         }
     }

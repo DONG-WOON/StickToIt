@@ -10,16 +10,14 @@ import RxSwift
 import RxCocoa
 
 protocol CalendarButtonProtocol: AnyObject {
-    func calendarButtonDidTapped()
+    func endDateSettingButtonDidTapped()
 }
 
 final class CreatePlanView: UIScrollView {
     
     weak var buttonDelegate: CalendarButtonProtocol?
     
-    var selectedDays = BehaviorSubject<Set<Week>>(value: [
-        .monday, .thursday, .tuesday, .wednesday, .friday
-    ])
+    var selectedDays = BehaviorSubject<Set<Week>>(value: [])
     
     let planNameLabel: UILabel = {
         let view = UILabel()
@@ -48,29 +46,33 @@ final class CreatePlanView: UIScrollView {
     
     let planTargetPeriodLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표 기간 설정 (옵션)"
+        view.text = "목표 기간 설정 (최소 3일!)"
         view.textColor = .label
         view.font = .boldSystemFont(ofSize: 17)
         return view
     }()
-    
-    let numberOfDaysToAchieveLabel: BorderedView<UILabel> = {
-        let view = BorderedView<UILabel>()
-        view.rounded()
-        view.backgroundColor = .systemIndigo
-        view.innerView.text = "3일"
-        view.innerView.textAlignment = .center
-        view.innerView.textColor = .white
+
+    let endDateLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
+        view.bordered(cornerRadius: 10, borderWidth: 0.7, borderColor: .systemIndigo)
+        let date = Calendar.current.date(byAdding: .day, value: 2, to: .now)
+        view.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: date!))"
+        view.innerView.backgroundColor = .clear
+        view.innerView.textColor = .label
         return view
     }()
     
-    lazy var targetNumberOfDaysSettingButton = ResizableButton(
-        image: UIImage(resource: .calendar),
-        symbolConfiguration: .init(scale: .large),
-        tintColor: .label,
-        target: self,
-        action: #selector(targetNumberOfDaysSettingButtonDidTapped)
-    )
+    lazy var endDateSettingButton: ResizableButton = {
+        let button = ResizableButton(
+            image: UIImage(resource: .calendar),
+            symbolConfiguration: .init(scale: .large),
+            tintColor: .white,
+            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
+            target: self,
+            action: #selector(endDateSettingButtonDidTapped)
+        )
+        return button
+    }()
     
     let planRequiredDoingDayLabel: UILabel = {
         let view = UILabel()
@@ -80,11 +82,12 @@ final class CreatePlanView: UIScrollView {
         return view
     }()
     
-    lazy var planRequiredDoingDayStackView: UIStackView = {
-        let dayButtons = Week.allCases.map { day in
+    lazy var executionDaysOfWeekdayStackView: UIStackView = {
+        let weekDay: [Week] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+        let dayButtons = weekDay.map { day in
             let button = ResizableButton(
                 title: day.kor, font: .boldSystemFont(ofSize: 17),
-                tintColor: .black, backgroundColor: .systemBackground,
+                tintColor: .label, backgroundColor: .systemBackground,
                 target: self,
                 action: #selector(planRequiredDoingDayButtonDidTapped)
             )
@@ -126,13 +129,38 @@ final class CreatePlanView: UIScrollView {
     }
     
     func initialConfiguration() {
-        let buttons = planRequiredDoingDayStackView
+        let buttons = executionDaysOfWeekdayStackView
             .arrangedSubviews
             .compactMap { $0 as? UIButton }
         /// 월~금까지 기본 선택
         buttons
-            .filter { $0.tag < 5 }
+            .filter { $0.tag < 7 && $0.tag > 1 }
             .forEach { self.select($0) }
+    }
+    
+    func disableStackView(weekdayList: [Int]) {
+        let buttons = executionDaysOfWeekdayStackView
+            .arrangedSubviews
+            .compactMap { $0 as? UIButton }
+        buttons
+            .filter {
+                weekdayList.contains($0.tag)
+            }
+            .forEach {
+                $0.isEnabled = true
+                $0.backgroundColor = .systemBackground
+                $0.setTitleColor(.label, for: .normal)
+            }
+        
+        buttons
+            .filter {
+                !weekdayList.contains($0.tag)
+            }
+            .forEach {
+                $0.isEnabled = false
+                $0.backgroundColor = .gray
+                $0.setTitleColor(.systemBackground, for: .normal)
+            }
     }
     
     override func setNeedsLayout() {
@@ -149,80 +177,8 @@ final class CreatePlanView: UIScrollView {
         self.endEditing(true)
     }
     
-    private func configureViews() {
-        backgroundColor = .systemBackground
-        
-        addSubview(planNameLabel)
-        addSubview(planNameTextField)
-        addSubview(planNameMaximumTextNumberLabel)
-        addSubview(planTargetPeriodLabel)
-        addSubview(numberOfDaysToAchieveLabel)
-        addSubview(targetNumberOfDaysSettingButton)
-        addSubview(planRequiredDoingDayLabel)
-        addSubview(planRequiredDoingDayStackView)
-        addSubview(descriptionLabel)
-        addSubview(createButton)
-    }
-    
-    private func setConstraints() {
-        
-        self.contentLayoutGuide.snp.makeConstraints { make in
-            make.width.equalTo(self.frameLayoutGuide.snp.width)
-        }
-        
-        planNameLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(self.contentLayoutGuide).inset(20)
-        }
-        planNameMaximumTextNumberLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(contentLayoutGuide).inset(20)
-            make.bottom.equalTo(planNameTextField.snp.top).offset(-10)
-        }
-        planNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(planNameLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
-        }
-        planTargetPeriodLabel.snp.makeConstraints { make in
-            make.top.equalTo(planNameTextField.snp.bottom).offset(30)
-            make.leading.equalTo(self.contentLayoutGuide).inset(20)
-        }
-        
-        numberOfDaysToAchieveLabel.snp.makeConstraints { make in
-            make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(10)
-            make.leading.equalTo(self.contentLayoutGuide).inset(20)
-        }
-        
-        targetNumberOfDaysSettingButton.snp.makeConstraints { make in
-            make.leading.greaterThanOrEqualTo(numberOfDaysToAchieveLabel.snp.trailing).offset(-10)
-            make.centerY.equalTo(numberOfDaysToAchieveLabel)
-            make.trailing.equalTo(contentLayoutGuide).inset(30)
-        }
-        
-        planRequiredDoingDayLabel.snp.makeConstraints { make in
-            make.top.equalTo(numberOfDaysToAchieveLabel.snp.bottom).offset(50)
-            make.leading.equalTo(self.contentLayoutGuide).inset(20)
-        }
-        
-        planRequiredDoingDayStackView.snp.makeConstraints { make in
-            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom).offset(30)
-            
-            let inset = 20.0
-            let deviceWidth = UIScreen.main.bounds.width
-            
-            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(inset)
-            make.height.equalTo((deviceWidth - (inset * 2) - (3 * 6)) / 7)
-        }
-        
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(planRequiredDoingDayStackView.snp.bottom).offset(50)
-            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
-            make.bottom.equalTo(contentLayoutGuide).offset(-10)
-        }
-    }
-}
-
-extension CreatePlanView {
-    @objc func targetNumberOfDaysSettingButtonDidTapped() {
-        buttonDelegate?.calendarButtonDidTapped()
+    @objc func endDateSettingButtonDidTapped() {
+        buttonDelegate?.endDateSettingButtonDidTapped()
     }
     
     @objc func planRequiredDoingDayButtonDidTapped(_ button: UIButton) {
@@ -232,8 +188,8 @@ extension CreatePlanView {
     
     private func select(_ button: UIButton) {
         button.isSelected.toggle()
-        button.backgroundColor = button.isSelected ? .systemIndigo : .systemBackground
-        button.setTitleColor(button.isSelected ? .white : .black, for: .normal)
+        button.backgroundColor = button.isSelected ? .systemIndigo.withAlphaComponent(0.6) : .systemBackground
+        button.setTitleColor(button.isSelected ? .white : .label, for: .normal)
     }
     
     private func updateSelectedDays(data: Int) {
@@ -248,6 +204,94 @@ extension CreatePlanView {
             selectedDays.onNext(_selectedDays)
         } catch {
             print(error)
+        }
+    }
+    
+    func updateStackView(from minWeekday: Int, to maxWeekday: Int) {
+        [minWeekday...maxWeekday]
+    }
+    
+    func update(plan: Plan) {
+        planNameLabel.text = plan.name
+        plan.executionDaysOfWeekday.forEach { week in
+            (executionDaysOfWeekdayStackView.arrangedSubviews[week.rawValue - 1] as? UIButton)?.isSelected = true
+        }
+        endDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
+    }
+}
+
+extension CreatePlanView {
+    
+    private func configureViews() {
+        
+        addSubview(planNameLabel)
+        addSubview(planNameTextField)
+        addSubview(planNameMaximumTextNumberLabel)
+        addSubview(planTargetPeriodLabel)
+        addSubview(endDateLabel)
+        addSubview(planRequiredDoingDayLabel)
+        addSubview(executionDaysOfWeekdayStackView)
+        addSubview(descriptionLabel)
+        addSubview(createButton)
+       
+        endDateLabel.addSubview(endDateSettingButton)
+    }
+    
+    private func setConstraints() {
+        
+        self.contentLayoutGuide.snp.makeConstraints { make in
+            make.width.equalTo(self.frameLayoutGuide.snp.width)
+        }
+        
+        planNameLabel.snp.makeConstraints { make in
+            make.top.leading.equalTo(self.contentLayoutGuide).inset(20)
+        }
+        
+        planNameMaximumTextNumberLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(contentLayoutGuide).inset(20)
+            make.bottom.equalTo(planNameTextField.snp.top).offset(-10)
+        }
+        
+        planNameTextField.snp.makeConstraints { make in
+            make.top.equalTo(planNameLabel.snp.bottom).offset(15)
+            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
+        }
+        
+        planTargetPeriodLabel.snp.makeConstraints { make in
+            make.top.equalTo(planNameTextField.snp.bottom).offset(30)
+            make.leading.equalTo(self.contentLayoutGuide).inset(20)
+        }
+        
+        endDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
+            make.size.equalTo(planNameTextField)
+        }
+        
+        endDateSettingButton.snp.makeConstraints { make in
+            make.top.bottom.trailing.equalToSuperview()
+            make.width.equalTo(endDateSettingButton.snp.height)
+        }
+        
+        planRequiredDoingDayLabel.snp.makeConstraints { make in
+            make.top.equalTo(endDateLabel.snp.bottom).offset(50)
+            make.leading.equalTo(self.contentLayoutGuide).inset(20)
+        }
+        
+        executionDaysOfWeekdayStackView.snp.makeConstraints { make in
+            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom).offset(30)
+            
+            let inset = 20.0
+            let deviceWidth = UIScreen.main.bounds.width
+            
+            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(inset)
+            make.height.equalTo((deviceWidth - (inset * 2) - (3 * 6)) / 7)
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(executionDaysOfWeekdayStackView.snp.bottom).offset(50)
+            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
+            make.bottom.equalTo(contentLayoutGuide).offset(-10)
         }
     }
 }

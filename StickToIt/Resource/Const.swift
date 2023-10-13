@@ -22,5 +22,10 @@ enum Const {
         case uncheckedCircle = "checkmark.circle"
         case checkedCircle = "checkmark.circle.fill"
         case camera = "camera.shutter.button.fill"
+        case pencil = "pencil"
+    }
+    
+    enum Key {
+        static let imageToUpload = "imageToUpload"
     }
 }

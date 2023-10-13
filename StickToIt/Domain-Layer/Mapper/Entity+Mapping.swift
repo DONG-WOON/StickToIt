@@ -27,7 +27,7 @@ extension PlanEntity {
             targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
             endDate: endDate,
-            executionDaysOfWeek: Set(executionDaysOfWeek),
+            executionDaysOfWeekday: Set(executionDaysOfWeekday),
             dayPlans: dayPlans.map { $0.toDomain() }
         )
     }
@@ -37,9 +37,10 @@ extension DayPlanEntity {
     func toDomain() -> DayPlan {
         return .init(
             _id: _id,
+            isRequired: isRequired,
+            isComplete: isComplete,
             date: date,
             week: week,
-            imageData: imageData,
             content: content
         )
     }
