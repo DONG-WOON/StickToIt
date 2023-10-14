@@ -12,7 +12,7 @@ extension DateFormatter {
     private static let shared = DateFormatter()
     
     enum Format: String {
-        case clendarHeader = "MMM yyyy"
+        case calendarHeader = "MMM yyyy"
     }
     
     static func formatToString(format: Format, from date: Date) -> String {
@@ -30,5 +30,13 @@ extension DateFormatter {
     static func getFullDateString(from date: Date) -> String {
         shared.dateFormat = "yyyy.MM.dd E"
         return shared.string(from: date)
+    }
+    
+    static func convertDate(from date: Date) -> Date? {
+        shared.dateStyle = .full
+        
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .weekday], from: date)
+        
+        return Calendar.current.date(from: dateComponents)
     }
 }

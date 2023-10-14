@@ -13,11 +13,15 @@ protocol CalendarButtonProtocol: AnyObject {
     func endDateSettingButtonDidTapped()
 }
 
+protocol DayCellDelegate: AnyObject {
+    func select(week: Week?)
+    func deSelect(week: Week?)
+}
+
 final class CreatePlanView: UIScrollView {
     
     weak var buttonDelegate: CalendarButtonProtocol?
-    
-    var selectedDays = BehaviorSubject<Set<Week>>(value: [])
+    weak var dayCellDelegate: DayCellDelegate?
     
     let planNameLabel: UILabel = {
         let view = UILabel()
@@ -55,8 +59,7 @@ final class CreatePlanView: UIScrollView {
     let endDateLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
         view.bordered(cornerRadius: 10, borderWidth: 0.7, borderColor: .systemIndigo)
-        let date = Calendar.current.date(byAdding: .day, value: 2, to: .now)
-        view.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: date!))"
+        view.innerView.text = "종료일을 설정해주세요 ---->"
         view.innerView.backgroundColor = .clear
         view.innerView.textColor = .label
         return view
@@ -82,29 +85,7 @@ final class CreatePlanView: UIScrollView {
         return view
     }()
     
-    lazy var executionDaysOfWeekdayStackView: UIStackView = {
-        let weekDay: [Week] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
-        let dayButtons = weekDay.map { day in
-            let button = ResizableButton(
-                title: day.kor, font: .boldSystemFont(ofSize: 17),
-                tintColor: .label, backgroundColor: .systemBackground,
-                target: self,
-                action: #selector(planRequiredDoingDayButtonDidTapped)
-            )
-            button.titleLabel?.textAlignment = .center
-            button.bordered(borderWidth: 0.5, borderColor: .systemIndigo)
-            
-            button.tag = day.rawValue
-            return button
-        }
-        
-        let view = UIStackView(arrangedSubviews: dayButtons)
-        view.spacing = 3
-        view.axis = .horizontal
-        view.alignment = .fill
-        view.distribution = .fillEqually
-        return view
-    }()
+    let executionDaysOfWeekdayCollectionView = ExecutionDayCollectionView()
     
     let descriptionLabel: UILabel = {
         let view = UILabel()
@@ -124,43 +105,6 @@ final class CreatePlanView: UIScrollView {
         super.init(frame: frame)
         
         configureViews()
-        
-        initialConfiguration()
-    }
-    
-    func initialConfiguration() {
-        let buttons = executionDaysOfWeekdayStackView
-            .arrangedSubviews
-            .compactMap { $0 as? UIButton }
-        /// 월~금까지 기본 선택
-        buttons
-            .filter { $0.tag < 7 && $0.tag > 1 }
-            .forEach { self.select($0) }
-    }
-    
-    func disableStackView(weekdayList: [Int]) {
-        let buttons = executionDaysOfWeekdayStackView
-            .arrangedSubviews
-            .compactMap { $0 as? UIButton }
-        buttons
-            .filter {
-                weekdayList.contains($0.tag)
-            }
-            .forEach {
-                $0.isEnabled = true
-                $0.backgroundColor = .systemBackground
-                $0.setTitleColor(.label, for: .normal)
-            }
-        
-        buttons
-            .filter {
-                !weekdayList.contains($0.tag)
-            }
-            .forEach {
-                $0.isEnabled = false
-                $0.backgroundColor = .gray
-                $0.setTitleColor(.systemBackground, for: .normal)
-            }
     }
     
     override func setNeedsLayout() {
@@ -181,41 +125,14 @@ final class CreatePlanView: UIScrollView {
         buttonDelegate?.endDateSettingButtonDidTapped()
     }
     
-    @objc func planRequiredDoingDayButtonDidTapped(_ button: UIButton) {
-        select(button)
-        updateSelectedDays(data: button.tag)
-    }
-    
-    private func select(_ button: UIButton) {
-        button.isSelected.toggle()
-        button.backgroundColor = button.isSelected ? .systemIndigo.withAlphaComponent(0.6) : .systemBackground
-        button.setTitleColor(button.isSelected ? .white : .label, for: .normal)
-    }
-    
-    private func updateSelectedDays(data: Int) {
-        guard let week = Week(rawValue: data) else { return }
-        do {
-            var _selectedDays = try selectedDays.value()
-            if _selectedDays.contains(week) {
-                _selectedDays.remove(week)
-            } else {
-                _selectedDays.insert(week)
-            }
-            selectedDays.onNext(_selectedDays)
-        } catch {
-            print(error)
-        }
-    }
-    
-    func updateStackView(from minWeekday: Int, to maxWeekday: Int) {
-        [minWeekday...maxWeekday]
-    }
-    
     func update(plan: Plan) {
         planNameLabel.text = plan.name
         plan.executionDaysOfWeekday.forEach { week in
-            (executionDaysOfWeekdayStackView.arrangedSubviews[week.rawValue - 1] as? UIButton)?.isSelected = true
+            let cell = executionDaysOfWeekdayCollectionView.cellForItem(at: IndexPath(item: week.rawValue - 1, section: 0)) as? ExecutionDayCollectionViewCell 
+            
+            cell?.isSelected = true
         }
+        
         endDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
     }
 }
@@ -224,13 +141,18 @@ extension CreatePlanView {
     
     private func configureViews() {
         
+        executionDaysOfWeekdayCollectionView.dataSource = self
+        executionDaysOfWeekdayCollectionView.delegate = self
+        executionDaysOfWeekdayCollectionView.register(ExecutionDayCollectionViewCell.self, forCellWithReuseIdentifier: ExecutionDayCollectionViewCell.identifier)
+        
         addSubview(planNameLabel)
         addSubview(planNameTextField)
         addSubview(planNameMaximumTextNumberLabel)
         addSubview(planTargetPeriodLabel)
         addSubview(endDateLabel)
         addSubview(planRequiredDoingDayLabel)
-        addSubview(executionDaysOfWeekdayStackView)
+        addSubview(executionDaysOfWeekdayCollectionView)
+        
         addSubview(descriptionLabel)
         addSubview(createButton)
        
@@ -278,8 +200,8 @@ extension CreatePlanView {
             make.leading.equalTo(self.contentLayoutGuide).inset(20)
         }
         
-        executionDaysOfWeekdayStackView.snp.makeConstraints { make in
-            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom).offset(30)
+        executionDaysOfWeekdayCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom)
             
             let inset = 20.0
             let deviceWidth = UIScreen.main.bounds.width
@@ -288,10 +210,35 @@ extension CreatePlanView {
             make.height.equalTo((deviceWidth - (inset * 2) - (3 * 6)) / 7)
         }
         
+        
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(executionDaysOfWeekdayStackView.snp.bottom).offset(50)
+            make.top.equalTo(executionDaysOfWeekdayCollectionView.snp.bottom).offset(50)
             make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
             make.bottom.equalTo(contentLayoutGuide).offset(-10)
         }
+    }
+}
+
+extension CreatePlanView: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 7
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExecutionDayCollectionViewCell.identifier, for: indexPath) as? ExecutionDayCollectionViewCell else { return UICollectionViewCell() }
+        cell.label.text = Week(rawValue: indexPath.item + 1)?.kor
+        cell.isUserInteractionEnabled = false
+        return cell
+    }
+}
+
+extension CreatePlanView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        dayCellDelegate?.select(week: Week(rawValue: indexPath.item + 1))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        dayCellDelegate?.deSelect(week: Week(rawValue: indexPath.item + 1))
     }
 }

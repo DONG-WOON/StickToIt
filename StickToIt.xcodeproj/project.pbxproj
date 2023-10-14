@@ -29,6 +29,7 @@
 		727849872AD77E4B00433753 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849862AD77E4B00433753 /* UpdateService.swift */; };
 		7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849892AD79FB400433753 /* Extension+Notification.swift */; };
 		7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498B2AD849B600433753 /* BlurEffectView.swift */; };
+		727849902ADA9CBC00433753 /* ExecutionDayCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498F2ADA9CBC00433753 /* ExecutionDayCollectionView.swift */; };
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4032AC32ED400E910D5 /* ContentsView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
@@ -115,6 +116,7 @@
 		727849862AD77E4B00433753 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		727849892AD79FB400433753 /* Extension+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Notification.swift"; sourceTree = "<group>"; };
 		7278498B2AD849B600433753 /* BlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectView.swift; sourceTree = "<group>"; };
+		7278498F2ADA9CBC00433753 /* ExecutionDayCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionDayCollectionView.swift; sourceTree = "<group>"; };
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4032AC32ED400E910D5 /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				729AC4D62ACBA20400E910D5 /* CreatePlanViewController.swift */,
 				729AC50E2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift */,
 				729AC4DB2ACBA4D500E910D5 /* CreatePlanView.swift */,
+				7278498F2ADA9CBC00433753 /* ExecutionDayCollectionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -754,6 +757,7 @@
 				729AC4522AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
+				727849902ADA9CBC00433753 /* ExecutionDayCollectionView.swift in Sources */,
 				729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */,
 				729AC4C32ACAFD8200E910D5 /* AchievementView.swift in Sources */,
 				72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */,

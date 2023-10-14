@@ -10,7 +10,7 @@ import SnapKit
 import FSCalendar
 
 protocol StickToItCalendarDelegate: AnyObject {
-    func calendarView(didSelectAt date: Date)
+    func calendarView(didSelectAt date: Date?)
 }
 
 final class StickToItCalendar: UIView {
@@ -81,8 +81,7 @@ final class StickToItCalendar: UIView {
     // 해당날짜를 선택된 것으로 표시해주는 메소드
     func select(date: Date?) {
         guard let date = date else { return }
-        monthLabel.text = DateFormatter.formatToString(format: .clendarHeader, from: date)
-        print("✅ ",date)
+        monthLabel.text = DateFormatter.formatToString(format: .calendarHeader, from: date)
         calendar.select(date)
     }
     
@@ -227,11 +226,11 @@ extension StickToItCalendar: FSCalendarDelegate {
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let today = calendar.currentPage
-        monthLabel.text = DateFormatter.formatToString(format: .clendarHeader, from: today)
+        monthLabel.text = DateFormatter.formatToString(format: .calendarHeader, from: today)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        
+//        let _date = DateFormatter.convertDate(from: date)
         delegate?.calendarView(didSelectAt: date)
         
         // 현재 캘린더에서 보이는 이전달 또는 다음달의 날짜를 누르면 해당 달로 이동하도록 하는 부분
