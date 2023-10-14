@@ -71,6 +71,7 @@ extension DayPlanDataBaseManager: DatabaseManager {
             fetchedEntity.date = model.date
             fetchedEntity.isComplete = model.isComplete
             fetchedEntity.isRequired = model.isRequired
+            fetchedEntity.imageURL = model.imageURL
             fetchedEntity.week = model.week
         } onComplete: { error in
             underlyingQueue.async {

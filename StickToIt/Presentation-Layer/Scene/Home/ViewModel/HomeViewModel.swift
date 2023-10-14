@@ -88,7 +88,6 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
         useCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
-            print(data)
             completion(data)
         }
     }

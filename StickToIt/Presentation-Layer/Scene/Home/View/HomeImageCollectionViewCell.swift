@@ -99,6 +99,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        dayPlan = nil
         imageView.image = nil
         checkMarkImageView.isHidden = true
         requiredLabel.isHidden = true
@@ -111,11 +112,14 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     func update(imageData: Data?) {
         guard let imageData = imageData else { return }
         addImageButton.isHidden = true
-        imageView.image = UIImage(data: imageData)
+        imageView.image = UIImage(data: imageData, scale: 0.6)
     }
     
     private func update(with dayPlan: DayPlan) {
-        dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: dayPlan.date)
+        if let _date = dayPlan.date {
+            dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: _date)
+        }
+        
         requiredLabel.isHidden = !dayPlan.isRequired
         checkDayPlanIsRequired(dayPlan.isRequired)
         checkMarkImageView.isHidden = !dayPlan.isComplete
