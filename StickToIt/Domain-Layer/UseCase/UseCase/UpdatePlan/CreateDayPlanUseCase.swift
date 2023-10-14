@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CreateDayPlanUseCase: UpdateService {
-    func save(dayPlanID: UUID, imageData: Data?)
+    func save(dayPlanID: UUID, imageData: Data?) async -> String?
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void)
 }
 
@@ -28,21 +28,27 @@ final class CreateDayPlanUseCaseImpl<
         self.repository = repository
     }
     
-    func save(entity: DayPlanEntity.Type, matchingWith model: DayPlan, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
-        repository.update(entity: entity, matchingWith: model) { error in
-            guard let error else {
-                return completion(.success(true))
+    func save(entity: DayPlanEntity.Type, matchingWith model: DayPlan) async -> Result<Bool, Error> {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.main.async { [weak self] in
+                self?.repository.update(entity: entity, matchingWith: model) { error in
+                    if let error {
+                        continuation.resume(returning: .failure(error))
+                    }
+                    continuation.resume(returning: .success(true))
+                }
             }
-            return completion(.failure(error))
         }
     }
     
-    func save(dayPlanID: UUID, imageData: Data?) {
+    func save(dayPlanID: UUID, imageData: Data?) async -> String? {
         do {
-            try repository.saveImage(path: dayPlanID.uuidString, imageData: imageData)
+            let url = try await repository.saveImage(path: dayPlanID.uuidString, imageData: imageData)
+            return url
         } catch {
             print(error)
         }
+        return nil
     }
     
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {

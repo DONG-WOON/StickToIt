@@ -28,11 +28,13 @@ final class DayPlanViewController: UIViewController {
         return view
     }()
     
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        view.layer.borderColor = UIColor.systemIndigo.cgColor
-        view.layer.borderWidth = 0.4
+        view.contentMode = .scaleAspectFill
+        view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .gray)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
+        view.addGestureRecognizer(gesture)
+        view.isUserInteractionEnabled = false
         return view
     }()
     
@@ -105,6 +107,12 @@ final class DayPlanViewController: UIViewController {
         action: #selector(dismissButtonDidTapped)
     )
     
+    private lazy var indicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.isHidden = true
+        return view
+    }()
+    
     
     // MARK: Life Cycle
     
@@ -143,7 +151,9 @@ final class DayPlanViewController: UIViewController {
     }
     
     func bind() {
-        self.dateLabel.innerView.text = DateFormatter.getFullDateString(from: viewModel.dayPlan.date)
+        if let _date = viewModel.dayPlan.date {
+            self.dateLabel.innerView.text = DateFormatter.getFullDateString(from: _date)
+        }
         
         viewModel.loadImage { data in
             if let imageData = data {
@@ -162,6 +172,19 @@ final class DayPlanViewController: UIViewController {
                 _self.createButton.backgroundColor = isValidated ? .systemIndigo.withAlphaComponent(0.6) : .gray
             }
             .disposed(by: disposeBag)
+        
+        viewModel.isLoading
+            .bind(with: self) { (_self, isLoading) in
+                
+                if isLoading {
+                    _self.indicatorView.startAnimating()
+                } else {
+                    _self.indicatorView.stopAnimating()
+                }
+                
+                _self.indicatorView.isHidden = !isLoading
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -175,10 +198,10 @@ extension DayPlanViewController: BaseViewConfigurable {
         view.addSubview(borderContainerView)
         view.addSubview(editImageButton)
         view.addSubview(createButton)
+        view.addSubview(indicatorView)
         
         borderContainerView.addSubview(imageView)
         
-        borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(blurView)
         borderContainerView.addSubview(dateLabel)
         borderContainerView.addSubview(addImageButton)
@@ -222,16 +245,57 @@ extension DayPlanViewController: BaseViewConfigurable {
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
             make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
         }
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalTo(view.safeAreaLayoutGuide)
+        }
     }
 }
 
 
 extension DayPlanViewController {
     
-    @objc private func editImageButtonAction() {
-        //        self.delegate?.editImageButtonDidTapped()
+    @objc func imageViewTapped(_ gesture: UITapGestureRecognizer) {
+        
+        switch gesture.state {
+        case .began:
+            print("began")
+        case.changed:
+            print("changed")
+        case .cancelled:
+            print("cancel")
+        case .possible:
+            print("possible")
+        case .failed:
+            print("failed")
+        case .ended:
+            print("end")
+        @unknown default:
+            return
+        }
+        print(gesture.location(in: imageView))
+        
+        
+        let textView = PaddingView<UITextView>()
+        textView.rounded()
+        textView.innerView.delegate = self
+        textView.backgroundColor = .white.withAlphaComponent(0.6)
+        textView.innerView.backgroundColor = .clear
+        textView.innerView.textColor = .black
+        textView.center = gesture.location(in: imageView)
+        
+        imageView.addSubview(textView)
     }
-    //
+}
+
+extension DayPlanViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        textView.sizeToFit()
+    }
+    
+    @objc private func editImageButtonAction() {
+       print("수정하자")
+    }
+    
     @objc private func addImageButtonAction() {
         let vc = ImageSelectionViewController(imageManager: ImageManager())
             .embedNavigationController()
@@ -240,33 +304,42 @@ extension DayPlanViewController {
     }
     
     @objc private func updateImageToUpload(_ notification: Notification) {
-        let image = notification.userInfo?[Const.Key.imageToUpload] as? UIImage
-        self.imageView.image = image
+        guard let data = notification.userInfo?[Const.Key.imageToUpload] as? Data else { return }
         
-        if image != nil {
-            self.addImageButton.isHidden = true
-            self.editImageButton.isHidden = false
-            self.viewModel.isValidated.accept(true)
-        } else {
-            self.addImageButton.isHidden = false
-            self.editImageButton.isHidden = true
-        }
+        self.imageView.image = UIImage(data: data)
+        self.imageView.isUserInteractionEnabled = true
+        self.addImageButton.isHidden = true
+        self.editImageButton.isHidden = false
+        self.viewModel.isValidated.accept(true)
     }
     
     @objc private func createButtonDidTapped() {
+        /*⭐️ 나의 의견
+         이미지를 매번 홈화면에서 렌더링 하는것보다 이미지를 불러올때,
+         원본사진을 렌더링하고, 해당 렌더링 된 이미지를 리사이징(압축)하여 데이터로 저장한다.
+         그리고 홈화면에서 이미지를 불러올때는 해당 데이터를 가공없이 불러오면 문제 없을 것으로 예상됨.
+         */
         
-        viewModel.save(imageData: imageView.image?.pngData())
+        //1 이미지 파일 압축 (무손실 압축은 1.0) 백그라운드에서
+        viewModel.isLoading(true)
         
-        
-        
-        viewModel.save { result in
+        Task(priority: .background) { [weak self] in
+            guard let _self = self else { return }
+            let originalImage = _self.imageView.image
+            let result = await _self.viewModel.save(with: originalImage)
+            
             switch result {
-            case .success(let success):
-                print(success)
+            case .success:
                 NotificationCenter.default.post(name: .reload, object: nil)
-                self.dismiss(animated: true)
-            case .failure(let failure):
-                print(failure)
+                DispatchQueue.main.async {
+                    _self.viewModel.isLoading(false)
+                    _self.dismiss(animated: true)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    _self.viewModel.isLoading(false)
+                }
+                print(error)
             }
         }
     }

@@ -52,13 +52,13 @@ extension PlanRepositoryImpl: PlanRepository {
         databaseManager?.update(entity: entity, matchingWith: model, onFailure: onFailure)
     }
     
-    func saveImage(path fileName: String, imageData: Data?) throws {
-        
+    func saveImage(path fileName: String, imageData: Data?) async throws -> String? {
+        return nil
     }
     
     func loadImageFromDocument(fileName: String) throws -> Data? {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory }
-        let fileURL = documentDirectory.appendingPathComponent(fileName)
+        let fileURL = documentDirectory.appendingPathComponent("\(fileName).jpeg")
         if FileManager.default.fileExists(atPath: fileURL.path) {
             return try? Data(contentsOf: fileURL)
         } else {

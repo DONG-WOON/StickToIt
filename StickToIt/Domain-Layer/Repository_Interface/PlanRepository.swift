@@ -16,7 +16,7 @@ protocol PlanRepository<Model, Entity, Query> {
     func fetch(query: PlanQuery) -> Result<Model, Error>
     func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void)
     func update(entity: Entity.Type, matchingWith model: Model, onFailure: @Sendable @escaping (Error?) -> Void)
-    func saveImage(path fileName: String, imageData: Data?) throws
+    func saveImage(path fileName: String, imageData: Data?) async throws -> String?
     func loadImageFromDocument(fileName: String) throws -> Data?
 }
 
