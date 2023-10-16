@@ -38,7 +38,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     }
     
     func save(with imageData: UIImage?) async -> Result<Bool, Error> {
-        let imageData = compressedImageData(imageData, limitSize: 1024 * 1024)
+        let imageData = compressedImageData(imageData, limitSize: Const.Size.MB)
         let imageURL = await useCase.save(dayPlanID: dayPlan._id, imageData: imageData)
         dayPlan.imageURL = imageURL
         dayPlan.isComplete = true
