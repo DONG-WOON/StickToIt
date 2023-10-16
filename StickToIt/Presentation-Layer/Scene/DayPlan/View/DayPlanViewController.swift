@@ -10,8 +10,14 @@ import RxSwift
 
 final class DayPlanViewController: UIViewController {
     
-    private let viewModel: CreateDayPlanViewModel<CreateDayPlanUseCaseImpl<DayPlanRepositoryImpl>>
+    enum ViewState {
+        case editing
+        case done
+    }
     
+    private var viewState: ViewState = .done
+    
+    private let viewModel: CreateDayPlanViewModel<CreateDayPlanUseCaseImpl<DayPlanRepositoryImpl>>
     private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
@@ -30,8 +36,7 @@ final class DayPlanViewController: UIViewController {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .gray)
+        view.contentMode = .scaleAspectFit
         let gesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
         view.addGestureRecognizer(gesture)
         view.isUserInteractionEnabled = false
@@ -49,6 +54,24 @@ final class DayPlanViewController: UIViewController {
         view.innerView.font = .systemFont(ofSize: 19)
         view.innerView.textColor = .white
         return view
+    }()
+    
+    private lazy var imageContentModeSegment: UISegmentedControl = {
+        let segment = UISegmentedControl(
+            items: [
+                Const.Image.scaleAspectFit,
+                Const.Image.scaleAspectFill
+            ]
+        )
+        
+        segment.selectedSegmentIndex = 0
+        segment.isEnabled = false
+        
+        segment.setImage(UIImage(named: Const.Image.scaleAspectFit), forSegmentAt: 0)
+        segment.setImage(UIImage(named: Const.Image.scaleAspectFill), forSegmentAt: 1)
+        segment.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+        
+        return segment
     }()
     
     private let contentTextView: UITextView = {
@@ -82,9 +105,29 @@ final class DayPlanViewController: UIViewController {
         configuration.baseForegroundColor = .white
         
         let view = UIButton(configuration: configuration)
+        view.isHidden = true
         view.addTarget(self, action: #selector(editImageButtonAction), for: .touchUpInside)
         
         return view
+    }()
+    
+    private lazy var requiredLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
+        view.innerView.text = "필수"
+        view.innerView.textColor = .white
+        view.innerView.textAlignment = .center
+        view.rounded(cornerRadius: 16)
+        view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
+        return view
+    }()
+    
+    private let checkMarkImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .clear
+        imageView.tintColor = .systemGreen
+        imageView.image = UIImage(resource: .checkedCircle)
+        imageView.isHidden = true
+        return imageView
     }()
     
     private lazy var createButton: ResizableButton = {
@@ -106,6 +149,16 @@ final class DayPlanViewController: UIViewController {
         tintColor: .label, target: self,
         action: #selector(dismissButtonDidTapped)
     )
+    
+    private lazy var editButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("편집", for: .normal)
+        button.setTitle("완료", for: .selected)
+        button.setTitleColor(.label, for: .normal)
+        button.setTitleColor(.systemIndigo.withAlphaComponent(0.6), for: .selected)
+        button.addTarget(self, action: #selector(dayPlanEdit), for: .touchUpInside)
+        return button
+    }()
     
     private lazy var indicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
@@ -142,9 +195,7 @@ final class DayPlanViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(updateImageToUpload), name: .updateImageToUpload, object: nil)
-        
+        addNotification()
         configureViews()
         setConstraints()
         bind()
@@ -155,14 +206,19 @@ final class DayPlanViewController: UIViewController {
             self.dateLabel.innerView.text = DateFormatter.getFullDateString(from: _date)
         }
         
-        viewModel.loadImage { data in
+        imageView.contentMode = viewModel.dayPlan.imageContentIsFill ? .scaleAspectFill : .scaleAspectFit
+        requiredLabel.isHidden = !viewModel.dayPlan.isRequired
+        
+        checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
+        createButton.isHidden = viewModel.dayPlan.isComplete
+        editButton.isHidden = !viewModel.dayPlan.isComplete
+        
+        viewModel.loadImage { [weak self] data in
             if let imageData = data {
-                self.addImageButton.isHidden = true
-                self.editImageButton.isHidden = false
-                self.imageView.image = UIImage(data: imageData)
+                self?.addImageButton.isHidden = true
+                self?.imageView.image = UIImage(data: imageData)
             } else {
-                self.addImageButton.isHidden = false
-                self.editImageButton.isHidden = true
+                self?.addImageButton.isHidden = false
             }
         }
         
@@ -194,25 +250,42 @@ extension DayPlanViewController: BaseViewConfigurable {
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
         
         view.addSubview(borderContainerView)
-        view.addSubview(editImageButton)
-        view.addSubview(createButton)
-        view.addSubview(indicatorView)
+        
+        view.addSubview(imageContentModeSegment)
+        
+        imageContentModeSegment.selectedSegmentIndex = 0
+        
+        borderContainerView.setDefaultGradient()
         
         borderContainerView.addSubview(imageView)
-        
         borderContainerView.addSubview(blurView)
-        borderContainerView.addSubview(dateLabel)
         borderContainerView.addSubview(addImageButton)
+        borderContainerView.addSubview(requiredLabel)
+        
+        blurView.addSubview(dateLabel)
+        blurView.addSubview(editImageButton)
+        blurView.addSubview(checkMarkImageView)
+        
+        view.addSubview(createButton)
+        view.addSubview(indicatorView)
+    
     }
     
     func setConstraints() {
         
         borderContainerView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(50)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(40)
             make.centerX.equalTo(view.safeAreaLayoutGuide)
-            make.width.height.equalTo(view.safeAreaLayoutGuide.snp.width).multipliedBy(0.9)
+            make.width.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.9)
+            make.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.7)
+        }
+        
+        imageContentModeSegment.snp.makeConstraints { make in
+            make.bottom.equalTo(imageView.snp.top).offset(-10)
+            make.trailing.equalTo(imageView)
         }
         
         imageView.snp.makeConstraints { make in
@@ -230,6 +303,17 @@ extension DayPlanViewController: BaseViewConfigurable {
             make.centerY.equalTo(blurView)
         }
         
+        requiredLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView).inset(5)
+            make.leading.equalTo(imageView).inset(5)
+        }
+        
+        checkMarkImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            make.centerY.equalTo(blurView)
+            make.leading.equalTo(dateLabel.snp.trailing).offset(15)
+        }
+        
         addImageButton.snp.makeConstraints { make in
             make.centerX.equalTo(imageView)
             make.centerY.equalTo(imageView).offset(20)
@@ -245,6 +329,7 @@ extension DayPlanViewController: BaseViewConfigurable {
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
             make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
         }
+        
         indicatorView.snp.makeConstraints { make in
             make.center.equalTo(view.safeAreaLayoutGuide)
         }
@@ -291,9 +376,54 @@ extension DayPlanViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         textView.sizeToFit()
     }
+}
+
+extension DayPlanViewController {
+    
+    private func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateImageToUpload), name: .updateImageToUpload, object: nil)
+    }
+
+    @objc private func dayPlanEdit(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            viewState = .editing
+            imageContentModeSegment.isEnabled = true
+            imageContentModeSegment.selectedSegmentTintColor = .systemIndigo.withAlphaComponent(0.6)
+            editImageButton.isHidden = false
+        } else {
+            viewState = .done
+            
+            imageContentModeSegment.isEnabled = false
+            imageContentModeSegment.selectedSegmentTintColor = .systemBackground
+            editImageButton.isHidden = true
+            
+            #warning("수정사항 업데이틑 하기")
+        }
+    }
     
     @objc private func editImageButtonAction() {
-       print("수정하자")
+        
+        // 이미지 수정, 이미지 재선택,
+        
+        let vc = ImageSelectionViewController(imageManager: ImageManager())
+            .embedNavigationController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+    
+    @objc private func segmentChanged(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            imageView.contentMode = .scaleAspectFit
+            viewModel.dayPlan.imageContentIsFill = false
+        case 1:
+            imageView.contentMode = .scaleAspectFill
+            viewModel.dayPlan.imageContentIsFill = true
+        default:
+            return
+        }
     }
     
     @objc private func addImageButtonAction() {
@@ -304,11 +434,12 @@ extension DayPlanViewController: UITextViewDelegate {
     }
     
     @objc private func updateImageToUpload(_ notification: Notification) {
-        guard let data = notification.userInfo?[Const.Key.imageToUpload] as? Data else { return }
+        guard let image = notification.userInfo?[Const.Key.imageToUpload] as? UIImage else { return }
         
-        self.imageView.image = UIImage(data: data)
+        self.imageView.image = image
         self.imageView.isUserInteractionEnabled = true
         self.addImageButton.isHidden = true
+        self.imageContentModeSegment.isEnabled = true
         self.editImageButton.isHidden = false
         self.viewModel.isValidated.accept(true)
     }
@@ -345,15 +476,21 @@ extension DayPlanViewController: UITextViewDelegate {
     }
     
     @objc private func dismissButtonDidTapped() {
-        let alert = UIAlertController(title: "주의", message: "지금 나가면 편집 내용이 사라질 수 도 있습니다. 나가시겠습니까?", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "나가기", style: .destructive) { _ in
+        
+        switch viewState {
+        case .done:
             self.dismiss(animated: true)
+        case .editing:
+            let alert = UIAlertController(title: "주의", message: "지금 나가면 편집 내용이 사라질 수 도 있습니다. 나가시겠습니까?", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "나가기", style: .destructive) { _ in
+                self.dismiss(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            
+            alert.addAction(okAction)
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true)
         }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-        
-        self.present(alert, animated: true)
     }
 }

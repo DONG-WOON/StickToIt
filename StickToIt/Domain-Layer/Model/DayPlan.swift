@@ -15,6 +15,7 @@ struct DayPlan: Hashable {
     var week: Int
     var content: String?
     var imageURL: String?
+    var imageContentIsFill: Bool
     
     init(
         _id: UUID,
@@ -23,7 +24,8 @@ struct DayPlan: Hashable {
         date: Date?,
         week: Int,
         content: String?,
-        imageURL: String?
+        imageURL: String?,
+        imageContentIsFill: Bool
     ) {
         self._id = _id
         self.isRequired = isRequired
@@ -32,5 +34,6 @@ struct DayPlan: Hashable {
         self.week = week
         self.content = content
         self.imageURL = imageURL
+        self.imageContentIsFill = imageContentIsFill
     }
 }

@@ -51,11 +51,8 @@ where PlanUseCase.Model == Plan
         let planName = planName.value
         let executionDaysOfWeekday = executionDaysOfWeekday.value
 
-
         let datesFromStartDateToEndDate = Array(0...targetNumberOfDays).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
         }
-        
-        
         
         let filteredDates = datesFromStartDateToEndDate.filter { date in
             executionDaysOfWeekday.contains {
@@ -72,7 +69,7 @@ where PlanUseCase.Model == Plan
                 _id: UUID(), isRequired: true,
                 isComplete: false, date: date,
                 week: Calendar.current.dateComponents([.weekOfYear], from: startDate, to: date!).weekOfYear! + 1,
-                content: nil, imageURL: nil)
+                content: nil, imageURL: nil, imageContentIsFill: true)
         }
         
         let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)

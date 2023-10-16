@@ -74,17 +74,17 @@ extension DayPlanRepositoryImpl: PlanRepository {
     
     func loadImageFromDocument(fileName: String) throws -> Data? {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory  }
-        let fileURL = documentDirectory.appendingPathComponent(fileName)
+        let fileURL = documentDirectory.appendingPathComponent("\(fileName).jpeg")
         if FileManager.default.fileExists(atPath: fileURL.path) {
-            return try? Data(contentsOf: fileURL)
+            return try Data(contentsOf: fileURL)
         } else {
-            throw FileManagerError.fileIsNil
+            return nil
         }
     }
     
     func deleteImageFromDocument(fileName: String) throws {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory }
-        let fileURL = documentDirectory.appendingPathComponent( fileName)
+        let fileURL = documentDirectory.appendingPathComponent(fileName)
 
         if FileManager.default.fileExists(atPath: fileURL.path) {
             do {
