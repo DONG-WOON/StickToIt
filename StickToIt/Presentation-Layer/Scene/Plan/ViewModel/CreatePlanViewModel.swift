@@ -20,9 +20,9 @@ where PlanUseCase.Model == Plan
     
     var planName = BehaviorRelay<String>(value: "")
     var targetNumberOfDays: Int = 3
-    var startDate: Date = Date()
-    var endDate: Date = Calendar.current.date(byAdding: .day, value: 2, to: Date.now)!
-    var executionDaysOfWeekday = BehaviorRelay<Set<Week>>(value: [.monday, .tuesday, .wednesday, .thursday, .friday])
+    var startDate: Date = Date.now
+    var endDate: BehaviorRelay<Date?> = BehaviorRelay(value: nil)
+    var executionDaysOfWeekday = BehaviorRelay<Set<Week>>(value: [])
     var planIsValidated = BehaviorRelay(value: false)
     private let disposeBag = DisposeBag()
     
@@ -38,9 +38,10 @@ where PlanUseCase.Model == Plan
             planName,
             executionDaysOfWeekday
         )
-        
+        .debug()
         .map { $0.count > 0 && $1.count != 0 }
-        .subscribe(with: self, onNext: { (self, isValied) in self.planIsValidated.accept(isValied)
+        .subscribe(with: self, onNext: { (self, isValied) in
+            self.planIsValidated.accept(isValied)
         }).disposed(by: disposeBag)
     }
     
@@ -49,27 +50,29 @@ where PlanUseCase.Model == Plan
         
         let planName = planName.value
         let executionDaysOfWeekday = executionDaysOfWeekday.value
-    
-        let daysFromStartDateToEndDate = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day!
-        print(daysFromStartDateToEndDate)
-        
-        let datesFromStartDateToEndDate = Array(0...daysFromStartDateToEndDate).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
+
+        let datesFromStartDateToEndDate = Array(0...targetNumberOfDays).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
         }
         
-        let requiredDays = datesFromStartDateToEndDate.filter { date in
-            executionDaysOfWeekday.contains(where: { $0.rawValue == Calendar.current.dateComponents([.weekday], from: date).weekday! }
-            )
+        let filteredDates = datesFromStartDateToEndDate.filter { date in
+            executionDaysOfWeekday.contains {
+                $0.rawValue == Calendar.current.dateComponents([.weekday], from: date).weekday!
+            }
         }
         
-        
-        let dayPlans = requiredDays.map { date in
+        let timeRemovedDates = filteredDates.map {
+            DateFormatter.convertDate(from: $0)
+        }
+  
+        let dayPlans = timeRemovedDates.map { date in
             DayPlan(
                 _id: UUID(), isRequired: true,
                 isComplete: false, date: date,
-                week: 1, content: nil)
+                week: Calendar.current.dateComponents([.weekOfYear], from: startDate, to: date!).weekOfYear! + 1,
+                content: nil, imageURL: nil, imageContentIsFill: true)
         }
         
-        let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)
+        let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)
         useCase.create(userPlan, completion: completion)
     }
 }

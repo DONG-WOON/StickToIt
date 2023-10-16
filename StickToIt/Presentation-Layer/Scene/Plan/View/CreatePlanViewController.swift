@@ -59,10 +59,6 @@ final class CreatePlanViewController: UIViewController {
         configureViews()
         setConstraints()
         
-        // FSCalendar 때문에 하루 뺴줌
-        let date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
-        
-        reload(date: date)
     }
     
     private func bindViewModel() {
@@ -87,23 +83,51 @@ final class CreatePlanViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        mainView.selectedDays
-            .bind(with: self) { (_self, _week) in
-                _self.viewModel
-                    .executionDaysOfWeekday
-                    .accept(_week)
-                print(_week)
+        viewModel.endDate
+            .bind(with: self) { (_self, date) in
+                guard let _date = date else { return }
+                let endDateString = DateFormatter.getFullDateString(from: _date)
+                self.mainView.endDateLabel.innerView.text = "종료일: \(endDateString)"
+                
+                _self.setTargetNumberOfDays(date: _date)
+                
             }
             .disposed(by: disposeBag)
     }
     
+    func setTargetNumberOfDays(date: Date?) {
+        guard let date else { return }
+        
+        guard let dayInterval = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
+        
+        let diffOfStartDateAndEndDate = dayInterval + 1
+        self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
+        
+        let datesFromStartDateToEndDate = Array(0...diffOfStartDateAndEndDate).map { Calendar.current.date(byAdding: .day, value: $0, to: viewModel.startDate)!
+        }
+        
+        let weekdayList = datesFromStartDateToEndDate.map {
+            return Calendar.current.dateComponents([.weekday], from: $0).weekday!
+        }
+        
+        if weekdayList.count < 7 {
+        
+            mainView.executionDaysOfWeekdayCollectionView
+                .disable(indexAtCell: weekdayList)
+        } else {
+            mainView.executionDaysOfWeekdayCollectionView
+                .enableAllCell()
+        }
+    }
+    
     private func configureViews() {
-        self.title = "목표 생성"
+        self.title = "계획 생성"
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
         
         mainView.buttonDelegate = self
+        mainView.dayCellDelegate = self
         
         view.addSubview(mainView)
         view.addSubview(createButton)
@@ -159,7 +183,10 @@ final class CreatePlanViewController: UIViewController {
 extension CreatePlanViewController: CalendarButtonProtocol {
     
     func endDateSettingButtonDidTapped() {
-        let popupVC = CreatePlanTargetPeriodSettingViewController(date: viewModel.endDate)
+        let endDate = viewModel.endDate.value
+        let twoDaysLater = Calendar.current.date(byAdding: .day, value: 2, to: Date.now)!
+        let defaultDate = DateFormatter.convertDate(from: twoDaysLater)!
+        let popupVC = CreatePlanTargetPeriodSettingViewController(date: endDate ?? defaultDate)
         popupVC.delegate = self
         
         popupVC.modalTransitionStyle = .crossDissolve
@@ -171,38 +198,27 @@ extension CreatePlanViewController: CalendarButtonProtocol {
 
 extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
     
-    func okButtonDidTapped(date: Date) {
-        self.viewModel.endDate = date
-        
-        let endDate = DateFormatter.getFullDateString(from: date)
-        self.mainView.endDateLabel.innerView.text = "종료일: \(endDate)"
-        
-        reload(date: date)
+    func okButtonDidTapped(date: Date?) {
+        self.viewModel.endDate.accept(date)
+        self.viewModel.executionDaysOfWeekday.accept([])
     }
-    
-    func reload(date: Date) {
-        guard let day = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
-        let diffOfStartDateAndEndDate = day + 2
-        self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
-        
-        let datesFromStartDateToEndDate = Array(0...day + 1).map { Calendar.current.date(byAdding: .day, value: $0, to: viewModel.startDate)!
-        }
-        
-        let weekdayList = datesFromStartDateToEndDate.map {
-            return Calendar.current.dateComponents([.weekday], from: $0).weekday!
-        }
-        
-        
-        if weekdayList.count < 7 {
-            mainView.disableStackView(weekdayList: weekdayList)
-        } else {
-            mainView.executionDaysOfWeekdayStackView
-                .arrangedSubviews
-                .map { $0 as? UIButton }
-                .forEach {
-                    $0?.isEnabled = true
-                    $0?.backgroundColor = .systemBackground
-                }
-        }
+}
+
+extension CreatePlanViewController: DayCellDelegate {
+    func select(week: Week?) {
+        guard let week else { return }
+        var weeks = viewModel.executionDaysOfWeekday.value
+        weeks.insert(week)
+        viewModel.executionDaysOfWeekday
+            .accept(weeks)
+    }
+    func deSelect(week: Week?) {
+        guard let week else { return }
+        var weeks = viewModel.executionDaysOfWeekday.value
+        weeks.remove(week)
+        viewModel.executionDaysOfWeekday
+            .accept(
+                weeks
+            )
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import RxCocoa
 
 final class CreateDayPlanViewModel<PlanUseCase: CreateDayPlanUseCase>
@@ -17,6 +18,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     
     var dayPlan: DayPlan
     var isValidated = BehaviorRelay(value: false)
+    var isLoading = BehaviorRelay(value: false)
     
     init(
         dayPlan: DayPlan,
@@ -31,20 +33,44 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     func viewDidLoad() {
         
     }
-    
-    func save(completion: @escaping (Result<Bool, Error>) -> Void) {
-        dayPlan.isComplete = true
-        useCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan, completion: completion)
+    func isLoading(_ isLoading: Bool) {
+        self.isLoading.accept(isLoading)
     }
     
-    func save(imageData: Data?) {
-        
-        useCase.save(dayPlanID: dayPlan._id, imageData: imageData)
+    func save(with imageData: UIImage?) async -> Result<Bool, Error> {
+        let imageData = compressedImageData(imageData, limitSize: Const.Size.MB(2).value)
+        let imageURL = await useCase.save(dayPlanID: dayPlan._id, imageData: imageData)
+        dayPlan.imageURL = imageURL
+        dayPlan.isComplete = true
+        let result = await useCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan)
+        return result
     }
     
     func loadImage(completion: @escaping (Data?) -> Void) {
         useCase.loadImage(dayPlanID: dayPlan._id) { data in
             completion(data)
         }
+    }
+    
+    private func compressedImageData(_ image: UIImage?, limitSize limitOfImageDataSize: Int) -> Data? {
+        guard let image = image else { return nil }
+        let compressionQuality: CGFloat
+        
+        if let jpegImageData = image.jpegData(compressionQuality: 1.0) {
+            let bytesOfImageData = jpegImageData.count
+            
+            if bytesOfImageData > limitOfImageDataSize {
+                compressionQuality = CGFloat(limitOfImageDataSize) / CGFloat(bytesOfImageData)
+            } else {
+                compressionQuality = 1.0
+            }
+            
+            let compressedData = image.jpegData(compressionQuality: compressionQuality)
+            print("Image saved with compression quality: \(compressionQuality).\nDataSize:\(compressedData?.count)")
+            
+            return compressedData
+        }
+        
+        return nil
     }
 }

@@ -54,7 +54,9 @@ extension DayPlan {
             isRequired: isRequired,
             isComplete: isComplete,
             week: week,
-            content: content
+            content: content,
+            imageURL: imageURL,
+            imageContentIsFill: imageContentIsFill
         )
     }
 }

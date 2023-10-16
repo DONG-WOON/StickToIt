@@ -23,9 +23,23 @@ enum Const {
         case checkedCircle = "checkmark.circle.fill"
         case camera = "camera.shutter.button.fill"
         case pencil = "pencil"
+        
+        static let scaleAspectFill = "scaleAspectFill"
+        static let scaleAspectFit = "scaleAspectFit"
     }
     
     enum Key {
         static let imageToUpload = "imageToUpload"
+    }
+    
+    enum Size {
+        case MB(Int)
+        
+        var value: Int {
+            switch self {
+            case .MB(let number) :
+                return Int(1024*1024*number)
+            }
+        }
     }
 }

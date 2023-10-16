@@ -344,7 +344,7 @@ extension HomeViewController {
 
 extension HomeViewController: HomeImageCollectionViewCellDelegate {
     
-    func addImageButtonDidTapped(_ dayPlan: DayPlan) {
+    func imageDidSelected(_ dayPlan: DayPlan) {
         
         let vc = DayPlanViewController(
             dayPlan: dayPlan
@@ -352,19 +352,5 @@ extension HomeViewController: HomeImageCollectionViewCellDelegate {
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
-    }
-    
-    func editImageButtonDidTapped(_ dayPlan: DayPlan) {
-        
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let edit = UIAlertAction(title: "편집", style: .default)
-        let delete = UIAlertAction(title: "삭제", style: .destructive)
-        let cancel = UIAlertAction(title: "취소", style: .cancel)
-        
-        alert.addAction(edit)
-        alert.addAction(delete)
-        alert.addAction(cancel)
-        
-        self.present(alert, animated: true)
     }
 }
