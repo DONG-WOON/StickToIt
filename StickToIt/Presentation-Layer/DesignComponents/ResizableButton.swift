@@ -31,7 +31,7 @@ final class ResizableButton: UIButton {
         }
         
         if let title {
-            self.setTitle(title + " ", for: .normal)
+            self.setTitle(title, for: .normal)
         }
         
         if let imageAlignment {
