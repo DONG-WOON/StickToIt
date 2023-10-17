@@ -121,7 +121,6 @@ final class ImageSelectionViewController: UIViewController {
             configureDataSource(of: _mainView)
             _mainView.delegate = self
             imageManager.register(viewController: self)
-            
         }
         
         if mainView is ImageSelectionDeniedView {
@@ -151,10 +150,10 @@ extension ImageSelectionViewController {
         
         let selectableImageCellRegistration = UICollectionView
             .CellRegistration<SelectableImageCell, String>
-        { cell, indexPath, id in
+        { [weak self] cell, indexPath, id in
             
-            let imageAssets = self.viewModel.imageDataList.value
-            let asset = imageAssets[indexPath.item - 1]
+            let imageAssets = self?.viewModel.imageDataList.value
+            guard let asset = imageAssets?[indexPath.item - 1] else { return }
             
             DispatchQueue.main.async { [weak self] in
                 self?.imageManager.getThumbnailImage(for: asset) { image in
@@ -207,15 +206,16 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
-            let vc = EditImageViewController()
+            
             let asset = viewModel.imageDataList.value[indexPath.item - 1]
             DispatchQueue.main.async { [weak self] in
                 self?.imageManager.getImage(for: asset) { data in
-                    guard let data else { return }
-                    vc.imageView.image = UIImage(data: data)
+                    guard let _data = data else { return }
+                    let image = UIImage(data: _data)
+                    NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: image])
+                    self?.dismiss(animated: true)
                 }
             }
-            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
@@ -233,7 +233,24 @@ extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
 
 // MARK: UIImagePickerControllerDelegate
 
-extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate { }
+extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        var newImage: UIImage? = nil
+        
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            newImage = editedImage
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            newImage = possibleImage
+        }
+        
+        picker.dismiss(animated: true) { [weak self] in
+            NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: newImage])
+            self?.dismiss(animated: true)
+        }
+    }
+}
 
 
 extension ImageSelectionViewController: SettingButtonDelegate {
