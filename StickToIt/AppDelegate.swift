@@ -18,6 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationBarAppearance = UINavigationBar.appearance()
         navigationBarAppearance.tintColor = .label
 
+        if let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: userIDString) {
+            
+        } else {
+            
+            UserDefaults.standard.setValue(UUID().uuidString, forKey: Const.Key.userID.rawValue)
+        }
+
         return true
     }
 

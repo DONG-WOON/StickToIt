@@ -21,6 +21,7 @@ class GradientCircleView: RingProgressView {
     
     func setProgress(_ progress: Double) {
         UIView.animate(withDuration: 0.7) {
+            print(progress)
             self.progress = progress
         }
     }

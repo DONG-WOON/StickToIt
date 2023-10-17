@@ -25,12 +25,7 @@ final class DayPlanViewController: UIViewController {
     private let borderContainerView: UIView = {
         let view = UIView()
         view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
-        view.setGradient(
-            color1: .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1).withAlphaComponent(0.5),
-            color2: .systemIndigo.withAlphaComponent(0.6),
-            startPoint: .init(x: 1, y: 0),
-            endPoint: .init(x: 1, y: 1)
-        )
+        view.setDefaultGradient()
         return view
     }()
     
@@ -170,7 +165,6 @@ final class DayPlanViewController: UIViewController {
     // MARK: Life Cycle
     
     init(dayPlan: DayPlan) {
-        print(dayPlan)
         viewModel = CreateDayPlanViewModel(
             dayPlan: dayPlan,
             useCase: CreateDayPlanUseCaseImpl(
@@ -434,7 +428,7 @@ extension DayPlanViewController {
     }
     
     @objc private func updateImageToUpload(_ notification: Notification) {
-        guard let image = notification.userInfo?[Const.Key.imageToUpload] as? UIImage else { return }
+        guard let image = notification.userInfo?[Const.NotificationKey.imageToUpload] as? UIImage else { return }
         
         self.imageView.image = image
         self.imageView.isUserInteractionEnabled = true

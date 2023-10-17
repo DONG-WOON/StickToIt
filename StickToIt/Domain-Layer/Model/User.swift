@@ -10,16 +10,16 @@ import Foundation
 struct User: Equatable {
     var _id: UUID
     var name: String
-    var plans: [Plan]
+    var planQueries: [PlanQuery]
     
     init(
         _id: UUID,
          name: String,
-         plans: [Plan]
+        planQueries: [PlanQuery]
     ) {
         self._id = _id
         self.name = name
-        self.plans = plans
+        self.planQueries = planQueries
     }
     
     static func == (lhs: User, rhs: User) -> Bool {

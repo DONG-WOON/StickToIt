@@ -10,7 +10,23 @@ import RealmSwift
 
 extension User {
     func toEntity() -> UserEntity {
-        return .init(name: name)
+        
+        let _planQueries = List<PlanQueryEntity>()
+        _planQueries.append(objectsIn: planQueries.map { $0.toEntity() })
+        
+        return .init(
+            name: name,
+            planQueries: _planQueries
+        )
+    }
+}
+
+extension PlanQuery {
+    func toEntity() -> PlanQueryEntity {
+        return .init(
+            _id: planID,
+            planName: planName
+        )
     }
 }
 

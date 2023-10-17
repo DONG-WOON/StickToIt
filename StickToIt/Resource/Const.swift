@@ -28,8 +28,13 @@ enum Const {
         static let scaleAspectFit = "scaleAspectFit"
     }
     
-    enum Key {
+    enum NotificationKey {
         static let imageToUpload = "imageToUpload"
+    }
+    
+    enum Key: String {
+        case favoritePlans = "favoritePlans"
+        case userID = "userID"
     }
     
     enum Size {
