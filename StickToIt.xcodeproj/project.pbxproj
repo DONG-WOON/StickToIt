@@ -93,6 +93,8 @@
 		72D7D3152ADD0FBD0062A60F /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */; };
 		72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */; };
 		72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3182ADD2EC80062A60F /* UserDefaultWrapper.swift */; };
+		72D7D31E2ADE152B0062A60F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */; };
+		72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */; };
 		72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */; };
 		72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE32AD1221200F19568 /* FetchService.swift */; };
 		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
@@ -181,6 +183,8 @@
 		72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanQueryEntity.swift; sourceTree = "<group>"; };
 		72D7D3182ADD2EC80062A60F /* UserDefaultWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultWrapper.swift; sourceTree = "<group>"; };
+		72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageUseCase.swift; sourceTree = "<group>"; };
 		72FA8DE32AD1221200F19568 /* FetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchService.swift; sourceTree = "<group>"; };
 		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
@@ -443,6 +447,7 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				72D7D31A2ADE15010062A60F /* Calendar */,
 				72D7D3062ADD05630062A60F /* FavoritePlan */,
 				7278496E2AD6962400433753 /* DayPlan */,
 				7278495B2AD5247300433753 /* EditImage */,
@@ -663,6 +668,31 @@
 			path = FetchUserInfo;
 			sourceTree = "<group>";
 		};
+		72D7D31A2ADE15010062A60F /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D31C2ADE150A0062A60F /* ViewModel */,
+				72D7D31B2ADE15070062A60F /* View */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		72D7D31B2ADE15070062A60F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		72D7D31C2ADE150A0062A60F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		72FA8DE12AD10FAE00F19568 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
@@ -802,6 +832,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D7D31E2ADE152B0062A60F /* CalendarViewController.swift in Sources */,
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
 				729AC5152ACE91AD00E910D5 /* FetchPlanUseCase.swift in Sources */,
 				72D7D3152ADD0FBD0062A60F /* UserRepositoryImpl.swift in Sources */,
@@ -825,6 +856,7 @@
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,
 				729AC5252ACEEBAF00E910D5 /* CameraManager.swift in Sources */,
+				72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */,
 				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* PlanDatabaseManager.swift in Sources */,
 				72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */,

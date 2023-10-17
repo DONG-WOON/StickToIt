@@ -14,10 +14,12 @@ final class UserEntity: Object {
     @Persisted var planQueries: List<PlanQueryEntity>
     
     convenience init(
+        _id: UUID,
         name: String,
         planQueries: List<PlanQueryEntity>
     ) {
         self.init()
+        self._id = _id
         self.name = name
         self.planQueries = planQueries
     }

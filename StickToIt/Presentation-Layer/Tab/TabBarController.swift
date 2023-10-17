@@ -13,8 +13,22 @@ final class TabBarController: UITabBarController {
     // MARK: Properties
     
     let homeVC = HomeViewController()
-        .configureTabBarItem(title: "Home", image: UIImage(resource: .houseFill))
+        .configureTabBarItem(title: "홈", image: UIImage(resource: .houseFill))
         .embedNavigationController()
+    
+    let CalendarVC = CalendarViewController(
+        viewModel: CalendarViewModel(
+            planRepository: PlanRepositoryImpl(
+                networkService: nil,
+                databaseManager: PlanDatabaseManager()
+            ),
+            userRepository: UserRepositoryImpl(
+                networkService: nil,
+                databaseManager: UserDatabaseManager())
+        ))
+        .configureTabBarItem(title: "캘린더", image: UIImage(resource: .calendar))
+        .embedNavigationController()
+        
     
     
     // MARK: View Life Cycle
@@ -36,7 +50,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.viewControllers = [homeVC]
+        self.viewControllers = [homeVC, CalendarVC]
     }
 }
 

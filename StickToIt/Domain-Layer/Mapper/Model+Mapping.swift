@@ -15,6 +15,7 @@ extension User {
         _planQueries.append(objectsIn: planQueries.map { $0.toEntity() })
         
         return .init(
+            _id: _id,
             name: name,
             planQueries: _planQueries
         )
@@ -40,6 +41,7 @@ extension Plan {
         _dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
         
         return .init(
+            _id: _id,
             name: name,
             targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,

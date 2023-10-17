@@ -9,8 +9,12 @@ import UIKit
 import SnapKit
 import FSCalendar
 
-protocol StickToItCalendarDelegate: AnyObject {
+@objc protocol StickToItCalendarDelegate: AnyObject {
     func calendarView(didSelectAt date: Date?)
+    @objc optional func calendarWillDisplay(date: Date)
+    @objc optional func numberOfEventsFor(date: Date) -> Int
+    @objc optional func eventDefaultColorsFor(date: Date) -> [UIColor]?
+    @objc optional func pageDidChange(on date: Date)
 }
 
 final class StickToItCalendar: UIView {
@@ -216,7 +220,7 @@ extension StickToItCalendar: FSCalendarDataSource {
     
     // 이벤트 발생 날짜에 필요한 만큼 개수 반환 (최대 3개)
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        return 0
+        return delegate?.numberOfEventsFor?(date: date) ?? 0
     }
 }
 
@@ -227,6 +231,7 @@ extension StickToItCalendar: FSCalendarDelegate {
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let today = calendar.currentPage
         monthLabel.text = DateFormatter.formatToString(format: .calendarHeader, from: today)
+        delegate?.pageDidChange?(on: today)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -241,14 +246,7 @@ extension StickToItCalendar: FSCalendarDelegate {
 
     func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         
-//        let dateComponents = date.convertToDateComponents([.year, .month, .day])
-//        let today = Date().convertToDateComponents([.year, .month, .day])
-//        let todayCell = cell as? CustomCalendarCell
-//        if dateComponents == today {
-//            todayCell?.setTodayBorderLayerIsHidden(false)
-//        } else {
-//            todayCell?.setTodayBorderLayerIsHidden(true)
-//        }
+        delegate?.calendarWillDisplay?(date: date)
     }
 }
 // MARK: - FSCalendarDelegateAppearance
@@ -257,7 +255,7 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
 
     // 스터디 스케쥴 북마크컬러에따라 컬러 지정
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]? {
-        return nil
+        return delegate?.eventDefaultColorsFor?(date: date)
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
@@ -265,7 +263,7 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-        return UIColor.clear // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
+        return .systemIndigo.withAlphaComponent(0.8) // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
@@ -279,13 +277,17 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
 final class CustomCalendarCell: FSCalendarCell {
     
     // MARK: - Properties
+    private let underBar: UIView = {
+        let view = UIView(backgroundColor:  UIColor.systemIndigo.withAlphaComponent(0.7))
+        view.rounded(cornerRadius: 2)
+        view.isHidden = true
+        return view
+    }()
     
-    private let selectionLayer = CAShapeLayer()
-    private let todayBorderLayer = CAShapeLayer()
     
     override var isSelected: Bool {
         didSet {
-            selectionLayer.isHidden = !isSelected // 선택된 상태에 따라 layer 보이기/숨기기
+            underBar.isHidden = !isSelected // 선택된 상태에 따라 layer 보이기/숨기기
         }
     }
     
@@ -294,7 +296,8 @@ final class CustomCalendarCell: FSCalendarCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setSelectionLayer()
+        setUnderBar()
+    
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -302,11 +305,12 @@ final class CustomCalendarCell: FSCalendarCell {
     }
     // MARK: - Actions
     
-    private func setSelectionLayer() {
-        selectionLayer.fillColor = UIColor.systemIndigo.withAlphaComponent(0.7).cgColor
-        selectionLayer.path = UIBezierPath(roundedRect: self.bounds.insetBy(dx: 6.0, dy: 1.0), cornerRadius: 6).cgPath
-        selectionLayer.isHidden = true
+    private func setUnderBar() {
+        self.insertSubview(underBar, at: 0)
         
-        self.layer.insertSublayer(selectionLayer, at: 0)
+        underBar.snp.makeConstraints { make in
+            make.bottom.horizontalEdges.equalTo(self).inset(4)
+            make.height.equalTo(4)
+        }
     }
 }

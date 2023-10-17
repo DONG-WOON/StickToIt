@@ -20,6 +20,7 @@ final class PlanEntity: Object {
     #warning("id 초기화 하진않아도 생기는지 확인")
     
     convenience init(
+        _id: UUID,
         name: String,
         targetNumberOfDays: Int,
         startDate: Date,
@@ -29,6 +30,7 @@ final class PlanEntity: Object {
         ) {
             self.init()
             
+            self._id = _id
             self.name = name
             self.targetNumberOfDays = targetNumberOfDays
             self.startDate = startDate
