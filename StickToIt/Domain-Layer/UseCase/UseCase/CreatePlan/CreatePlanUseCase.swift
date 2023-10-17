@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CreatePlanUseCase: CreateService {
-    
+    func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 final class CreatePlanUseCaseImpl<
@@ -28,5 +28,9 @@ final class CreatePlanUseCaseImpl<
     
     func create(_ model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
         repository.create(model: model, completion: completion)
+    }
+    
+    func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        repository.save(planQuery: planQuery, to: user, completion: completion)
     }
 }

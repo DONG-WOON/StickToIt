@@ -428,7 +428,7 @@ extension DayPlanViewController {
     }
     
     @objc private func updateImageToUpload(_ notification: Notification) {
-        guard let image = notification.userInfo?[Const.Key.imageToUpload] as? UIImage else { return }
+        guard let image = notification.userInfo?[Const.NotificationKey.imageToUpload] as? UIImage else { return }
         
         self.imageView.image = image
         self.imageView.isUserInteractionEnabled = true

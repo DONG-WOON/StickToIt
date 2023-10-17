@@ -37,12 +37,12 @@ extension DayPlanRepositoryImpl: PlanRepository {
     typealias Query = PlanQuery
     
     func fetchAll() -> Result<[Model], Error> {
-        guard let entities = databaseManager?.fetchAll() else { return .failure((NSError(domain: "fetchAll Error", code: 1000))) }
+        guard let entities = databaseManager?.fetchAll() else { return .failure((NSError(domain: "\nfetch All Error, \nfile: \(#file), \nfunction: \(#function), \nline: \(#line)", code: 1000))) }
         return .success(entities.map { $0.toDomain() })
     }
     
     func fetch(query: PlanQuery) -> Result<Model, Error> {
-        guard let entity = databaseManager?.fetch(key: query.planID) as? DayPlanEntity else { return .failure(NSError(domain: "fetch Error", code: 1000)) }
+        guard let entity = databaseManager?.fetch(key: query.planID) as? DayPlanEntity else { return .failure(NSError(domain: "\nfetch Error, \nfile: \(#file), \nfunction: \(#function), \nline: \(#line)", code: 1000)) }
         return .success(entity.toDomain())
     }
     
@@ -55,9 +55,9 @@ extension DayPlanRepositoryImpl: PlanRepository {
         })
     }
     
-    func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, onFailure: @escaping @Sendable (Error?) -> Void) {
+    func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, updateHandler: @escaping (Entity)-> Void,  onFailure: @escaping @Sendable (Error?) -> Void) {
         print(model, entity)
-        databaseManager?.update(entity: entity, matchingWith: model, onFailure: onFailure)
+        databaseManager?.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: onFailure)
     }
     
     func saveImage(path fileName: String, imageData: Data?) async throws -> String? {
@@ -96,4 +96,9 @@ extension DayPlanRepositoryImpl: PlanRepository {
             return
         }
     }
+    
+    func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        return
+    }
+    
 }

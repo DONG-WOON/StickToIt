@@ -72,7 +72,46 @@ where PlanUseCase.Model == Plan
                 content: nil, imageURL: nil, imageContentIsFill: true)
         }
         
-        let userPlan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)
-        useCase.create(userPlan, completion: completion)
+        let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)
+        
+        useCase.create(plan) { [weak self] result in
+            switch result {
+            case .success:
+                let planQuery = PlanQuery(planID: plan._id, planName: plan.name)
+                
+                guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: userIDString) else { return
+                }
+                
+                self?.save(planQuery: planQuery, to: userID) { [weak self] result in
+                    switch result {
+                    case .success:
+                        self?.saveInUserDefaults(planQuery)
+                        completion(.success(true))
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    private func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        useCase.save(planQuery: planQuery, to: user, completion: completion)
+    }
+    
+    private func saveInUserDefaults(_ planQuery: PlanQuery) {
+        @UserDefault(key: .favoritePlans, type: [PlanQuery].self, defaultValue: nil)
+        var favoritePlans
+        
+        if var _favoritePlans = favoritePlans {
+            _favoritePlans.insert(planQuery, at: 0)
+            favoritePlans = _favoritePlans
+        } else {
+            var _favoritePlans: [PlanQuery] = []
+            _favoritePlans.append(planQuery)
+            favoritePlans = _favoritePlans
+        }
     }
 }
