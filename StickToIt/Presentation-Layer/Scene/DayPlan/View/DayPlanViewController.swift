@@ -25,7 +25,6 @@ final class DayPlanViewController: UIViewController {
     private let borderContainerView: UIView = {
         let view = UIView()
         view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
-        view.setDefaultGradient()
         return view
     }()
     
@@ -252,7 +251,6 @@ extension DayPlanViewController: BaseViewConfigurable {
         
         imageContentModeSegment.selectedSegmentIndex = 0
         
-        borderContainerView.setDefaultGradient()
         
         borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(blurView)

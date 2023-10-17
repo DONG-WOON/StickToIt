@@ -132,8 +132,6 @@ extension HomeImageCollectionViewCell {
         
         self.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
         
-        self.setDefaultGradient()
-        
         contentView.addSubview(addImageView)
         contentView.addSubview(imageView)
         contentView.addSubview(blurView)
