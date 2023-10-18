@@ -66,7 +66,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
             }
             
             let compressedData = image.jpegData(compressionQuality: compressionQuality)
-            print("Image saved with compression quality: \(compressionQuality).\nDataSize:\(compressedData?.count)")
+            print("Image saved with compression quality: \(compressionQuality).\nDataSize:\(compressedData?.count ?? 0 / 1024*1024)")
             
             return compressedData
         }
