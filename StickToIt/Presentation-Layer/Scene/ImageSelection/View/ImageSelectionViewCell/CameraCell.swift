@@ -12,7 +12,7 @@ final class CameraCell: UICollectionViewCell {
     // MARK: UI Properties
     
     let cameraImageView: UIImageView = {
-        var view  = UIImageView(backgroundColor: .systemBackground)
+        var view  = UIImageView(backgroundColor: .clear)
         view.image = UIImage(resource: .camera)
         view.tintColor = .label
         view.contentMode = .scaleAspectFill

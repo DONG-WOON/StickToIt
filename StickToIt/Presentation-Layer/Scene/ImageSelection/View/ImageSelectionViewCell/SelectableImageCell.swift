@@ -12,7 +12,7 @@ final class SelectableImageCell: UICollectionViewCell {
     // MARK: UI Properties
     
     let imageView: UIImageView = {
-        let view = UIImageView(backgroundColor: .systemBackground)
+        let view = UIImageView(backgroundColor: .clear)
         view.contentMode = .scaleAspectFill
         return view
     }()
@@ -38,7 +38,7 @@ final class SelectableImageCell: UICollectionViewCell {
 
     func select(isSelected: Bool) {
         if isSelected {
-            contentView.bordered(borderWidth: 1.5, borderColor: .systemIndigo)
+            contentView.bordered(borderWidth: 1.5, borderColor: .assetColor(.accent1))
         } else {
             contentView.bordered(borderWidth: 0.3, borderColor: .gray)
         }

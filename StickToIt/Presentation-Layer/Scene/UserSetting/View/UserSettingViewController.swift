@@ -40,7 +40,7 @@ class UserSettingViewController: UIViewController {
         view.innerView.borderStyle = .none
         view.innerView.clearButtonMode = .whileEditing
         view.innerView.font = .systemFont(ofSize: 17)
-        view.bordered(cornerRadius: 10, borderWidth: 1, borderColor: UIColor(named: AssetColor.Accent2))
+        view.bordered(cornerRadius: 10, borderWidth: 1, borderColor: .assetColor(.accent2))
         return view
     }()
     
@@ -57,7 +57,7 @@ class UserSettingViewController: UIViewController {
             title: "사용자 등록하기",
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
-            backgroundColor: UIColor(named: AssetColor.Accent1),
+            backgroundColor: .assetColor(.accent1),
             target: self,
             action: #selector(registerButtonDidTapped)
         )
@@ -115,12 +115,12 @@ class UserSettingViewController: UIViewController {
                     
                 case .userNameValidate(let isValidated):
                     _self.registerButton.isEnabled = isValidated
-                    _self.registerButton.backgroundColor = isValidated ? UIColor(named: AssetColor.Accent1) : .gray
+                    _self.registerButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
                     
                 case .validateError(let errorMessage):
                     guard let errorMessage else {
                         _self.validateLabel.text = "유효한 닉네임 입니다."
-                        _self.validateLabel.textColor = UIColor(named: AssetColor.Accent1)
+                        _self.validateLabel.textColor = .assetColor(.accent1)
                         return
                     }
                     _self.validateLabel.text = errorMessage
@@ -149,7 +149,7 @@ extension UserSettingViewController {
 
 extension UserSettingViewController: BaseViewConfigurable {
     func configureViews() {
-        view.backgroundColor = UIColor(named: AssetColor.Accent4)
+        view.backgroundColor = .systemBackground
         
         title = "사용자 등록"
         

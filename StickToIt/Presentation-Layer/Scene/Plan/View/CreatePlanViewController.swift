@@ -44,7 +44,7 @@ final class CreatePlanViewController: UIViewController {
             title: "목표 생성하기",
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
-            backgroundColor: .systemIndigo,
+            backgroundColor: .assetColor(.accent1),
             target: self,
             action: #selector(createButtonDidTapped)
         )
@@ -66,7 +66,7 @@ final class CreatePlanViewController: UIViewController {
         viewModel.planIsValidated
             .bind(with: self) { (_self, isValidated) in
                 _self.createButton.isEnabled = isValidated
-                _self.createButton.backgroundColor = isValidated ? .systemIndigo.withAlphaComponent(0.6) : .gray
+                _self.createButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
             }
             .disposed(by: disposeBag)
         

@@ -29,7 +29,7 @@ final class StickToItCalendar: UIView {
     weak var delegate: StickToItCalendarDelegate?
     
     /// CalendarHeaderView
-    private let customHeaderView = UIView(backgroundColor: .systemBackground)
+    private let customHeaderView = UIView(backgroundColor: .clear)
     
     private let monthLabel: UILabel = {
         let titleLabel = UILabel()
@@ -42,12 +42,12 @@ final class StickToItCalendar: UIView {
     
     private lazy var leftButton = ResizableButton(
         image: UIImage(resource: .chevronLeft),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo.withAlphaComponent(0.6),
+        symbolConfiguration: .init(scale: .large), tintColor: .assetColor(.accent2),
         target: self, action: #selector(moveToPreviousMonth)
     )
     private lazy var rightButton = ResizableButton(
         image: UIImage(resource: .chevronRight),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo.withAlphaComponent(0.6),
+        symbolConfiguration: .init(scale: .large), tintColor: .assetColor(.accent2),
         target: self, action: #selector(moveToNextMonth)
     )
     
@@ -116,12 +116,12 @@ final class StickToItCalendar: UIView {
         
         calendar.weekdayHeight = 40
         calendar.appearance.weekdayFont = UIFont.boldSystemFont(ofSize: 16)
-        calendar.appearance.weekdayTextColor = .systemIndigo.withAlphaComponent(0.6)
+        calendar.appearance.weekdayTextColor = .assetColor(.accent2)
     }
     
     private func setCalendarDaysView() {
         
-        calendar.appearance.todayColor = .systemIndigo.withAlphaComponent(0.6)
+        calendar.appearance.todayColor = .assetColor(.accent2)
         calendar.appearance.titleDefaultColor = .label
         calendar.appearance.titleTodayColor = .systemBackground
         calendar.appearance.titleFont = UIFont.boldSystemFont(ofSize: 16)
@@ -263,7 +263,7 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-        return .systemIndigo.withAlphaComponent(0.8) // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
+        return .assetColor(.accent2) // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
@@ -278,7 +278,7 @@ final class CustomCalendarCell: FSCalendarCell {
     
     // MARK: - Properties
     private let underBar: UIView = {
-        let view = UIView(backgroundColor:  UIColor.systemIndigo.withAlphaComponent(0.7))
+        let view = UIView(backgroundColor: .assetColor(.accent1))
         view.rounded(cornerRadius: 2)
         view.isHidden = true
         return view

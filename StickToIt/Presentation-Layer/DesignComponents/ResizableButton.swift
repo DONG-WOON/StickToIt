@@ -16,7 +16,7 @@ final class ResizableButton: UIButton {
         symbolConfiguration: UIImage.SymbolConfiguration? = .init(scale: .default),
         font: UIFont? = nil,
         tintColor: UIColor?,
-        backgroundColor: UIColor? = .systemBackground,
+        backgroundColor: UIColor? = .clear,
         imageAlignment: UISemanticContentAttribute? = .forceLeftToRight,
         target: Any?,
         action: Selector? = nil

@@ -101,7 +101,7 @@ final class ExecutionDayCollectionViewCell: UICollectionViewCell {
     
     private func select(_ isSelected: Bool) {
         if isSelected {
-            contentView.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
+            contentView.backgroundColor = .assetColor(.accent2)
             label.textColor = .white
         } else {
             contentView.backgroundColor = .clear
@@ -124,7 +124,7 @@ extension ExecutionDayCollectionViewCell: BaseViewConfigurable {
     func configureViews() {
         contentView.addSubview(label)
         
-        contentView.bordered(borderWidth: 0.5, borderColor: .systemIndigo)
+        contentView.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
     }
     
     func setConstraints() {

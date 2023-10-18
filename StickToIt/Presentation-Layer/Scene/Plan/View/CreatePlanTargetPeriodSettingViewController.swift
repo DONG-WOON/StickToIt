@@ -26,18 +26,18 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      }
      
      let containerView: UIView = {
-          let view = UIView(backgroundColor: .systemBackground)
+          let view = UIView(backgroundColor: .assetColor(.accent4))
           view.rounded(cornerRadius:20)
           return view
      }()
      
-     let calendar = StickToItCalendar(backgroundColor: .systemBackground)
+     let calendar = StickToItCalendar(backgroundColor: .assetColor(.accent4))
      
      private let dDayLabel: PaddingView<UILabel> = {
           let view = PaddingView<UILabel>()
           view.innerView.text = "오늘부터 3일 동안"
           view.innerView.textAlignment = .center
-          view.innerView.textColor = .systemIndigo.withAlphaComponent(0.7)
+          view.innerView.textColor = .assetColor(.accent2)
           return view
      }()
      
@@ -46,7 +46,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
                title: "확인",
                font: .boldSystemFont(ofSize: 18),
                tintColor: .white,
-               backgroundColor: .systemIndigo.withAlphaComponent(0.6),
+               backgroundColor: .assetColor(.accent1),
                target: self,
                action: #selector(okButtonDidTapped)
           )

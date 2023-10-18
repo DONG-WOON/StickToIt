@@ -30,6 +30,7 @@
 		7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849892AD79FB400433753 /* Extension+Notification.swift */; };
 		7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498B2AD849B600433753 /* BlurEffectView.swift */; };
 		727849902ADA9CBC00433753 /* ExecutionDayCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498F2ADA9CBC00433753 /* ExecutionDayCollectionView.swift */; };
+		728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */; };
 		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
 		729AC4522AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4512AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift */; };
@@ -129,6 +130,7 @@
 		727849892AD79FB400433753 /* Extension+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Notification.swift"; sourceTree = "<group>"; };
 		7278498B2AD849B600433753 /* BlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectView.swift; sourceTree = "<group>"; };
 		7278498F2ADA9CBC00433753 /* ExecutionDayCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionDayCollectionView.swift; sourceTree = "<group>"; };
+		728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIColor.swift"; sourceTree = "<group>"; };
 		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		729AC4512AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPlanRepositoryImpl.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				729AC51D2ACEA51F00E910D5 /* Extension+UIImage.swift */,
 				729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */,
 				727849892AD79FB400433753 /* Extension+Notification.swift */,
+				728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -889,6 +892,7 @@
 				729AC4DC2ACBA4D500E910D5 /* CreatePlanView.swift in Sources */,
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				729AC4522AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift in Sources */,
+				728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */,
 				72D7D32C2ADF74700062A60F /* HomeEmptyView.swift in Sources */,

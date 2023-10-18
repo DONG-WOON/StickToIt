@@ -24,7 +24,7 @@ final class DayPlanViewController: UIViewController {
     
     private let borderContainerView: UIView = {
         let view = UIView()
-        view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
+        view.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .assetColor(.accent2))
         return view
     }()
     
@@ -111,14 +111,14 @@ final class DayPlanViewController: UIViewController {
         view.innerView.textColor = .white
         view.innerView.textAlignment = .center
         view.rounded(cornerRadius: 16)
-        view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
+        view.backgroundColor = .assetColor(.accent2)
         return view
     }()
     
     private let checkMarkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
-        imageView.tintColor = UIColor(named: AssetColor.Accent1)
+        imageView.tintColor = .assetColor(.accent2)
         imageView.image = UIImage(resource: .checkedCircle)
         imageView.isHidden = true
         return imageView
@@ -129,7 +129,7 @@ final class DayPlanViewController: UIViewController {
             title: "목표 생성하기",
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
-            backgroundColor: .systemIndigo.withAlphaComponent(0.6),
+            backgroundColor: .assetColor(.accent1),
             target: self,
             action: #selector(createButtonDidTapped)
         )
@@ -149,7 +149,7 @@ final class DayPlanViewController: UIViewController {
         button.setTitle("편집", for: .normal)
         button.setTitle("완료", for: .selected)
         button.setTitleColor(.label, for: .normal)
-        button.setTitleColor(.systemIndigo.withAlphaComponent(0.6), for: .selected)
+        button.setTitleColor(.assetColor(.accent1), for: .selected)
         button.addTarget(self, action: #selector(dayPlanEdit), for: .touchUpInside)
         return button
     }()
@@ -203,8 +203,8 @@ final class DayPlanViewController: UIViewController {
         requiredLabel.isHidden = !viewModel.dayPlan.isRequired
         
         checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
-        createButton.isHidden = viewModel.dayPlan.isComplete
         editButton.isHidden = !viewModel.dayPlan.isComplete
+        
         
         viewModel.loadImage { [weak self] data in
             if let imageData = data {
@@ -382,7 +382,7 @@ extension DayPlanViewController {
         if sender.isSelected {
             viewState = .editing
             imageContentModeSegment.isEnabled = true
-            imageContentModeSegment.selectedSegmentTintColor = .systemIndigo.withAlphaComponent(0.6)
+            imageContentModeSegment.selectedSegmentTintColor = .assetColor(.accent2)
             editImageButton.isHidden = false
         } else {
             viewState = .done
@@ -453,7 +453,7 @@ extension DayPlanViewController {
             
             switch result {
             case .success:
-                NotificationCenter.default.post(name: .reload, object: nil)
+                NotificationCenter.default.post(name: .reloadPlan, object: nil)
                 DispatchQueue.main.async {
                     _self.viewModel.isLoading(false)
                     _self.dismiss(animated: true)

@@ -33,7 +33,7 @@ enum Const {
     }
     
     enum Key: String {
-        case favoritePlans = "favoritePlans"
+        case currentPlan = "currentPlan"
         case userID = "userID"
     }
     
@@ -49,12 +49,12 @@ enum Const {
     }
 }
 
-enum AssetColor {
-    static let Accent1 = "Accent1"
-    static let Accent2 = "Accent2"
-    static let Accent3 = "Accent3"
-    static let Accent4 = "Accent4"
-    static let Black = "Black"
+enum AssetColor: String {
+    case accent1 = "Accent1"
+    case accent2 = "Accent2"
+    case accent3 = "Accent3"
+    case accent4 = "Accent4"
+    case black = "Black"
 }
 
 enum FontSize {
