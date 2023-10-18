@@ -48,3 +48,17 @@ enum Const {
         }
     }
 }
+
+enum AssetColor {
+    static let Accent1 = "Accent1"
+    static let Accent2 = "Accent2"
+    static let Accent3 = "Accent3"
+    static let Accent4 = "Accent4"
+    static let Black = "Black"
+}
+
+enum FontSize {
+    static let title: CGFloat = 30
+    static let body: CGFloat = 17
+    static let description:CGFloat = 15
+}
