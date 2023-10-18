@@ -37,11 +37,19 @@ final class CalendarViewController: UIViewController {
                 case .reload:
                     _self.calendar.reloadData()
                 case .showPlansMenu(let planQueries):
-                    let firstPlanQuery = planQueries.first
-                    _self.input.onNext(.planMenuTapped(firstPlanQuery))
-                    _self.title = firstPlanQuery?.planName
+                    
+                    if let currentPlanQueryString = UserDefaults.standard.string(forKey: Const.Key.currentPlan.rawValue), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+                        
+                        let currentPlanQuery = PlanQuery(planID: currentPlanID, planName: "")
+                        _self.input.onNext(.planMenuTapped(currentPlanQuery))
+                    } else {
+                        if let _firstPlanQuery = planQueries.first {
+                            _self.input.onNext(.planMenuTapped(_firstPlanQuery))
+                        }
+                    }
+
                 case .showPlanInfo(let plan):
-                    print(plan)
+                    _self.title = plan.name
                 }
             }
             .disposed(by: disposeBag)
