@@ -30,12 +30,12 @@ extension PlanRepositoryImpl: PlanRepository {
     typealias Query = PlanQuery
     
     func fetchAll() -> Result<[Model], Error> {
-        guard let entities = databaseManager?.fetchAll() else { return .failure((NSError(domain: "fetchAll Error", code: 1000))) }
+        guard let entities = databaseManager?.fetchAll() else { return .failure((NSError(domain: "\nfetch All Error, \nfile: \(#file), \nfunction: \(#function), \nline: \(#line)", code: 1000))) }
         return .success(entities.map { $0.toDomain() })
     }
     
     func fetch(query: PlanQuery) -> Result<Model, Error> {
-        guard let entity = databaseManager?.fetch(key: query.planID) as? PlanEntity else { return .failure(NSError(domain: "fetch Error", code: 1000)) }
+        guard let entity = databaseManager?.fetch(key: query.planID) as? PlanEntity else { return .failure(NSError(domain: "\nfetch Error, \nfile: \(#file), \nfunction: \(#function), \nline: \(#line)", code: 1000)) }
         return .success(entity.toDomain())
     }
     
@@ -48,8 +48,8 @@ extension PlanRepositoryImpl: PlanRepository {
         })
     }
     
-    func update(entity: PlanEntity.Type, matchingWith model: Plan, onFailure: @escaping @Sendable (Error?) -> Void) {
-        databaseManager?.update(entity: entity, matchingWith: model, onFailure: onFailure)
+    func update(entity: PlanEntity.Type, matchingWith model: Plan, updateHandler: @escaping (Entity) -> Void, onFailure: @escaping @Sendable (Error?) -> Void) {
+        databaseManager?.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: onFailure)
     }
     
     func saveImage(path fileName: String, imageData: Data?) async throws -> String? {
@@ -64,5 +64,9 @@ extension PlanRepositoryImpl: PlanRepository {
         } else {
             throw FileManagerError.fileIsNil
         }
+    }
+    
+    func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void){
+        databaseManager?.save(planQuery: planQuery, to: user, completion: completion)
     }
 }

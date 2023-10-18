@@ -85,6 +85,16 @@
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
 		72A976172ABB2A910021291C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72A976162ABB2A910021291C /* Assets.xcassets */; };
 		72A9761A2ABB2A910021291C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976182ABB2A910021291C /* LaunchScreen.storyboard */; };
+		72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */; };
+		72D7D30C2ADD05630062A60F /* FavoritePlanSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */; };
+		72D7D30F2ADD07C70062A60F /* FetchUserInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30E2ADD07C70062A60F /* FetchUserInfoUseCase.swift */; };
+		72D7D3112ADD09250062A60F /* UserDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3102ADD09250062A60F /* UserDatabaseManager.swift */; };
+		72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3122ADD0F630062A60F /* UserRepository.swift */; };
+		72D7D3152ADD0FBD0062A60F /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */; };
+		72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */; };
+		72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3182ADD2EC80062A60F /* UserDefaultWrapper.swift */; };
+		72D7D31E2ADE152B0062A60F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */; };
+		72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */; };
 		72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */; };
 		72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE32AD1221200F19568 /* FetchService.swift */; };
 		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
@@ -165,6 +175,16 @@
 		72A976162ABB2A910021291C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A976192ABB2A910021291C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72A9761B2ABB2A910021291C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewModel.swift; sourceTree = "<group>"; };
+		72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewController.swift; sourceTree = "<group>"; };
+		72D7D30E2ADD07C70062A60F /* FetchUserInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserInfoUseCase.swift; sourceTree = "<group>"; };
+		72D7D3102ADD09250062A60F /* UserDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDatabaseManager.swift; sourceTree = "<group>"; };
+		72D7D3122ADD0F630062A60F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
+		72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanQueryEntity.swift; sourceTree = "<group>"; };
+		72D7D3182ADD2EC80062A60F /* UserDefaultWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultWrapper.swift; sourceTree = "<group>"; };
+		72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageUseCase.swift; sourceTree = "<group>"; };
 		72FA8DE32AD1221200F19568 /* FetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchService.swift; sourceTree = "<group>"; };
 		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
@@ -380,6 +400,7 @@
 				729AC4512AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift */,
 				7278496C2AD5702500433753 /* PlanRepositoryImpl.swift */,
 				7278497F2AD76A2000433753 /* DayPlanRepositoryImpl.swift */,
+				72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -397,6 +418,7 @@
 			isa = PBXGroup;
 			children = (
 				729AC4712AC5AA9100E910D5 /* UserEntity.swift */,
+				72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */,
 				729AC46F2AC5A95800E910D5 /* PlanEntity.swift */,
 				729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */,
 				729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */,
@@ -425,6 +447,8 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				72D7D31A2ADE15010062A60F /* Calendar */,
+				72D7D3062ADD05630062A60F /* FavoritePlan */,
 				7278496E2AD6962400433753 /* DayPlan */,
 				7278495B2AD5247300433753 /* EditImage */,
 				729AC4D32ACBA1C000E910D5 /* Plan */,
@@ -440,6 +464,7 @@
 			children = (
 				729AC4AE2AC9672500E910D5 /* ImageManager.swift */,
 				729AC5242ACEEBAF00E910D5 /* CameraManager.swift */,
+				72D7D3182ADD2EC80062A60F /* UserDefaultWrapper.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -561,6 +586,7 @@
 			children = (
 				729AC4692AC5479D00E910D5 /* PlanDatabaseManager.swift */,
 				727849812AD76A4600433753 /* DayPlanDataBaseManager.swift */,
+				72D7D3102ADD09250062A60F /* UserDatabaseManager.swift */,
 			);
 			path = PlanDatabaseManager;
 			sourceTree = "<group>";
@@ -609,9 +635,68 @@
 			path = StickToIt;
 			sourceTree = "<group>";
 		};
+		72D7D3062ADD05630062A60F /* FavoritePlan */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D3072ADD05630062A60F /* ViewModel */,
+				72D7D3092ADD05630062A60F /* View */,
+			);
+			path = FavoritePlan;
+			sourceTree = "<group>";
+		};
+		72D7D3072ADD05630062A60F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		72D7D3092ADD05630062A60F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		72D7D30D2ADD07BA0062A60F /* FetchUserInfo */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D30E2ADD07C70062A60F /* FetchUserInfoUseCase.swift */,
+			);
+			path = FetchUserInfo;
+			sourceTree = "<group>";
+		};
+		72D7D31A2ADE15010062A60F /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D31C2ADE150A0062A60F /* ViewModel */,
+				72D7D31B2ADE15070062A60F /* View */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		72D7D31B2ADE15070062A60F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		72D7D31C2ADE150A0062A60F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		72FA8DE12AD10FAE00F19568 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				72D7D30D2ADD07BA0062A60F /* FetchUserInfo */,
 				727849832AD77E0F00433753 /* UpdatePlan */,
 				72FA8DF02AD19F9400F19568 /* EditImage */,
 				72FA8DE22AD1103700F19568 /* FetchImage */,
@@ -634,6 +719,7 @@
 			isa = PBXGroup;
 			children = (
 				72FA8DE82AD19AB000F19568 /* PlanRepository.swift */,
+				72D7D3122ADD0F630062A60F /* UserRepository.swift */,
 			);
 			path = Repository_Interface;
 			sourceTree = "<group>";
@@ -746,8 +832,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D7D31E2ADE152B0062A60F /* CalendarViewController.swift in Sources */,
 				729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */,
 				729AC5152ACE91AD00E910D5 /* FetchPlanUseCase.swift in Sources */,
+				72D7D3152ADD0FBD0062A60F /* UserRepositoryImpl.swift in Sources */,
 				729AC51C2ACEA1C300E910D5 /* SelectableImageCell.swift in Sources */,
 				7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */,
 				729AC50D2ACD3F5E00E910D5 /* PaddingView.swift in Sources */,
@@ -756,6 +844,7 @@
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				729AC4522AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
+				72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				727849902ADA9CBC00433753 /* ExecutionDayCollectionView.swift in Sources */,
 				729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */,
@@ -767,6 +856,7 @@
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,
 				729AC5252ACEEBAF00E910D5 /* CameraManager.swift in Sources */,
+				72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */,
 				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* PlanDatabaseManager.swift in Sources */,
 				72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */,
@@ -777,9 +867,11 @@
 				729AC4B42AC9B84600E910D5 /* ResizableButton.swift in Sources */,
 				729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */,
 				729AC4D72ACBA20400E910D5 /* CreatePlanViewController.swift in Sources */,
+				72D7D30C2ADD05630062A60F /* FavoritePlanSettingViewController.swift in Sources */,
 				727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */,
 				729AC4042AC32ED400E910D5 /* ContentsView.swift in Sources */,
 				72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */,
+				72D7D3112ADD09250062A60F /* UserDatabaseManager.swift in Sources */,
 				727849722AD6964A00433753 /* DayPlanViewController.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
 				72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */,
@@ -790,6 +882,7 @@
 				727849802AD76A2000433753 /* DayPlanRepositoryImpl.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
+				72D7D30F2ADD07C70062A60F /* FetchUserInfoUseCase.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,
@@ -807,15 +900,18 @@
 				729AC4892AC81E7600E910D5 /* WeeklyPlan.swift in Sources */,
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
 				729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */,
+				72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */,
 				729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
+				72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */,
 				727849822AD76A4600433753 /* DayPlanDataBaseManager.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
 				72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */,
+				72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */,
 				729AC4BD2ACA7F8800E910D5 /* ImageSelectionViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,15 +1,15 @@
 //
-//  DayPlanDataBaseManager.swift
+//  UserDatabaseManager.swift
 //  StickToIt
 //
-//  Created by 서동운 on 10/12/23.
+//  Created by 서동운 on 10/16/23.
 //
 
 import Foundation
 import RealmSwift
+import Realm
 
-
-struct DayPlanDataBaseManager {
+struct UserDatabaseManager {
     
     // MARK: Properties
     private let asyncRealm: Realm
@@ -35,24 +35,24 @@ struct DayPlanDataBaseManager {
     }
 }
 
-extension DayPlanDataBaseManager: DatabaseManager {
-   
-    typealias Model = DayPlan
-    typealias Entity = DayPlanEntity
-    typealias ResultType = Results<DayPlanEntity>
+extension UserDatabaseManager: DatabaseManager {
+    
+    typealias Model = User
+    typealias Entity = UserEntity
+    typealias ResultType = Results<UserEntity>
     typealias Key = UUID
     
-    func fetchAll() -> Results<Entity> {
+    func fetchAll() -> RealmSwift.Results<UserEntity> {
         let objects = asyncRealm.objects(Entity.self)
         return objects
     }
     
-    func fetch(key: UUID) -> Entity? {
+    func fetch(key: UUID) -> UserEntity? {
         let object = asyncRealm.object(ofType: Entity.self, forPrimaryKey: key)
         return object
     }
     
-    func create(model: Model, to entity: Entity.Type, onFailure: @Sendable @escaping (Error?) -> Void) {
+    func create(model: User, to entity: UserEntity.Type, onFailure: @escaping @Sendable (Error?) -> Void) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(
                 model.toEntity()
@@ -64,7 +64,7 @@ extension DayPlanDataBaseManager: DatabaseManager {
         }
     }
     
-    func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, updateHandler: @escaping (Entity) -> Void,  onFailure: @escaping @Sendable (Error?) -> Void) {
+    func update(entity: UserEntity.Type, matchingWith model: User, updateHandler: @escaping (Entity) -> Void, onFailure: @escaping @Sendable (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         asyncRealm.writeAsync {
             updateHandler(fetchedEntity)
@@ -75,8 +75,7 @@ extension DayPlanDataBaseManager: DatabaseManager {
         }
     }
     
-    func delete(entity: DayPlanEntity.Type, matchingWith model: DayPlan, onFailure: @escaping @Sendable (Error?) -> Void) {
-    
+    func delete(entity: UserEntity.Type, matchingWith model: User, onFailure: @escaping @Sendable (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         
         //삭제는 동기로 해야할지도!

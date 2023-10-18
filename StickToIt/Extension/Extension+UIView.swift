@@ -23,15 +23,6 @@ extension UIView {
         gradient.frame = bounds
         layer.addSublayer(gradient)
     }
-    
-    func setDefaultGradient() {
-        self.setGradient(
-            color1: .init(red: 95/255, green: 193/255, blue: 220/255, alpha: 1).withAlphaComponent(0.5),
-            color2: .systemIndigo.withAlphaComponent(0.6),
-            startPoint: .init(x: 1, y: 0),
-            endPoint: .init(x: 1, y: 1)
-        )
-    }
 }
 
 extension UIView {

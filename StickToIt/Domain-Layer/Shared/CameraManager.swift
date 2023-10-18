@@ -14,12 +14,12 @@ final class CameraManager {
     
     func requestAuthAndOpenCamera(in viewController: CameraManagerDelegate) {
         AVCaptureDevice.requestAccess(for: .video) { [weak self] isAuthorized in
-           
+            
             guard isAuthorized else {
                 self?.showGoToSettingAlert(viewController)
                 return
             }
-
+            
             self?.openCamera(in: viewController)
         }
     }
@@ -39,6 +39,7 @@ final class CameraManager {
     }
     
     private func showGoToSettingAlert(_ viewController: CameraManagerDelegate) {
+        
         DispatchQueue.main.async {
             let alert = UIAlertController(
                 title: "현재 카메라에 대한 접근 권한이 없습니다.",

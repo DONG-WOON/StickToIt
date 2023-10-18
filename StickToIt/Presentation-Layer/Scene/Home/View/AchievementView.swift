@@ -19,7 +19,7 @@ final class AchievementView: UIView {
     
     let circleView = GradientCircleView(frame: .zero)
     
-    let imageView = UIImageView(image: UIImage(named: "awesome"))
+    let imageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +36,7 @@ final class AchievementView: UIView {
         let percentage = Int(progress * 100)
         percentageLabel.text = "\(percentage)%"
         circleView.setProgress(progress)
+        
         switch percentage {
         case 0:
             imageView.image = UIImage(named: "lets-go")

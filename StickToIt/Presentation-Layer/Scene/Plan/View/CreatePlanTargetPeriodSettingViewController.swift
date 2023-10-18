@@ -102,6 +102,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
 }
 
 extension CreatePlanTargetPeriodSettingViewController: StickToItCalendarDelegate {
+     
      func calendarView(didSelectAt date: Date?) {
           
           self.date = date

@@ -67,13 +67,10 @@ extension PlanDatabaseManager: DatabaseManager {
         }
     }
     
-    func update(entity: Entity.Type, matchingWith model: Plan, onFailure: @Sendable @escaping (Error?) -> Void) {
+    func update(entity: Entity.Type, matchingWith model: Plan, updateHandler: @escaping (Entity) -> Void, onFailure: @Sendable @escaping (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
         asyncRealm.writeAsync {
-            fetchedEntity.startDate = model.startDate
-            fetchedEntity.targetNumberOfDays = model.targetNumberOfDays
-            fetchedEntity.name = model.name
-            fetchedEntity.endDate = model.endDate
+            updateHandler(fetchedEntity)
         } onComplete: { error in
             underlyingQueue.async {
                 onFailure(error)
@@ -100,5 +97,18 @@ extension PlanDatabaseManager: DatabaseManager {
     
     func deleteAll() {
         asyncRealm.deleteAll()
+    }
+    
+    func save(planQuery: PlanQuery, to user: Key, completion: @escaping (Result<Void, Error>) -> Void) {
+        let userEntity = asyncRealm.object(ofType: UserEntity.self, forPrimaryKey: user)
+        asyncRealm.writeAsync {
+            userEntity?.planQueries.append(planQuery.toEntity())
+        } onComplete: { error in
+            
+            if let error {
+                completion(.failure(error))
+            }
+            return completion(.success(()))
+        }
     }
 }

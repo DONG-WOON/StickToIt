@@ -13,7 +13,16 @@ extension UserEntity {
         return .init(
             _id: _id,
             name: name,
-            plans: plans.map { $0.toDomain() }
+            planQueries: planQueries.map { $0.toDomain() }
+        )
+    }
+}
+
+extension PlanQueryEntity {
+    func toDomain() -> PlanQuery {
+        .init(
+            planID: _id,
+            planName: planName
         )
     }
 }

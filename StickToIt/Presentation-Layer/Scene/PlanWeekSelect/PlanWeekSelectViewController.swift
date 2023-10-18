@@ -50,7 +50,7 @@ extension PlanWeekSelectViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        cell.textLabel?.text = "WEEK \(indexPath.item + 1)"
+        cell.textLabel?.text = "\(indexPath.item + 1) 주차"
         
         if indexPath.item + 1 == currentWeek {
             cell.accessoryType = .checkmark

@@ -19,7 +19,13 @@ final class HomeViewController: UIViewController {
     }
     
     let viewModel = HomeViewModel(
-        useCase: FetchPlanUseCaseImpl(
+        userInfoUseCase: FetchUserInfoUseCaseImpl(
+            repository: UserRepositoryImpl(
+                networkService: nil,
+                databaseManager: UserDatabaseManager()
+            )
+        ),
+        planUseCase: FetchPlanUseCaseImpl(
             repository: PlanRepositoryImpl(
                 networkService: nil,
                 databaseManager: PlanDatabaseManager()
@@ -48,7 +54,17 @@ final class HomeViewController: UIViewController {
         title: "내 계획 설정하기",
         image: UIImage(resource: .gear),
         handler: { [weak self] _ in
-            let vc = UIViewController()
+            let vc = FavoritePlanSettingViewController(
+                viewModel:
+                    FavoritePlanSettingViewModel(
+                        useCase: FetchUserInfoUseCaseImpl(
+                            repository: UserRepositoryImpl(
+                                networkService: nil,
+                                databaseManager: UserDatabaseManager()
+                            )
+                        )
+                    )
+            )
             self?.navigationController?.pushViewController(vc, animated: true)
         }
     )
@@ -155,7 +171,6 @@ final class HomeViewController: UIViewController {
                 var actions: [UIMenuElement] = []
     
                 let queryActions = userPlanQueries
-                    .prefix(2)
                     .map { query in
                         UIAction(
                             title: query.planName
@@ -167,7 +182,6 @@ final class HomeViewController: UIViewController {
                         
                 actions.append(contentsOf: queryActions)
                 
-                #warning("나중에 userdefaults에서 불러오기")
                 guard let firstPlanQuery = userPlanQueries.first else { return }
                 
                 _self.title = firstPlanQuery.planName
@@ -186,7 +200,6 @@ final class HomeViewController: UIViewController {
         viewModel.currentPlan
             .subscribe(with: self) { (_self, plan) in
                 _self.viewModel.currentWeek.accept(plan.currentWeek)
-                _self.currentWeekTitleButton.setTitle("WEEK \(plan.currentWeek)", for: .normal)
             }
             .disposed(by: disposeBag)
         

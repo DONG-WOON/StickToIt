@@ -21,11 +21,12 @@ import RxCocoa
 //    func fetchWeeklyPlan(of week: Int)
 //}
 
-final class HomeViewModel<UseCase: FetchPlanUseCase>
-where UseCase.Model == Plan, UseCase.Query == PlanQuery
+final class HomeViewModel<PlanUseCase: FetchPlanUseCase>
+where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
 {
 
-    private let useCase: UseCase
+    private let usersInfoUserCase: FetchUserInfoUseCase
+    private let planUseCase: PlanUseCase
     private let mainQueue: DispatchQueue
     
     var userPlanList = BehaviorRelay(value: [PlanQuery]())
@@ -41,10 +42,12 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     private let disposeBag = DisposeBag()
     
     init(
-        useCase: UseCase,
+        userInfoUseCase: FetchUserInfoUseCase,
+        planUseCase: PlanUseCase,
         mainQueue: DispatchQueue = .main
     ) {
-        self.useCase = useCase
+        self.usersInfoUserCase = userInfoUseCase
+        self.planUseCase = planUseCase
         self.mainQueue = mainQueue
         
     
@@ -56,24 +59,22 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     // MARK: External method
     
     func viewDidLoad() {
-        
-        fetchAllPlanQueries()
+        fetchUserFavoritePlanQueries()
     }
     
     func reload() {
-        fetchAllPlanQueries()
+        fetchUserFavoritePlanQueries()
     }
     
     func fetchPlan(_ query: PlanQuery) {
         // 쿼리로 현재 플랜에 대한 정보 가져오기
-        useCase.fetch(query: query) { plan in
+        planUseCase.fetch(query: query) { plan in
             self.currentPlan.accept(plan)
             self.currentPlanData = plan
         }
     }
     
     func fetchWeeklyPlan(of week: Int) {
-        
         
         currentPlan
             .map { $0.dayPlans }
@@ -87,7 +88,7 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     }
     
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
-        useCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
+        planUseCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
             completion(data)
         }
     }
@@ -96,15 +97,20 @@ where UseCase.Model == Plan, UseCase.Query == PlanQuery
     
     // MARK: internal Method
     
-    private func fetchAllPlanQueries() {
-
-        useCase.fetchAll { [weak self] plans in
-            let planQueries = plans.map {
-                PlanQuery(planID: $0._id,
-                          planName: $0.name ?? String())
-            }
-            
-            self?.userPlanList.accept(planQueries)
-        }
+    private func fetchUserFavoritePlanQueries() {
+        guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: userIDString) else { return }
+        
+        @UserDefault(key: .favoritePlans, type: [PlanQuery].self, defaultValue: nil)
+        var favoritePlans
+    
+        guard let _favoritePlans = favoritePlans else { return }
+        
+        self.userPlanList.accept(_favoritePlans)
+//        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+//            let filteredPlanQueries = user.planQueries.filter { query in
+//                _favoritePlans.contains(query)
+//            }
+//            self?.userPlanList.accept(filteredPlanQueries)
+//        }
     }
 }

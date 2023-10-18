@@ -13,10 +13,10 @@ protocol PlanRepository<Model, Entity, Query> {
     associatedtype Query
     
     func fetchAll() -> Result<[Model], Error>
-    func fetch(query: PlanQuery) -> Result<Model, Error>
+    func fetch(query: Query) -> Result<Model, Error>
     func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void)
-    func update(entity: Entity.Type, matchingWith model: Model, onFailure: @Sendable @escaping (Error?) -> Void)
+    func update(entity: Entity.Type, matchingWith model: Model, updateHandler: @escaping (Entity) -> Void, onFailure: @Sendable @escaping (Error?) -> Void)
     func saveImage(path fileName: String, imageData: Data?) async throws -> String?
     func loadImageFromDocument(fileName: String) throws -> Data?
+    func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void)
 }
-
