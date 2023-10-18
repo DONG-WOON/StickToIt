@@ -20,10 +20,12 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         }
     }
     
+//    private let slideButton = SlideActionButton()
+    
     private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.layer.borderColor = UIColor.systemIndigo.cgColor
+        view.layer.borderColor = UIColor.assetColor(.accent2).cgColor
         view.layer.borderWidth = 0.4
         view.rounded(cornerRadius: 20)
         return view
@@ -48,7 +50,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         view.innerView.textColor = .white
         view.innerView.textAlignment = .center
         view.rounded(cornerRadius: 16)
-        view.backgroundColor = .systemIndigo.withAlphaComponent(0.6)
+        view.backgroundColor = .assetColor(.accent2)
         return view
     }()
     
@@ -63,8 +65,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: HomeImageCollectionViewCellDelegate?
     
-    lazy var addImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(resource: .plus))
+    lazy var placeholderImageView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "Placeholder"))
         view.backgroundColor = .clear
         view.contentMode = .scaleToFill
         view.tintColor = .label
@@ -92,15 +94,15 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         checkMarkImageView.isHidden = true
         requiredLabel.isHidden = true
         dayNameLabel.innerView.text = nil
-        addImageView.isHidden = false
+        placeholderImageView.isHidden = false
     }
     
     // MARK: Methods
     
     func update(imageData: Data?) {
         guard let imageData = imageData else { return }
-        addImageView.isHidden = true
-        imageView.image = UIImage(data: imageData, scale: 0.6)
+        placeholderImageView.isHidden = true
+        imageView.image = UIImage(data: imageData)
     }
     
     private func update(with dayPlan: DayPlan) {
@@ -109,14 +111,16 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         }
         imageView.contentMode = dayPlan.imageContentIsFill ? .scaleAspectFill : .scaleAspectFit
         requiredLabel.isHidden = !dayPlan.isRequired
-        checkDayPlanIsRequired(dayPlan.isRequired)
+
         checkMarkImageView.isHidden = !dayPlan.isComplete
+        
+//        if dayPlan.isComplete {
+//            slideButton.complete()
+//        } else {
+//            slideButton.reset()
+//        }
     }
     
-    func checkDayPlanIsRequired(_ isRequired: Bool) {
-        
-        requiredLabel.isHidden = !isRequired
-    }
 }
 
 extension HomeImageCollectionViewCell {
@@ -130,13 +134,15 @@ extension HomeImageCollectionViewCell {
 extension HomeImageCollectionViewCell {
     private func configureViews() {
         
-        self.bordered(cornerRadius: 20, borderWidth: 0.5, borderColor: .systemIndigo)
+        self.backgroundColor = .assetColor(.accent4)
+        self.rounded(cornerRadius: 20)
         
-        contentView.addSubview(addImageView)
+        contentView.addSubview(placeholderImageView)
         contentView.addSubview(imageView)
         contentView.addSubview(blurView)
-        contentView.addSubview(requiredLabel)
+//        contentView.addSubview(slideButton)
         
+        blurView.addSubview(requiredLabel)
         blurView.addSubview(dayNameLabel)
         blurView.addSubview(checkMarkImageView)
         
@@ -144,17 +150,21 @@ extension HomeImageCollectionViewCell {
     }
     
     private func setConstraints() {
+        
         imageView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.top.equalTo(contentView).offset(4)
+            make.horizontalEdges.equalTo(blurView)
         }
         
-        addImageView.snp.makeConstraints { make in
-            make.center.equalTo(contentView)
+        placeholderImageView.snp.makeConstraints { make in
+            make.center.equalTo(imageView)
+            make.width.equalTo(contentView).multipliedBy(0.3)
+            make.height.equalTo(placeholderImageView.snp.width)
         }
         
         blurView.snp.makeConstraints { make in
-            make.bottom.equalTo(contentView).inset(15)
-            make.horizontalEdges.equalTo(contentView).inset(15)
+            make.top.equalTo(imageView.snp.bottom).offset(4)
+            make.horizontalEdges.bottom.equalTo(contentView).inset(4)
             make.height.equalTo(50)
         }
         
@@ -164,8 +174,7 @@ extension HomeImageCollectionViewCell {
         }
         
         requiredLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView).inset(5)
-            make.leading.equalTo(imageView).inset(5)
+            make.top.trailing.bottom.equalTo(blurView).inset(4)
         }
         
         checkMarkImageView.snp.makeConstraints { make in
@@ -173,5 +182,11 @@ extension HomeImageCollectionViewCell {
             make.centerY.equalTo(blurView)
             make.leading.equalTo(dayNameLabel.snp.trailing).offset(15)
         }
+        
+//        slideButton.snp.makeConstraints { make in
+//            make.horizontalEdges.equalTo(contentView).inset(3)
+//            make.height.equalTo(50)
+//            make.bottom.equalTo(contentView).inset(3)
+//        }
     }
 }

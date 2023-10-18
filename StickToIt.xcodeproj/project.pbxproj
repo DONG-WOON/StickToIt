@@ -45,7 +45,6 @@
 		729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC46F2AC5A95800E910D5 /* PlanEntity.swift */; };
 		729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4712AC5AA9100E910D5 /* UserEntity.swift */; };
 		729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */; };
-		729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */; };
 		729AC47A2AC6EB4200E910D5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4792AC6EB4200E910D5 /* User.swift */; };
 		729AC47C2AC6EB4D00E910D5 /* DayPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */; };
 		729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC47D2AC6EBA100E910D5 /* Plan.swift */; };
@@ -96,6 +95,8 @@
 		72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */; };
 		72D7D3282ADEA7D90062A60F /* UserSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3272ADEA7D90062A60F /* UserSettingViewController.swift */; };
 		72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3292ADEA7E80062A60F /* UserSettingViewModel.swift */; };
+		72D7D32C2ADF74700062A60F /* HomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */; };
+		72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32D2ADF78F30062A60F /* HomeView.swift */; };
 		72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */; };
 		72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE32AD1221200F19568 /* FetchService.swift */; };
 		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
@@ -136,7 +137,6 @@
 		729AC46F2AC5A95800E910D5 /* PlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEntity.swift; sourceTree = "<group>"; };
 		729AC4712AC5AA9100E910D5 /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
 		729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanEntity.swift; sourceTree = "<group>"; };
-		729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlanEntity.swift; sourceTree = "<group>"; };
 		729AC4792AC6EB4200E910D5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		729AC47B2AC6EB4D00E910D5 /* DayPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlan.swift; sourceTree = "<group>"; };
 		729AC47D2AC6EBA100E910D5 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
@@ -187,6 +187,8 @@
 		72D7D3212ADE4A000062A60F /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		72D7D3272ADEA7D90062A60F /* UserSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingViewController.swift; sourceTree = "<group>"; };
 		72D7D3292ADEA7E80062A60F /* UserSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingViewModel.swift; sourceTree = "<group>"; };
+		72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyView.swift; sourceTree = "<group>"; };
+		72D7D32D2ADF78F30062A60F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageUseCase.swift; sourceTree = "<group>"; };
 		72FA8DE32AD1221200F19568 /* FetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchService.swift; sourceTree = "<group>"; };
 		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
@@ -221,9 +223,8 @@
 			isa = PBXGroup;
 			children = (
 				7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */,
-				729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */,
-				729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */,
-				729AC4C22ACAFD8200E910D5 /* AchievementView.swift */,
+				72D7D32F2ADF792A0062A60F /* MainView */,
+				72D7D3302ADF79300062A60F /* SubView */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -421,7 +422,6 @@
 				729AC4712AC5AA9100E910D5 /* UserEntity.swift */,
 				72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */,
 				729AC46F2AC5A95800E910D5 /* PlanEntity.swift */,
-				729AC4752AC5ED6600E910D5 /* WeeklyPlanEntity.swift */,
 				729AC4732AC5C32900E910D5 /* DayPlanEntity.swift */,
 			);
 			path = Entities;
@@ -720,6 +720,25 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		72D7D32F2ADF792A0062A60F /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				72D7D32D2ADF78F30062A60F /* HomeView.swift */,
+				72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
+		72D7D3302ADF79300062A60F /* SubView */ = {
+			isa = PBXGroup;
+			children = (
+				729AC4C22ACAFD8200E910D5 /* AchievementView.swift */,
+				729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */,
+				729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */,
+			);
+			path = SubView;
+			sourceTree = "<group>";
+		};
 		72FA8DE12AD10FAE00F19568 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
@@ -872,6 +891,7 @@
 				729AC4522AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */,
+				72D7D32C2ADF74700062A60F /* HomeEmptyView.swift in Sources */,
 				729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */,
 				727849902ADA9CBC00433753 /* ExecutionDayCollectionView.swift in Sources */,
 				729AC5082ACD342C00E910D5 /* StickToItCalendar.swift in Sources */,
@@ -929,7 +949,7 @@
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
 				729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */,
 				72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */,
-				729AC4762AC5ED6600E910D5 /* WeeklyPlanEntity.swift in Sources */,
+				72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,

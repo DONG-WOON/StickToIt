@@ -11,8 +11,8 @@ final class AchievementView: UIView {
     
     let percentageLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 25)
-        label.textColor = .init(red: 99/255, green: 125/255, blue: 227/255, alpha: 1)
+        label.font = .boldSystemFont(ofSize: 23)
+        label.textColor = .assetColor(.black)
         label.textAlignment = .center
         return label
     }()
@@ -53,8 +53,8 @@ final class AchievementView: UIView {
 extension AchievementView {
     
     private func configureViews() {
-        self.backgroundColor = .clear
-        
+        self.backgroundColor = .assetColor(.accent4)
+        self.rounded(cornerRadius: 20)
         addSubview(percentageLabel)
         addSubview(imageView)
         addSubview(circleView)
@@ -64,18 +64,18 @@ extension AchievementView {
         
         circleView.snp.makeConstraints { make in
             make.leading.equalTo(self.safeAreaLayoutGuide).inset(20)
-            make.height.width.equalTo(self.snp.width).multipliedBy(0.4)
+            make.height.width.equalTo(self.snp.height).multipliedBy(0.7)
             make.centerY.equalTo(self.safeAreaLayoutGuide)
         }
 
         percentageLabel.snp.makeConstraints { make in
             make.center.equalTo(circleView)
-            make.width.lessThanOrEqualTo(circleView).multipliedBy(0.7)
+            make.width.lessThanOrEqualTo(circleView).multipliedBy(0.6)
         }
 
         imageView.snp.makeConstraints { make in
             make.centerY.equalTo(self.safeAreaLayoutGuide)
-            make.width.height.equalTo(self.snp.width).multipliedBy(0.4)
+            make.width.height.equalTo(self.snp.height).multipliedBy(0.7)
             make.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
         }
     }

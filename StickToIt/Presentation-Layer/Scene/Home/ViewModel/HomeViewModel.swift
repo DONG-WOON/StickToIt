@@ -9,37 +9,38 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-//protocol PlanViewModel {
-//    associatedtype UseCase = FetchPlanUseCase<FetchPlanRepository>
-//
-//    init(
-//        planUseCase: UseCase,
-//        mainQueue: DispatchQueue
-//    )
-//
-//    func fetchPlan(_ query: PlanQuery)
-//    func fetchWeeklyPlan(of week: Int)
-//}
-
 final class HomeViewModel<PlanUseCase: FetchPlanUseCase>
 where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
 {
-
+    enum Input {
+        case createPlanButtonDidTapped
+        case planWeekButtonDidTapped
+        
+        case viewDidLoad
+        case reloadAll
+        case reloadPlan(currentPlan: PlanQuery)
+        case fetchPlan(PlanQuery)
+    }
+    
+    enum Output {
+        case showCreatePlanScene
+        case showPlanWeekScene(Int)
+        
+        case setViewsAndDelegate(planIsExist: Bool)
+        case loadPlanQueries([PlanQuery])
+        case loadPlan(Plan)
+        case loadDayPlans([DayPlan])
+        case loadAchievementProgress(Double)
+    }
+    
     private let usersInfoUserCase: FetchUserInfoUseCase
     private let planUseCase: PlanUseCase
     private let mainQueue: DispatchQueue
-    
-    var userPlanList = BehaviorRelay(value: [PlanQuery]())
-    var currentPlan = PublishRelay<Plan>()
-    var currentDayPlans = BehaviorRelay(value: [DayPlan]())
-    var currentWeek = BehaviorRelay<Int>(value: 1)
-    var currentPlanData: Plan?
-    
-    var daysOfWeek: Set<Week> {
-        return currentPlanData?.executionDaysOfWeekday ?? []
-    }
-    
+    private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
+    
+    var currentWeek: Int?
+    var currentPlanCount: Int?
     
     init(
         userInfoUseCase: FetchUserInfoUseCase,
@@ -49,42 +50,61 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         self.usersInfoUserCase = userInfoUseCase
         self.planUseCase = planUseCase
         self.mainQueue = mainQueue
+    }
+    
+    func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
+        input
+            .subscribe(with: self) { (_self, event) in
+                switch event {
+                case .viewDidLoad:
+                    _self.checkPlanIsExist()
+                    
+                case .reloadAll:
+                    _self.fetchPlanQueriesOfUser()
+                    
+                case .reloadPlan(currentPlan: let planQuery):
+                    _self.fetchPlan(planQuery)
+                    
+                case .createPlanButtonDidTapped:
+                    _self.output.onNext(.showCreatePlanScene)
+                    
+                case .planWeekButtonDidTapped:
+                    _self.output.onNext(.showPlanWeekScene(1))
+                    
+                case .fetchPlan(let planQuery):
+                    _self.fetchPlan(planQuery)
+                }
+            }
+            .disposed(by: disposeBag)
         
-    
-        // 사용자가 장기간 앱을 사용하지않은경우 날짜가 지난지 어떻게 알것인지.
-        // -> 포그라운드 상태에 진입할때 비동기로 몇주가 지났는지 확인?
-        // -> 타이머 사용
+        return output.asObserver()
     }
+}
+
+extension HomeViewModel {
     
-    // MARK: External method
-    
-    func viewDidLoad() {
-        fetchUserFavoritePlanQueries()
-    }
-    
-    func reload() {
-        fetchUserFavoritePlanQueries()
-    }
-    
-    func fetchPlan(_ query: PlanQuery) {
-        // 쿼리로 현재 플랜에 대한 정보 가져오기
-        planUseCase.fetch(query: query) { plan in
-            self.currentPlan.accept(plan)
-            self.currentPlanData = plan
+    private func checkPlanIsExist() {
+        guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue),
+              let userID = UUID(uuidString: userIDString) else {
+            return
+        }
+        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+            let planQueries = user.planQueries
+            
+            if planQueries.count > 0 {
+                self?.output.onNext(.setViewsAndDelegate(planIsExist: true))
+            } else {
+                self?.output.onNext(.setViewsAndDelegate(planIsExist: false))
+            }
         }
     }
     
-    func fetchWeeklyPlan(of week: Int) {
-        
-        currentPlan
-            .map { $0.dayPlans }
-            .map { $0.filter { $0.week == week }}
-            .ifEmpty(default: nil)
-            .subscribe(onNext: { _dayPlans in
-                guard let _dayPlans = _dayPlans else { return }
-                self.currentDayPlans.accept(_dayPlans)
-            })
-            .disposed(by: disposeBag)
+    func getCurrentWeek() -> Int {
+        guard let week = currentWeek else {
+            print("week 없음")
+            return 0
+        }
+        return week
     }
     
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
@@ -93,24 +113,55 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         }
     }
     
-    
-    
-    // MARK: internal Method
-    
-    private func fetchUserFavoritePlanQueries() {
-        guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: userIDString) else { return }
+    func computeAchievementProgress(of dayPlans: [DayPlan]) {
         
-        @UserDefault(key: .favoritePlans, type: [PlanQuery].self, defaultValue: nil)
-        var favoritePlans
-    
-        guard let _favoritePlans = favoritePlans else { return }
+        let requiredDayPlanCount = dayPlans
+            .filter { $0.isRequired }.count
+        let completeDayPlanCount = dayPlans
+            .filter { $0.isComplete }.count
+        let progress = Double(completeDayPlanCount) / Double(requiredDayPlanCount)
         
-        self.userPlanList.accept(_favoritePlans)
-//        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
-//            let filteredPlanQueries = user.planQueries.filter { query in
-//                _favoritePlans.contains(query)
-//            }
-//            self?.userPlanList.accept(filteredPlanQueries)
-//        }
+        output.onNext(.loadAchievementProgress(progress))
+    }
+    
+    private func fetchPlanQueriesOfUser() {
+        guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue),
+                let userID = UUID(uuidString: userIDString) else {
+            return
+        }
+      
+        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+            let planQueries = user.planQueries
+            self?.currentPlanCount = planQueries.count
+            self?.output.onNext(.loadPlanQueries(planQueries))
+        }
+    }
+    
+    private func fetchPlan(_ query: PlanQuery) {
+        planUseCase.fetch(query: query) { [weak self] plan in
+            guard let _self = self else { return }
+            
+            _self.output.onNext(.loadPlan(plan))
+            _self.currentWeek = Calendar.current.dateComponents(
+                [.weekdayOrdinal],
+                from: plan.startDate,
+                to: .now).weekdayOrdinal! + 1
+            let dayPlans = _self.loadCurrentWeekDayPlans(plan)
+            _self.output.onNext(.loadDayPlans(dayPlans))
+            
+            _self.computeAchievementProgress(of: dayPlans)
+        }
+    }
+    
+    private func loadCurrentWeekDayPlans(_ plan: Plan) -> [DayPlan] {
+        guard let currentWeek else {
+            print("current Week 없음")
+            return []
+        }
+        return filtered(plan.dayPlans, at: currentWeek)
+    }
+    
+    private func filtered(_ dayPlans :[DayPlan], at week: Int) -> [DayPlan] {
+        return dayPlans.filter { $0.week == week }
     }
 }
