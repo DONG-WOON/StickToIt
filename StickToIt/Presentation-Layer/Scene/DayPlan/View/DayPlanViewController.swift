@@ -124,9 +124,9 @@ final class DayPlanViewController: UIViewController {
         return imageView
     }()
     
-    private lazy var createButton: ResizableButton = {
+    private lazy var certifyButton: ResizableButton = {
         let button = ResizableButton(
-            title: "목표 생성하기",
+            title: "당일만 인증할 수 있어요.",
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
             backgroundColor: .assetColor(.accent1),
@@ -195,8 +195,19 @@ final class DayPlanViewController: UIViewController {
     }
     
     func bind() {
+        
         if let _date = viewModel.dayPlan.date {
-            self.dateLabel.innerView.text = DateFormatter.getFullDateString(from: _date)
+            let dateString = DateFormatter.getFullDateString(from: _date)
+            self.dateLabel.innerView.text = dateString
+            
+            if DateFormatter.getFullDateString(from: .now) == dateString {
+                certifyButton.isHidden = false
+                if viewModel.dayPlan.isComplete {
+                    certifyButton.setTitle("인증 완료 ✨", for: .normal)
+                }
+            } else {
+                certifyButton.isHidden = true
+            }
         }
         
         imageView.contentMode = viewModel.dayPlan.imageContentIsFill ? .scaleAspectFill : .scaleAspectFit
@@ -217,8 +228,8 @@ final class DayPlanViewController: UIViewController {
         
         viewModel.isValidated
             .subscribe(with: self) { (_self, isValidated) in
-                _self.createButton.isEnabled = isValidated
-                _self.createButton.backgroundColor = isValidated ? .systemIndigo.withAlphaComponent(0.6) : .gray
+                _self.certifyButton.isEnabled = isValidated
+                _self.certifyButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
             }
             .disposed(by: disposeBag)
         
@@ -255,13 +266,13 @@ extension DayPlanViewController: BaseViewConfigurable {
         borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(blurView)
         borderContainerView.addSubview(addImageButton)
-        borderContainerView.addSubview(requiredLabel)
         
+        blurView.addSubview(requiredLabel)
         blurView.addSubview(dateLabel)
         blurView.addSubview(editImageButton)
         blurView.addSubview(checkMarkImageView)
         
-        view.addSubview(createButton)
+        view.addSubview(certifyButton)
         view.addSubview(indicatorView)
     
     }
@@ -296,14 +307,14 @@ extension DayPlanViewController: BaseViewConfigurable {
         }
         
         requiredLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView).inset(5)
-            make.leading.equalTo(imageView).inset(5)
+            make.trailing.equalTo(blurView).inset(10)
+            make.centerY.equalTo(blurView)
         }
         
         checkMarkImageView.snp.makeConstraints { make in
             make.width.height.equalTo(20)
             make.centerY.equalTo(blurView)
-            make.leading.equalTo(dateLabel.snp.trailing).offset(15)
+            make.leading.equalTo(dateLabel.snp.trailing).offset(10)
         }
         
         addImageButton.snp.makeConstraints { make in
@@ -316,7 +327,7 @@ extension DayPlanViewController: BaseViewConfigurable {
             make.trailing.equalTo(blurView).inset(10)
         }
         
-        createButton.snp.makeConstraints { make in
+        certifyButton.snp.makeConstraints { make in
             make.height.equalTo(60)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
             make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
