@@ -46,7 +46,7 @@ where PlanUseCase.Model == Plan
     }
     
     // MARK: Methods
-    func createPlan(completion: @escaping (Result<Bool, Error>) -> Void) {
+    func createPlan(completion: @escaping (Result<PlanQuery, Error>) -> Void) {
         
         let planName = planName.value
         let executionDaysOfWeekday = executionDaysOfWeekday.value
@@ -82,11 +82,12 @@ where PlanUseCase.Model == Plan
                 guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: userIDString) else { return
                 }
                 
-                self?.save(planQuery: planQuery, to: userID) { [weak self] result in
+                self?.save(planQuery: planQuery, to: userID) { result in
                     switch result {
                     case .success:
-                        self?.saveInUserDefaults(planQuery)
-                        completion(.success(true))
+                        UserDefaults.standard.setValue(planQuery.planID.uuidString, forKey: Const.Key.currentPlan.rawValue)
+                        
+                        completion(.success(planQuery))
                     case .failure(let error):
                         print(error)
                     }
@@ -99,19 +100,5 @@ where PlanUseCase.Model == Plan
     
     private func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
         useCase.save(planQuery: planQuery, to: user, completion: completion)
-    }
-    
-    private func saveInUserDefaults(_ planQuery: PlanQuery) {
-        @UserDefault(key: .favoritePlans, type: [PlanQuery].self, defaultValue: nil)
-        var favoritePlans
-        
-        if var _favoritePlans = favoritePlans {
-            _favoritePlans.insert(planQuery, at: 0)
-            favoritePlans = _favoritePlans
-        } else {
-            var _favoritePlans: [PlanQuery] = []
-            _favoritePlans.append(planQuery)
-            favoritePlans = _favoritePlans
-        }
     }
 }

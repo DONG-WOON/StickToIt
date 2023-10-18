@@ -9,10 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol CreatePlanCompletedDelegate: AnyObject {
-    func createPlanCompleted()
-}
-
 final class CreatePlanViewController: UIViewController {
     
     let viewModel = CreatePlanViewModel(
@@ -23,9 +19,7 @@ final class CreatePlanViewController: UIViewController {
             )
         )
     )
-    
-    weak var delegate: CreatePlanCompletedDelegate?
-    
+
     private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
@@ -170,8 +164,8 @@ final class CreatePlanViewController: UIViewController {
     @objc private func createButtonDidTapped() {
         viewModel.createPlan { [weak self] result in
             switch result {
-            case .success:
-                self?.delegate?.createPlanCompleted()
+            case .success(let planQuery):
+                NotificationCenter.default.post(name: .reloadAll, object: planQuery)
                 self?.dismiss(animated: true)
             case .failure:
                 print("생성에 실패, 잠시 후 다시 시도해주세요!")
@@ -205,6 +199,7 @@ extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
 }
 
 extension CreatePlanViewController: DayCellDelegate {
+    
     func select(week: Week?) {
         guard let week else { return }
         var weeks = viewModel.executionDaysOfWeekday.value
@@ -212,6 +207,7 @@ extension CreatePlanViewController: DayCellDelegate {
         viewModel.executionDaysOfWeekday
             .accept(weeks)
     }
+    
     func deSelect(week: Week?) {
         guard let week else { return }
         var weeks = viewModel.executionDaysOfWeekday.value
