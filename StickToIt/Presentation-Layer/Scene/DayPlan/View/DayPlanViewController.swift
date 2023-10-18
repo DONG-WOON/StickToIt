@@ -97,10 +97,12 @@ final class DayPlanViewController: UIViewController {
         configuration.image = UIImage(resource: .pencil)
         configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
         configuration.baseForegroundColor = .white
+        configuration.baseBackgroundColor = .assetColor(.accent2).withAlphaComponent(0.3)
         
         let view = UIButton(configuration: configuration)
         view.isHidden = true
         view.addTarget(self, action: #selector(editImageButtonAction), for: .touchUpInside)
+        
         
         return view
     }()
@@ -131,7 +133,7 @@ final class DayPlanViewController: UIViewController {
             tintColor: .white,
             backgroundColor: .assetColor(.accent1),
             target: self,
-            action: #selector(createButtonDidTapped)
+            action: #selector(certifyButtonDidTapped)
         )
         button.rounded(cornerRadius: 20)
         return button
@@ -202,15 +204,24 @@ final class DayPlanViewController: UIViewController {
             
             if DateFormatter.getFullDateString(from: .now) == dateString {
                 certifyButton.isHidden = false
+                addImageButton.isEnabled = true
+                
                 if viewModel.dayPlan.isComplete {
                     certifyButton.setTitle("인증 완료 ✨", for: .normal)
+                } else {
+                    certifyButton.setTitle("인증 하기", for: .normal)
                 }
             } else {
+                addImageButton.isEnabled = false
+                addImageButton.configuration?.image = UIImage(named: "Placeholder")
+                addImageButton.configuration?.title = nil
+                
                 certifyButton.isHidden = true
             }
         }
         
         imageView.contentMode = viewModel.dayPlan.imageContentIsFill ? .scaleAspectFill : .scaleAspectFit
+        imageContentModeSegment.selectedSegmentIndex = viewModel.dayPlan.imageContentIsFill ? 1 : 0
         requiredLabel.isHidden = !viewModel.dayPlan.isRequired
         
         checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
@@ -260,16 +271,13 @@ extension DayPlanViewController: BaseViewConfigurable {
         
         view.addSubview(imageContentModeSegment)
         
-        imageContentModeSegment.selectedSegmentIndex = 0
-        
-        
         borderContainerView.addSubview(imageView)
         borderContainerView.addSubview(blurView)
         borderContainerView.addSubview(addImageButton)
         
         blurView.addSubview(requiredLabel)
         blurView.addSubview(dateLabel)
-        blurView.addSubview(editImageButton)
+        imageView.addSubview(editImageButton)
         blurView.addSubview(checkMarkImageView)
         
         view.addSubview(certifyButton)
@@ -298,7 +306,7 @@ extension DayPlanViewController: BaseViewConfigurable {
         blurView.snp.makeConstraints { make in
             make.bottom.equalTo(borderContainerView).inset(15)
             make.horizontalEdges.equalTo(borderContainerView).inset(15)
-            make.height.equalTo(50)
+            make.height.equalTo(60)
         }
         
         dateLabel.snp.makeConstraints { make in
@@ -307,8 +315,7 @@ extension DayPlanViewController: BaseViewConfigurable {
         }
         
         requiredLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(blurView).inset(10)
-            make.centerY.equalTo(blurView)
+            make.top.bottom.trailing.equalTo(blurView).inset(10)
         }
         
         checkMarkImageView.snp.makeConstraints { make in
@@ -320,11 +327,12 @@ extension DayPlanViewController: BaseViewConfigurable {
         addImageButton.snp.makeConstraints { make in
             make.centerX.equalTo(imageView)
             make.centerY.equalTo(imageView).offset(20)
+            make.width.height.equalTo(imageView.snp.width).multipliedBy(0.3)
         }
         
         editImageButton.snp.makeConstraints { make in
-            make.centerY.equalTo(blurView)
-            make.trailing.equalTo(blurView).inset(10)
+            make.top.equalTo(imageView).inset(20)
+            make.trailing.equalTo(imageView).inset(20)
         }
         
         certifyButton.snp.makeConstraints { make in
@@ -447,7 +455,7 @@ extension DayPlanViewController {
         self.viewModel.isValidated.accept(true)
     }
     
-    @objc private func createButtonDidTapped() {
+    @objc private func certifyButtonDidTapped() {
         /*⭐️ 나의 의견
          이미지를 매번 홈화면에서 렌더링 하는것보다 이미지를 불러올때,
          원본사진을 렌더링하고, 해당 렌더링 된 이미지를 리사이징(압축)하여 데이터로 저장한다.
@@ -465,6 +473,7 @@ extension DayPlanViewController {
             switch result {
             case .success:
                 NotificationCenter.default.post(name: .reloadPlan, object: nil)
+                
                 DispatchQueue.main.async {
                     _self.viewModel.isLoading(false)
                     _self.dismiss(animated: true)
