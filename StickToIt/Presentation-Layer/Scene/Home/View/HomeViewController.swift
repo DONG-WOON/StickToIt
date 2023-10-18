@@ -126,16 +126,6 @@ final class HomeViewController: UIViewController {
                 case .loadPlanQueries(let planQueries):
                     _self.makeMenu(with: planQueries)
                     
-                    if let currentPlanQueryString = UserDefaults.standard.string(forKey: Const.Key.currentPlan.rawValue), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
-                        
-                        let currentPlanQuery = PlanQuery(planID: currentPlanID, planName: "")
-                        _self.input.onNext(.fetchPlan(currentPlanQuery))
-                    } else {
-                        if let _firstPlanQuery = planQueries.first {
-                            _self.input.onNext(.fetchPlan(_firstPlanQuery))
-                        }
-                    }
-                    
                 case .loadPlan(let plan):
                     _self.setPlanNameLabel(planName: plan.name)
                     
@@ -248,14 +238,7 @@ extension HomeViewController {
     }
     
     @objc private func reloadPlan() {
-        
-        if let currentPlanQueryString = UserDefaults.standard.string(forKey: Const.Key.currentPlan.rawValue), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
-            
-            let currentPlanQuery = PlanQuery(planID: currentPlanID, planName: "")
-            input.onNext(.fetchPlan(currentPlanQuery))
-        } else {
-            print("현재 PlanQuery 없음")
-        }
+        input.onNext(.reloadPlan)
     }
     
     @objc private func weekButtonDidTapped() {

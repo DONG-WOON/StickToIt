@@ -18,7 +18,7 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         
         case viewDidLoad
         case reloadAll
-        case reloadPlan(currentPlan: PlanQuery)
+        case reloadPlan
         case fetchPlan(PlanQuery)
     }
     
@@ -62,8 +62,8 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
                 case .reloadAll:
                     _self.fetchPlanQueriesOfUser()
                     
-                case .reloadPlan(currentPlan: let planQuery):
-                    _self.fetchPlan(planQuery)
+                case .reloadPlan:
+                    _self.fetchCurrentPlan()
                     
                 case .createPlanButtonDidTapped:
                     _self.output.onNext(.showCreatePlanScene)
@@ -79,15 +79,31 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         
         return output.asObserver()
     }
+    
+    func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
+        planUseCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
+            completion(data)
+        }
+    }
 }
 
 extension HomeViewModel {
+    
+    private func fetchCurrentPlan() {
+        if let currentPlanQueryString = UserDefaults.standard.string(forKey: Const.Key.currentPlan.rawValue), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+            
+            let currentPlanQuery = PlanQuery(planID: currentPlanID, planName: "")
+            
+            fetchPlan(currentPlanQuery)
+        }
+    }
     
     private func checkPlanIsExist() {
         guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue),
               let userID = UUID(uuidString: userIDString) else {
             return
         }
+        
         usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
             let planQueries = user.planQueries
             
@@ -97,31 +113,6 @@ extension HomeViewModel {
                 self?.output.onNext(.setViewsAndDelegate(planIsExist: false))
             }
         }
-    }
-    
-    func getCurrentWeek() -> Int {
-        guard let week = currentWeek else {
-            print("week 없음")
-            return 0
-        }
-        return week
-    }
-    
-    func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
-        planUseCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
-            completion(data)
-        }
-    }
-    
-    func computeAchievementProgress(of dayPlans: [DayPlan]) {
-        
-        let requiredDayPlanCount = dayPlans
-            .filter { $0.isRequired }.count
-        let completeDayPlanCount = dayPlans
-            .filter { $0.isComplete }.count
-        let progress = Double(completeDayPlanCount) / Double(requiredDayPlanCount)
-        
-        output.onNext(.loadAchievementProgress(progress))
     }
     
     private func fetchPlanQueriesOfUser() {
@@ -134,6 +125,7 @@ extension HomeViewModel {
             let planQueries = user.planQueries
             self?.currentPlanCount = planQueries.count
             self?.output.onNext(.loadPlanQueries(planQueries))
+            self?.fetchCurrentPlan()
         }
     }
     
@@ -142,6 +134,7 @@ extension HomeViewModel {
             guard let _self = self else { return }
             
             _self.output.onNext(.loadPlan(plan))
+            
             _self.currentWeek = Calendar.current.dateComponents(
                 [.weekdayOrdinal],
                 from: plan.startDate,
@@ -151,6 +144,17 @@ extension HomeViewModel {
             
             _self.computeAchievementProgress(of: dayPlans)
         }
+    }
+    
+    private func computeAchievementProgress(of dayPlans: [DayPlan]) {
+        
+        let requiredDayPlanCount = dayPlans
+            .filter { $0.isRequired }.count
+        let completeDayPlanCount = dayPlans
+            .filter { $0.isComplete }.count
+        let progress = Double(completeDayPlanCount) / Double(requiredDayPlanCount)
+        
+        output.onNext(.loadAchievementProgress(progress))
     }
     
     private func loadCurrentWeekDayPlans(_ plan: Plan) -> [DayPlan] {
