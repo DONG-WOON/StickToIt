@@ -182,8 +182,7 @@ extension HomeViewController {
         actions.append(settingMenu)
         
         planTitleButton.menu = UIMenu(
-            title: "즐겨찾기",
-            image: UIImage(systemName: "star.fill"),
+            title: "목표 리스트",
             children: actions
         )
     }

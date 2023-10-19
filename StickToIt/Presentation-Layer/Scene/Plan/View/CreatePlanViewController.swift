@@ -115,7 +115,7 @@ final class CreatePlanViewController: UIViewController {
     }
     
     private func configureViews() {
-        self.title = "계획 생성"
+        self.title = "목표 생성"
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
@@ -145,7 +145,7 @@ final class CreatePlanViewController: UIViewController {
     @objc private func dismissButtonDidTapped() {
         let alert = UIAlertController(
             title: "주의",
-            message: "지금 닫으면 생성하던 계획 내용이 사라집니다. 그래도 나가시겠습니까?",
+            message: "지금 닫으면 작성한 내용은 사라집니다. 그래도 나가시겠습니까?",
             preferredStyle: .alert
         )
         let okAction = UIAlertAction(
@@ -168,7 +168,7 @@ final class CreatePlanViewController: UIViewController {
                 NotificationCenter.default.post(name: .reloadAll, object: planQuery)
                 self?.dismiss(animated: true)
             case .failure:
-                print("생성에 실패, 잠시 후 다시 시도해주세요!")
+                print("목표 생성 실패, 잠시 후 다시 시도해주세요!")
             }
         }
     }

@@ -120,7 +120,7 @@ final class DayPlanViewController: UIViewController {
     private let checkMarkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
-        imageView.tintColor = .assetColor(.accent2)
+        imageView.tintColor = .systemGreen
         imageView.image = UIImage(resource: .checkedCircle)
         imageView.isHidden = true
         return imageView

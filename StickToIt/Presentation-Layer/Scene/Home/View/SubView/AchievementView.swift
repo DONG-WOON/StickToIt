@@ -11,7 +11,7 @@ final class AchievementView: UIView {
     
     let percentageLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 23)
+        label.font = .boldSystemFont(ofSize: 20)
         label.textColor = .assetColor(.black)
         label.textAlignment = .center
         return label
@@ -70,7 +70,7 @@ extension AchievementView {
 
         percentageLabel.snp.makeConstraints { make in
             make.center.equalTo(circleView)
-            make.width.lessThanOrEqualTo(circleView).multipliedBy(0.6)
+            make.width.lessThanOrEqualTo(circleView).multipliedBy(0.5)
         }
 
         imageView.snp.makeConstraints { make in
