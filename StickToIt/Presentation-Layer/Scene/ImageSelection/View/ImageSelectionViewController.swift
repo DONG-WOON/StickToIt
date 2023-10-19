@@ -68,7 +68,9 @@ final class ImageSelectionViewController: UIViewController {
             mainView = ImageSelectionView()
             self.cameraManager = CameraManager()
         case .authorized:
-            mainView = ImageSelectionView()
+            let _view = ImageSelectionView()
+            _view.hideGoSettingButton(isHidden: true)
+            mainView = _view
             self.cameraManager = CameraManager()
         case .denied, .restricted:
             mainView = ImageSelectionDeniedView()
@@ -89,6 +91,8 @@ final class ImageSelectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .systemBackground
         
         viewModel.viewDidLoad()
         setViewsAndDelegate()
@@ -118,8 +122,10 @@ final class ImageSelectionViewController: UIViewController {
     
     func setViewsAndDelegate() {
         if let _mainView = mainView as? ImageSelectionView {
-            configureDataSource(of: _mainView)
+            configureDataSource(of: _mainView.collectionView)
             _mainView.delegate = self
+            _mainView.collectionView.delegate = self
+            
             imageManager.register(viewController: self)
         }
         

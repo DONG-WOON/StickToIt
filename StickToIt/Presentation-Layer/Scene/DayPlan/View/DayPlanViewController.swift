@@ -300,7 +300,8 @@ extension DayPlanViewController: BaseViewConfigurable {
         }
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalTo(borderContainerView)
+            make.top.horizontalEdges.equalTo(borderContainerView)
+            make.bottom.equalTo(blurView.snp.top).offset(-15)
         }
         
         blurView.snp.makeConstraints { make in

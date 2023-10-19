@@ -60,7 +60,7 @@ extension HomeView: BaseViewConfigurable {
             make.bottom.equalTo(collectionView.snp.top).offset(-10)
             make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(30)
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
-            make.height.equalTo(self.safeAreaLayoutGuide).multipliedBy(0.3)
+            make.height.equalTo(self.safeAreaLayoutGuide).multipliedBy(0.2)
         }
         
         collectionView.snp.makeConstraints { make in
