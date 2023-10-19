@@ -17,7 +17,7 @@ final class HomeEmptyView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "아직 추가한 계획이 없습니다."
+        label.text = "목표가 아직 없어요."
         label.textColor = .label
         label.font = .boldSystemFont(ofSize: FontSize.title)
         return label
@@ -28,19 +28,24 @@ final class HomeEmptyView: UIView {
         label.textColor = .label
         label.numberOfLines = 2
         label.textAlignment = .center
-        label.text = "지금 당장 계획을 추가해보세요!!"
-        label.font = .systemFont(ofSize: FontSize.description)
+        label.text = "지금 당장 작심삼일 목표를 추가해보세요!!"
+        label.font = .systemFont(ofSize: FontSize.body)
         return label
     }()
     
     lazy var goToCreatePlanButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .assetColor(.accent2)
+        configuration.image = UIImage(named: "Placeholder")
+//        configuration.preferredSymbolConfigurationForImage = .init(scale: .small)
+        configuration.imagePlacement = .top
+        configuration.imagePadding = 10
         configuration.baseForegroundColor = .white
-        configuration.title = "계획 생성하기"
+        configuration.title = "목표 생성하기"
+        
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attr in
             var new = attr
-            new.font = UIFont.boldSystemFont(ofSize: FontSize.body)
+            new.font = UIFont.boldSystemFont(ofSize: 23)
             return new
         }
         
@@ -58,6 +63,7 @@ final class HomeEmptyView: UIView {
         
         configureViews()
         setConstraints()
+    
     }
     
     required init?(coder: NSCoder) {
@@ -66,6 +72,20 @@ final class HomeEmptyView: UIView {
     
     @objc private func goToCreatePlanButtonDidTapped() {
         delegate?.tapButton()
+    }
+    
+    func startAnimation() {
+        UIView.animate(withDuration: 1.1, delay: 0.5, options: [.curveEaseInOut, .autoreverse, .allowUserInteraction, .repeat]) {
+            self.goToCreatePlanButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        } completion: { _ in
+            self.goToCreatePlanButton.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+        }
+    }
+    
+    func stopAnimation() {
+        UIView.animate(withDuration: 0) {
+            self.goToCreatePlanButton.transform = .identity
+        }
     }
 }
 
@@ -82,14 +102,16 @@ extension HomeEmptyView: BaseViewConfigurable {
     func setConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.centerY.equalTo(self).offset(-50)
+            make.bottom.equalTo(descriptionLabel.snp.top).offset(-15)
         }
+        
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(15)
+            make.bottom.equalTo(goToCreatePlanButton.snp.top).offset(-15)
             make.centerX.equalTo(self)
         }
+        
         goToCreatePlanButton.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(15)
+            make.centerY.equalTo(self).offset(15)
             make.centerX.equalTo(self)
         }
     }

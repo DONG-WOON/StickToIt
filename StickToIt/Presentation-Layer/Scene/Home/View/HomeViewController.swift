@@ -38,7 +38,7 @@ final class HomeViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     private lazy var createPlanAction = UIAction(
-        title: "계획 추가하기",
+        title: "목표 추가하기",
         image: UIImage(resource: .plus),
         handler: { [weak self] _ in
             guard let planCount = self?.viewModel.currentPlanCount else { return }
@@ -106,6 +106,18 @@ final class HomeViewController: UIViewController {
         input.onNext(.viewDidLoad)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        input.onNext(.viewWillAppear)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        input.onNext(.viewWillDisappear)
+    }
+    
     // MARK: Methods
     
     func bind() {
@@ -134,6 +146,12 @@ final class HomeViewController: UIViewController {
                     
                 case .loadAchievementProgress(let progress):
                     _self.setAchievementProgress(progress)
+                    
+                case .startAnimation:
+                    _self.startAnimation()
+                    
+                case .stopAnimation:
+                    _self.stopAnimation()
                 }
             }
             .disposed(by: disposeBag)
@@ -191,12 +209,20 @@ extension HomeViewController {
         (view as? HomeView)?.setProgress(progress)
     }
     
+    func startAnimation() {
+        (view as? HomeEmptyView)?.startAnimation()
+    }
+    
+    func stopAnimation() {
+        (view as? HomeEmptyView)?.stopAnimation()
+    }
     
     func setViewsAndDelegate(_ planIsExist: Bool) {
         if planIsExist {
             let _view = HomeView()
             configureDataSource(of: _view.collectionView)
             self.view = _view
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
             self.input.onNext(.reloadAll)
         } else {
             let _view = HomeEmptyView()
@@ -263,7 +289,6 @@ extension HomeViewController {
     private func configureViews() {
         view.backgroundColor = .systemBackground
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
 //        if viewModel.currentWeek.value != 1 {
 //            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: weekButton)
 //        }

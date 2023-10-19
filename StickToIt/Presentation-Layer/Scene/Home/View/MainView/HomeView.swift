@@ -11,7 +11,7 @@ final class HomeView: UIView {
     private let titleLabel: UILabel = {
         let view = UILabel()
         view.textColor = .label
-        view.font = .boldSystemFont(ofSize: 30)
+        view.font = .boldSystemFont(ofSize: 28)
         view.numberOfLines = 1
         return view
     }()
@@ -35,7 +35,7 @@ final class HomeView: UIView {
     }
     
     func setTitleLabel(text: String) {
-        self.titleLabel.text = text
+        self.titleLabel.text = "📌 \(text)"
     }
 }
 
@@ -59,12 +59,12 @@ extension HomeView: BaseViewConfigurable {
         homeAchievementView.snp.makeConstraints { make in
             make.bottom.equalTo(collectionView.snp.top).offset(-10)
             make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(30)
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.height.equalTo(self.safeAreaLayoutGuide).multipliedBy(0.3)
         }
         
         collectionView.snp.makeConstraints { make in
             make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(safeAreaLayoutGuide.snp.height).multipliedBy(0.7)
         }
     }
 }

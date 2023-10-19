@@ -17,6 +17,8 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         case planWeekButtonDidTapped
         
         case viewDidLoad
+        case viewWillAppear
+        case viewWillDisappear
         case reloadAll
         case reloadPlan
         case fetchPlan(PlanQuery)
@@ -25,6 +27,8 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
     enum Output {
         case showCreatePlanScene
         case showPlanWeekScene(Int)
+        case startAnimation
+        case stopAnimation
         
         case setViewsAndDelegate(planIsExist: Bool)
         case loadPlanQueries([PlanQuery])
@@ -58,6 +62,12 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
                 switch event {
                 case .viewDidLoad:
                     _self.checkPlanIsExist()
+                    
+                case .viewWillAppear:
+                    _self.output.onNext(.startAnimation)
+                    
+                case .viewWillDisappear:
+                    _self.output.onNext(.stopAnimation)
                     
                 case .reloadAll:
                     _self.fetchPlanQueriesOfUser()
