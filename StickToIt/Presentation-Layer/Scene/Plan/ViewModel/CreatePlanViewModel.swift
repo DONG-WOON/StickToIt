@@ -36,10 +36,10 @@ where PlanUseCase.Model == Plan
         
         _ = Observable.combineLatest(
             planName,
-            executionDaysOfWeekday
+            endDate
         )
         .debug()
-        .map { $0.count > 0 && $1.count != 0 }
+        .map { $0.count > 0 && ($1 != nil) }
         .subscribe(with: self, onNext: { (self, isValied) in
             self.planIsValidated.accept(isValied)
         }).disposed(by: disposeBag)
@@ -49,30 +49,29 @@ where PlanUseCase.Model == Plan
     func createPlan(completion: @escaping (Result<PlanQuery, Error>) -> Void) {
         
         let planName = planName.value
-        let executionDaysOfWeekday = executionDaysOfWeekday.value
+//        let executionDaysOfWeekday = executionDaysOfWeekday.value
 
-        let datesFromStartDateToEndDate = Array(0...targetNumberOfDays).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
-        }
+//        let datesFromStartDateToEndDate = Array(0...targetNumberOfDays).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
+//        }
         
-        let filteredDates = datesFromStartDateToEndDate.filter { date in
-            executionDaysOfWeekday.contains {
-                $0.rawValue == Calendar.current.dateComponents([.weekday], from: date).weekday!
-            }
-        }
-        
-        let timeRemovedDates = filteredDates.map {
-            DateFormatter.convertDate(from: $0)
+//        let filteredDates = datesFromStartDateToEndDate.filter { date in
+//            executionDaysOfWeekday.contains {
+//                $0.rawValue == Calendar.current.dateComponents([.weekday], from: date).weekday!
+//            }
+//        }
+        let initialDayPlanDates = Array(0...2).map {
+            Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
         }
   
-        let dayPlans = timeRemovedDates.map { date in
+        let dayPlans = initialDayPlanDates.map { date in
             DayPlan(
                 _id: UUID(), isRequired: true,
                 isComplete: false, date: date,
-                week: Calendar.current.dateComponents([.weekOfYear], from: startDate, to: date!).weekOfYear! + 1,
+                week: Calendar.current.dateComponents([.weekOfYear], from: startDate, to: date).weekOfYear! + 1,
                 content: nil, imageURL: nil, imageContentIsFill: true)
         }
         
-        let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: executionDaysOfWeekday, dayPlans: dayPlans)
+        let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: [], dayPlans: dayPlans)
         
         useCase.create(plan) { [weak self] result in
             switch result {
