@@ -38,12 +38,12 @@ enum Const {
     }
     
     enum Size {
-        case MB(Int)
+        case kb(Int)
         
         var value: Int {
             switch self {
-            case .MB(let number) :
-                return Int(1024*1024*number)
+            case .kb(let number) :
+                return Int(1024*number)
             }
         }
     }
