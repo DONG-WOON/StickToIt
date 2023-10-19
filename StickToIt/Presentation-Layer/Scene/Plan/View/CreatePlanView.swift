@@ -25,9 +25,17 @@ final class CreatePlanView: UIScrollView {
     
     let planNameLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표"
+        view.text = "목표 이름"
         view.textColor = .label
         view.font = .boldSystemFont(ofSize: 17)
+        return view
+    }()
+    
+    let planNameDescriptionLabel: UILabel = {
+        let view = UILabel()
+        view.text = "작심삼일 목표 이름을 설정해주세요."
+        view.textColor = .secondaryLabel
+        view.font = .boldSystemFont(ofSize: 14)
         return view
     }()
     
@@ -45,14 +53,64 @@ final class CreatePlanView: UIScrollView {
             borderColor: .assetColor(.accent2)
         )
         view.placeholder = "예시) 2주간 매일 달리기"
+        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.5)
+        return view
+    }()
+    
+    let planStartDateLabel: UILabel = {
+        let view = UILabel()
+        view.text = "목표 시작일"
+        view.textColor = .label
+        view.font = .boldSystemFont(ofSize: 17)
+        return view
+    }()
+    
+    let planStartDateDescriptionLabel: UILabel = {
+        let view = UILabel()
+        view.text = "작심삼일 목표 시작일을 설정해주세요.\n여러분의 목표 실행을 위해 오늘 바로 시작하시는건 어떤가요?"
+        view.textColor = .secondaryLabel
+        view.font = .boldSystemFont(ofSize: 14)
+        return view
+    }()
+
+    lazy var planStartDateSegment: UISegmentedControl = {
+        let view = UISegmentedControl(items: ["오늘", "내일"])
+        view.selectedSegmentIndex = 0
+        view.selectedSegmentTintColor = .assetColor(.accent1)
+        view.tintColor = .white
+        view.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
+        
+        view.setTitleTextAttributes(
+            [
+                .font: UIFont.boldSystemFont(ofSize: 19)
+            ],
+            for: .normal
+        )
+        
+        view.setTitleTextAttributes(
+            [
+                .font: UIFont.boldSystemFont(ofSize: 21),
+                .foregroundColor: UIColor.assetColor(.accent4)
+            ],
+            for: .selected
+        )
         return view
     }()
     
     let planTargetPeriodLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표 기간 설정 (최소 3일!)"
+        view.text = "목표 종료일"
         view.textColor = .label
         view.font = .boldSystemFont(ofSize: 17)
+        return view
+    }()
+    
+    let planEndDateDescriptionLabel: UILabel = {
+        let view = UILabel()
+        view.text = "목표일을 설정해주세요. 적어도 3일은 하시겠죠? "
+        view.textColor = .secondaryLabel
+        view.font = .boldSystemFont(ofSize: 14)
+        
         return view
     }()
 
@@ -61,6 +119,7 @@ final class CreatePlanView: UIScrollView {
         view.bordered(cornerRadius: 10, borderWidth: 0.7, borderColor: .assetColor(.accent2))
         view.innerView.text = "종료일을 설정해주세요 ---->"
         view.innerView.backgroundColor = .clear
+        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.5)
         view.innerView.textColor = .label
         return view
     }()
@@ -77,20 +136,20 @@ final class CreatePlanView: UIScrollView {
         return button
     }()
     
-    let planRequiredDoingDayLabel: UILabel = {
-        let view = UILabel()
-        view.text = "목표 실행일 설정"
-        view.textColor = .label
-        view.font = .boldSystemFont(ofSize: 17)
-        return view
-    }()
+//    let planRequiredDoingDayLabel: UILabel = {
+//        let view = UILabel()
+//        view.text = "목표 실행일 설정"
+//        view.textColor = .label
+//        view.font = .boldSystemFont(ofSize: 17)
+//        return view
+//    }()
     
-    let executionDaysOfWeekdayCollectionView = ExecutionDayCollectionView()
+//    let executionDaysOfWeekdayCollectionView = ExecutionDayCollectionView()
     
     let descriptionLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.text = "⌜목표 시작일은 목표 생성일 이후 날짜로 설정할 수 있습니다⌟\n\n⌜목표 기간 설정을 하지않으면 기본 3일로 설정됩니다⌟\n\n⌜목표 실행일은 기본적으로 주5일 (월~금)으로 설정됩니다⌟\n\n⌜계획은 최대 5개까지만 추가할 수 있습니다⌟"
+        view.text = "목표는 인당 최대 5개까지만 추가할 수 있습니다"
         view.textColor = .label
         view.font = .systemFont(ofSize: 14)
         return view
@@ -127,11 +186,11 @@ final class CreatePlanView: UIScrollView {
     
     func update(plan: Plan) {
         planNameLabel.text = plan.name
-        plan.executionDaysOfWeekday.forEach { week in
-            let cell = executionDaysOfWeekdayCollectionView.cellForItem(at: IndexPath(item: week.rawValue - 1, section: 0)) as? ExecutionDayCollectionViewCell 
-            
-            cell?.isSelected = true
-        }
+//        plan.executionDaysOfWeekday.forEach { week in
+//            let cell = executionDaysOfWeekdayCollectionView.cellForItem(at: IndexPath(item: week.rawValue - 1, section: 0)) as? ExecutionDayCollectionViewCell
+//
+//            cell?.isSelected = true
+//        }
         
         endDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
     }
@@ -141,17 +200,24 @@ extension CreatePlanView {
     
     private func configureViews() {
         
-        executionDaysOfWeekdayCollectionView.dataSource = self
-        executionDaysOfWeekdayCollectionView.delegate = self
-        executionDaysOfWeekdayCollectionView.register(ExecutionDayCollectionViewCell.self, forCellWithReuseIdentifier: ExecutionDayCollectionViewCell.identifier)
+//        executionDaysOfWeekdayCollectionView.dataSource = self
+//        executionDaysOfWeekdayCollectionView.delegate = self
+//        executionDaysOfWeekdayCollectionView.register(ExecutionDayCollectionViewCell.self, forCellWithReuseIdentifier: ExecutionDayCollectionViewCell.identifier)
         
         addSubview(planNameLabel)
+        addSubview(planNameDescriptionLabel)
         addSubview(planNameTextField)
         addSubview(planNameMaximumTextNumberLabel)
+
+        addSubview(planStartDateLabel)
+        addSubview(planStartDateDescriptionLabel)
+        addSubview(planStartDateSegment)
+
         addSubview(planTargetPeriodLabel)
+        addSubview(planEndDateDescriptionLabel)
         addSubview(endDateLabel)
-        addSubview(planRequiredDoingDayLabel)
-        addSubview(executionDaysOfWeekdayCollectionView)
+//        addSubview(planRequiredDoingDayLabel)
+//        addSubview(executionDaysOfWeekdayCollectionView)
         
         addSubview(descriptionLabel)
         addSubview(createButton)
@@ -169,23 +235,49 @@ extension CreatePlanView {
             make.top.leading.equalTo(self.contentLayoutGuide).inset(20)
         }
         
+        planNameDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(planNameLabel.snp.bottom).offset(10)
+            make.leading.equalTo(contentLayoutGuide).inset(20)
+        }
+        
         planNameMaximumTextNumberLabel.snp.makeConstraints { make in
             make.trailing.equalTo(contentLayoutGuide).inset(20)
             make.bottom.equalTo(planNameTextField.snp.top).offset(-10)
         }
         
         planNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(planNameLabel.snp.bottom).offset(15)
+            make.top.equalTo(planNameDescriptionLabel.snp.bottom).offset(15)
             make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
         }
         
-        planTargetPeriodLabel.snp.makeConstraints { make in
-            make.top.equalTo(planNameTextField.snp.bottom).offset(50)
+        planStartDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(planNameTextField.snp.bottom).offset(40)
             make.leading.equalTo(self.contentLayoutGuide).inset(20)
         }
         
+        planStartDateDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(planStartDateLabel.snp.bottom).offset(10)
+            make.leading.equalTo(contentLayoutGuide).inset(20)
+        }
+
+        planStartDateSegment.snp.makeConstraints { make in
+            make.top.equalTo(planStartDateDescriptionLabel.snp.bottom).offset(15)
+            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
+            make.height.equalTo(50)
+        }
+    
+        planTargetPeriodLabel.snp.makeConstraints { make in
+            make.top.equalTo(planStartDateSegment.snp.bottom).offset(40)
+            make.leading.equalTo(self.contentLayoutGuide).inset(20)
+        }
+        
+        planEndDateDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(10)
+            make.leading.equalTo(contentLayoutGuide).inset(20)
+        }
+        
         endDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(15)
+            make.top.equalTo(planEndDateDescriptionLabel.snp.bottom).offset(15)
             make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
             make.size.equalTo(planNameTextField)
         }
@@ -195,24 +287,24 @@ extension CreatePlanView {
             make.width.equalTo(endDateSettingButton.snp.height)
         }
         
-        planRequiredDoingDayLabel.snp.makeConstraints { make in
-            make.top.equalTo(endDateLabel.snp.bottom).offset(50)
-            make.leading.equalTo(self.contentLayoutGuide).inset(20)
-        }
-        
-        executionDaysOfWeekdayCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom).offset(15)
-            
-            let inset = 20.0
-            let deviceWidth = UIScreen.main.bounds.width
-            
-            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(inset)
-            make.height.equalTo((deviceWidth - (inset * 2) - (3 * 6)) / 7)
-        }
+//        planRequiredDoingDayLabel.snp.makeConstraints { make in
+//            make.top.equalTo(endDateLabel.snp.bottom).offset(40)
+//            make.leading.equalTo(self.contentLayoutGuide).inset(20)
+//        }
+//
+//        executionDaysOfWeekdayCollectionView.snp.makeConstraints { make in
+//            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom).offset(15)
+//
+//            let inset = 20.0
+//            let deviceWidth = UIScreen.main.bounds.width
+//
+//            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(inset)
+//            make.height.equalTo((deviceWidth - (inset * 2) - (3 * 6)) / 7)
+//        }
         
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(executionDaysOfWeekdayCollectionView.snp.bottom).offset(50)
+            make.top.equalTo(endDateLabel.snp.bottom).offset(40)
             make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
             make.bottom.equalTo(contentLayoutGuide).offset(-10)
         }

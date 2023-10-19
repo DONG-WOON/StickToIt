@@ -52,7 +52,13 @@ final class CreatePlanViewController: UIViewController {
         bindViewModel()
         configureViews()
         setConstraints()
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        mainView.planNameTextField.innerView.becomeFirstResponder()
     }
     
     private func bindViewModel() {
@@ -74,27 +80,55 @@ final class CreatePlanViewController: UIViewController {
                 _self.mainView.planNameTextField.innerView.text = text
                 _self.mainView.planNameMaximumTextNumberLabel.text = "\(text.count) / 20"
                 _self.viewModel.planName.accept(text)
+                
+                if !text.isEmpty {
+                    _self.mainView.planNameTextField.bordered(borderWidth: 1, borderColor: .assetColor(.accent1))
+                } else {
+                    _self.mainView.planNameTextField.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        mainView.planStartDateSegment.rx.selectedSegmentIndex
+            .asObservable()
+            .subscribe(with: self) { _self, index in
+                switch index {
+                case 0:
+                    _self.viewModel.startDate = .now
+                    _self.viewModel.endDate.accept(nil)
+                    _self.mainView.planNameTextField.innerView.resignFirstResponder()
+                case 1:
+                    let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now)!
+                    _self.viewModel.startDate = tomorrow
+                    _self.viewModel.endDate.accept(nil)
+                    _self.mainView.planNameTextField.innerView.resignFirstResponder()
+                default:
+                    return
+                }
             }
             .disposed(by: disposeBag)
         
         viewModel.endDate
             .bind(with: self) { (_self, date) in
-                guard let _date = date else { return }
+                guard let _date = date else {
+                    self.mainView.endDateLabel.innerView.text = "종료일을 설정해주세요 ---->"
+                    return
+                }
                 let endDateString = DateFormatter.getFullDateString(from: _date)
                 self.mainView.endDateLabel.innerView.text = "종료일: \(endDateString)"
                 
                 _self.setTargetNumberOfDays(date: _date)
-                
             }
             .disposed(by: disposeBag)
     }
     
-    func setTargetNumberOfDays(date: Date?) {
-        guard let date else { return }
-        
+    func setTargetNumberOfDays(date: Date) {
         guard let dayInterval = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
+        print(dayInterval)
         
         let diffOfStartDateAndEndDate = dayInterval + 1
+        print(diffOfStartDateAndEndDate)
+        
         self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
         
         let datesFromStartDateToEndDate = Array(0...diffOfStartDateAndEndDate).map { Calendar.current.date(byAdding: .day, value: $0, to: viewModel.startDate)!
@@ -104,18 +138,18 @@ final class CreatePlanViewController: UIViewController {
             return Calendar.current.dateComponents([.weekday], from: $0).weekday!
         }
         
-        if weekdayList.count < 7 {
-        
-            mainView.executionDaysOfWeekdayCollectionView
-                .disable(indexAtCell: weekdayList)
-        } else {
-            mainView.executionDaysOfWeekdayCollectionView
-                .enableAllCell()
-        }
+//        if weekdayList.count < 7 {
+//        
+//            mainView.executionDaysOfWeekdayCollectionView
+//                .disable(indexAtCell: weekdayList)
+//        } else {
+//            mainView.executionDaysOfWeekdayCollectionView
+//                .enableAllCell()
+//        }
     }
     
     private func configureViews() {
-        self.title = "목표 생성"
+        self.title = "작심삼일 목표 생성"
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
@@ -178,9 +212,9 @@ extension CreatePlanViewController: CalendarButtonProtocol {
     
     func endDateSettingButtonDidTapped() {
         let endDate = viewModel.endDate.value
-        let twoDaysLater = Calendar.current.date(byAdding: .day, value: 2, to: Date.now)!
+        let twoDaysLater = Calendar.current.date(byAdding: .day, value: 2, to: viewModel.startDate)!
         let defaultDate = DateFormatter.convertDate(from: twoDaysLater)!
-        let popupVC = CreatePlanTargetPeriodSettingViewController(date: endDate ?? defaultDate)
+        let popupVC = CreatePlanTargetPeriodSettingViewController(startDate: viewModel.startDate, endDate: endDate ?? defaultDate)
         popupVC.delegate = self
         
         popupVC.modalTransitionStyle = .crossDissolve

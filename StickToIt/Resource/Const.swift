@@ -58,7 +58,7 @@ enum AssetColor: String {
 }
 
 enum FontSize {
-    static let title: CGFloat = 30
+    static let title: CGFloat = 25
     static let body: CGFloat = 17
-    static let description:CGFloat = 15
+    static let description:CGFloat = 14
 }

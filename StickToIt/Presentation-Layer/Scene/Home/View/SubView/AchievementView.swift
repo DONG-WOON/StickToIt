@@ -61,11 +61,12 @@ extension AchievementView {
     }
     
     private func setConstraints() {
+        let spacing = 20.0
         
         circleView.snp.makeConstraints { make in
-            make.leading.equalTo(self.safeAreaLayoutGuide).inset(20)
-            make.height.width.equalTo(self.snp.height).multipliedBy(0.7)
-            make.centerY.equalTo(self.safeAreaLayoutGuide)
+            make.leading.equalTo(self).inset(spacing)
+            make.height.equalTo(circleView.snp.width)
+            make.centerY.equalTo(self)
         }
 
         percentageLabel.snp.makeConstraints { make in
@@ -74,9 +75,10 @@ extension AchievementView {
         }
 
         imageView.snp.makeConstraints { make in
-            make.centerY.equalTo(self.safeAreaLayoutGuide)
-            make.width.height.equalTo(self.snp.height).multipliedBy(0.7)
-            make.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
+            make.leading.equalTo(circleView.snp.trailing).offset(spacing)
+            make.trailing.equalTo(self).inset(spacing)
+            make.height.equalTo(imageView.snp.width)
+            make.centerY.equalTo(self)
         }
     }
 }

@@ -16,12 +16,17 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      
      weak var delegate: PlanTargetNumberOfDaysSettingDelegate?
      
+     private var startDate: Date
      private var date: Date? {
           willSet {
                guard let  _newValue = newValue else { return }
-               guard let days = Calendar.current.dateComponents([.day], from: .now, to: _newValue).day else { return }
-               
-               self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
+               guard let days = Calendar.current.dateComponents([.day], from: startDate, to: _newValue).day else { return }
+               if DateFormatter.getFullDateString(from: startDate)
+                    == DateFormatter.getFullDateString(from: .now) {
+                    self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
+               } else {
+                    self.dDayLabel.innerView.text = "내일부터 \(days + 2) 동안"
+               }
           }
      }
      
@@ -35,7 +40,6 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      
      private let dDayLabel: PaddingView<UILabel> = {
           let view = PaddingView<UILabel>()
-          view.innerView.text = "오늘부터 3일 동안"
           view.innerView.textAlignment = .center
           view.innerView.textColor = .assetColor(.accent2)
           return view
@@ -61,8 +65,10 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
           action: #selector(dismissButtonDidTapped)
      )
      
-     init(date: Date) {
-          self.date = date
+     init(startDate: Date, endDate: Date) {
+          self.startDate = startDate
+          self.date = endDate
+          
           super.init(nibName: nil, bundle: nil)
      }
      
@@ -84,7 +90,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
                     .date(
                          byAdding: .day,
                          value: 2,
-                         to: .now
+                         to: startDate
                     )
           )
           
@@ -136,7 +142,8 @@ extension CreatePlanTargetPeriodSettingViewController {
           }
           
           dDayLabel.snp.makeConstraints { make in
-               make.top.trailing.equalTo(containerView).inset(20)
+               make.centerY.equalTo(dismissButton)
+               make.trailing.equalTo(containerView).inset(15)
           }
           
           dismissButton.snp.makeConstraints { make in
@@ -145,7 +152,7 @@ extension CreatePlanTargetPeriodSettingViewController {
           }
           
           calendar.snp.makeConstraints { make in
-               make.top.equalTo(dDayLabel.snp.bottom).offset(5)
+               make.top.equalTo(dismissButton.snp.bottom).offset(10)
                make.horizontalEdges.equalTo(containerView).inset(5)
           }
           
