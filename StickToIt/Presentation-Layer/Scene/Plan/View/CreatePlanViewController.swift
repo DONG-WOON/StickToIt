@@ -52,6 +52,13 @@ final class CreatePlanViewController: UIViewController {
         bindViewModel()
         configureViews()
         setConstraints()
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        mainView.planNameTextField.innerView.becomeFirstResponder()
     }
     
     private func bindViewModel() {
@@ -89,10 +96,12 @@ final class CreatePlanViewController: UIViewController {
                 case 0:
                     _self.viewModel.startDate = .now
                     _self.viewModel.endDate.accept(nil)
+                    _self.mainView.planNameTextField.innerView.resignFirstResponder()
                 case 1:
                     let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now)!
                     _self.viewModel.startDate = tomorrow
                     _self.viewModel.endDate.accept(nil)
+                    _self.mainView.planNameTextField.innerView.resignFirstResponder()
                 default:
                     return
                 }
@@ -205,7 +214,7 @@ extension CreatePlanViewController: CalendarButtonProtocol {
         let endDate = viewModel.endDate.value
         let twoDaysLater = Calendar.current.date(byAdding: .day, value: 2, to: viewModel.startDate)!
         let defaultDate = DateFormatter.convertDate(from: twoDaysLater)!
-        let popupVC = CreatePlanTargetPeriodSettingViewController(date: endDate ?? defaultDate)
+        let popupVC = CreatePlanTargetPeriodSettingViewController(startDate: viewModel.startDate, endDate: endDate ?? defaultDate)
         popupVC.delegate = self
         
         popupVC.modalTransitionStyle = .crossDissolve
