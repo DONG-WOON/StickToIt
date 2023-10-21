@@ -49,16 +49,7 @@ where PlanUseCase.Model == Plan
     func createPlan(completion: @escaping (Result<PlanQuery, Error>) -> Void) {
         
         let planName = planName.value
-//        let executionDaysOfWeekday = executionDaysOfWeekday.value
-
-//        let datesFromStartDateToEndDate = Array(0...targetNumberOfDays).map { Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
-//        }
         
-//        let filteredDates = datesFromStartDateToEndDate.filter { date in
-//            executionDaysOfWeekday.contains {
-//                $0.rawValue == Calendar.current.dateComponents([.weekday], from: date).weekday!
-//            }
-//        }
         let initialDayPlanDates = Array(0...2).map {
             Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
         }
@@ -68,7 +59,7 @@ where PlanUseCase.Model == Plan
                 _id: UUID(), isRequired: true,
                 isComplete: false, date: date,
                 week: Calendar.current.dateComponents([.weekOfYear], from: startDate, to: date).weekOfYear! + 1,
-                content: nil, imageURL: nil, imageContentIsFill: true)
+                content: nil, imageURL: nil)
         }
         
         let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: [], dayPlans: dayPlans)

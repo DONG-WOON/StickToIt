@@ -73,8 +73,7 @@ extension DayPlan {
             isComplete: isComplete,
             week: week,
             content: content,
-            imageURL: imageURL,
-            imageContentIsFill: imageContentIsFill
+            imageURL: imageURL
         )
     }
 }

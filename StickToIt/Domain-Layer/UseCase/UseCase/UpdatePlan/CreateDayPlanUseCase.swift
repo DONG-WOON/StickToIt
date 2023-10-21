@@ -38,7 +38,6 @@ final class CreateDayPlanUseCaseImpl<
                     entity.isRequired = model.isRequired
                     entity.imageURL = model.imageURL
                     entity.week = model.week
-                    entity.imageContentIsFill = model.imageContentIsFill
                 }, onFailure: { error in
                     if let error {
                         continuation.resume(returning: .failure(error))
