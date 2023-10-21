@@ -28,8 +28,8 @@ class PaddingView<T: UIView>: UIView {
     
     private func setConstraints() {
         innerView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.safeAreaLayoutGuide).inset(10)
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(15)
+            make.top.bottom.equalTo(self).inset(10)
+            make.horizontalEdges.equalTo(self).inset(15)
         }
     }
     

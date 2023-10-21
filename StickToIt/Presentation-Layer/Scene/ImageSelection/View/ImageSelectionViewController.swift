@@ -68,7 +68,9 @@ final class ImageSelectionViewController: UIViewController {
             mainView = ImageSelectionView()
             self.cameraManager = CameraManager()
         case .authorized:
-            mainView = ImageSelectionView()
+            let _view = ImageSelectionView()
+            _view.hideGoSettingButton(isHidden: true)
+            mainView = _view
             self.cameraManager = CameraManager()
         case .denied, .restricted:
             mainView = ImageSelectionDeniedView()
@@ -89,6 +91,8 @@ final class ImageSelectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .systemBackground
         
         viewModel.viewDidLoad()
         setViewsAndDelegate()
@@ -118,8 +122,10 @@ final class ImageSelectionViewController: UIViewController {
     
     func setViewsAndDelegate() {
         if let _mainView = mainView as? ImageSelectionView {
-            configureDataSource(of: _mainView)
+            configureDataSource(of: _mainView.collectionView)
             _mainView.delegate = self
+            _mainView.collectionView.delegate = self
+            
             imageManager.register(viewController: self)
         }
         
@@ -205,15 +211,17 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
         if indexPath.item == 0 {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
+            guard collectionView.cellForItem(at: indexPath) is SelectableImageCell else { return }
             
             let asset = viewModel.imageDataList.value[indexPath.item - 1]
             DispatchQueue.main.async { [weak self] in
                 self?.imageManager.getImage(for: asset) { data in
                     guard let _data = data else { return }
                     let image = UIImage(data: _data)
-                    NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: image])
-                    self?.dismiss(animated: true)
+                    
+                    let vc = EditImageViewController()
+                    vc.imageView.image = image
+                    self?.navigationController?.pushViewController(vc, animated: true)
                 }
             }
         }
@@ -246,8 +254,9 @@ extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavig
         }
         
         picker.dismiss(animated: true) { [weak self] in
-            NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: newImage])
-            self?.dismiss(animated: true)
+            let vc = EditImageViewController()
+            vc.imageView.image = newImage
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
 }

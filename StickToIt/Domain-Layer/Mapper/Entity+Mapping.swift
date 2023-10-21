@@ -51,8 +51,7 @@ extension DayPlanEntity {
             date: date,
             week: week,
             content: content,
-            imageURL: imageURL,
-            imageContentIsFill: imageContentIsFill
+            imageURL: imageURL
         )
     }
 }

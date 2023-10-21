@@ -7,7 +7,70 @@
 
 import UIKit
 
-final class ImageSelectionView: UICollectionView {
+final class ImageSelectionView: UIView, BaseViewConfigurable {
+    
+    weak var delegate: SettingButtonDelegate?
+    
+    lazy var goSettingButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .assetColor(.accent2)
+        configuration.baseForegroundColor = .white
+        configuration.title = "설정에서 사진 접근 권한을 허용하러 가기"
+        configuration.titleAlignment = .center
+        let button = UIButton(configuration: configuration)
+        
+        button.addTarget(self, action: #selector(goToSettingButtonDidTapped),
+                         for: .touchUpInside)
+        return button
+    }()
+    
+    let collectionView = ImageCollectionView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        configureViews()
+        setConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func hideGoSettingButton(isHidden: Bool) {
+        goSettingButton.isHidden = isHidden
+        if isHidden {
+            goSettingButton.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
+        }
+    }
+    
+    func configureViews() {
+        backgroundColor = backgroundColor
+        
+        addSubview(goSettingButton)
+        addSubview(collectionView)
+    }
+    
+    func setConstraints() {
+        goSettingButton.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide).inset(2)
+            make.centerX.equalTo(self.safeAreaLayoutGuide)
+            make.height.equalTo(30)
+        }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(goSettingButton.snp.bottom).offset(2)
+            make.horizontalEdges.bottom.equalTo(self.safeAreaLayoutGuide)
+        }
+    }
+    
+    @objc func goToSettingButtonDidTapped() {
+        delegate?.settingButtonDidTapped()
+    }
+}
+
+final class ImageCollectionView: UICollectionView {
 
     init() {
         super.init(
@@ -21,7 +84,7 @@ final class ImageSelectionView: UICollectionView {
     }
 }
 
-extension ImageSelectionView {
+extension ImageCollectionView {
     
     static func createLayout() -> UICollectionViewLayout {
         
@@ -29,8 +92,8 @@ extension ImageSelectionView {
             (sectionIndex, environment) in
 
             let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1 / 3),
-                heightDimension: .fractionalWidth(1 / 3)
+                widthDimension: .fractionalWidth(1 / 2),
+                heightDimension: .fractionalWidth(1 / 2)
             )
             
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -38,12 +101,12 @@ extension ImageSelectionView {
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(1 / 3)
+                heightDimension: .fractionalWidth(1 / 2)
             )
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: groupSize,
                 subitem: item,
-                count: 3
+                count: 2
             )
             
             group.interItemSpacing = .fixed(5.0)

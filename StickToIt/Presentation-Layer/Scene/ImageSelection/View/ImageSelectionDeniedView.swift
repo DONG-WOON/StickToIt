@@ -33,7 +33,7 @@ final class ImageSelectionDeniedView: UIView {
     }()
     lazy var goToSettingButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.baseBackgroundColor = .darkGray
+        configuration.baseBackgroundColor = .assetColor(.accent2)
         configuration.baseForegroundColor = .white
         configuration.title = "사진 접근 허용하기"
         let button = UIButton(configuration: configuration)

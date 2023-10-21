@@ -16,7 +16,6 @@ final class DayPlanEntity: Object {
     @Persisted var week: Int
     @Persisted var content: String?
     @Persisted var imageURL: String?
-    @Persisted var imageContentIsFill: Bool
     @Persisted(originProperty: "dayPlans") var plan: LinkingObjects<PlanEntity>
     
     convenience init(
@@ -25,8 +24,7 @@ final class DayPlanEntity: Object {
         isComplete: Bool,
         week: Int,
         content: String?,
-        imageURL: String?,
-        imageContentIsFill: Bool
+        imageURL: String?
     ) {
         self.init()
         
@@ -36,6 +34,5 @@ final class DayPlanEntity: Object {
         self.week = week
         self.content = content
         self.imageURL = imageURL
-        self.imageContentIsFill = imageContentIsFill
     }
 }
