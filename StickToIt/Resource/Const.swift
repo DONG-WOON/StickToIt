@@ -23,6 +23,12 @@ enum Const {
         case checkedCircle = "checkmark.circle.fill"
         case camera = "camera.shutter.button.fill"
         case pencil = "pencil"
+        case aspectratio = "aspectratio"
+        case textformat = "textformat"
+        case textSize = "textformat.size"
+        case trash = "trash.circle.fill"
+        case timer = "timer"
+        case text = "t.circle"
         
         static let scaleAspectFill = "scaleAspectFill"
         static let scaleAspectFit = "scaleAspectFit"

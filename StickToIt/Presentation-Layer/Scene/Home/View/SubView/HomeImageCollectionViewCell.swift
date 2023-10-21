@@ -25,9 +25,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.layer.borderColor = UIColor.assetColor(.accent2).cgColor
-        view.layer.borderWidth = 0.4
         view.rounded(cornerRadius: 20)
+        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
         return view
     }()
     
@@ -109,7 +108,6 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         if let _date = dayPlan.date {
             dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: _date)
         }
-        imageView.contentMode = dayPlan.imageContentIsFill ? .scaleAspectFill : .scaleAspectFit
         requiredLabel.isHidden = !dayPlan.isRequired
 
         checkMarkImageView.isHidden = !dayPlan.isComplete
@@ -136,6 +134,7 @@ extension HomeImageCollectionViewCell {
         
         self.backgroundColor = .assetColor(.accent4)
         self.rounded(cornerRadius: 20)
+        self.addBlurEffect()
         
         contentView.addSubview(placeholderImageView)
         contentView.addSubview(imageView)

@@ -53,7 +53,7 @@ final class CreatePlanView: UIScrollView {
             borderColor: .assetColor(.accent2)
         )
         view.placeholder = "예시) 2주간 매일 달리기"
-        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.5)
+        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
         return view
     }()
     
@@ -78,6 +78,7 @@ final class CreatePlanView: UIScrollView {
         view.selectedSegmentIndex = 0
         view.selectedSegmentTintColor = .assetColor(.accent1)
         view.tintColor = .white
+        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
         view.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
         
         view.setTitleTextAttributes(
@@ -119,7 +120,7 @@ final class CreatePlanView: UIScrollView {
         view.bordered(cornerRadius: 10, borderWidth: 0.7, borderColor: .assetColor(.accent2))
         view.innerView.text = "종료일을 설정해주세요 ---->"
         view.innerView.backgroundColor = .clear
-        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.5)
+        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
         view.innerView.textColor = .label
         return view
     }()
