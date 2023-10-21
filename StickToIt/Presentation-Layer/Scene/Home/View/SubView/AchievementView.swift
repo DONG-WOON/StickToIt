@@ -53,7 +53,7 @@ final class AchievementView: UIView {
 extension AchievementView {
     
     private func configureViews() {
-        self.backgroundColor = .assetColor(.accent4)
+        self.addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
         self.rounded(cornerRadius: 20)
         addSubview(percentageLabel)
         addSubview(imageView)

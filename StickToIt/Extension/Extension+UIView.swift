@@ -53,5 +53,22 @@ extension UIView {
         self.clipsToBounds = true
         self.layer.cornerRadius = cornerRadius
     }
+    
+    func addSubviews(_ views: [UIView]) {
+        views.forEach { self.addSubview($0) }
+    }
+    
+    func addBlurEffect(_ backgroundColor: UIColor = .systemBackground) {
+        let visualEffectView = UIVisualEffectView(
+            effect: UIBlurEffect(
+                style: .light
+            )
+        )
+        self.backgroundColor = backgroundColor
+        self.addSubview(visualEffectView)
+        
+        visualEffectView.frame = self.frame
+        self.addSubview(visualEffectView)
+    }
 }
 

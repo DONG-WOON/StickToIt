@@ -32,6 +32,12 @@ extension DateFormatter {
         return shared.string(from: date)
     }
     
+    static func getTimeString(from date: Date) -> String {
+        shared.timeStyle = .medium
+        shared.dateStyle = .none
+        return shared.string(from: date)
+    }
+    
     static func convertDate(from date: Date) -> Date? {
         shared.dateStyle = .full
         
