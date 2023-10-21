@@ -211,15 +211,17 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
         if indexPath.item == 0 {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? SelectableImageCell else { return }
+            guard collectionView.cellForItem(at: indexPath) is SelectableImageCell else { return }
             
             let asset = viewModel.imageDataList.value[indexPath.item - 1]
             DispatchQueue.main.async { [weak self] in
                 self?.imageManager.getImage(for: asset) { data in
                     guard let _data = data else { return }
                     let image = UIImage(data: _data)
-                    NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: image])
-                    self?.dismiss(animated: true)
+                    
+                    let vc = EditImageViewController()
+                    vc.imageView.image = image
+                    self?.navigationController?.pushViewController(vc, animated: true)
                 }
             }
         }
@@ -252,8 +254,9 @@ extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavig
         }
         
         picker.dismiss(animated: true) { [weak self] in
-            NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: newImage])
-            self?.dismiss(animated: true)
+            let vc = EditImageViewController()
+            vc.imageView.image = newImage
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
