@@ -18,7 +18,7 @@ where PlanUseCase.Model == Plan
     
     // MARK: Properties
     
-    var planName = BehaviorRelay<String>(value: "")
+    var planName = BehaviorSubject(value: "")
     var targetNumberOfDays: Int = 3
     var startDate: Date = Date.now
     var endDate: BehaviorRelay<Date?> = BehaviorRelay(value: nil)
@@ -38,7 +38,6 @@ where PlanUseCase.Model == Plan
             planName,
             endDate
         )
-        .debug()
         .map { $0.count > 0 && ($1 != nil) }
         .subscribe(with: self, onNext: { (self, isValied) in
             self.planIsValidated.accept(isValied)

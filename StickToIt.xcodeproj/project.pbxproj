@@ -86,7 +86,7 @@
 		72A9761A2ABB2A910021291C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976182ABB2A910021291C /* LaunchScreen.storyboard */; };
 		72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */; };
 		72D7D30C2ADD05630062A60F /* FavoritePlanSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */; };
-		72D7D30F2ADD07C70062A60F /* FetchUserInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30E2ADD07C70062A60F /* FetchUserInfoUseCase.swift */; };
+		72D7D30F2ADD07C70062A60F /* UserInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */; };
 		72D7D3112ADD09250062A60F /* UserDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3102ADD09250062A60F /* UserDatabaseManager.swift */; };
 		72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3122ADD0F630062A60F /* UserRepository.swift */; };
 		72D7D3152ADD0FBD0062A60F /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */; };
@@ -179,7 +179,7 @@
 		72A9761B2ABB2A910021291C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewModel.swift; sourceTree = "<group>"; };
 		72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewController.swift; sourceTree = "<group>"; };
-		72D7D30E2ADD07C70062A60F /* FetchUserInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserInfoUseCase.swift; sourceTree = "<group>"; };
+		72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoUseCase.swift; sourceTree = "<group>"; };
 		72D7D3102ADD09250062A60F /* UserDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDatabaseManager.swift; sourceTree = "<group>"; };
 		72D7D3122ADD0F630062A60F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
@@ -668,7 +668,7 @@
 		72D7D30D2ADD07BA0062A60F /* FetchUserInfo */ = {
 			isa = PBXGroup;
 			children = (
-				72D7D30E2ADD07C70062A60F /* FetchUserInfoUseCase.swift */,
+				72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */,
 			);
 			path = FetchUserInfo;
 			sourceTree = "<group>";
@@ -934,7 +934,7 @@
 				727849802AD76A2000433753 /* DayPlanRepositoryImpl.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
-				72D7D30F2ADD07C70062A60F /* FetchUserInfoUseCase.swift in Sources */,
+				72D7D30F2ADD07C70062A60F /* UserInfoUseCase.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,

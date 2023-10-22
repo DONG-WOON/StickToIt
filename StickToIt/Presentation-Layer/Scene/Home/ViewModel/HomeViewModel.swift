@@ -37,7 +37,7 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         case loadAchievementProgress(Double)
     }
     
-    private let usersInfoUserCase: FetchUserInfoUseCase
+    private let userInfoUseCase: UserInfoUseCase
     private let planUseCase: PlanUseCase
     private let mainQueue: DispatchQueue
     private let output = PublishSubject<Output>()
@@ -47,11 +47,11 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
     var currentPlanCount: Int?
     
     init(
-        userInfoUseCase: FetchUserInfoUseCase,
+        userInfoUseCase: UserInfoUseCase,
         planUseCase: PlanUseCase,
         mainQueue: DispatchQueue = .main
     ) {
-        self.usersInfoUserCase = userInfoUseCase
+        self.userInfoUseCase = userInfoUseCase
         self.planUseCase = planUseCase
         self.mainQueue = mainQueue
     }
@@ -114,7 +114,7 @@ extension HomeViewModel {
             return
         }
         
-        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+        userInfoUseCase.fetchUserInfo(key: userID) { [weak self] user in
             let planQueries = user.planQueries
             
             if planQueries.count > 0 {
@@ -131,11 +131,14 @@ extension HomeViewModel {
             return
         }
       
-        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+        userInfoUseCase.fetchUserInfo(key: userID) { [weak self] user in
+            
             let planQueries = user.planQueries
             self?.currentPlanCount = planQueries.count
-            self?.output.onNext(.loadPlanQueries(planQueries))
-            self?.fetchCurrentPlan()
+            if !planQueries.isEmpty {
+                self?.output.onNext(.loadPlanQueries(planQueries))
+                self?.fetchCurrentPlan()
+            }
         }
     }
     

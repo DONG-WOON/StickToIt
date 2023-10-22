@@ -19,7 +19,7 @@ final class HomeViewController: UIViewController {
     }
     
     let viewModel = HomeViewModel(
-        userInfoUseCase: FetchUserInfoUseCaseImpl(
+        userInfoUseCase: UserInfoUseCaseImpl(
             repository: UserRepositoryImpl(
                 networkService: nil,
                 databaseManager: UserDatabaseManager()

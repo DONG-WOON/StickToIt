@@ -79,7 +79,7 @@ final class CreatePlanViewController: UIViewController {
             .subscribe(with: self) { (_self, text) in
                 _self.mainView.planNameTextField.innerView.text = text
                 _self.mainView.planNameMaximumTextNumberLabel.text = "\(text.count) / 20"
-                _self.viewModel.planName.accept(text)
+                _self.viewModel.planName.onNext(text)
                 
                 if !text.isEmpty {
                     _self.mainView.planNameTextField.bordered(borderWidth: 1, borderColor: .assetColor(.accent1))
