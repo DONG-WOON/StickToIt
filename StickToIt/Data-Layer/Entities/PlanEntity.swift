@@ -17,7 +17,6 @@ final class PlanEntity: Object {
     @Persisted var executionDaysOfWeekday: MutableSet<Week>
     @Persisted var dayPlans: List<DayPlanEntity>
     
-    #warning("id 초기화 하진않아도 생기는지 확인")
     
     convenience init(
         _id: UUID,

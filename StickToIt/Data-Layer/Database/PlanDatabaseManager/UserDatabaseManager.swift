@@ -52,6 +52,11 @@ extension UserDatabaseManager: DatabaseManager {
         return object
     }
     
+    func filteredFetch(_ filtered: (UserEntity) -> Bool) -> [UserEntity] {
+        let objects = asyncRealm.objects(UserEntity.self).filter(filtered)
+        return objects
+    }
+    
     func create(model: User, to entity: UserEntity.Type, onFailure: @escaping @Sendable (Error?) -> Void) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(
@@ -66,6 +71,18 @@ extension UserDatabaseManager: DatabaseManager {
     
     func update(entity: UserEntity.Type, matchingWith model: User, updateHandler: @escaping (Entity) -> Void, onFailure: @escaping @Sendable (Error?) -> Void) {
         guard let fetchedEntity = fetch(key: model._id) else { return }
+        asyncRealm.writeAsync {
+            updateHandler(fetchedEntity)
+        } onComplete: { error in
+            underlyingQueue.async {
+                onFailure(error)
+            }
+        }
+    }
+    
+    func update(key: Key, updateHandler: @escaping (Entity) -> Void, onFailure: @escaping @Sendable (Error?) -> Void) {
+        guard let fetchedEntity = fetch(key: key) else { return }
+        
         asyncRealm.writeAsync {
             updateHandler(fetchedEntity)
         } onComplete: { error in

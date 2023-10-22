@@ -55,6 +55,11 @@ extension PlanDatabaseManager: DatabaseManager {
         return object
     }
     
+    func filteredFetch(_ filtered: (PlanEntity) -> Bool) -> [PlanEntity] {
+        let object = asyncRealm.objects(PlanEntity.self).filter(filtered)
+        return object
+    }
+    
     func create(model: Model, to entity: Entity.Type, onFailure: @Sendable @escaping (Error?) -> Void) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(

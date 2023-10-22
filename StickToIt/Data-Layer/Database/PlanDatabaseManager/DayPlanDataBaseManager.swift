@@ -52,6 +52,11 @@ extension DayPlanDataBaseManager: DatabaseManager {
         return object
     }
     
+    func filteredFetch(_ filtered: (DayPlanEntity) -> Bool) -> [DayPlanEntity] {
+        let objects = asyncRealm.objects(DayPlanEntity.self).filter(filtered)
+        return objects
+    }
+    
     func create(model: Model, to entity: Entity.Type, onFailure: @Sendable @escaping (Error?) -> Void) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(
