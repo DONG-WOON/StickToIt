@@ -33,10 +33,7 @@ extension PlanQuery {
 
 extension Plan {
     func toEntity() -> PlanEntity {
-        
-        let _executionDaysOfWeekday = MutableSet<Week>()
-        _executionDaysOfWeekday.insert(objectsIn: executionDaysOfWeekday)
-        
+    
         let _dayPlans = List<DayPlanEntity>()
         _dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
         
@@ -46,7 +43,6 @@ extension Plan {
             targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
             endDate: endDate,
-            executionDaysOfWeekday: _executionDaysOfWeekday,
             dayPlans: _dayPlans
         )
     }

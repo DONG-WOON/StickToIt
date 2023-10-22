@@ -11,7 +11,7 @@ struct DayPlan: Hashable {
     var _id: UUID
     let isRequired: Bool
     var isComplete: Bool
-    var date: Date?
+    var date: Date
     var week: Int
     var content: String?
     var imageURL: String?
@@ -21,7 +21,7 @@ struct DayPlan: Hashable {
         _id: UUID,
         isRequired: Bool,
         isComplete: Bool,
-        date: Date?,
+        date: Date,
         week: Int,
         content: String?,
         imageURL: String?
