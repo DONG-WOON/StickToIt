@@ -30,8 +30,7 @@ enum Const {
         case timer = "timer"
         case text = "t.circle"
         
-        static let scaleAspectFill = "scaleAspectFill"
-        static let scaleAspectFit = "scaleAspectFit"
+        static let placeholder = "Placeholder"
     }
     
     enum NotificationKey {

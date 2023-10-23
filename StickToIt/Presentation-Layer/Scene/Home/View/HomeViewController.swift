@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class HomeViewController: UIViewController {
     
@@ -106,6 +107,10 @@ final class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -143,6 +148,8 @@ final class HomeViewController: UIViewController {
                     
                 case .showPlanWeekScene(let plan):
                     _self.showStatics(plan: plan)
+                case .showToast(let title, let message):
+                    _self.showToast(title: title, message: message)
                     
                 case .loadPlanQueries(let planQueries):
                     _self.makeMenu(with: planQueries)
@@ -171,6 +178,8 @@ final class HomeViewController: UIViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        addNotification()
     }
 }
 
@@ -188,6 +197,10 @@ extension HomeViewController {
         vc.modalPresentationStyle = .overFullScreen
         vc.modalTransitionStyle = .crossDissolve
         self.present(vc, animated: true)
+    }
+    
+    func showToast(title: String?, message: String) {
+        self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(named: Const.Image.placeholder))
     }
     
     func update(user: User?) {
@@ -268,6 +281,7 @@ extension HomeViewController {
     }
     
     func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(planCreated), name: .planCreated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAll), name: .reloadAll, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadPlan), name: .reloadPlan, object: nil)
     }
@@ -285,6 +299,10 @@ extension HomeViewController {
 // MARK: - @objc Method
 
 extension HomeViewController {
+    
+    @objc private func planCreated() {
+        input.onNext(.planCreated)
+    }
     
     @objc private func reloadAll() {
         input.onNext(.viewDidLoad)

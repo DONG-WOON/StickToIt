@@ -79,6 +79,7 @@
 		729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5202ACEC3A100E910D5 /* CameraCell.swift */; };
 		729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */; };
 		729AC5252ACEEBAF00E910D5 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5242ACEEBAF00E910D5 /* CameraManager.swift */; };
+		72A618DE2AE66C17008ACA84 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 72A618DD2AE66C17008ACA84 /* Toast */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
 		72A976102ABB2A8E0021291C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */; };
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
@@ -211,6 +212,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72A618DE2AE66C17008ACA84 /* Toast in Frameworks */,
 				729AC4672AC4989300E910D5 /* RealmSwift in Frameworks */,
 				729AC4652AC4989300E910D5 /* Realm in Frameworks */,
 				729AC45B2AC4981D00E910D5 /* RxCocoa in Frameworks */,
@@ -857,6 +859,7 @@
 				729AC4662AC4989300E910D5 /* RealmSwift */,
 				729AC4CF2ACB1DFE00E910D5 /* MKRingProgressView */,
 				729AC50A2ACD34C900E910D5 /* FSCalendar */,
+				72A618DD2AE66C17008ACA84 /* Toast */,
 			);
 			productName = StickToIt;
 			productReference = 72A9760A2ABB2A8E0021291C /* StickToIt.app */;
@@ -893,6 +896,7 @@
 				729AC4632AC4989300E910D5 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				729AC4CE2ACB1DFE00E910D5 /* XCRemoteSwiftPackageReference "MKRingProgressView" */,
 				729AC5092ACD34C900E910D5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				72A618DC2AE66C17008ACA84 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 72A9760B2ABB2A8E0021291C /* Products */;
 			projectDirPath = "";
@@ -1292,6 +1296,14 @@
 				minimumVersion = 2.8.3;
 			};
 		};
+		72A618DC2AE66C17008ACA84 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1344,6 +1356,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 729AC5092ACD34C900E910D5 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		72A618DD2AE66C17008ACA84 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 72A618DC2AE66C17008ACA84 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

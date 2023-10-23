@@ -182,7 +182,7 @@ extension HomeViewModel {
         
         let lastCompletedDayPlanQuery = DateFormatter.convertToDateQuery(lastCompletedDayPlan.date)
         let todayQuery = DateFormatter.convertToDateQuery(.now)
-        self.useDateQuery(firstQuery: lastCompletedDayPlanQuery, secondQuery: todayQuery)
+//        self.useDateQuery(firstQuery: lastCompletedDayPlanQuery, secondQuery: todayQuery)
         
         let requiredDayPlanCount = dayPlans
             .filter { $0.isRequired }.count
