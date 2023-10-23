@@ -40,6 +40,7 @@ final class TabBarController: UITabBarController {
         
         let tabBarAppearance = UITabBar.appearance()
         tabBarAppearance.tintColor = .label
+        tabBarAppearance.barTintColor = .black
         tabBarAppearance.isTranslucent = true
     }
 

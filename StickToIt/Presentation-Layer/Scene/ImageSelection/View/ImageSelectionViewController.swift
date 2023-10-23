@@ -104,7 +104,7 @@ final class ImageSelectionViewController: UIViewController {
         
         if mainView is ImageSelectionView {
             imageManager.getImageAssets { [weak self] imageAssets in
-                self?.viewModel.imageDataList.accept(imageAssets)
+                self?.viewModel.imageDataList.onNext(imageAssets)
             }
         }
     }
@@ -158,7 +158,7 @@ extension ImageSelectionViewController {
             .CellRegistration<SelectableImageCell, String>
         { [weak self] cell, indexPath, id in
             
-            let imageAssets = self?.viewModel.imageDataList.value
+            let imageAssets = try? self?.viewModel.imageDataList.value()
             guard let asset = imageAssets?[indexPath.item - 1] else { return }
             
             DispatchQueue.main.async { [weak self] in
@@ -212,8 +212,9 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
             guard collectionView.cellForItem(at: indexPath) is SelectableImageCell else { return }
+            guard let imageList = try? viewModel.imageDataList.value() else { return }
             
-            let asset = viewModel.imageDataList.value[indexPath.item - 1]
+            let asset = imageList[indexPath.item - 1]
             DispatchQueue.main.async { [weak self] in
                 self?.imageManager.getImage(for: asset) { data in
                     guard let _data = data else { return }
@@ -233,7 +234,7 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
 extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         imageManager.getImageAssets { [weak self] imageAssets in
-            self?.viewModel.imageDataList.accept(imageAssets)
+            self?.viewModel.imageDataList.onNext(imageAssets)
         }
     }
 }

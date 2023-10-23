@@ -108,6 +108,8 @@ final class StickToItCalendar: UIView {
         
         calendar.headerHeight = 0
         calendar.appearance.headerMinimumDissolvedAlpha = 0
+        calendar.locale = .current
+        
         
         calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: CustomCalendarCell.identifier)
     }
@@ -235,7 +237,6 @@ extension StickToItCalendar: FSCalendarDelegate {
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-//        let _date = DateFormatter.convertDate(from: date)
         delegate?.calendarView(didSelectAt: date)
         
         // 현재 캘린더에서 보이는 이전달 또는 다음달의 날짜를 누르면 해당 달로 이동하도록 하는 부분
@@ -267,7 +268,7 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
-        return .label // nil을 해주어도 white로 설정되어있어서 black로 해주어야 함.
+        return .white // nil을 해주어도 white로 설정되어있어서 black로 해주어야 함.
     }
 }
 

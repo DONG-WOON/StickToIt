@@ -33,7 +33,7 @@ extension HomeImageCollectionView {
             let spacing = 10.0
             
             let edgeInset = NSDirectionalEdgeInsets(
-                top: spacing,
+                top: 0,
                 leading: spacing,
                 bottom: spacing,
                 trailing: spacing
