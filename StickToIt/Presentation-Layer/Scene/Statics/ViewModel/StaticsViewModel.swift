@@ -37,6 +37,7 @@ final class StaticsViewModel {
                 switch event {
                 case .viewDidLoad:
                     _self.output.onNext(.configureUI)
+                    _self.output.onNext(.showProgress(_self.percentageOfCompleteDays()))
                 }
             }
             .disposed(by: disposeBag)

@@ -18,7 +18,7 @@ final class StaticsViewController: UIViewController {
     // MARK: UI Properties
     
     private let containerView = UIView(backgroundColor: .assetColor(.accent4))
-    
+    private let plantImageView = UIImageView(image: UIImage(named: "1"))
     private let progressView = GradientCircleView(frame: .zero)
     
     
@@ -59,9 +59,30 @@ final class StaticsViewController: UIViewController {
                     _self.setConstraints()
                 case .showProgress(let progress):
                     _self.progressView.setProgress(progress)
+                    _self.setPlantImage(progress)
                 }
             }
             .disposed(by: disposeBag)
+    }
+    
+    func setPlantImage(_ progress: Double) {
+        var level: Int
+        switch progress {
+        case 0..<0.1:
+            level = 1
+        case 0.1..<0.3:
+            level = 2
+        case 0.3..<0.6:
+            level = 3
+        case 0.6..<0.9:
+            level = 4
+        case 0.9..<1.0:
+            level = 5
+        default:
+            level = 0
+        }
+        
+        plantImageView.image = UIImage(named: String(level))
     }
 }
 
@@ -70,14 +91,22 @@ extension StaticsViewController: BaseViewConfigurable {
         view.backgroundColor = .black.withAlphaComponent(0.3)
         view.addSubview(containerView)
         
-        containerView.backgroundColor = .white
+        containerView.addBlurEffect()
         
-        containerView.addSubviews([progressView])
+        containerView.addSubviews([plantImageView, progressView])
         
         containerView.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
     }
     
     func setConstraints() {
+        
+        plantImageView.snp.makeConstraints { make in
+            make.top.equalTo(containerView).inset(20)
+            make.centerX.equalTo(containerView)
+            make.width.equalTo(containerView).multipliedBy(0.6)
+            make.bottom.equalTo(progressView.snp.top).offset(-20)
+        }
+        
         containerView.snp.makeConstraints { make in
             make.center.equalTo(view)
             make.width.equalTo(view).multipliedBy(0.7)
@@ -85,7 +114,7 @@ extension StaticsViewController: BaseViewConfigurable {
         }
         
         progressView.snp.makeConstraints { make in
-            make.bottom.equalTo(containerView.snp.bottom).inset(20)
+            make.bottom.equalTo(containerView.snp.bottom).inset(30)
             make.centerX.equalTo(containerView)
             make.width.equalTo(containerView).multipliedBy(0.6)
             make.height.equalTo(progressView.snp.width)

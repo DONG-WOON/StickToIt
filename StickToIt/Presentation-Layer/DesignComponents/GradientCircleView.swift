@@ -13,7 +13,7 @@ class GradientCircleView: RingProgressView {
     let percentageLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: FontSize.body)
-        label.textColor = .assetColor(.black)
+        label.textColor = .label
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -36,7 +36,9 @@ class GradientCircleView: RingProgressView {
     }
     
     func setProgress(_ progress: Double) {
-        self.progress = progress
+        UIView.animate(withDuration: 0.3) {
+            self.progress = progress
+        }
         
         let percentage = Int(progress * 100)
         percentageLabel.text = "목표 달성률\n\(percentage)%"
