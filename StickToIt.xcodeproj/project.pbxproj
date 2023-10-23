@@ -84,6 +84,7 @@
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
 		72A976172ABB2A910021291C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72A976162ABB2A910021291C /* Assets.xcassets */; };
 		72A9761A2ABB2A910021291C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976182ABB2A910021291C /* LaunchScreen.storyboard */; };
+		72BA205F2AE58B27005F7D90 /* STIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BA205E2AE58B27005F7D90 /* STIError.swift */; };
 		72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BA20632AE60A39005F7D90 /* StaticsViewController.swift */; };
 		72BA20662AE60A41005F7D90 /* StaticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */; };
 		72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */; };
@@ -179,6 +180,7 @@
 		72A976162ABB2A910021291C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A976192ABB2A910021291C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72A9761B2ABB2A910021291C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72BA205E2AE58B27005F7D90 /* STIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STIError.swift; sourceTree = "<group>"; };
 		72BA20632AE60A39005F7D90 /* StaticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsViewController.swift; sourceTree = "<group>"; };
 		72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsViewModel.swift; sourceTree = "<group>"; };
 		72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewModel.swift; sourceTree = "<group>"; };
@@ -632,6 +634,7 @@
 			children = (
 				72A9760D2ABB2A8E0021291C /* AppDelegate.swift */,
 				72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */,
+				72BA205D2AE58B15005F7D90 /* Debug */,
 				7217B0002AC2B283002C3112 /* Resource */,
 				7217AFFB2AC2B130002C3112 /* Extension */,
 				7217AFF42AC2AE9F002C3112 /* Data-Layer */,
@@ -643,6 +646,14 @@
 				72A9761B2ABB2A910021291C /* Info.plist */,
 			);
 			path = StickToIt;
+			sourceTree = "<group>";
+		};
+		72BA205D2AE58B15005F7D90 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				72BA205E2AE58B27005F7D90 /* STIError.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		72BA20602AE60A20005F7D90 /* Statics */ = {
@@ -975,6 +986,7 @@
 				727849772AD697FB00433753 /* BaseViewConfigurable.swift in Sources */,
 				729AC4B62AC9D97500E910D5 /* ImageSelectionView.swift in Sources */,
 				7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */,
+				72BA205F2AE58B27005F7D90 /* STIError.swift in Sources */,
 				729AC4BF2ACA81B100E910D5 /* ImageSelectionDeniedView.swift in Sources */,
 				729AC4D22ACB986600E910D5 /* Extension+UIView.swift in Sources */,
 				729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */,
