@@ -74,14 +74,23 @@ final class HomeViewController: UIViewController {
         return button
     }()
     
-    private lazy var weekButton = ResizableButton(
-        title: "1 주차",
-        symbolConfiguration: .init(scale: .large),
-        tintColor: .label,
-        backgroundColor: .clear,
-        target: self,
-        action: #selector(weekButtonDidTapped)
-    )
+    private lazy var completedDayPlansButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.cornerStyle = .capsule
+        configuration.title = "0"
+        configuration.image = UIImage(resource: .checkedCircle)?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.assetColor(.accent1))
+        
+        configuration.imagePadding = 10
+        configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
+        configuration.baseForegroundColor = .black
+        configuration.baseBackgroundColor = .assetColor(.accent4)
+        
+        let button = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(completedDayPlansButtonDidTapped), for: .touchUpInside)
+        return button
+    }()
     
     private var mainView: UIView?
     
@@ -139,7 +148,7 @@ final class HomeViewController: UIViewController {
                     _self.makeMenu(with: planQueries)
                     
                 case .loadPlan(let plan):
-                    _self.setPlanNameLabel(planName: plan.name)
+                    _self.update(plan: plan)
                     
                 case .loadDayPlans(let dayPlans):
                     _self.takeSnapshot(dayPlans: dayPlans)
@@ -152,6 +161,13 @@ final class HomeViewController: UIViewController {
                     
                 case .stopAnimation:
                     _self.stopAnimation()
+                    
+                case .showUserInfo(let user):
+                    _self.update(user: user)
+                    _self.setEmptyView(user: user)
+                    
+                case .showCompleteDayPlanCount(let count):
+                    _self.completedDayPlansButton.configuration?.title = String(count)
                 }
             }
             .disposed(by: disposeBag)
@@ -178,8 +194,8 @@ extension HomeViewController {
         (view as? HomeView)?.update(user: user)
     }
     
-    func setPlanNameLabel(planName: String) {
-        (view as? HomeView)?.setTitleLabel(text: planName)
+    func update(plan: Plan) {
+        (view as? HomeView)?.update(plan: plan)
     }
     
     func makeMenu(with planQuery: [PlanQuery]) {
@@ -191,7 +207,6 @@ extension HomeViewController {
                     title: query.planName
                 ) { [weak self] _ in
                     UserDefaults.standard.setValue(query.planID.uuidString, forKey: Const.Key.currentPlan.rawValue)
-                    self?.navigationItem.title = query.planName
                     self?.input.onNext(.fetchPlan(query))
                 }
             }
@@ -205,7 +220,7 @@ extension HomeViewController {
         
         actions.append(settingMenu)
         
-        planTitleButton.menu = UIMenu(
+        planListButton.menu = UIMenu(
             title: "목표 리스트",
             children: actions
         )
@@ -213,6 +228,11 @@ extension HomeViewController {
     
     func setAchievementProgress(_ progress: Double) {
         (view as? HomeView)?.setProgress(progress)
+    }
+    
+    func setEmptyView(user: User?) {
+        guard let userName = user?.name else { return }
+        (view as? HomeEmptyView)?.titleLabel.text = "\(userName) 님\n목표가 비어있어요"
     }
     
     func startAnimation() {
@@ -226,9 +246,11 @@ extension HomeViewController {
     func setViewsAndDelegate(_ planIsExist: Bool) {
         if planIsExist {
             let _view = HomeView()
+            _view.setDelegate(self)
             configureDataSource(of: _view.collectionView)
             self.view = _view
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planListButton)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: completedDayPlansButton)
             self.input.onNext(.reloadAll)
         } else {
             let _view = HomeEmptyView()
@@ -272,20 +294,14 @@ extension HomeViewController {
         input.onNext(.reloadPlan)
     }
     
-    @objc private func weekButtonDidTapped() {
-        input.onNext(.planWeekButtonDidTapped)
+    @objc private func completedDayPlansButtonDidTapped() {
+        input.onNext(.completedDayPlansButtonDidTapped)
     }
 }
 
 extension HomeViewController: CreatePlanButtonDelegate {
-    func tapButton() {
+    func createPlan() {
         input.onNext(.createPlanButtonDidTapped)
-    }
-}
-
-extension HomeViewController: PlanWeekSelectDelegate {
-    func planWeekSelected(week: Int) {
-        #warning("sdfsdfsdfsdf")
     }
 }
 
@@ -294,10 +310,6 @@ extension HomeViewController {
     
     private func configureViews() {
         view.backgroundColor = .systemBackground
-        
-//        if viewModel.currentWeek.value != 1 {
-//            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: weekButton)
-//        }
     }
     
     private func configureDataSource(of collectionView: UICollectionView) {
@@ -344,5 +356,12 @@ extension HomeViewController: HomeImageCollectionViewCellDelegate {
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
+    }
+}
+
+extension HomeViewController: PlanSettingButtonDelegate {
+    func goToPlanSetting() {
+//        let settingVC = CreatePlanViewController()
+       
     }
 }
