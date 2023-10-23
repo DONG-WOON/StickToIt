@@ -84,6 +84,8 @@
 		72A976152ABB2A8E0021291C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976132ABB2A8E0021291C /* Main.storyboard */; };
 		72A976172ABB2A910021291C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72A976162ABB2A910021291C /* Assets.xcassets */; };
 		72A9761A2ABB2A910021291C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A976182ABB2A910021291C /* LaunchScreen.storyboard */; };
+		72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BA20632AE60A39005F7D90 /* StaticsViewController.swift */; };
+		72BA20662AE60A41005F7D90 /* StaticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */; };
 		72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */; };
 		72D7D30C2ADD05630062A60F /* FavoritePlanSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */; };
 		72D7D30F2ADD07C70062A60F /* UserInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */; };
@@ -177,6 +179,8 @@
 		72A976162ABB2A910021291C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A976192ABB2A910021291C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72A9761B2ABB2A910021291C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72BA20632AE60A39005F7D90 /* StaticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsViewController.swift; sourceTree = "<group>"; };
+		72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsViewModel.swift; sourceTree = "<group>"; };
 		72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewModel.swift; sourceTree = "<group>"; };
 		72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewController.swift; sourceTree = "<group>"; };
 		72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoUseCase.swift; sourceTree = "<group>"; };
@@ -452,6 +456,7 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				72BA20602AE60A20005F7D90 /* Statics */,
 				72D7D3242ADEA7740062A60F /* UserSetting */,
 				72D7D31A2ADE15010062A60F /* Calendar */,
 				72D7D3062ADD05630062A60F /* FavoritePlan */,
@@ -638,6 +643,31 @@
 				72A9761B2ABB2A910021291C /* Info.plist */,
 			);
 			path = StickToIt;
+			sourceTree = "<group>";
+		};
+		72BA20602AE60A20005F7D90 /* Statics */ = {
+			isa = PBXGroup;
+			children = (
+				72BA20622AE60A2D005F7D90 /* View */,
+				72BA20612AE60A27005F7D90 /* ViewModel */,
+			);
+			path = Statics;
+			sourceTree = "<group>";
+		};
+		72BA20612AE60A27005F7D90 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		72BA20622AE60A2D005F7D90 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				72BA20632AE60A39005F7D90 /* StaticsViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		72D7D3062ADD05630062A60F /* FavoritePlan */ = {
@@ -893,6 +923,7 @@
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				729AC4522AC4973C00E910D5 /* FetchPlanRepositoryImpl.swift in Sources */,
 				728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */,
+				72BA20662AE60A41005F7D90 /* StaticsViewModel.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */,
 				72D7D32C2ADF74700062A60F /* HomeEmptyView.swift in Sources */,
@@ -933,6 +964,7 @@
 				727849802AD76A2000433753 /* DayPlanRepositoryImpl.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
+				72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */,
 				72D7D30F2ADD07C70062A60F /* UserInfoUseCase.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */,

@@ -52,7 +52,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: UI Properties
     
-    private lazy var planTitleButton: UIButton = {
+    private lazy var planListButton: UIButton = {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePadding = 7
         configuration.image = UIImage(resource: .listBullet)
@@ -132,8 +132,8 @@ final class HomeViewController: UIViewController {
                 case .showCreatePlanScene:
                     _self.showCreatePlanScene()
                     
-                case .showPlanWeekScene(let currentWeek):
-                    _self.showPlanWeekScene(currentWeek: currentWeek)
+                case .showPlanWeekScene(let plan):
+                    _self.showStatics(plan: plan)
                     
                 case .loadPlanQueries(let planQueries):
                     _self.makeMenu(with: planQueries)
@@ -166,10 +166,16 @@ extension HomeViewController {
         self.present(vc, animated: true)
     }
     
-    func showPlanWeekScene(currentWeek: Int) {
-        let vc = PlanWeekSelectViewController(currentWeek: currentWeek)
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
+    func showStatics(plan: Plan?) {
+        guard let plan else { return }
+        let vc = StaticsViewController(viewModel: StaticsViewModel(plan: plan))
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        self.present(vc, animated: true)
+    }
+    
+    func update(user: User?) {
+        (view as? HomeView)?.update(user: user)
     }
     
     func setPlanNameLabel(planName: String) {
