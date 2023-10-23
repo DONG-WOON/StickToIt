@@ -31,12 +31,13 @@ final class EditImageViewController: UIViewController {
     
     let frameView: UIView = {
         let view = UIView()
-        view.rounded(cornerRadius: 20)
+        view.rounded()
         return view
     }()
     
     lazy var imageView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "images"))
+        view.backgroundColor = .white
         view.contentMode = .scaleAspectFit
         return view
     }()
@@ -258,7 +259,7 @@ extension EditImageViewController: UITextViewDelegate {
 
 extension EditImageViewController: BaseViewConfigurable {
     func configureViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .assetColor(.accent4)
         
         view.addSubviews(
             [frameView,

@@ -36,7 +36,6 @@ extension PlanEntity {
             targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
             endDate: endDate,
-            executionDaysOfWeekday: Set(executionDaysOfWeekday),
             dayPlans: dayPlans.map { $0.toDomain() }
         )
     }

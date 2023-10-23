@@ -8,15 +8,8 @@
 import UIKit
 
 final class HomeView: UIView {
-    private let titleLabel: UILabel = {
-        let view = UILabel()
-        view.textColor = .label
-        view.font = .boldSystemFont(ofSize: 28)
-        view.numberOfLines = 1
-        return view
-    }()
     
-    private lazy var homeAchievementView = AchievementView()
+    private lazy var planInfoView = PlanInfoView()
     let collectionView = HomeImageCollectionView()
     
     override init(frame: CGRect) {
@@ -31,11 +24,19 @@ final class HomeView: UIView {
     }
     
     func setProgress(_ progress: Double) {
-        homeAchievementView.setProgress(progress)
+//        homeAchievementView.setProgress(progress)
     }
     
-    func setTitleLabel(text: String) {
-        self.titleLabel.text = "📌 \(text)"
+    func update(user: User?) {
+        planInfoView.update(user: user)
+    }
+    
+    func update(plan: Plan) {
+        planInfoView.update(plan: plan)
+    }
+    
+    func setDelegate(_ delegate: PlanSettingButtonDelegate) {
+        planInfoView.delegate = delegate
     }
 }
 
@@ -43,24 +44,17 @@ extension HomeView: BaseViewConfigurable {
     
     func configureViews() {
         backgroundColor = .clear
-        addSubview(titleLabel)
         addSubview(collectionView)
-        addSubview(homeAchievementView)
+        addSubview(planInfoView)
     }
     
     func setConstraints() {
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(30)
-            make.height.equalTo(30)
-        }
-        
-        homeAchievementView.snp.makeConstraints { make in
-            make.bottom.equalTo(collectionView.snp.top).offset(-10)
-            make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(30)
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
-            make.height.equalTo(self.safeAreaLayoutGuide).multipliedBy(0.2)
+        planInfoView.snp.makeConstraints { make in
+            make.bottom.equalTo(collectionView.snp.top).offset(-15)
+            make.width.equalTo(safeAreaLayoutGuide).multipliedBy(0.85)
+            make.top.equalTo(safeAreaLayoutGuide).inset(20)
+            make.centerX.equalTo(safeAreaLayoutGuide)
         }
         
         collectionView.snp.makeConstraints { make in

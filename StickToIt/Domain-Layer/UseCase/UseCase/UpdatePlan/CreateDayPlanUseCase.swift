@@ -28,17 +28,10 @@ final class CreateDayPlanUseCaseImpl<
         self.repository = repository
     }
     
-    func save(entity: DayPlanEntity.Type, matchingWith model: DayPlan) async -> Result<Bool, Error> {
+    func save(entity: DayPlanEntity.Type, matchingWith model: DayPlan, updateHandler: @escaping (Entity) -> Void) async -> Result<Bool, Error> {
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async { [weak self] in
-                self?.repository.update(entity: entity, matchingWith: model, updateHandler: { entity in
-                    entity.content = model.content
-                    entity.date = model.date
-                    entity.isComplete = model.isComplete
-                    entity.isRequired = model.isRequired
-                    entity.imageURL = model.imageURL
-                    entity.week = model.week
-                }, onFailure: { error in
+                self?.repository.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: { error in
                     if let error {
                         continuation.resume(returning: .failure(error))
                     }
@@ -47,7 +40,6 @@ final class CreateDayPlanUseCaseImpl<
             }
         }
     }
-
     
     func save(dayPlanID: UUID, imageData: Data?) async -> String? {
         do {

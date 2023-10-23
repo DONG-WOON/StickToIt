@@ -12,14 +12,14 @@ final class DayPlanEntity: Object {
     @Persisted(primaryKey: true) var _id: UUID
     @Persisted var isRequired: Bool
     @Persisted var isComplete: Bool
-    @Persisted var date: Date?
+    @Persisted var date: Date
     @Persisted var week: Int
     @Persisted var content: String?
     @Persisted var imageURL: String?
     @Persisted(originProperty: "dayPlans") var plan: LinkingObjects<PlanEntity>
     
     convenience init(
-        date: Date?,
+        date: Date,
         isRequired: Bool,
         isComplete: Bool,
         week: Int,

@@ -18,22 +18,33 @@ final class DayPlanViewController: UIViewController {
     private let borderContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
-        view.rounded(cornerRadius: 20)
+        view.rounded()
         return view
     }()
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.rounded(cornerRadius: 20)
+        view.rounded()
         view.isUserInteractionEnabled = false
         return view
     }()
     
     private lazy var blurView: BlurEffectView  = {
         let view = BlurEffectView()
-        view.rounded(cornerRadius: 20)
+        view.rounded()
         return view
+    }()
+    
+    private lazy var weekDayLabel: PaddingView<UILabel> = {
+       let paddingView = PaddingView<UILabel>()
+        paddingView.innerView.text = "1주차"
+        paddingView.innerView.font = .monospacedSystemFont(ofSize: FontSize.body, weight: .semibold)
+        paddingView.innerView.backgroundColor = .clear
+        paddingView.backgroundColor = .assetColor(.accent4)
+        paddingView.rounded(cornerRadius: 20)
+        paddingView.addBlurEffect()
+        return paddingView
     }()
 
     private let dateLabel: PaddingView<UILabel> = {
@@ -52,27 +63,10 @@ final class DayPlanViewController: UIViewController {
         configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
         configuration.imagePlacement = .top
         configuration.imagePadding = 10
-        configuration.baseForegroundColor = .label
+        configuration.baseForegroundColor = .black
         
         let view = UIButton(configuration: configuration)
         view.addTarget(self, action: #selector(addImageButtonAction), for: .touchUpInside)
-        
-        return view
-    }()
-    
-    private lazy var editImageButton: UIButton = {
-        
-        var configuration = UIButton.Configuration.filled()
-        
-        configuration.image = UIImage(resource: .pencil)?.withRenderingMode(.alwaysTemplate)
-        configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
-        configuration.baseForegroundColor = .assetColor(.accent1)
-        configuration.baseBackgroundColor = .white
-        
-        let view = UIButton(configuration: configuration)
-        view.rounded(cornerRadius: 15)
-        view.isHidden = true
-        view.addTarget(self, action: #selector(editImageButtonAction), for: .touchUpInside)
         
         return view
     }()
@@ -82,7 +76,7 @@ final class DayPlanViewController: UIViewController {
         view.innerView.text = "필수"
         view.innerView.textColor = .white
         view.innerView.textAlignment = .center
-        view.rounded(cornerRadius: 16)
+        view.rounded()
         view.backgroundColor = .assetColor(.accent2)
         return view
     }()
@@ -104,7 +98,7 @@ final class DayPlanViewController: UIViewController {
             target: self,
             action: #selector(certifyButtonDidTapped)
         )
-        button.rounded(cornerRadius: 20)
+        button.rounded()
         return button
     }()
     
@@ -135,6 +129,8 @@ final class DayPlanViewController: UIViewController {
         )
         
         super.init(nibName: nil, bundle: nil)
+        
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -148,44 +144,57 @@ final class DayPlanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.checkError { [weak self] key, message in
+            if key == Const.Key.isCertifyingError {
+                self?.showAlert(title: "인증오류", message: message) {
+                    self?.addImageButton.isEnabled = true
+                    self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
+                }
+            } else {
+                self?.showAlert(title: "사진 저장 오류", message: message) {
+                    self?.addImageButton.isEnabled = true
+                    self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
+                }
+            }
+        }
+        
         viewModel.viewDidLoad()
         addNotification()
         configureViews()
         setConstraints()
-        bind()
     }
     
     func bind() {
         
-        if let _date = viewModel.dayPlan.date {
-            let dateString = DateFormatter.getFullDateString(from: _date)
-            self.dateLabel.innerView.text = dateString
-            
-            if !viewModel.dayPlan.isComplete {
-                if DateFormatter.getFullDateString(from: .now) == dateString {
-                    addImageButton.isEnabled = true
-                    certifyButton.setTitle("인증하기 ✨", for: .normal)
-                } else if DateFormatter.getFullDateString(from: .now) > dateString {
-                    addImageButton.isEnabled = false
-                    addImageButton.configuration?.image = UIImage(named: "Placeholder")
-                    addImageButton.configuration?.title = nil
-                    certifyButton.setTitle("아쉽게도 인증 못했어요 🥲", for: .normal)
-                } else if DateFormatter.getFullDateString(from: .now) < dateString {
-                    addImageButton.isEnabled = false
-                    addImageButton.configuration?.image = UIImage(named: "Placeholder")
-                    addImageButton.configuration?.title = nil
-                    certifyButton.setTitle("지금처럼 꾸준히 해주세요!", for: .normal)
-                }
-            } else {
+        let _date = viewModel.dayPlan.date
+        let dateString = DateFormatter.getFullDateString(from: _date)
+        self.dateLabel.innerView.text = dateString
+        
+        if !viewModel.dayPlan.isComplete {
+            if DateFormatter.getFullDateString(from: .now) == dateString {
+                addImageButton.isEnabled = true
+                certifyButton.setTitle("인증하기 ✨", for: .normal)
+            } else if DateFormatter.getFullDateString(from: .now) > dateString {
                 addImageButton.isEnabled = false
-                certifyButton.setTitle("인증 완료 ✨", for: .normal)
+                addImageButton.configuration?.image = UIImage(named: "Placeholder")
+                addImageButton.configuration?.title = nil
+                certifyButton.setTitle("아쉽게도 인증 못했어요 🥲", for: .normal)
+            } else if DateFormatter.getFullDateString(from: .now) < dateString {
+                addImageButton.isEnabled = false
+                addImageButton.configuration?.image = UIImage(named: "Placeholder")
+                addImageButton.configuration?.title = nil
+                certifyButton.setTitle("지금처럼 꾸준히 해주세요!", for: .normal)
             }
+        } else {
+            addImageButton.isEnabled = false
+            certifyButton.setTitle("인증 완료 ✨", for: .normal)
         }
         
         requiredLabel.isHidden = !viewModel.dayPlan.isRequired
         
         checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
         
+        weekDayLabel.innerView.text = "\(viewModel.dayPlan.week)주차"
         
         viewModel.loadImage { [weak self] data in
             if let imageData = data {
@@ -204,14 +213,13 @@ final class DayPlanViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.isLoading
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { (_self, isLoading) in
-                
                 if isLoading {
                     _self.indicatorView.startAnimating()
                 } else {
                     _self.indicatorView.stopAnimating()
                 }
-                
                 _self.indicatorView.isHidden = !isLoading
             }
             .disposed(by: disposeBag)
@@ -225,34 +233,33 @@ extension DayPlanViewController: BaseViewConfigurable {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
         
-        view.addSubview(borderContainerView)
-        
-        borderContainerView.addSubview(imageView)
-        borderContainerView.addSubview(blurView)
-        borderContainerView.addSubview(addImageButton)
-        
-        blurView.addSubview(requiredLabel)
-        blurView.addSubview(dateLabel)
-        imageView.addSubview(editImageButton)
-        blurView.addSubview(checkMarkImageView)
-        
-        view.addSubview(certifyButton)
-        view.addSubview(indicatorView)
-    
+        view.addSubviews(
+            [borderContainerView, certifyButton, indicatorView]
+        )
+        borderContainerView.addSubviews(
+            [imageView, blurView, addImageButton, weekDayLabel]
+        )
+        blurView.addSubviews(
+            [requiredLabel, dateLabel, checkMarkImageView]
+        )
     }
     
     func setConstraints() {
         
         borderContainerView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(50)
             make.centerX.equalTo(view.safeAreaLayoutGuide)
             make.width.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.9)
-            make.bottom.equalTo(certifyButton.snp.top).offset(-20)
+            make.bottom.equalTo(certifyButton.snp.top).offset(-60)
         }
         
         imageView.snp.makeConstraints { make in
             make.top.equalTo(borderContainerView).offset(4)
             make.horizontalEdges.equalTo(blurView)
+        }
+        
+        weekDayLabel.snp.makeConstraints { make in
+            make.top.leading.equalTo(borderContainerView).inset(10)
         }
         
         blurView.snp.makeConstraints { make in
@@ -282,16 +289,10 @@ extension DayPlanViewController: BaseViewConfigurable {
             make.width.height.equalTo(imageView.snp.width).multipliedBy(0.3)
         }
         
-        editImageButton.snp.makeConstraints { make in
-            make.top.equalTo(imageView).inset(20)
-            make.trailing.equalTo(imageView).inset(20)
-            make.width.height.equalTo(30)
-        }
-        
         certifyButton.snp.makeConstraints { make in
             make.height.equalTo(60)
             make.horizontalEdges.equalTo(borderContainerView)
-            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-30)
         }
         
         indicatorView.snp.makeConstraints { make in
@@ -327,7 +328,6 @@ extension DayPlanViewController {
         self.imageView.image = image
         self.imageView.isUserInteractionEnabled = true
         self.addImageButton.isHidden = true
-        self.editImageButton.isHidden = false
         self.viewModel.isValidated.accept(true)
     }
     
@@ -339,28 +339,17 @@ extension DayPlanViewController {
          */
         
         //1 이미지 파일 압축 (무손실 압축은 1.0) 백그라운드에서
-        viewModel.isLoading(true)
         
-        Task(priority: .background) { [weak self] in
-            guard let _self = self else { return }
-            let originalImage = _self.imageView.image
-            let result = await _self.viewModel.save(with: originalImage)
-            
-            switch result {
-            case .success:
-                NotificationCenter.default.post(name: .reloadPlan, object: nil)
-                
-                DispatchQueue.main.async {
-                    _self.viewModel.isLoading(false)
-                    _self.dismiss(animated: true)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    _self.viewModel.isLoading(false)
-                }
-                print(error)
+        viewModel.certifyButtonDidTapped(with: imageView.image) { [weak self] in
+            self?.viewModel.isLoading(false)
+            self?.dismiss(animated: true)
+        } failure: { [weak self] title, message in
+            self?.viewModel.isLoading(false)
+            self?.showAlert(title: title, message: message) {
+                self?.certifyButtonDidTapped()
             }
         }
+
     }
     
     @objc private func dismissButtonDidTapped() {

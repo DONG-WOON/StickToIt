@@ -11,5 +11,5 @@ protocol UpdateService {
     associatedtype Model
     associatedtype Entity
     
-    func save(entity: Entity.Type, matchingWith model: Model) async -> Result<Bool, Error>
+    func save(entity: Entity.Type, matchingWith model: Model, updateHandler: @escaping (Entity) -> Void) async -> Result<Bool, Error>
 }

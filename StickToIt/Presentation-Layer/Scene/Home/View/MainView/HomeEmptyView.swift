@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CreatePlanButtonDelegate: AnyObject {
-    func tapButton()
+    func createPlan()
 }
 
 final class HomeEmptyView: UIView {
@@ -18,7 +18,10 @@ final class HomeEmptyView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "목표가 아직 없어요."
+        label.textAlignment = .center
         label.textColor = .label
+        label.numberOfLines = 0
+//        label.adjustsFontSizeToFitWidth = true
         label.font = .boldSystemFont(ofSize: FontSize.title)
         return label
     }()
@@ -26,7 +29,7 @@ final class HomeEmptyView: UIView {
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.textAlignment = .center
         label.text = "지금 당장 작심삼일 목표를 추가해보세요!!"
         label.font = .systemFont(ofSize: FontSize.body)
@@ -71,7 +74,7 @@ final class HomeEmptyView: UIView {
     }
     
     @objc private func goToCreatePlanButtonDidTapped() {
-        delegate?.tapButton()
+        delegate?.createPlan()
     }
     
     func startAnimation() {
@@ -103,15 +106,15 @@ extension HomeEmptyView: BaseViewConfigurable {
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.bottom.equalTo(descriptionLabel.snp.top).offset(-15)
+            make.width.lessThanOrEqualTo(self).multipliedBy(0.7)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(goToCreatePlanButton.snp.top).offset(-15)
-            make.centerX.equalTo(self)
+            make.center.equalTo(self)
         }
         
         goToCreatePlanButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(15)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(15)
             make.centerX.equalTo(self)
         }
     }

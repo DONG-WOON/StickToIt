@@ -47,4 +47,10 @@ extension UserRepositoryImpl: UserRepository {
     func update(entity: Entity.Type, matchingWith model: Model, updateHandler: @escaping (Entity) -> Void, onFailure: @escaping @Sendable (Error?) -> Void) {
         databaseManager?.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: onFailure)
     }
+    
+    func update(userID: ID, updateHandler: @escaping (Entity) -> Void, onFailure: @escaping (Error?) -> Void) {
+        DispatchQueue.main.async {
+            databaseManager?.update(key: userID, updateHandler: updateHandler, onFailure: onFailure)
+        }
+    }
 }

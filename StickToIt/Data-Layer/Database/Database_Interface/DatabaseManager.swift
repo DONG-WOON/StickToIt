@@ -17,6 +17,9 @@ protocol DatabaseManager {
     // MARK: Methods
     func fetchAll() -> ResultType
     func fetch(key: Key) -> Entity?
+    
+    func filteredFetch(_ filtered: (Entity) -> Bool) -> [Entity]
+    
     func create(model: Model, to entity: Entity.Type, onFailure: @Sendable @escaping (Error?) -> Void)
     func update(entity: Entity.Type, matchingWith model: Model, updateHandler: @escaping (Entity) -> Void, onFailure: @Sendable @escaping (Error?) -> Void) 
     func delete(entity: Entity.Type, matchingWith model: Model, onFailure: @Sendable @escaping (Error?) -> Void)

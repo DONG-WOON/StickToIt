@@ -14,7 +14,7 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
 {
     enum Input {
         case createPlanButtonDidTapped
-        case planWeekButtonDidTapped
+        case completedDayPlansButtonDidTapped
         
         case viewDidLoad
         case viewWillAppear
@@ -26,32 +26,37 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
     
     enum Output {
         case showCreatePlanScene
-        case showPlanWeekScene(Int)
+        case showPlanWeekScene(Plan?)
         case startAnimation
         case stopAnimation
+        case showUserInfo(User?)
         
         case setViewsAndDelegate(planIsExist: Bool)
         case loadPlanQueries([PlanQuery])
         case loadPlan(Plan)
         case loadDayPlans([DayPlan])
         case loadAchievementProgress(Double)
+        case showCompleteDayPlanCount(Int)
     }
     
-    private let usersInfoUserCase: FetchUserInfoUseCase
+    private let userInfoUseCase: UserInfoUseCase
     private let planUseCase: PlanUseCase
     private let mainQueue: DispatchQueue
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
     
-    var currentWeek: Int?
+    private var user: User?
+    private var currentWeek: Int?
+    private var currentPlan: Plan?
+    
     var currentPlanCount: Int?
     
     init(
-        userInfoUseCase: FetchUserInfoUseCase,
+        userInfoUseCase: UserInfoUseCase,
         planUseCase: PlanUseCase,
         mainQueue: DispatchQueue = .main
     ) {
-        self.usersInfoUserCase = userInfoUseCase
+        self.userInfoUseCase = userInfoUseCase
         self.planUseCase = planUseCase
         self.mainQueue = mainQueue
     }
@@ -78,8 +83,8 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
                 case .createPlanButtonDidTapped:
                     _self.output.onNext(.showCreatePlanScene)
                     
-                case .planWeekButtonDidTapped:
-                    _self.output.onNext(.showPlanWeekScene(1))
+                case .completedDayPlansButtonDidTapped:
+                    _self.output.onNext(.showPlanWeekScene(_self.currentPlan))
                     
                 case .fetchPlan(let planQuery):
                     _self.fetchPlan(planQuery)
@@ -114,13 +119,14 @@ extension HomeViewModel {
             return
         }
         
-        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+        userInfoUseCase.fetchUserInfo(key: userID) { [weak self] user in
             let planQueries = user.planQueries
             
             if planQueries.count > 0 {
                 self?.output.onNext(.setViewsAndDelegate(planIsExist: true))
             } else {
                 self?.output.onNext(.setViewsAndDelegate(planIsExist: false))
+                self?.output.onNext(.showUserInfo(user))
             }
         }
     }
@@ -131,18 +137,22 @@ extension HomeViewModel {
             return
         }
       
-        usersInfoUserCase.fetchUserInfo(key: userID) { [weak self] user in
+        userInfoUseCase.fetchUserInfo(key: userID) { [weak self] user in
+            self?.user = user
+            
             let planQueries = user.planQueries
             self?.currentPlanCount = planQueries.count
-            self?.output.onNext(.loadPlanQueries(planQueries))
-            self?.fetchCurrentPlan()
+            if !planQueries.isEmpty {
+                self?.output.onNext(.loadPlanQueries(planQueries))
+                self?.fetchCurrentPlan()
+            }
         }
     }
     
     private func fetchPlan(_ query: PlanQuery) {
         planUseCase.fetch(query: query) { [weak self] plan in
             guard let _self = self else { return }
-            
+            _self.currentPlan = plan
             _self.output.onNext(.loadPlan(plan))
             
             _self.currentWeek = Calendar.current.dateComponents(
@@ -150,13 +160,29 @@ extension HomeViewModel {
                 from: plan.startDate,
                 to: .now).weekdayOrdinal! + 1
             let dayPlans = _self.loadCurrentWeekDayPlans(plan)
-            _self.output.onNext(.loadDayPlans(dayPlans))
             
             _self.computeAchievementProgress(of: dayPlans)
+            _self.output.onNext(.showUserInfo(_self.user))
+            _self.output.onNext(.loadDayPlans(dayPlans))
+            _self.completedDayPlansCount(plan.dayPlans)
         }
     }
     
+    private func completedDayPlansCount(_ dayPlans: [DayPlan]) {
+        let completeDayPlanCount = dayPlans
+            .filter { $0.isComplete }.count
+        output.onNext(.showCompleteDayPlanCount(completeDayPlanCount))
+    }
+    
     private func computeAchievementProgress(of dayPlans: [DayPlan]) {
+        
+        let completedDayPlans = dayPlans.filter { $0.isComplete == true }
+        
+        guard let lastCompletedDayPlan = completedDayPlans.sorted(by: { $0.date < $1.date }).last else { return }
+        
+        let lastCompletedDayPlanQuery = DateFormatter.convertToDateQuery(lastCompletedDayPlan.date)
+        let todayQuery = DateFormatter.convertToDateQuery(.now)
+        self.useDateQuery(firstQuery: lastCompletedDayPlanQuery, secondQuery: todayQuery)
         
         let requiredDayPlanCount = dayPlans
             .filter { $0.isRequired }.count

@@ -41,6 +41,8 @@ enum Const {
     enum Key: String {
         case currentPlan = "currentPlan"
         case userID = "userID"
+        static let isCertifyingError = "isCertifyingError"
+        static let isSaveImageError = "isSaveImageError"
     }
     
     enum Size {
@@ -64,7 +66,16 @@ enum AssetColor: String {
 }
 
 enum FontSize {
-    static let title: CGFloat = 25
-    static let body: CGFloat = 17
+    
+    /// 27
+    static let title: CGFloat = 27
+    
+    /// 21
+    static let subTitle: CGFloat = 21
+    
+    /// 18
+    static let body: CGFloat = 18
+    
+    /// 14
     static let description:CGFloat = 14
 }

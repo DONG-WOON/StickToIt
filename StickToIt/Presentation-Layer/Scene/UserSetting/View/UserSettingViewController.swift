@@ -40,7 +40,7 @@ class UserSettingViewController: UIViewController {
         view.innerView.borderStyle = .none
         view.innerView.clearButtonMode = .whileEditing
         view.innerView.font = .systemFont(ofSize: 17)
-        view.bordered(cornerRadius: 10, borderWidth: 1, borderColor: .assetColor(.accent2))
+        view.bordered(borderWidth: 1, borderColor: .assetColor(.accent2))
         return view
     }()
     
@@ -61,7 +61,7 @@ class UserSettingViewController: UIViewController {
             target: self,
             action: #selector(registerButtonDidTapped)
         )
-        button.rounded(cornerRadius: 20)
+        button.rounded()
         return button
     }()
     
@@ -132,9 +132,10 @@ class UserSettingViewController: UIViewController {
         nicknameTextField.innerView.rx.text
             .orEmpty
             .asObservable()
-            .map{ String($0.prefix(30)) }
+            .map{ String($0.prefix(20)) }
             .subscribe(on: MainScheduler.asyncInstance)
             .subscribe(with: self) { (_self, text) in
+                self.nicknameTextField.innerView.text = text
                 _self.input.onNext(.textInput(text: text))
             }
             .disposed(by: disposeBag)

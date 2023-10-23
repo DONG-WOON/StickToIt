@@ -12,7 +12,10 @@ final class PlanQueryEntity: Object {
     @Persisted var _id: UUID
     @Persisted var planName: String
     
-    convenience init(_id: UUID, planName: String) {
+    convenience init(
+        _id: UUID,
+        planName: String
+    ) {
         self.init()
         
         self._id = _id

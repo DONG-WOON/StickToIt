@@ -25,14 +25,13 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.rounded(cornerRadius: 20)
-        view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
+        view.rounded()
         return view
     }()
     
     private lazy var blurView: BlurEffectView = {
         let view = BlurEffectView()
-        view.rounded(cornerRadius: 20)
+        view.rounded()
         return view
     }()
     
@@ -48,7 +47,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         view.innerView.text = "필수"
         view.innerView.textColor = .white
         view.innerView.textAlignment = .center
-        view.rounded(cornerRadius: 16)
+        view.rounded()
         view.backgroundColor = .assetColor(.accent2)
         return view
     }()
@@ -70,6 +69,17 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         view.contentMode = .scaleToFill
         view.tintColor = .label
         return view
+    }()
+    
+    private lazy var weekDayLabel: PaddingView<UILabel> = {
+       let paddingView = PaddingView<UILabel>()
+        paddingView.innerView.text = "1주차"
+        paddingView.innerView.font = .monospacedSystemFont(ofSize: FontSize.body, weight: .semibold)
+        paddingView.innerView.backgroundColor = .clear
+        paddingView.backgroundColor = .assetColor(.accent4)
+        paddingView.rounded(cornerRadius: 20)
+        paddingView.addBlurEffect()
+        return paddingView
     }()
     
     private lazy var imageTapGesture = UITapGestureRecognizer(target: self, action: #selector(imageDidSelected))
@@ -105,11 +115,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     }
     
     private func update(with dayPlan: DayPlan) {
-        if let _date = dayPlan.date {
-            dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: _date)
-        }
+        dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: dayPlan.date)
         requiredLabel.isHidden = !dayPlan.isRequired
-
         checkMarkImageView.isHidden = !dayPlan.isComplete
         
 //        if dayPlan.isComplete {
@@ -117,6 +124,8 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
 //        } else {
 //            slideButton.reset()
 //        }
+        
+        weekDayLabel.innerView.text = "\(dayPlan.week)주차"
     }
     
 }
@@ -132,27 +141,31 @@ extension HomeImageCollectionViewCell {
 extension HomeImageCollectionViewCell {
     private func configureViews() {
         
-        self.backgroundColor = .assetColor(.accent4)
-        self.rounded(cornerRadius: 20)
-        self.addBlurEffect()
+        contentView.addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
+        contentView.rounded()
         
-        contentView.addSubview(placeholderImageView)
-        contentView.addSubview(imageView)
-        contentView.addSubview(blurView)
-//        contentView.addSubview(slideButton)
+        contentView.addSubviews(
+            [placeholderImageView, imageView, blurView, weekDayLabel]
+        )
         
-        blurView.addSubview(requiredLabel)
-        blurView.addSubview(dayNameLabel)
-        blurView.addSubview(checkMarkImageView)
+        //        contentView.addSubview(slideButton)
         
+        blurView.addSubviews(
+            [requiredLabel, dayNameLabel, checkMarkImageView]
+        )
+
         contentView.addGestureRecognizer(imageTapGesture)
     }
     
     private func setConstraints() {
         
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView).offset(4)
-            make.horizontalEdges.equalTo(blurView)
+            make.top.equalTo(contentView).inset(4)
+            make.horizontalEdges.equalTo(contentView).inset(4)
+        }
+        
+        weekDayLabel.snp.makeConstraints { make in
+            make.top.leading.equalTo(contentView).inset(10)
         }
         
         placeholderImageView.snp.makeConstraints { make in

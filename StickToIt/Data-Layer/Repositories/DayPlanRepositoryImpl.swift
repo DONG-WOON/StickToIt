@@ -46,6 +46,12 @@ extension DayPlanRepositoryImpl: PlanRepository {
         return .success(entity.toDomain())
     }
     
+    func filteredFetch(filtered: (Entity) -> Bool) -> Result<[Model], Error> {
+        guard let entity = databaseManager?.filteredFetch(filtered) else { return .failure(NSError(domain: "filtered error", code: -1000))}
+        return .success(entity.map { $0.toDomain() })
+    }
+    
+    
     func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
         databaseManager?.create(model: model, to: DayPlanEntity.self, onFailure: { error in
             if let error {
@@ -56,7 +62,6 @@ extension DayPlanRepositoryImpl: PlanRepository {
     }
     
     func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, updateHandler: @escaping (Entity)-> Void,  onFailure: @escaping @Sendable (Error?) -> Void) {
-        print(model, entity)
         databaseManager?.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: onFailure)
     }
     

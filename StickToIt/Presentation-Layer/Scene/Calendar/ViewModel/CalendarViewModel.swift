@@ -15,7 +15,6 @@ final class CalendarViewModel {
     enum Input {
         case viewWillAppear
         case viewDidLoad
-        case fetchCurrentDatePlan(Date)
         case planMenuTapped(PlanQuery?)
         case refresh
         case didSelect(Date?)
@@ -23,19 +22,24 @@ final class CalendarViewModel {
     
     enum Output {
         case reload
+        case configureUI
         case showPlansMenu([PlanQuery])
         case showPlanInfo(Plan)
+        case showDayPlanImage(data: Data?)
     }
     
     private var currentPlanQuery: PlanQuery?
     private var planCompletedDate: [Date]?
-    private let currentMonthPlans = [DayPlan]()
+    private var currentPlan: Plan?
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
     private let planRepository: PlanRepositoryImpl
     private let userRepository: UserRepositoryImpl
     
-    init(planRepository: PlanRepositoryImpl, userRepository: UserRepositoryImpl) {
+    init(
+        planRepository: PlanRepositoryImpl,
+         userRepository: UserRepositoryImpl
+    ) {
         self.planRepository = planRepository
         self.userRepository = userRepository
     }
@@ -44,17 +48,17 @@ final class CalendarViewModel {
         input
             .subscribe(with: self) { (_self, event) in
                 switch event {
-                case .fetchCurrentDatePlan(let date):
-                    _self.fetchCurrentMonthPlan(date: date)
+             
                 case .viewDidLoad:
-                    _self.fetchPlanQueries()
+                    _self.output.onNext(.configureUI)
                 case .viewWillAppear, .refresh:
                     _self.fetchPlanQueries()
-                    return
+    
                 case .planMenuTapped(let planQuery):
                     _self.fetchPlanInfo(query: planQuery)
+                    
                 case .didSelect(let date):
-                    return
+                    _self.selectDayPlan(at: date)
                 }
             }
             .disposed(by: disposeBag)
@@ -63,15 +67,12 @@ final class CalendarViewModel {
 }
 
 extension CalendarViewModel {
-    
+    //1
     func eventCount(at date: Date) -> Int {
         return completedPlanNumber(at: date)
     }
     
-    private func fetchCurrentMonthPlan(date: Date) {
-        print(date)
-    }
-    
+    //2
     private func fetchPlanInfo(query: PlanQuery?) {
         guard let query else {
             print("Query 없음")
@@ -83,7 +84,10 @@ extension CalendarViewModel {
         switch result {
         case .success(let plan):
             output.onNext(.showPlanInfo(plan))
+            currentPlan = plan
             filterCompletedDayPlans(plan.dayPlans)
+            selectDayPlan(at: .now)
+        
         case .failure(let error):
             print(error)
         }
@@ -103,17 +107,46 @@ extension CalendarViewModel {
         }
     }
     
+    func selectDayPlan(at date: Date?) {
+        if let plan = currentPlan?.dayPlans.filter({ dayPlan in
+            let _date = dayPlan.date
+            guard let _selectedDate = date else { return false }
+            return DateFormatter.convertDate(from: _selectedDate) == DateFormatter.convertDate(from: _date)
+        }).first {
+            guard plan.imageURL != nil else {
+                output.onNext(.showDayPlanImage(data: nil))
+                return
+            }
+            
+            loadImage(dayPlanID: plan._id)
+        } else {
+            output.onNext(.showDayPlanImage(data: nil))
+            return
+        }
+    }
+    
+    private func loadImage(dayPlanID: UUID) {
+        do {
+            let data = try planRepository.loadImageFromDocument(fileName: dayPlanID.uuidString)
+            output.onNext(.showDayPlanImage(data: data))
+        } catch {
+            print(error)
+        }
+    }
+    
+    //3
     func filterCompletedDayPlans(_ dayPlans: [DayPlan]) {
         let dates = dayPlans
             .filter { $0.isComplete == true }
             .compactMap { $0.date }
         self.planCompletedDate = dates
-        output.onNext(.reload)
     }
 
     private func completedPlanNumber(at date: Date) -> Int {
         
-        if let count = planCompletedDate?.filter({ $0 == date }).count, count > 0 {
+        if let count = planCompletedDate?.filter({
+            DateFormatter.getFullDateString(from: $0) == DateFormatter.getFullDateString(from: date)
+        }).count, count > 0 {
             return count
         } else {
             return 0

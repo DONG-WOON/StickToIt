@@ -14,7 +14,6 @@ struct Plan {
     let targetNumberOfDays: Int
     let startDate: Date
     let endDate: Date
-    let executionDaysOfWeekday: Set<Week>
     var dayPlans: [DayPlan]
     
     var totalWeek: Int {
@@ -34,7 +33,6 @@ struct Plan {
         targetNumberOfDays: Int,
         startDate: Date,
         endDate: Date,
-        executionDaysOfWeekday: Set<Week>,
         dayPlans: [DayPlan]
     ) {
         self._id = _id
@@ -42,7 +40,6 @@ struct Plan {
         self.targetNumberOfDays = targetNumberOfDays
         self.startDate = startDate
         self.endDate = endDate
-        self.executionDaysOfWeekday = executionDaysOfWeekday
         self.dayPlans = dayPlans
     }
     

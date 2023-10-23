@@ -42,7 +42,7 @@ final class CreatePlanViewController: UIViewController {
             target: self,
             action: #selector(createButtonDidTapped)
         )
-        button.rounded(cornerRadius: 20)
+        button.rounded()
         return button
     }()
     
@@ -79,7 +79,7 @@ final class CreatePlanViewController: UIViewController {
             .subscribe(with: self) { (_self, text) in
                 _self.mainView.planNameTextField.innerView.text = text
                 _self.mainView.planNameMaximumTextNumberLabel.text = "\(text.count) / 20"
-                _self.viewModel.planName.accept(text)
+                _self.viewModel.planName.onNext(text)
                 
                 if !text.isEmpty {
                     _self.mainView.planNameTextField.bordered(borderWidth: 1, borderColor: .assetColor(.accent1))
@@ -137,15 +137,6 @@ final class CreatePlanViewController: UIViewController {
         let weekdayList = datesFromStartDateToEndDate.map {
             return Calendar.current.dateComponents([.weekday], from: $0).weekday!
         }
-        
-//        if weekdayList.count < 7 {
-//        
-//            mainView.executionDaysOfWeekdayCollectionView
-//                .disable(indexAtCell: weekdayList)
-//        } else {
-//            mainView.executionDaysOfWeekdayCollectionView
-//                .enableAllCell()
-//        }
     }
     
     private func configureViews() {
@@ -155,7 +146,6 @@ final class CreatePlanViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
         
         mainView.buttonDelegate = self
-        mainView.dayCellDelegate = self
         
         view.addSubview(mainView)
         view.addSubview(createButton)
@@ -228,27 +218,5 @@ extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
     
     func okButtonDidTapped(date: Date?) {
         self.viewModel.endDate.accept(date)
-        self.viewModel.executionDaysOfWeekday.accept([])
-    }
-}
-
-extension CreatePlanViewController: DayCellDelegate {
-    
-    func select(week: Week?) {
-        guard let week else { return }
-        var weeks = viewModel.executionDaysOfWeekday.value
-        weeks.insert(week)
-        viewModel.executionDaysOfWeekday
-            .accept(weeks)
-    }
-    
-    func deSelect(week: Week?) {
-        guard let week else { return }
-        var weeks = viewModel.executionDaysOfWeekday.value
-        weeks.remove(week)
-        viewModel.executionDaysOfWeekday
-            .accept(
-                weeks
-            )
     }
 }

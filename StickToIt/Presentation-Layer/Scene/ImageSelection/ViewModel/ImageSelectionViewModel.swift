@@ -7,18 +7,17 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
 import Photos
 
-final class ImageSelectionViewModel<ImageUseCase: FetchImageUseCase, CameraUseCase: OpenCameraUseCase> {
+final class ImageSelectionViewModel<CameraUseCase: OpenCameraUseCase> {
     
-    private let imageUseCase: ImageUseCase
+    private let imageUseCase: (any FetchImageUseCase)?
     private let cameraUseCase: CameraUseCase
     private let mainQueue: DispatchQueue
     
-    var imageDataList: BehaviorRelay<ImageAssets> = BehaviorRelay(value: [])
+    var imageDataList = BehaviorSubject(value: [ImageAsset]())
     
-    init(imageUseCase: ImageUseCase,
+    init(imageUseCase: some FetchImageUseCase,
          cameraUseCase: CameraUseCase,
          mainQueue: DispatchQueue
     ) {

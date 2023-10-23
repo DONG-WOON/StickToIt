@@ -12,9 +12,9 @@ final class FavoritePlanSettingViewModel {
     
     var planQueries = PublishSubject<[PlanQuery]>()
     
-    private let useCase: FetchUserInfoUseCase
+    private let useCase: UserInfoUseCase
     
-    init(useCase: FetchUserInfoUseCase) {
+    init(useCase: UserInfoUseCase) {
         self.useCase = useCase
     }
 

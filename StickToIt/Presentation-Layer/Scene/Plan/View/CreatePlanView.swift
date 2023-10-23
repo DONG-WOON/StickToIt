@@ -13,15 +13,9 @@ protocol CalendarButtonProtocol: AnyObject {
     func endDateSettingButtonDidTapped()
 }
 
-protocol DayCellDelegate: AnyObject {
-    func select(week: Week?)
-    func deSelect(week: Week?)
-}
-
 final class CreatePlanView: UIScrollView {
     
     weak var buttonDelegate: CalendarButtonProtocol?
-    weak var dayCellDelegate: DayCellDelegate?
     
     let planNameLabel: UILabel = {
         let view = UILabel()
@@ -117,7 +111,7 @@ final class CreatePlanView: UIScrollView {
 
     let endDateLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
-        view.bordered(cornerRadius: 10, borderWidth: 0.7, borderColor: .assetColor(.accent2))
+        view.bordered(borderWidth: 0.7, borderColor: .assetColor(.accent2))
         view.innerView.text = "종료일을 설정해주세요 ---->"
         view.innerView.backgroundColor = .clear
         view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
@@ -136,16 +130,6 @@ final class CreatePlanView: UIScrollView {
         )
         return button
     }()
-    
-//    let planRequiredDoingDayLabel: UILabel = {
-//        let view = UILabel()
-//        view.text = "목표 실행일 설정"
-//        view.textColor = .label
-//        view.font = .boldSystemFont(ofSize: 17)
-//        return view
-//    }()
-    
-//    let executionDaysOfWeekdayCollectionView = ExecutionDayCollectionView()
     
     let descriptionLabel: UILabel = {
         let view = UILabel()
@@ -187,12 +171,7 @@ final class CreatePlanView: UIScrollView {
     
     func update(plan: Plan) {
         planNameLabel.text = plan.name
-//        plan.executionDaysOfWeekday.forEach { week in
-//            let cell = executionDaysOfWeekdayCollectionView.cellForItem(at: IndexPath(item: week.rawValue - 1, section: 0)) as? ExecutionDayCollectionViewCell
-//
-//            cell?.isSelected = true
-//        }
-        
+
         endDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
     }
 }
@@ -200,10 +179,6 @@ final class CreatePlanView: UIScrollView {
 extension CreatePlanView {
     
     private func configureViews() {
-        
-//        executionDaysOfWeekdayCollectionView.dataSource = self
-//        executionDaysOfWeekdayCollectionView.delegate = self
-//        executionDaysOfWeekdayCollectionView.register(ExecutionDayCollectionViewCell.self, forCellWithReuseIdentifier: ExecutionDayCollectionViewCell.identifier)
         
         addSubview(planNameLabel)
         addSubview(planNameDescriptionLabel)
@@ -217,8 +192,6 @@ extension CreatePlanView {
         addSubview(planTargetPeriodLabel)
         addSubview(planEndDateDescriptionLabel)
         addSubview(endDateLabel)
-//        addSubview(planRequiredDoingDayLabel)
-//        addSubview(executionDaysOfWeekdayCollectionView)
         
         addSubview(descriptionLabel)
         addSubview(createButton)
@@ -288,50 +261,10 @@ extension CreatePlanView {
             make.width.equalTo(endDateSettingButton.snp.height)
         }
         
-//        planRequiredDoingDayLabel.snp.makeConstraints { make in
-//            make.top.equalTo(endDateLabel.snp.bottom).offset(40)
-//            make.leading.equalTo(self.contentLayoutGuide).inset(20)
-//        }
-//
-//        executionDaysOfWeekdayCollectionView.snp.makeConstraints { make in
-//            make.top.equalTo(planRequiredDoingDayLabel.snp.bottom).offset(15)
-//
-//            let inset = 20.0
-//            let deviceWidth = UIScreen.main.bounds.width
-//
-//            make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(inset)
-//            make.height.equalTo((deviceWidth - (inset * 2) - (3 * 6)) / 7)
-//        }
-        
-        
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(endDateLabel.snp.bottom).offset(40)
             make.horizontalEdges.equalTo(self.contentLayoutGuide).inset(20)
             make.bottom.equalTo(contentLayoutGuide).offset(-10)
         }
-    }
-}
-
-extension CreatePlanView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExecutionDayCollectionViewCell.identifier, for: indexPath) as? ExecutionDayCollectionViewCell else { return UICollectionViewCell() }
-        cell.label.text = Week(rawValue: indexPath.item + 1)?.kor
-        cell.isUserInteractionEnabled = false
-        return cell
-    }
-}
-
-extension CreatePlanView: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        dayCellDelegate?.select(week: Week(rawValue: indexPath.item + 1))
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        dayCellDelegate?.deSelect(week: Week(rawValue: indexPath.item + 1))
     }
 }
