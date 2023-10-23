@@ -22,7 +22,6 @@ where PlanUseCase.Model == Plan
     var targetNumberOfDays: Int = 3
     var startDate: Date = Date.now
     var endDate: BehaviorRelay<Date?> = BehaviorRelay(value: nil)
-    var executionDaysOfWeekday = BehaviorRelay<Set<Week>>(value: [])
     var planIsValidated = BehaviorRelay(value: false)
     private let disposeBag = DisposeBag()
     
@@ -47,9 +46,20 @@ where PlanUseCase.Model == Plan
     // MARK: Methods
     func createPlan(completion: @escaping (Result<PlanQuery, Error>) -> Void) {
         
-        let planName = planName.value
+        guard let planName = try? planName.value() else {
+            completion(.failure(NSError(domain: "목표 이름이 없어요.", code:    -1001)))
+            return
+        }
         
-        let initialDayPlanDates = Array(0...2).map {
+        let startDay = startDate
+        guard let endDay = endDate.value else {
+            completion(.failure(NSError(domain: "종료일이 설정되지않았어요.", code: -1010)))
+            return
+        }
+        
+        let allDays =  Calendar.current.dateComponents([.day], from: startDay, to: endDay).day!
+        
+        let initialDayPlanDates = Array(0...allDays + 1).map {
             Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
         }
   
@@ -61,7 +71,7 @@ where PlanUseCase.Model == Plan
                 content: nil, imageURL: nil)
         }
         
-        let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, executionDaysOfWeekday: [], dayPlans: dayPlans)
+        let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, dayPlans: dayPlans)
         
         useCase.create(plan) { [weak self] result in
             switch result {
