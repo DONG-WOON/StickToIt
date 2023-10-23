@@ -11,5 +11,6 @@ enum STIError: Error {
     case certifyingError
     case entityNotSave
     case imageNotSave
+    case imageURLNotSave
     
 }

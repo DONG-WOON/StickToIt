@@ -71,23 +71,6 @@ final class DayPlanViewController: UIViewController {
         return view
     }()
     
-    private lazy var editImageButton: UIButton = {
-        
-        var configuration = UIButton.Configuration.filled()
-        
-        configuration.image = UIImage(resource: .pencil)?.withRenderingMode(.alwaysTemplate)
-        configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
-        configuration.baseForegroundColor = .assetColor(.accent1)
-        configuration.baseBackgroundColor = .white
-        
-        let view = UIButton(configuration: configuration)
-        view.rounded(cornerRadius: 15)
-        view.isHidden = true
-        view.addTarget(self, action: #selector(editImageButtonAction), for: .touchUpInside)
-        
-        return view
-    }()
-    
     private lazy var requiredLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
         view.innerView.text = "필수"
@@ -146,6 +129,8 @@ final class DayPlanViewController: UIViewController {
         )
         
         super.init(nibName: nil, bundle: nil)
+        
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -159,11 +144,24 @@ final class DayPlanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.checkError { [weak self] key, message in
+            if key == Const.Key.isCertifyingError {
+                self?.showAlert(title: "인증오류", message: message) {
+                    self?.addImageButton.isEnabled = true
+                    self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
+                }
+            } else {
+                self?.showAlert(title: "사진 저장 오류", message: message) {
+                    self?.addImageButton.isEnabled = true
+                    self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
+                }
+            }
+        }
+        
         viewModel.viewDidLoad()
         addNotification()
         configureViews()
         setConstraints()
-        bind()
     }
     
     func bind() {
@@ -215,14 +213,13 @@ final class DayPlanViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.isLoading
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { (_self, isLoading) in
-                
                 if isLoading {
                     _self.indicatorView.startAnimating()
                 } else {
                     _self.indicatorView.stopAnimating()
                 }
-                
                 _self.indicatorView.isHidden = !isLoading
             }
             .disposed(by: disposeBag)
@@ -342,28 +339,17 @@ extension DayPlanViewController {
          */
         
         //1 이미지 파일 압축 (무손실 압축은 1.0) 백그라운드에서
-        viewModel.isLoading(true)
         
-        Task(priority: .background) { [weak self] in
-            guard let _self = self else { return }
-            let originalImage = _self.imageView.image
-            let result = await _self.viewModel.save(with: originalImage)
-            
-            switch result {
-            case .success:
-                NotificationCenter.default.post(name: .reloadPlan, object: nil)
-                
-                DispatchQueue.main.async {
-                    _self.viewModel.isLoading(false)
-                    _self.dismiss(animated: true)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    _self.viewModel.isLoading(false)
-                }
-                print(error)
+        viewModel.certifyButtonDidTapped(with: imageView.image) { [weak self] in
+            self?.viewModel.isLoading(false)
+            self?.dismiss(animated: true)
+        } failure: { [weak self] title, message in
+            self?.viewModel.isLoading(false)
+            self?.showAlert(title: title, message: message) {
+                self?.certifyButtonDidTapped()
             }
         }
+
     }
     
     @objc private func dismissButtonDidTapped() {

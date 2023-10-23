@@ -41,6 +41,8 @@ enum Const {
     enum Key: String {
         case currentPlan = "currentPlan"
         case userID = "userID"
+        static let isCertifyingError = "isCertifyingError"
+        static let isSaveImageError = "isSaveImageError"
     }
     
     enum Size {
