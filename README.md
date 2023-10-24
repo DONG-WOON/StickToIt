@@ -20,13 +20,15 @@ iOS 15.0 ~
 - 위젯
 
 ## 스크린 샷
-<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/6465b944-28b3-47a7-b768-9f2eaf477346" width=220>
-<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/48646356-450b-46f6-9fb8-31bc1d318b69" width=220>
-<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/da2daa46-cf56-49e9-b034-6180915635e1" width=220>
+|<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/6465b944-28b3-47a7-b768-9f2eaf477346" width=220>|<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/48646356-450b-46f6-9fb8-31bc1d318b69" width=220>|<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/da2daa46-cf56-49e9-b034-6180915635e1" width=220>|
+|:-:|:-:|:-:|
+|홈 화면|목표 생성|캘린더|
 </br>
-<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/91458add-2819-4401-8f04-438d35238965" width=220>
-<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/debbd251-332d-422b-9af6-66d1c9b401c0" width=220>
-<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/7fd17ffe-46fe-49c1-8b44-4cdfdbf446e2" width=220>
+
+|<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/91458add-2819-4401-8f04-438d35238965" width=220>|<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/debbd251-332d-422b-9af6-66d1c9b401c0" width=220>|<img src="https://github.com/DONG-WOON/StickToIt/assets/80871083/7fd17ffe-46fe-49c1-8b44-4cdfdbf446e2" width=220>|
+|:-:|:-:|:-:|
+|목표달성률|인증화면|이미지 편집|
+
 
 ## 핵심 기능
 - 일일 목표 데이터 관리 | Realm CRUD
