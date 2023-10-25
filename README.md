@@ -71,7 +71,7 @@ iOS 15.0 ~
 [배운점]
 1. usecase, repository에 protocol을 적용하여 인터페이스로 의존성 역전, where(Conditionally Conforming)을 사용하여 특정한 프로토콜로 제한
 2. CRUD 기능별 Service protocol 정의, 필요에 따라 채택하여 usecase 사용
-3. RXSwift와 Input/Output 패턴으로 코드의 가독성 향상, 비동기 데이
+3. RXSwift와 Input/Output 패턴으로 코드의 가독성 향상, 비동기 데이터 처리
 
 [아쉬운점]
 1. MVVM + clean architecture로 설계하면서 UseCase의 분리 기준과 목적의 부재로 작업 시간 딜레이</br>
