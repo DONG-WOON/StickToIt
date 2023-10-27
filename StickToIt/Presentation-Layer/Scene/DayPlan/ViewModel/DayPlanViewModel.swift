@@ -1,5 +1,5 @@
 //
-//  CreateDayPlanViewModel.swift
+//  DayPlanViewModel.swift
 //  StickToIt
 //
 //  Created by 서동운 on 10/11/23.
@@ -9,11 +9,9 @@ import Foundation
 import UIKit
 import RxCocoa
 
-final class CreateDayPlanViewModel<PlanUseCase: CreateDayPlanUseCase>
-where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
-{
+final class DayPlanViewModel {
     // MARK: Properties
-    private let useCase: PlanUseCase
+    private let updateDayPlanUseCase: any UpdateDayPlanUseCase<DayPlan, DayPlanEntity>
     private let mainQueue: DispatchQueue
     
     var dayPlan: DayPlan
@@ -22,11 +20,11 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     
     init(
         dayPlan: DayPlan,
-        useCase: PlanUseCase,
+        updateDayPlanUseCase: some UpdateDayPlanUseCase<DayPlan, DayPlanEntity>,
         mainQueue: DispatchQueue = .main
     ) {
         self.dayPlan = dayPlan
-        self.useCase = useCase
+        self.updateDayPlanUseCase = updateDayPlanUseCase
         self.mainQueue = mainQueue
     }
         
@@ -80,7 +78,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     }
     
     func certify() async throws {
-        let result = await useCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan, updateHandler: {
+        let result = await updateDayPlanUseCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan, updateHandler: {
             $0.isComplete = true
         })
         
@@ -94,7 +92,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
 
     func save(with imageData: UIImage?) async throws -> String {
         let imageData = compressedImageData(imageData, limitSize: Const.Size.kb(10).value)
-        let imageURL = await useCase.save(dayPlanID: dayPlan._id, imageData: imageData)
+        let imageURL = await updateDayPlanUseCase.save(dayPlanID: dayPlan.id, imageData: imageData)
         
         if let imageURL {
             return imageURL
@@ -104,7 +102,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     }
     
     func updateImageURL(with imageURL: String) async throws {
-        let result = await useCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan) { $0.imageURL = imageURL }
+        let result = await updateDayPlanUseCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan) { $0.imageURL = imageURL }
         
         switch result {
         case .success:
@@ -115,7 +113,7 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     }
     
     func loadImage(completion: @escaping (Data?) -> Void) {
-        useCase.loadImage(dayPlanID: dayPlan._id) { data in
+        updateDayPlanUseCase.loadImage(dayPlanID: dayPlan.id) { data in
             completion(data)
         }
     }

@@ -11,14 +11,7 @@ import RxCocoa
 
 final class CreatePlanViewController: UIViewController {
     
-    let viewModel = CreatePlanViewModel(
-        useCase: CreatePlanUseCaseImpl(
-            repository: PlanRepositoryImpl(
-                networkService: nil,
-                databaseManager: PlanDatabaseManager()
-            )
-        )
-    )
+    private let viewModel: CreatePlanViewModel
 
     private let disposeBag = DisposeBag()
     
@@ -46,13 +39,22 @@ final class CreatePlanViewController: UIViewController {
         return button
     }()
     
+    init(viewModel: CreatePlanViewModel) {
+        self.viewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         bindViewModel()
         configureViews()
         setConstraints()
-    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,10 +126,8 @@ final class CreatePlanViewController: UIViewController {
     
     func setTargetNumberOfDays(date: Date) {
         guard let dayInterval = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
-        print(dayInterval)
         
         let diffOfStartDateAndEndDate = dayInterval + 1
-        print(diffOfStartDateAndEndDate)
         
         self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
         

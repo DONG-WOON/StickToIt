@@ -7,6 +7,7 @@
 
 import UIKit
 
+// MARK: Functions
 extension UIViewController {
     func embedNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)

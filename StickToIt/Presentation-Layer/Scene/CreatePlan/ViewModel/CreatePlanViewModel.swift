@@ -9,11 +9,10 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class CreatePlanViewModel<PlanUseCase: CreatePlanUseCase>
-where PlanUseCase.Model == Plan
-{
+final class CreatePlanViewModel {
     // MARK: Properties
-    private let useCase: PlanUseCase
+    private let planUseCase: any CreatePlanUseCase<Plan>
+    private let userUseCase: any UpdateUserUseCase
     private let mainQueue: DispatchQueue
     
     // MARK: Properties
@@ -27,10 +26,12 @@ where PlanUseCase.Model == Plan
     
     // MARK: Life Cycle
     init(
-        useCase: PlanUseCase,
+        planUseCase: some CreatePlanUseCase<Plan>,
+        userUseCase: some UpdateUserUseCase,
         mainQueue: DispatchQueue = .main
     ) {
-        self.useCase = useCase
+        self.planUseCase = planUseCase
+        self.userUseCase = userUseCase
         self.mainQueue = mainQueue
         
         _ = Observable.combineLatest(
@@ -65,7 +66,7 @@ where PlanUseCase.Model == Plan
   
         let dayPlans = initialDayPlanDates.map { date in
             DayPlan(
-                _id: UUID(), isRequired: true,
+                id: UUID(), isRequired: true,
                 isComplete: false, date: date,
                 week: Calendar.current.dateComponents([.weekOfYear], from: startDate, to: date).weekOfYear! + 1,
                 content: nil, imageURL: nil)
@@ -73,7 +74,7 @@ where PlanUseCase.Model == Plan
         
         let plan = Plan(id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, dayPlans: dayPlans)
         
-        useCase.create(plan) { [weak self] result in
+        planUseCase.create(plan) { [weak self] result in
             switch result {
             case .success:
                 let planQuery = PlanQuery(id: plan.id, planName: plan.name)
@@ -99,6 +100,14 @@ where PlanUseCase.Model == Plan
     }
     
     private func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
-        useCase.save(planQuery: planQuery, to: user, completion: completion)
+        userUseCase.updateUserInfo(userID: user) { entity in
+            entity.planQueries.append(planQuery.toEntity())
+        } onFailure: { error in
+            if let error {
+                completion(.failure(error))
+            }
+            completion(.success(()))
+        }
+
     }
 }
