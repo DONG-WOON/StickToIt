@@ -49,6 +49,7 @@ final class StaticsViewController: UIViewController {
     }
     
     func bind() {
+        
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
@@ -58,8 +59,8 @@ final class StaticsViewController: UIViewController {
                     _self.configureViews()
                     _self.setConstraints()
                 case .showProgress(let progress):
-                    _self.progressView.setProgress(progress)
                     _self.setPlantImage(progress)
+                    _self.progressView.setProgress(progress)
                 }
             }
             .disposed(by: disposeBag)
