@@ -11,4 +11,5 @@ extension Notification.Name {
     static let updateImageToUpload = Notification.Name("updateImageToUpload")
     static let reloadAll = Notification.Name("reloadAll")
     static let reloadPlan = Notification.Name("reloadPlan")
+    static let planCreated = Notification.Name("planCreated")
 }

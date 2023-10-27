@@ -21,7 +21,7 @@ final class HomeEmptyView: UIView {
         label.textAlignment = .center
         label.textColor = .label
         label.numberOfLines = 0
-//        label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontSizeToFitWidth = true
         label.font = .boldSystemFont(ofSize: FontSize.title)
         return label
     }()
@@ -31,28 +31,17 @@ final class HomeEmptyView: UIView {
         label.textColor = .label
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = "지금 당장 작심삼일 목표를 추가해보세요!!"
+        label.text = "지금 당장 작심삼일 목표를 추가해보세요!!\n👇"
         label.font = .systemFont(ofSize: FontSize.body)
         return label
     }()
     
     lazy var goToCreatePlanButton: UIButton = {
-        var configuration = UIButton.Configuration.filled()
-        configuration.baseBackgroundColor = .assetColor(.accent2)
-        configuration.image = UIImage(named: "Placeholder")
-//        configuration.preferredSymbolConfigurationForImage = .init(scale: .small)
-        configuration.imagePlacement = .top
-        configuration.imagePadding = 10
-        configuration.baseForegroundColor = .white
-        configuration.title = "목표 생성하기"
+        let button = UIButton()
+        button.backgroundColor = .assetColor(.accent2)
+        button.rounded()
+        button.setImage(UIImage(named: Const.Image.placeholder), for: .normal)
         
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attr in
-            var new = attr
-            new.font = UIFont.boldSystemFont(ofSize: 23)
-            return new
-        }
-        
-        let button = UIButton(configuration: configuration)
         button.addTarget(
             self,
             action: #selector(goToCreatePlanButtonDidTapped),
@@ -116,6 +105,8 @@ extension HomeEmptyView: BaseViewConfigurable {
         goToCreatePlanButton.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(15)
             make.centerX.equalTo(self)
+            make.width.equalTo(self).multipliedBy(0.4)
+            make.height.equalTo(goToCreatePlanButton.snp.width)
         }
     }
 }

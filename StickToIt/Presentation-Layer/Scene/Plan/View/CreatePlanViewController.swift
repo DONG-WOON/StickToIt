@@ -189,7 +189,7 @@ final class CreatePlanViewController: UIViewController {
         viewModel.createPlan { [weak self] result in
             switch result {
             case .success(let planQuery):
-                NotificationCenter.default.post(name: .reloadAll, object: planQuery)
+                NotificationCenter.default.post(name: .planCreated, object: planQuery)
                 self?.dismiss(animated: true)
             case .failure:
                 print("목표 생성 실패, 잠시 후 다시 시도해주세요!")
