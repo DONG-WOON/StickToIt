@@ -15,28 +15,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
-        if let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let _ = UUID(uuidString: userIDString) {
+        if let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
+           let _ = UUID(uuidString: userIDString) {
             window?.rootViewController = TabBarController()
         } else {
             window?.rootViewController = UserSettingViewController(
-                viewModel: UserSettingViewModel(
-                    repository: UserRepositoryImpl(
-                        networkService: nil,
-                        databaseManager: UserDatabaseManager())
-                )
+                viewModel: DIContainer.makeUserSettingViewModel()
             ).embedNavigationController()
         }
-
+        
         window?.makeKeyAndVisible()
         
         if let window {
-            UIView.transition(with: window,
-                              duration: 0.6,
-                              options: .transitionCrossDissolve,
-                              animations: nil)
+            UIView.transition(
+                with: window,
+                duration: 0.6,
+                options: .transitionCrossDissolve,
+                animations: nil
+            )
         }
     }
-
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

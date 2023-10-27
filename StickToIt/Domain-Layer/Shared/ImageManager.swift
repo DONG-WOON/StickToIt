@@ -80,7 +80,13 @@ final class ImageManager {
         let requestOptions = PHImageRequestOptions()
         requestOptions.isSynchronous = true
         
-        return self.phImageManager.requestImage(for: asset, targetSize: CGSize.thumbnail, contentMode: .aspectFit, options: requestOptions, resultHandler: { (image, info) in
+        return self.phImageManager
+            .requestImage(
+                for: asset,
+                targetSize: CGSize.thumbnail,
+                contentMode: .aspectFit,
+                options: requestOptions,
+                resultHandler: { (image, info) in
             completion(image)
         })
     }
@@ -107,7 +113,10 @@ extension ImageManager {
     
     private func fetchImage() {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.sortDescriptors = [
+            NSSortDescriptor(key: "creationDate", ascending: false)
+        ]
+        
         let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
         let imageCount = fetchResult.countOfAssets(with: .image)
         

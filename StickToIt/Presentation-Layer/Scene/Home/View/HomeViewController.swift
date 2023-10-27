@@ -19,23 +19,10 @@ final class HomeViewController: UIViewController {
         case main = 0
     }
     
-    let viewModel = HomeViewModel(
-        userInfoUseCase: UserInfoUseCaseImpl(
-            repository: UserRepositoryImpl(
-                networkService: nil,
-                databaseManager: UserDatabaseManager()
-            )
-        ),
-        planUseCase: FetchPlanUseCaseImpl(
-            repository: PlanRepositoryImpl(
-                networkService: nil,
-                databaseManager: PlanDatabaseManager()
-            )
-        )
-    )
+    let viewModel: HomeViewModel
     
-    private var dataSource: DataSource!
-    private let input = PublishSubject<HomeViewModel<FetchPlanUseCaseImpl<PlanRepositoryImpl>>.Input>()
+    private var dataSource: DataSource?
+    private let input = PublishSubject<HomeViewModel.Input>()
     private let disposeBag = DisposeBag()
     
     private lazy var createPlanAction = UIAction(
@@ -97,7 +84,8 @@ final class HomeViewController: UIViewController {
     
     // MARK: View Life Cycle
     
-    init() {
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         
         bind()
@@ -175,6 +163,9 @@ final class HomeViewController: UIViewController {
                     
                 case .showCompleteDayPlanCount(let count):
                     _self.completedDayPlansButton.configuration?.title = String(count)
+                    
+                case .userDeleted:
+                    _self.reloadAll()
                 }
             }
             .disposed(by: disposeBag)
@@ -185,7 +176,7 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController {
     func showCreatePlanScene() {
-        let vc = CreatePlanViewController()
+        let vc = CreatePlanViewController(viewModel: DIContainer.makeCreatePlanViewModel())
             .embedNavigationController()
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
@@ -223,7 +214,7 @@ extension HomeViewController {
                     self?.input.onNext(.fetchPlan(query))
                 }
             }
-                
+        
         actions.append(contentsOf: queryActions)
         
         let settingMenu = UIMenu(
@@ -376,8 +367,8 @@ extension HomeViewController: HomeImageCollectionViewCellDelegate {
     func imageDidSelected(_ dayPlan: DayPlan) {
         
         let vc = DayPlanViewController(
-            dayPlan: dayPlan
-            ).embedNavigationController()
+            viewModel: DIContainer.makeDayPlanViewModel(dayPlan: dayPlan)
+        ).embedNavigationController()
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
@@ -386,7 +377,19 @@ extension HomeViewController: HomeImageCollectionViewCellDelegate {
 
 extension HomeViewController: PlanSettingButtonDelegate {
     func goToPlanSetting() {
-//        let settingVC = CreatePlanViewController()
-       
+        
+    }
+    
+    func deletePlan() {
+        let alert = UIAlertController(title: "목표 삭제", message: "확인을 누르면 지금까지 달성하신 목표까지 모두 삭제됩니다. 목표를 삭제하시겠습니까?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
+//            self?.input.onNext(.deletePlan)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
     }
 }

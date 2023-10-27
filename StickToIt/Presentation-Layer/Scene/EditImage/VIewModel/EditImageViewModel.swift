@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class EditImageViewModel<UseCase: EditImageUseCase> {
+final class EditImageViewModel {
     
     enum Input {
         case viewDidLoad
@@ -17,14 +17,9 @@ final class EditImageViewModel<UseCase: EditImageUseCase> {
     enum Output {
         case ConfigureUI
     }
-    private let useCase: UseCase
+   
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
-    
-    init(useCase: UseCase) {
-        
-        self.useCase = useCase
-    }
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
@@ -42,10 +37,6 @@ final class EditImageViewModel<UseCase: EditImageUseCase> {
 }
 
 extension EditImageViewModel {
-    
-    func upload(data: Data?) {
-        useCase.upload(data: data)
-    }
     
     func textViewShouldChanged(_ text: String?, in range: NSRange, word: String) -> Bool {
         guard let allText = text else { return true }

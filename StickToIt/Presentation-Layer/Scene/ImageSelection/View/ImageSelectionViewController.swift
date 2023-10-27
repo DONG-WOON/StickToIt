@@ -15,14 +15,8 @@ final class ImageSelectionViewController: UIViewController {
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
     
     private enum Section: Int { case main = 0 }
-    
-    private let viewModel = ImageSelectionViewModel(
-        imageUseCase: FetchImageUseCaseImpl(),
-        cameraUseCase: OpenCameraUseCaseImpl(),
-        mainQueue: .main
-    )
-    
     private var imageManager: ImageManager
+    private var imageDataList = BehaviorSubject(value: [ImageAsset]())
     private var cameraManager: CameraManager?
     private var dataSource: DataSource?
     private let disposeBag = DisposeBag()
@@ -93,8 +87,6 @@ final class ImageSelectionViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        
-        viewModel.viewDidLoad()
         setViewsAndDelegate()
         bindUI()
     }
@@ -104,7 +96,7 @@ final class ImageSelectionViewController: UIViewController {
         
         if mainView is ImageSelectionView {
             imageManager.getImageAssets { [weak self] imageAssets in
-                self?.viewModel.imageDataList.onNext(imageAssets)
+                self?.imageDataList.onNext(imageAssets)
             }
         }
     }
@@ -112,7 +104,7 @@ final class ImageSelectionViewController: UIViewController {
     // MARK: - Methods
     
     private func bindUI() {
-        viewModel.imageDataList
+        imageDataList
             .bind(with: self) { (_self, datas) in
                 let id = datas.map { $0.localIdentifier }
                 _self.takeSnapshot(item: id, toSection: .main)
@@ -158,7 +150,7 @@ extension ImageSelectionViewController {
             .CellRegistration<SelectableImageCell, String>
         { [weak self] cell, indexPath, id in
             
-            let imageAssets = try? self?.viewModel.imageDataList.value()
+            let imageAssets = try? self?.imageDataList.value()
             guard let asset = imageAssets?[indexPath.item - 1] else { return }
             
             DispatchQueue.main.async { [weak self] in
@@ -212,7 +204,7 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
             cameraManager?.requestAuthAndOpenCamera(in: self)
         } else {
             guard collectionView.cellForItem(at: indexPath) is SelectableImageCell else { return }
-            guard let imageList = try? viewModel.imageDataList.value() else { return }
+            guard let imageList = try? imageDataList.value() else { return }
             
             let asset = imageList[indexPath.item - 1]
             DispatchQueue.main.async { [weak self] in
@@ -220,7 +212,7 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
                     guard let _data = data else { return }
                     let image = UIImage(data: _data)
                     
-                    let vc = EditImageViewController()
+                    let vc = EditImageViewController(viewModel: EditImageViewModel())
                     vc.imageView.image = image
                     self?.navigationController?.pushViewController(vc, animated: true)
                 }
@@ -234,7 +226,7 @@ extension ImageSelectionViewController: UICollectionViewDelegate {
 extension ImageSelectionViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         imageManager.getImageAssets { [weak self] imageAssets in
-            self?.viewModel.imageDataList.onNext(imageAssets)
+            self?.imageDataList.onNext(imageAssets)
         }
     }
 }
@@ -255,7 +247,7 @@ extension ImageSelectionViewController: UIImagePickerControllerDelegate, UINavig
         }
         
         picker.dismiss(animated: true) { [weak self] in
-            let vc = EditImageViewController()
+            let vc = EditImageViewController(viewModel: EditImageViewModel())
             vc.imageView.image = newImage
             self?.navigationController?.pushViewController(vc, animated: true)
         }

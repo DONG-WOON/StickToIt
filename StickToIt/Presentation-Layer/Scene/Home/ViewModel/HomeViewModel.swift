@@ -9,9 +9,9 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class HomeViewModel<PlanUseCase: FetchPlanUseCase>
-where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
-{
+final class HomeViewModel {
+    
+    // MARK: Input
     enum Input {
         case createPlanButtonDidTapped
         case completedDayPlansButtonDidTapped
@@ -22,14 +22,22 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         case reloadAll
         case reloadPlan
         case fetchPlan(PlanQuery)
+        case planCreated
+        case deletePlan
     }
     
+    // MARK: Output
     enum Output {
         case showCreatePlanScene
         case showPlanWeekScene(Plan?)
+        
         case startAnimation
         case stopAnimation
+        case showToast(title: String?, message: String)
+        
+        case configureUI
         case showUserInfo(User?)
+        case userDeleted
         
         case setViewsAndDelegate(planIsExist: Bool)
         case loadPlanQueries([PlanQuery])
@@ -39,11 +47,17 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
         case showCompleteDayPlanCount(Int)
     }
     
-    private let userInfoUseCase: UserInfoUseCase
-    private let planUseCase: PlanUseCase
-    private let mainQueue: DispatchQueue
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
+    
+    // MARK: UseCases
+    private let updateUserUseCase: any UpdateUserUseCase<UserEntity, User, UUID>
+    private let fetchUserUseCase: FetchUserUseCase
+    private let fetchPlanUseCase: any FetchPlanUseCase<PlanQuery, Plan, PlanEntity>
+    private let deletePlanUseCase: any DeletePlanUseCase
+    
+    
+    // MARK: Inner Properties
     
     private var user: User?
     private var currentWeek: Int?
@@ -51,14 +65,18 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
     
     var currentPlanCount: Int?
     
+    // MARK: Life Cycle
+    
     init(
-        userInfoUseCase: UserInfoUseCase,
-        planUseCase: PlanUseCase,
-        mainQueue: DispatchQueue = .main
+        updateUserUseCase: some UpdateUserUseCase<UserEntity, User, UUID>,
+        fetchUserUseCase: FetchUserUseCase,
+        fetchPlanUseCase: some FetchPlanUseCase<PlanQuery, Plan, PlanEntity>,
+        deletePlanUseCase: some DeletePlanUseCase
     ) {
-        self.userInfoUseCase = userInfoUseCase
-        self.planUseCase = planUseCase
-        self.mainQueue = mainQueue
+        self.updateUserUseCase = updateUserUseCase
+        self.fetchUserUseCase = fetchUserUseCase
+        self.fetchPlanUseCase = fetchPlanUseCase
+        self.deletePlanUseCase = deletePlanUseCase
     }
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
@@ -66,7 +84,13 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
             .subscribe(with: self) { (_self, event) in
                 switch event {
                 case .viewDidLoad:
+                    _self.output.onNext( .configureUI)
                     _self.checkPlanIsExist()
+                    
+                case .planCreated:
+                    _self.output.onNext(.configureUI)
+                    _self.checkPlanIsExist()
+                    _self.output.onNext(.showToast(title: "목표생성완료", message: "목표가 생성되었습니다.\n 열심히 달성해보세요!"))
                     
                 case .viewWillAppear:
                     _self.output.onNext(.startAnimation)
@@ -88,6 +112,9 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
                     
                 case .fetchPlan(let planQuery):
                     _self.fetchPlan(planQuery)
+                    
+                case .deletePlan:
+                    _self.deletePlan()
                 }
             }
             .disposed(by: disposeBag)
@@ -96,7 +123,7 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
     }
     
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
-        planUseCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
+        fetchPlanUseCase.loadImageFromDocument(fileName: dayPlanID.uuidString) { data in
             completion(data)
         }
     }
@@ -114,18 +141,19 @@ extension HomeViewModel {
     }
     
     private func checkPlanIsExist() {
-        guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue),
+        guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
               let userID = UUID(uuidString: userIDString) else {
             return
         }
         
-        userInfoUseCase.fetchUserInfo(key: userID) { [weak self] user in
+        fetchUserUseCase.fetchUserInfo(key: userID) { [weak self] user in
             let planQueries = user.planQueries
             
             if planQueries.count > 0 {
                 self?.output.onNext(.setViewsAndDelegate(planIsExist: true))
             } else {
                 self?.output.onNext(.setViewsAndDelegate(planIsExist: false))
+                
                 self?.output.onNext(.showUserInfo(user))
             }
         }
@@ -137,7 +165,7 @@ extension HomeViewModel {
             return
         }
       
-        userInfoUseCase.fetchUserInfo(key: userID) { [weak self] user in
+        fetchUserUseCase.fetchUserInfo(key: userID) { [weak self] user in
             self?.user = user
             
             let planQueries = user.planQueries
@@ -150,7 +178,7 @@ extension HomeViewModel {
     }
     
     private func fetchPlan(_ query: PlanQuery) {
-        planUseCase.fetch(query: query) { [weak self] plan in
+        fetchPlanUseCase.fetch(query: query) { [weak self] plan in
             guard let _self = self else { return }
             _self.currentPlan = plan
             _self.output.onNext(.loadPlan(plan))
@@ -204,4 +232,42 @@ extension HomeViewModel {
     private func filtered(_ dayPlans :[DayPlan], at week: Int) -> [DayPlan] {
         return dayPlans.filter { $0.week == week }
     }
+    
+    private func deletePlan() {
+        guard let currentPlan else {
+            print("플랜이 존재하지 않음")
+            return
+        }
+        
+//        planUseCase?.delete(entity: PlanEntity.self, matchingWith: currentPlan) { [weak self] result in
+//            switch result {
+//            case .success:
+//                self?.deletePlanQuery()
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+    }
+    
+//    private func deletePlanQuery() {
+//        guard let user else { return }
+//
+//
+//
+//        updateUserUseCase.updateUserInfo(userID: user._id) { [currentPlan] entity in
+//            guard
+//                let _id = currentPlan?._id,
+//                let index = entity.planQueries.firstIndex(where: { query in query._id == _id })
+//            else { return }
+//
+//            entity.planQueries.remove(at: index)
+//        } onFailure: { [weak self] error in
+//            if let error {
+//                print(error)
+//                return
+//            }
+//            UserDefaults.standard.removeObject(forKey: Const.Key.currentPlan.rawValue)
+//            self?.output.onNext(.userDeleted)
+//        }
+//    }
 }

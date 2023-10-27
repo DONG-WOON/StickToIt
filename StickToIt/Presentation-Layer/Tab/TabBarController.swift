@@ -12,20 +12,13 @@ final class TabBarController: UITabBarController {
 
     // MARK: Properties
     
-    let homeVC = HomeViewController()
-        .configureTabBarItem(title: "홈", image: UIImage(resource: .houseFill))
+    let homeVC = HomeViewController(
+        viewModel: DIContainer.makeHomeViewModel()
+    ).configureTabBarItem(title: "홈", image: UIImage(resource: .houseFill))
         .embedNavigationController()
     
     let CalendarVC = CalendarViewController(
-        viewModel: CalendarViewModel(
-            planRepository: PlanRepositoryImpl(
-                networkService: nil,
-                databaseManager: PlanDatabaseManager()
-            ),
-            userRepository: UserRepositoryImpl(
-                networkService: nil,
-                databaseManager: UserDatabaseManager())
-        ))
+        viewModel: DIContainer.makeCalendarViewModel())
         .configureTabBarItem(title: "캘린더", image: UIImage(resource: .calendar))
         .embedNavigationController()
         

@@ -33,12 +33,12 @@ final class CalendarViewModel {
     private var currentPlan: Plan?
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
-    private let planRepository: PlanRepositoryImpl
-    private let userRepository: UserRepositoryImpl
+    private let planRepository: PlanRepositoryImp
+    private let userRepository: UserRepositoryImp
     
     init(
-        planRepository: PlanRepositoryImpl,
-         userRepository: UserRepositoryImpl
+        planRepository: PlanRepositoryImp,
+        userRepository: UserRepositoryImp
     ) {
         self.planRepository = planRepository
         self.userRepository = userRepository

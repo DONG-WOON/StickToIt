@@ -10,20 +10,14 @@ import RxSwift
 
 final class EditImageViewController: UIViewController {
     
-    private let viewModel = EditImageViewModel(
-        useCase: EditImageUseCaseImpl(
-            repository: PlanRepositoryImpl(
-                networkService: nil,
-                databaseManager: PlanDatabaseManager()
-            )
-        )
-    )
+    private let viewModel: EditImageViewModel
+    
     private var addedTextViews: [Int: UITextView] = [:]
     private let textViewBackgroundColorChanged = PublishSubject<UIColor?>()
     private let textViewColorChanged = PublishSubject<UIColor?>()
     private let textViewFontChanged = PublishSubject<UIFont>()
     
-    private let input = PublishSubject<EditImageViewModel<EditImageUseCaseImpl<PlanRepositoryImpl>>.Input>()
+    private let input = PublishSubject<EditImageViewModel.Input>()
     private let disposeBag = DisposeBag()
     
     
@@ -137,16 +131,10 @@ final class EditImageViewController: UIViewController {
     
     // MARK: Life Cycle
     
-//    init(viewModel: EditImageViewModel) {
-//        self.viewModel = viewModel
-//        super.init(nibName: nil, bundle: nil)
-//
-//        bind()
-//    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
+    init(viewModel: EditImageViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+
         bind()
     }
     

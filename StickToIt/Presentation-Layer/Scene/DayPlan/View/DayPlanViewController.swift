@@ -10,7 +10,7 @@ import RxSwift
 
 final class DayPlanViewController: UIViewController {
     
-    private let viewModel: CreateDayPlanViewModel<CreateDayPlanUseCaseImpl<DayPlanRepositoryImpl>>
+    private let viewModel: DayPlanViewModel
     private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
@@ -118,15 +118,8 @@ final class DayPlanViewController: UIViewController {
     
     // MARK: Life Cycle
     
-    init(dayPlan: DayPlan) {
-        viewModel = CreateDayPlanViewModel(
-            dayPlan: dayPlan,
-            useCase: CreateDayPlanUseCaseImpl(
-                repository: DayPlanRepositoryImpl(
-                    networkService: nil,
-                    databaseManager: DayPlanDataBaseManager())
-            )
-        )
+    init(viewModel: DayPlanViewModel) {
+        self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
         
