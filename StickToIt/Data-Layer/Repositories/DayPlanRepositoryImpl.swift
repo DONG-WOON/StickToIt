@@ -7,53 +7,29 @@
 
 import Foundation
 
-enum FileManagerError: Error {
-    case invalidDirectory
-    case emptyData
-    case fileSaveError
-    case fileIsNil
-}
-
-struct DayPlanRepositoryImpl {
+struct DayPlanRepositoryImp {
 
     // MARK: Properties
     private let networkService: NetworkService?
-    private let databaseManager: DayPlanDataBaseManager?
+    private let databaseManager: DatabaseManager?
 
     // MARK: Life Cycle
     init(
         networkService: NetworkService?,
-        databaseManager: DayPlanDataBaseManager?
+        databaseManager: DatabaseManager?
     ) {
         self.networkService = networkService
         self.databaseManager = databaseManager
     }
 }
 
-extension DayPlanRepositoryImpl: PlanRepository {
+extension DayPlanRepositoryImp: DayPlanRepository {
    
     typealias Model = DayPlan
     typealias Entity = DayPlanEntity
-    typealias Query = PlanQuery
-    
-    func fetchAll() -> Result<[Model], Error> {
-        guard let entities = databaseManager?.fetchAll() else { return .failure((NSError(domain: "\nfetch All Error, \nfile: \(#file), \nfunction: \(#function), \nline: \(#line)", code: 1000))) }
-        return .success(entities.map { $0.toDomain() })
-    }
-    
-    func fetch(query: PlanQuery) -> Result<Model, Error> {
-        guard let entity = databaseManager?.fetch(key: query.planID) as? DayPlanEntity else { return .failure(NSError(domain: "\nfetch Error, \nfile: \(#file), \nfunction: \(#function), \nline: \(#line)", code: 1000)) }
-        return .success(entity.toDomain())
-    }
-    
-    func filteredFetch(filtered: (Entity) -> Bool) -> Result<[Model], Error> {
-        guard let entity = databaseManager?.filteredFetch(filtered) else { return .failure(NSError(domain: "filtered error", code: -1000))}
-        return .success(entity.map { $0.toDomain() })
-    }
-    
     
     func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
-        databaseManager?.create(model: model, to: DayPlanEntity.self, onFailure: { error in
+        databaseManager?.create(model: model, to: Entity.self, onFailure: { error in
             if let error {
                 return completion(.failure(error))
             }
@@ -101,9 +77,4 @@ extension DayPlanRepositoryImpl: PlanRepository {
             return
         }
     }
-    
-    func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
-        return
-    }
-    
 }

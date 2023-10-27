@@ -7,22 +7,18 @@
 
 import Foundation
 
-struct User: Equatable {
-    var _id: UUID
+struct User: Equatable, Identifiable {
+    var id: UUID
     var name: String
     var planQueries: [PlanQuery]
     
     init(
-        _id: UUID,
-         name: String,
+        id: UUID,
+        name: String,
         planQueries: [PlanQuery]
     ) {
-        self._id = _id
+        self.id = id
         self.name = name
         self.planQueries = planQueries
-    }
-    
-    static func == (lhs: User, rhs: User) -> Bool {
-        return lhs._id == rhs._id && lhs.name == rhs.name
     }
 }

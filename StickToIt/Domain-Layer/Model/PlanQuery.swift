@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct PlanQuery: Codable, Equatable {
-    let planID: UUID
+struct PlanQuery: Codable, Equatable, Identifiable {
+    let id: UUID
     let planName: String
     
     init(
-        planID: UUID,
+        id: UUID,
         planName: String
     ) {
-        self.planID = planID
+        self.id = id
         self.planName = planName
     }
 }

@@ -8,8 +8,8 @@
 import Foundation
 
 
-struct Plan {
-    private(set) var _id: UUID
+struct Plan: Identifiable {
+    let id: UUID
     let name: String
     let targetNumberOfDays: Int
     let startDate: Date
@@ -28,14 +28,14 @@ struct Plan {
 //    var completed
     
     init(
-        _id: UUID,
+        id: UUID,
         name: String,
         targetNumberOfDays: Int,
         startDate: Date,
         endDate: Date,
         dayPlans: [DayPlan]
     ) {
-        self._id = _id
+        self.id = id
         self.name = name
         self.targetNumberOfDays = targetNumberOfDays
         self.startDate = startDate

@@ -6,22 +6,48 @@
 //
 
 import Foundation
+import RealmSwift
 
 protocol DatabaseManager {
     
-    associatedtype Model
-    associatedtype Entity
-    associatedtype ResultType
-    associatedtype Key
+    // MARK: Read
+    func fetchAll<T: Object & Entity>(type: T.Type) -> Results<T>
+    func fetch<T: Object & Entity>(type: T.Type, key: UUID) -> T?
     
-    // MARK: Methods
-    func fetchAll() -> ResultType
-    func fetch(key: Key) -> Entity?
+    func filteredFetch<T: Object & Entity>(
+        type: T.Type,
+        _ filtered: (T) -> Bool
+    ) -> [T]
     
-    func filteredFetch(_ filtered: (Entity) -> Bool) -> [Entity]
+    // MARK: Create
+    func create<U: Model & Identifiable<UUID>, T: Object & Entity>(
+        model: U,
+        to entity: T.Type,
+        onFailure: @Sendable @escaping (Error?) -> Void
+    )
     
-    func create(model: Model, to entity: Entity.Type, onFailure: @Sendable @escaping (Error?) -> Void)
-    func update(entity: Entity.Type, matchingWith model: Model, updateHandler: @escaping (Entity) -> Void, onFailure: @Sendable @escaping (Error?) -> Void) 
-    func delete(entity: Entity.Type, matchingWith model: Model, onFailure: @Sendable @escaping (Error?) -> Void)
+    // MARK: Update
+    func update<U: Model & Identifiable<UUID>, T: Object & Entity>(
+        entity: T.Type,
+        matchingWith model: U,
+        updateHandler: @escaping (T) -> Void,
+        onFailure: @Sendable @escaping (Error?) -> Void
+    )
+    
+    func update<T: Object & Entity>(
+        entity: T.Type,
+        key: UUID,
+        updateHandler: @escaping (T) -> Void,
+        onFailure: @Sendable @escaping (Error?) -> Void
+    )
+    
+    // MARK: Delete
+    func delete<U: Model & Identifiable<UUID>, T: Object & Entity>(
+        entity: T.Type,
+        matchingWith model: U,
+        deleteHandler: @escaping (T) -> Void,
+        onFailure: @escaping @Sendable (Error?) -> Void
+    )
+    
     func deleteAll()
 }

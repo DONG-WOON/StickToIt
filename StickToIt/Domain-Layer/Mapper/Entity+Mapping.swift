@@ -8,30 +8,35 @@
 import Foundation
 import RealmSwift
 
-extension UserEntity {
+protocol Entity<Model> {
+    associatedtype Model
+    func toDomain() -> Model
+}
+
+extension UserEntity: Entity {
     func toDomain() -> User {
         return .init(
-            _id: _id,
+            id: _id,
             name: name,
             planQueries: planQueries.map { $0.toDomain() }
         )
     }
 }
 
-extension PlanQueryEntity {
+extension PlanQueryEntity: Entity {
     func toDomain() -> PlanQuery {
         .init(
-            planID: _id,
+            id: _id,
             planName: planName
         )
     }
 }
 
-extension PlanEntity {
+extension PlanEntity: Entity {
     func toDomain() -> Plan {
 
         return .init(
-            _id: _id,
+            id: _id,
             name: name,
             targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
@@ -41,10 +46,10 @@ extension PlanEntity {
     }
 }
 
-extension DayPlanEntity {
+extension DayPlanEntity: Entity {
     func toDomain() -> DayPlan {
         return .init(
-            _id: _id,
+            id: _id,
             isRequired: isRequired,
             isComplete: isComplete,
             date: date,

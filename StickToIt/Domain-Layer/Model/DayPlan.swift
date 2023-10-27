@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct DayPlan: Hashable {
-    var _id: UUID
+struct DayPlan: Hashable, Identifiable {
+    var id: UUID
     let isRequired: Bool
     var isComplete: Bool
     var date: Date
@@ -18,7 +18,7 @@ struct DayPlan: Hashable {
 
     
     init(
-        _id: UUID,
+        id: UUID,
         isRequired: Bool,
         isComplete: Bool,
         date: Date,
@@ -26,7 +26,7 @@ struct DayPlan: Hashable {
         content: String?,
         imageURL: String?
     ) {
-        self._id = _id
+        self.id = id
         self.isRequired = isRequired
         self.isComplete = isComplete
         self.date = date
