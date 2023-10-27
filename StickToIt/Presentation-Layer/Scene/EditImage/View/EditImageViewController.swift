@@ -200,7 +200,7 @@ extension EditImageViewController {
         view.endEditing(true)
 //        let snapshot = frameView.snapshotView(afterScreenUpdates: true)
         
-        NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [Const.NotificationKey.imageToUpload: capture(view: frameView) ?? UIImage()])
+        NotificationCenter.default.post(name: .updateImageToUpload, object: nil, userInfo: [NotificationKey.imageToUpload: capture(view: frameView) ?? UIImage()])
 
         self.dismiss(animated: true)
     }

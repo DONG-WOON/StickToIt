@@ -64,7 +64,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     weak var delegate: HomeImageCollectionViewCellDelegate?
     
     lazy var placeholderImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "Placeholder"))
+        let view = UIImageView(image: UIImage(asset: .placeholder))
         view.backgroundColor = .clear
         view.contentMode = .scaleToFill
         view.tintColor = .label
@@ -74,7 +74,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     private lazy var weekDayLabel: PaddingView<UILabel> = {
        let paddingView = PaddingView<UILabel>()
         paddingView.innerView.text = "1주차"
-        paddingView.innerView.font = .monospacedSystemFont(ofSize: FontSize.body, weight: .semibold)
+        paddingView.innerView.font = .monospacedSystemFont(ofSize: Const.FontSize.body, weight: .semibold)
         paddingView.innerView.backgroundColor = .clear
         paddingView.backgroundColor = .assetColor(.accent4)
         paddingView.rounded(cornerRadius: 20)

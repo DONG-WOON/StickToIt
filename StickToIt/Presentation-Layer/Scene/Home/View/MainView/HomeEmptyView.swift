@@ -22,7 +22,7 @@ final class HomeEmptyView: UIView {
         label.textColor = .label
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
-        label.font = .boldSystemFont(ofSize: FontSize.title)
+        label.font = .boldSystemFont(ofSize: Const.FontSize.title)
         return label
     }()
     
@@ -31,8 +31,8 @@ final class HomeEmptyView: UIView {
         label.textColor = .label
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = "지금 당장 작심삼일 목표를 추가해보세요!!\n👇"
-        label.font = .systemFont(ofSize: FontSize.body)
+        label.text = "지금 당장 작심삼일 목표를 추가해보세요~!"
+        label.font = .systemFont(ofSize: Const.FontSize.body)
         return label
     }()
     
@@ -40,7 +40,7 @@ final class HomeEmptyView: UIView {
         let button = UIButton()
         button.backgroundColor = .assetColor(.accent2)
         button.rounded()
-        button.setImage(UIImage(named: Const.Image.placeholder), for: .normal)
+        button.setImage(UIImage(asset: .placeholder), for: .normal)
         
         button.addTarget(
             self,

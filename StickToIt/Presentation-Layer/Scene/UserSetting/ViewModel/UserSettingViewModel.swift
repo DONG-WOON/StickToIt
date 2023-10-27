@@ -78,11 +78,11 @@ extension UserSettingViewModel {
     }
     
     private func register() {
-        let user = User(_id: UUID(), name: userNickname, planQueries: [])
+        let user = User(id: UUID(), name: userNickname, planQueries: [])
         repository.create(model: user) { [weak self] result in
             switch result {
             case .success:
-                UserDefaults.standard.setValue(user._id.uuidString, forKey: Const.Key.userID.rawValue)
+                UserDefaults.standard.setValue(user.id.uuidString, forKey: UserDefaultsKey.userID)
                 self?.output.onNext(.completeUserRegistration)
             case .failure(let error):
                 print(error)

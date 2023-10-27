@@ -18,7 +18,7 @@ final class PlanInfoView: UIView {
     private let userNameLabel: UILabel = {
         let view = UILabel()
         view.textColor = .label
-        view.font = .italicSystemFont(ofSize: FontSize.subTitle)
+        view.font = .italicSystemFont(ofSize: Const.FontSize.subTitle)
         view.numberOfLines = 1
         return view
     }()
@@ -26,7 +26,7 @@ final class PlanInfoView: UIView {
     private let planNameLabel: UILabel = {
         let view = UILabel()
         view.textColor = .label
-        view.font = .boldSystemFont(ofSize: FontSize.title)
+        view.font = .boldSystemFont(ofSize: Const.FontSize.title)
         view.numberOfLines = 1
         return view
     }()
@@ -34,7 +34,7 @@ final class PlanInfoView: UIView {
     private let lastCertifyingDayLabel: UILabel = {
         let view = UILabel()
         view.textColor = .label
-        view.font = .systemFont(ofSize: FontSize.body, weight: .medium)
+        view.font = .systemFont(ofSize: Const.FontSize.body, weight: .medium)
         view.numberOfLines = 1
         return view
     }()

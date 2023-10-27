@@ -8,7 +8,11 @@
 import UIKit
 
 extension UIImage {
-    convenience init?(resource: Const.Image) {
+    convenience init?(resource: Const.SymbolImage) {
         self.init(systemName: resource.rawValue)
+    }
+    
+    convenience init?(asset: Const.AssetImage) {
+        self.init(named: asset.rawValue)
     }
 }

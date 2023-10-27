@@ -12,7 +12,7 @@ class GradientCircleView: RingProgressView {
     
     let percentageLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: FontSize.body)
+        label.font = .boldSystemFont(ofSize: Const.FontSize.body)
         label.textColor = .label
         label.textAlignment = .center
         label.numberOfLines = 0

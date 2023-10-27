@@ -39,7 +39,7 @@ final class DayPlanViewController: UIViewController {
     private lazy var weekDayLabel: PaddingView<UILabel> = {
        let paddingView = PaddingView<UILabel>()
         paddingView.innerView.text = "1주차"
-        paddingView.innerView.font = .monospacedSystemFont(ofSize: FontSize.body, weight: .semibold)
+        paddingView.innerView.font = .monospacedSystemFont(ofSize: Const.FontSize.body, weight: .semibold)
         paddingView.innerView.backgroundColor = .clear
         paddingView.backgroundColor = .assetColor(.accent4)
         paddingView.rounded(cornerRadius: 20)
@@ -145,7 +145,7 @@ final class DayPlanViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel.checkError { [weak self] key, message in
-            if key == Const.Key.isCertifyingError {
+            if key == UserDefaultsKey.isCertifyingError {
                 self?.showAlert(title: "인증오류", message: message) {
                     self?.addImageButton.isEnabled = true
                     self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
@@ -176,12 +176,12 @@ final class DayPlanViewController: UIViewController {
                 certifyButton.setTitle("인증하기 ✨", for: .normal)
             } else if DateFormatter.getFullDateString(from: .now) > dateString {
                 addImageButton.isEnabled = false
-                addImageButton.configuration?.image = UIImage(named: "Placeholder")
+                addImageButton.configuration?.image = UIImage(asset: .placeholder)
                 addImageButton.configuration?.title = nil
                 certifyButton.setTitle("아쉽게도 인증 못했어요 🥲", for: .normal)
             } else if DateFormatter.getFullDateString(from: .now) < dateString {
                 addImageButton.isEnabled = false
-                addImageButton.configuration?.image = UIImage(named: "Placeholder")
+                addImageButton.configuration?.image = UIImage(asset: .placeholder)
                 addImageButton.configuration?.title = nil
                 certifyButton.setTitle("지금처럼 꾸준히 해주세요!", for: .normal)
             }
@@ -323,7 +323,7 @@ extension DayPlanViewController {
     }
     
     @objc private func updateImageToUpload(_ notification: Notification) {
-        guard let image = notification.userInfo?[Const.NotificationKey.imageToUpload] as? UIImage else { return }
+        guard let image = notification.userInfo?[NotificationKey.imageToUpload] as? UIImage else { return }
         
         self.imageView.image = image
         self.imageView.isUserInteractionEnabled = true

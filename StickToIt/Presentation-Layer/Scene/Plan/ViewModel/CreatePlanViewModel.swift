@@ -71,20 +71,21 @@ where PlanUseCase.Model == Plan
                 content: nil, imageURL: nil)
         }
         
-        let plan = Plan(_id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, dayPlans: dayPlans)
+        let plan = Plan(id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, dayPlans: dayPlans)
         
         useCase.create(plan) { [weak self] result in
             switch result {
             case .success:
-                let planQuery = PlanQuery(planID: plan._id, planName: plan.name)
+                let planQuery = PlanQuery(id: plan.id, planName: plan.name)
                 
-                guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: userIDString) else { return
+                guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID), let userID = UUID(uuidString: userIDString) else {
+                    return
                 }
                 
                 self?.save(planQuery: planQuery, to: userID) { result in
                     switch result {
                     case .success:
-                        UserDefaults.standard.setValue(planQuery.planID.uuidString, forKey: Const.Key.currentPlan.rawValue)
+                        UserDefaults.standard.setValue(planQuery.id.uuidString, forKey: UserDefaultsKey.currentPlan)
                         
                         completion(.success(planQuery))
                     case .failure(let error):

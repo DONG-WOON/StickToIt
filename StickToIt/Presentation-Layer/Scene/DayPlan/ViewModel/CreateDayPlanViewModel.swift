@@ -35,10 +35,10 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
     }
     
     func checkError(handler: (String, String) -> Void) {
-        if UserDefaults.standard.bool(forKey: Const.Key.isCertifyingError) {
-            handler(Const.Key.isCertifyingError,"인증이 실패했어요. 오늘 다시 시도해주세요!")
-        } else if UserDefaults.standard.bool(forKey: Const.Key.isSaveImageError) {
-            handler(Const.Key.isSaveImageError, "사진이 제대로 저장되지않았어요 ㅠㅠ 인증사진만 다시 저장하시겠어요?")
+        if UserDefaults.standard.bool(forKey: UserDefaultsKey.isCertifyingError) {
+            handler(UserDefaultsKey.isCertifyingError, "인증이 실패했어요. 오늘 다시 시도해주세요!")
+        } else if UserDefaults.standard.bool(forKey: UserDefaultsKey.isSaveImageError) {
+            handler(UserDefaultsKey.isSaveImageError, "사진이 제대로 저장되지않았어요 ㅠㅠ 인증사진만 다시 저장하시겠어요?")
         }
     }
     
@@ -61,17 +61,17 @@ where PlanUseCase.Model == DayPlan, PlanUseCase.Entity == DayPlanEntity
                 }
                 
             } catch STIError.certifyingError {
-                UserDefaults.standard.setValue(true, forKey: Const.Key.isCertifyingError)
+                UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isCertifyingError)
                 DispatchQueue.main.async { [weak self] in
                     failure("인증오류", "인증에 실패했습니다. 다시 시도하겠습니까?")
                 }
             } catch STIError.imageNotSave {
-                UserDefaults.standard.setValue(true, forKey: Const.Key.isSaveImageError)
+                UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isSaveImageError)
                 DispatchQueue.main.async { [weak self] in
                     failure("사진 저장 오류", "사진 저장에 실패했습니다. 다시 시도하겠습니까")
                 }
             } catch STIError.imageURLNotSave {
-                UserDefaults.standard.setValue(true, forKey: Const.Key.isSaveImageError)
+                UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isSaveImageError)
                 DispatchQueue.main.async { [weak self] in
                     failure("사진 저장 오류", "사진 저장에 실패했습니다. 다시 시도하겠습니까?")
                 }

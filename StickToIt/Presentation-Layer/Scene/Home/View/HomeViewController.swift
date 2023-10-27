@@ -102,7 +102,7 @@ final class HomeViewController: UIViewController {
         
         bind()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -114,9 +114,6 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addNotification()
-        configureViews()
-     
         input.onNext(.viewDidLoad)
     }
     
@@ -143,6 +140,9 @@ final class HomeViewController: UIViewController {
                 case .setViewsAndDelegate(planIsExist: let isExist):
                     _self.setViewsAndDelegate(isExist)
                     
+                case .configureUI:
+                    _self.configureViews()
+                    
                 case .showCreatePlanScene:
                     _self.showCreatePlanScene()
                     
@@ -152,7 +152,7 @@ final class HomeViewController: UIViewController {
                     _self.showToast(title: title, message: message)
                     
                 case .loadPlanQueries(let planQueries):
-                    _self.makeMenu(with: planQueries)
+                    _self.setPlanListButtonMenu(with: planQueries)
                     
                 case .loadPlan(let plan):
                     _self.update(plan: plan)
@@ -200,7 +200,7 @@ extension HomeViewController {
     }
     
     func showToast(title: String?, message: String) {
-        self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(named: Const.Image.placeholder))
+        self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(asset: .placeholder))
     }
     
     func update(user: User?) {
@@ -211,15 +211,15 @@ extension HomeViewController {
         (view as? HomeView)?.update(plan: plan)
     }
     
-    func makeMenu(with planQuery: [PlanQuery]) {
+    func setPlanListButtonMenu(with planQuery: [PlanQuery]) {
         var actions: [UIMenuElement] = []
-
+        
         let queryActions = planQuery
             .map { query in
                 UIAction(
                     title: query.planName
                 ) { [weak self] _ in
-                    UserDefaults.standard.setValue(query.planID.uuidString, forKey: Const.Key.currentPlan.rawValue)
+                    UserDefaults.standard.setValue(query.id.uuidString, forKey: UserDefaultsKey.currentPlan)
                     self?.input.onNext(.fetchPlan(query))
                 }
             }
@@ -245,7 +245,7 @@ extension HomeViewController {
     
     func setEmptyView(user: User?) {
         guard let userName = user?.name else { return }
-        (view as? HomeEmptyView)?.titleLabel.text = "\(userName) 님\n목표가 비어있어요"
+        (view as? HomeEmptyView)?.titleLabel.text = "\(userName) 님\n목표가 아직없어요"
     }
     
     func startAnimation() {
@@ -259,15 +259,22 @@ extension HomeViewController {
     func setViewsAndDelegate(_ planIsExist: Bool) {
         if planIsExist {
             let _view = HomeView()
+            
             _view.setDelegate(self)
-            configureDataSource(of: _view.collectionView)
+            
             self.view = _view
+            
+            configureDataSource(of: _view.collectionView)
+            
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planListButton)
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: completedDayPlansButton)
+            
             self.input.onNext(.reloadAll)
         } else {
             let _view = HomeEmptyView()
+            
             _view.delegate = self
+            
             self.view = _view
         }
     }
@@ -277,7 +284,7 @@ extension HomeViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(dayPlans, toSection: .main)
         
-        dataSource.apply(snapshot)
+        dataSource?.apply(snapshot)
     }
     
     func addNotification() {
@@ -305,7 +312,7 @@ extension HomeViewController {
     }
     
     @objc private func reloadAll() {
-        input.onNext(.viewDidLoad)
+        input.onNext(.reloadAll)
     }
     
     @objc private func reloadPlan() {
@@ -342,7 +349,7 @@ extension HomeViewController {
             
             guard item.imageURL != nil else { return }
             
-            _self.viewModel.loadImage(dayPlanID: item._id) { data in
+            _self.viewModel.loadImage(dayPlanID: item.id) { data in
                 cell.update(imageData: data)
             }
         }
@@ -355,7 +362,7 @@ extension HomeViewController {
                     for: indexPath,
                     item: item
                 )
-            
+                
                 cell.delegate = self
                 
                 return cell

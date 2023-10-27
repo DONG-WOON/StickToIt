@@ -94,7 +94,7 @@ extension CalendarViewModel {
     }
     
     private func fetchPlanQueries() {
-        guard let uuidString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue), let userID = UUID(uuidString: uuidString) else { return }
+        guard let uuidString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID), let userID = UUID(uuidString: uuidString) else { return }
         
         let result = userRepository.fetch(key: userID)
         
@@ -118,7 +118,7 @@ extension CalendarViewModel {
                 return
             }
             
-            loadImage(dayPlanID: plan._id)
+            loadImage(dayPlanID: plan.id)
         } else {
             output.onNext(.showDayPlanImage(data: nil))
             return

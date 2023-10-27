@@ -8,7 +8,7 @@
 import Foundation
 
 enum Const {
-    enum Image: String {
+    enum SymbolImage: String {
         case houseFill = "house.fill"
         case listBullet = "list.bullet"
         case calendar = "calendar"
@@ -29,20 +29,35 @@ enum Const {
         case trash = "trash.circle.fill"
         case timer = "timer"
         case text = "t.circle"
+    }
+    
+    enum AssetImage: String {
+        case placeholder = "Placeholder"
+    }
+
+    enum AssetColor: String {
+        case accent1 = "Accent1"
+        case accent2 = "Accent2"
+        case accent3 = "Accent3"
+        case accent4 = "Accent4"
+        case black = "Black"
+    }
+
+    enum FontSize {
         
-        static let placeholder = "Placeholder"
+        /// 27
+        static let title: CGFloat = 27
+        
+        /// 21
+        static let subTitle: CGFloat = 21
+        
+        /// 18
+        static let body: CGFloat = 18
+        
+        /// 14
+        static let description:CGFloat = 14
     }
-    
-    enum NotificationKey {
-        static let imageToUpload = "imageToUpload"
-    }
-    
-    enum Key: String {
-        case currentPlan = "currentPlan"
-        case userID = "userID"
-        static let isCertifyingError = "isCertifyingError"
-        static let isSaveImageError = "isSaveImageError"
-    }
+
     
     enum Size {
         case kb(Int)
@@ -54,27 +69,4 @@ enum Const {
             }
         }
     }
-}
-
-enum AssetColor: String {
-    case accent1 = "Accent1"
-    case accent2 = "Accent2"
-    case accent3 = "Accent3"
-    case accent4 = "Accent4"
-    case black = "Black"
-}
-
-enum FontSize {
-    
-    /// 27
-    static let title: CGFloat = 27
-    
-    /// 21
-    static let subTitle: CGFloat = 21
-    
-    /// 18
-    static let body: CGFloat = 18
-    
-    /// 14
-    static let description:CGFloat = 14
 }

@@ -31,12 +31,12 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      }
      
      let containerView: UIView = {
-          let view = UIView(backgroundColor: .assetColor(.accent4))
+          let view = UIView(backgroundColor: .systemBackground)
           view.rounded(cornerRadius:20)
           return view
      }()
      
-     let calendar = StickToItCalendar(backgroundColor: .assetColor(.accent4))
+     let calendar = StickToItCalendar()
      
      private let dDayLabel: PaddingView<UILabel> = {
           let view = PaddingView<UILabel>()

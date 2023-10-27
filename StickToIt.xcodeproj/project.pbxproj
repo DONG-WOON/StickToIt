@@ -76,6 +76,7 @@
 		729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */; };
 		729AC5252ACEEBAF00E910D5 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5242ACEEBAF00E910D5 /* CameraManager.swift */; };
 		72A618DE2AE66C17008ACA84 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 72A618DD2AE66C17008ACA84 /* Toast */; };
+		72A618FF2AEBDC79008ACA84 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A618FE2AEBDC79008ACA84 /* Keys.swift */; };
 		72A619012AEBDE58008ACA84 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619002AEBDE58008ACA84 /* DatabaseError.swift */; };
 		72A6190C2AEC0647008ACA84 /* DeletePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */; };
 		72A619102AEC069E008ACA84 /* DeleteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A6190F2AEC069E008ACA84 /* DeleteService.swift */; };
@@ -168,6 +169,7 @@
 		729AC5202ACEC3A100E910D5 /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
 		729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+CGSize.swift"; sourceTree = "<group>"; };
 		729AC5242ACEEBAF00E910D5 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		72A618FE2AEBDC79008ACA84 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		72A619002AEBDE58008ACA84 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlanUseCase.swift; sourceTree = "<group>"; };
 		72A6190F2AEC069E008ACA84 /* DeleteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteService.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				7217B0012AC2B2AF002C3112 /* Const.swift */,
+				72A618FE2AEBDC79008ACA84 /* Keys.swift */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -969,6 +972,7 @@
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
 				72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */,
+				72A618FF2AEBDC79008ACA84 /* Keys.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
 				728B49592AE3C32F009C1C88 /* DateQuery.swift in Sources */,
 				72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */,

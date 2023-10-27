@@ -76,9 +76,9 @@ final class CalendarViewController: UIViewController {
     }
     
     private func checkCurrentPlan(_ planQueries: [PlanQuery]) {
-        if let currentPlanQueryString = UserDefaults.standard.string(forKey: Const.Key.currentPlan.rawValue), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
             
-            let currentPlanQuery = PlanQuery(planID: currentPlanID, planName: "")
+            let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
             input.onNext(.planMenuTapped(currentPlanQuery))
         } else {
             if let _firstPlanQuery = planQueries.first {

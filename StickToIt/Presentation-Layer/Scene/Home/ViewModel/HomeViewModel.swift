@@ -105,9 +105,9 @@ where PlanUseCase.Model == Plan, PlanUseCase.Query == PlanQuery
 extension HomeViewModel {
     
     private func fetchCurrentPlan() {
-        if let currentPlanQueryString = UserDefaults.standard.string(forKey: Const.Key.currentPlan.rawValue), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
             
-            let currentPlanQuery = PlanQuery(planID: currentPlanID, planName: "")
+            let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
             
             fetchPlan(currentPlanQuery)
         }
@@ -132,7 +132,7 @@ extension HomeViewModel {
     }
     
     private func fetchPlanQueriesOfUser() {
-        guard let userIDString = UserDefaults.standard.string(forKey: Const.Key.userID.rawValue),
+        guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
                 let userID = UUID(uuidString: userIDString) else {
             return
         }
