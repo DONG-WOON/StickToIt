@@ -1,5 +1,5 @@
 //
-//  CreateDayPlanUseCase.swift
+//  UpdateDayPlanUseCase.swift
 //  StickToIt
 //
 //  Created by 서동운 on 10/12/23.
@@ -7,24 +7,22 @@
 
 import Foundation
 
-protocol CreateDayPlanUseCase: UpdateService {
+protocol UpdateDayPlanUseCase<Model, Entity>: UpdateService {
     func save(dayPlanID: UUID, imageData: Data?) async -> String?
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void)
 }
 
-final class CreateDayPlanUseCaseImpl<
-    Repository: PlanRepository<DayPlan, DayPlanEntity, PlanQuery>
->: CreateDayPlanUseCase {
-    
-    typealias Repository = Repository
+final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {
+
     typealias Model = DayPlan
     typealias Entity = DayPlanEntity
     
     // MARK: Properties
-    let repository: Repository
+    let repository: any DayPlanRepository<Model, Entity>
     
     // MARK: Life Cycle
-    init(repository: Repository) {
+    init(repository: some DayPlanRepository<Model, Entity>
+    ) {
         self.repository = repository
     }
     

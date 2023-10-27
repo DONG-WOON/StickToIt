@@ -7,9 +7,10 @@
 
 import Foundation
 
-protocol FetchService {
+protocol FetchService<Query, Model, Entity> {
     associatedtype Query
     associatedtype Model
+    associatedtype Entity
     
     func fetchAll(completion: @escaping([Model]) -> Void)
     func fetch(query: Query, completion: @escaping (Model) -> Void)

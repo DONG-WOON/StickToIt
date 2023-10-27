@@ -16,7 +16,6 @@
 		7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217B00A2AC2C407002C3112 /* PlanQuery.swift */; };
 		7217B00E2AC2D5F6002C3112 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7217B00D2AC2D5F6002C3112 /* SnapKit */; };
 		7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278495E2AD5249600433753 /* EditImageViewController.swift */; };
-		727849612AD524C300433753 /* EditImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849602AD524C300433753 /* EditImageUseCase.swift */; };
 		727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849622AD524CF00433753 /* EditImageViewModel.swift */; };
 		7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */; };
 		7278496D2AD5702500433753 /* PlanRepositoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278496C2AD5702500433753 /* PlanRepositoryImp.swift */; };
@@ -24,7 +23,7 @@
 		727849742AD6969E00433753 /* CreateDayPlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849732AD6969E00433753 /* CreateDayPlanViewModel.swift */; };
 		727849772AD697FB00433753 /* BaseViewConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849762AD697FB00433753 /* BaseViewConfigurable.swift */; };
 		727849802AD76A2000433753 /* DayPlanRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278497F2AD76A2000433753 /* DayPlanRepositoryImpl.swift */; };
-		727849852AD77E2000433753 /* CreateDayPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849842AD77E2000433753 /* CreateDayPlanUseCase.swift */; };
+		727849852AD77E2000433753 /* UpdateDayPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849842AD77E2000433753 /* UpdateDayPlanUseCase.swift */; };
 		727849872AD77E4B00433753 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849862AD77E4B00433753 /* UpdateService.swift */; };
 		7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849892AD79FB400433753 /* Extension+Notification.swift */; };
 		7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498B2AD849B600433753 /* BlurEffectView.swift */; };
@@ -78,6 +77,9 @@
 		729AC5252ACEEBAF00E910D5 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC5242ACEEBAF00E910D5 /* CameraManager.swift */; };
 		72A618DE2AE66C17008ACA84 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 72A618DD2AE66C17008ACA84 /* Toast */; };
 		72A619012AEBDE58008ACA84 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619002AEBDE58008ACA84 /* DatabaseError.swift */; };
+		72A6190C2AEC0647008ACA84 /* DeletePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */; };
+		72A619102AEC069E008ACA84 /* DeleteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A6190F2AEC069E008ACA84 /* DeleteService.swift */; };
+		72A619122AEC06F6008ACA84 /* FetchUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619112AEC06F6008ACA84 /* FetchUserUseCase.swift */; };
 		72A619142AEC098A008ACA84 /* FileManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619132AEC098A008ACA84 /* FileManagerError.swift */; };
 		72A619162AEC0B00008ACA84 /* DayPlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619152AEC0B00008ACA84 /* DayPlanRepository.swift */; };
 		72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9760D2ABB2A8E0021291C /* AppDelegate.swift */; };
@@ -90,7 +92,7 @@
 		72BA20662AE60A41005F7D90 /* StaticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */; };
 		72D7D30B2ADD05630062A60F /* FavoritePlanSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */; };
 		72D7D30C2ADD05630062A60F /* FavoritePlanSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */; };
-		72D7D30F2ADD07C70062A60F /* UserInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */; };
+		72D7D30F2ADD07C70062A60F /* UpdateUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D30E2ADD07C70062A60F /* UpdateUserUseCase.swift */; };
 		72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3122ADD0F630062A60F /* UserRepository.swift */; };
 		72D7D3152ADD0FBD0062A60F /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */; };
 		72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */; };
@@ -101,13 +103,10 @@
 		72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3292ADEA7E80062A60F /* UserSettingViewModel.swift */; };
 		72D7D32C2ADF74700062A60F /* HomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */; };
 		72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32D2ADF78F30062A60F /* HomeView.swift */; };
-		72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */; };
 		72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE32AD1221200F19568 /* FetchService.swift */; };
 		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
 		72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* PlanRepository.swift */; };
 		72FA8DED2AD19C7A00F19568 /* ImageQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */; };
-		72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */; };
-		72FA8DF32AD1A07400F19568 /* EditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DF22AD1A07400F19568 /* EditService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,7 +118,6 @@
 		7217B0052AC2BAB4002C3112 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7217B00A2AC2C407002C3112 /* PlanQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanQuery.swift; sourceTree = "<group>"; };
 		7278495E2AD5249600433753 /* EditImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewController.swift; sourceTree = "<group>"; };
-		727849602AD524C300433753 /* EditImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageUseCase.swift; sourceTree = "<group>"; };
 		727849622AD524CF00433753 /* EditImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewModel.swift; sourceTree = "<group>"; };
 		7278496A2AD56F6300433753 /* PlanWeekSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanWeekSelectViewController.swift; sourceTree = "<group>"; };
 		7278496C2AD5702500433753 /* PlanRepositoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepositoryImp.swift; sourceTree = "<group>"; };
@@ -127,7 +125,7 @@
 		727849732AD6969E00433753 /* CreateDayPlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDayPlanViewModel.swift; sourceTree = "<group>"; };
 		727849762AD697FB00433753 /* BaseViewConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewConfigurable.swift; sourceTree = "<group>"; };
 		7278497F2AD76A2000433753 /* DayPlanRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanRepositoryImpl.swift; sourceTree = "<group>"; };
-		727849842AD77E2000433753 /* CreateDayPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDayPlanUseCase.swift; sourceTree = "<group>"; };
+		727849842AD77E2000433753 /* UpdateDayPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDayPlanUseCase.swift; sourceTree = "<group>"; };
 		727849862AD77E4B00433753 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		727849892AD79FB400433753 /* Extension+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Notification.swift"; sourceTree = "<group>"; };
 		7278498B2AD849B600433753 /* BlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectView.swift; sourceTree = "<group>"; };
@@ -171,6 +169,9 @@
 		729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+CGSize.swift"; sourceTree = "<group>"; };
 		729AC5242ACEEBAF00E910D5 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		72A619002AEBDE58008ACA84 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlanUseCase.swift; sourceTree = "<group>"; };
+		72A6190F2AEC069E008ACA84 /* DeleteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteService.swift; sourceTree = "<group>"; };
+		72A619112AEC06F6008ACA84 /* FetchUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserUseCase.swift; sourceTree = "<group>"; };
 		72A619132AEC098A008ACA84 /* FileManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerError.swift; sourceTree = "<group>"; };
 		72A619152AEC0B00008ACA84 /* DayPlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanRepository.swift; sourceTree = "<group>"; };
 		72A9760A2ABB2A8E0021291C /* StickToIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickToIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,7 +186,7 @@
 		72BA20652AE60A41005F7D90 /* StaticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsViewModel.swift; sourceTree = "<group>"; };
 		72D7D3082ADD05630062A60F /* FavoritePlanSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewModel.swift; sourceTree = "<group>"; };
 		72D7D30A2ADD05630062A60F /* FavoritePlanSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePlanSettingViewController.swift; sourceTree = "<group>"; };
-		72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoUseCase.swift; sourceTree = "<group>"; };
+		72D7D30E2ADD07C70062A60F /* UpdateUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserUseCase.swift; sourceTree = "<group>"; };
 		72D7D3122ADD0F630062A60F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		72D7D3142ADD0FBD0062A60F /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		72D7D3162ADD18850062A60F /* PlanQueryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanQueryEntity.swift; sourceTree = "<group>"; };
@@ -196,13 +197,10 @@
 		72D7D3292ADEA7E80062A60F /* UserSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingViewModel.swift; sourceTree = "<group>"; };
 		72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyView.swift; sourceTree = "<group>"; };
 		72D7D32D2ADF78F30062A60F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageUseCase.swift; sourceTree = "<group>"; };
 		72FA8DE32AD1221200F19568 /* FetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchService.swift; sourceTree = "<group>"; };
 		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
 		72FA8DE82AD19AB000F19568 /* PlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepository.swift; sourceTree = "<group>"; };
 		72FA8DEC2AD19C7A00F19568 /* ImageQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQuery.swift; sourceTree = "<group>"; };
-		72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCameraUseCase.swift; sourceTree = "<group>"; };
-		72FA8DF22AD1A07400F19568 /* EditService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -397,12 +395,12 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		727849832AD77E0F00433753 /* UpdatePlan */ = {
+		727849832AD77E0F00433753 /* DayPlan */ = {
 			isa = PBXGroup;
 			children = (
-				727849842AD77E2000433753 /* CreateDayPlanUseCase.swift */,
+				727849842AD77E2000433753 /* UpdateDayPlanUseCase.swift */,
 			);
-			path = UpdatePlan;
+			path = DayPlan;
 			sourceTree = "<group>";
 		};
 		729AC44E2AC4961100E910D5 /* Repositories */ = {
@@ -556,20 +554,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		729AC5122ACE918500E910D5 /* FetchPlan */ = {
+		729AC5122ACE918500E910D5 /* Plan */ = {
 			isa = PBXGroup;
 			children = (
 				729AC5142ACE91AD00E910D5 /* FetchPlanUseCase.swift */,
-			);
-			path = FetchPlan;
-			sourceTree = "<group>";
-		};
-		729AC5132ACE919B00E910D5 /* CreatePlan */ = {
-			isa = PBXGroup;
-			children = (
 				729AC5172ACE91F200E910D5 /* CreatePlanUseCase.swift */,
+				72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */,
 			);
-			path = CreatePlan;
+			path = Plan;
 			sourceTree = "<group>";
 		};
 		729AC5162ACE91B500E910D5 /* Service */ = {
@@ -577,8 +569,8 @@
 			children = (
 				72FA8DE52AD1222600F19568 /* CreateService.swift */,
 				72FA8DE32AD1221200F19568 /* FetchService.swift */,
-				72FA8DF22AD1A07400F19568 /* EditService.swift */,
 				727849862AD77E4B00433753 /* UpdateService.swift */,
+				72A6190F2AEC069E008ACA84 /* DeleteService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -707,7 +699,8 @@
 		72D7D30D2ADD07BA0062A60F /* FetchUserInfo */ = {
 			isa = PBXGroup;
 			children = (
-				72D7D30E2ADD07C70062A60F /* UserInfoUseCase.swift */,
+				72D7D30E2ADD07C70062A60F /* UpdateUserUseCase.swift */,
+				72A619112AEC06F6008ACA84 /* FetchUserUseCase.swift */,
 			);
 			path = FetchUserInfo;
 			sourceTree = "<group>";
@@ -785,22 +778,10 @@
 			isa = PBXGroup;
 			children = (
 				72D7D30D2ADD07BA0062A60F /* FetchUserInfo */,
-				727849832AD77E0F00433753 /* UpdatePlan */,
-				72FA8DF02AD19F9400F19568 /* EditImage */,
-				72FA8DE22AD1103700F19568 /* FetchImage */,
-				729AC5122ACE918500E910D5 /* FetchPlan */,
-				729AC5132ACE919B00E910D5 /* CreatePlan */,
-				72FA8DF12AD1A01B00F19568 /* OpenCamera */,
+				727849832AD77E0F00433753 /* DayPlan */,
+				729AC5122ACE918500E910D5 /* Plan */,
 			);
 			path = UseCase;
-			sourceTree = "<group>";
-		};
-		72FA8DE22AD1103700F19568 /* FetchImage */ = {
-			isa = PBXGroup;
-			children = (
-				72FA8DDD2AD1012C00F19568 /* FetchImageUseCase.swift */,
-			);
-			path = FetchImage;
 			sourceTree = "<group>";
 		};
 		72FA8DE72AD19A9600F19568 /* Repository_Interface */ = {
@@ -811,22 +792,6 @@
 				72A619152AEC0B00008ACA84 /* DayPlanRepository.swift */,
 			);
 			path = Repository_Interface;
-			sourceTree = "<group>";
-		};
-		72FA8DF02AD19F9400F19568 /* EditImage */ = {
-			isa = PBXGroup;
-			children = (
-				727849602AD524C300433753 /* EditImageUseCase.swift */,
-			);
-			path = EditImage;
-			sourceTree = "<group>";
-		};
-		72FA8DF12AD1A01B00F19568 /* OpenCamera */ = {
-			isa = PBXGroup;
-			children = (
-				72FA8DEE2AD19F0C00F19568 /* OpenCameraUseCase.swift */,
-			);
-			path = OpenCamera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -934,6 +899,7 @@
 				729AC4DC2ACBA4D500E910D5 /* CreatePlanView.swift in Sources */,
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */,
+				72A619122AEC06F6008ACA84 /* FetchUserUseCase.swift in Sources */,
 				72BA20662AE60A41005F7D90 /* StaticsViewModel.swift in Sources */,
 				7217B00B2AC2C407002C3112 /* PlanQuery.swift in Sources */,
 				72D7D3192ADD2EC80062A60F /* UserDefaultWrapper.swift in Sources */,
@@ -953,10 +919,9 @@
 				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* DatabaseManagerImp.swift in Sources */,
 				72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */,
-				72FA8DF32AD1A07400F19568 /* EditService.swift in Sources */,
 				7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */,
 				7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */,
-				727849612AD524C300433753 /* EditImageUseCase.swift in Sources */,
+				72A6190C2AEC0647008ACA84 /* DeletePlanUseCase.swift in Sources */,
 				729AC4B42AC9B84600E910D5 /* ResizableButton.swift in Sources */,
 				729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */,
 				729AC4D72ACBA20400E910D5 /* CreatePlanViewController.swift in Sources */,
@@ -966,16 +931,15 @@
 				727849722AD6964A00433753 /* DayPlanViewController.swift in Sources */,
 				72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
-				72FA8DEF2AD19F0C00F19568 /* OpenCameraUseCase.swift in Sources */,
 				727849742AD6969E00433753 /* CreateDayPlanViewModel.swift in Sources */,
 				729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */,
 				7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */,
-				727849852AD77E2000433753 /* CreateDayPlanUseCase.swift in Sources */,
+				727849852AD77E2000433753 /* UpdateDayPlanUseCase.swift in Sources */,
 				727849802AD76A2000433753 /* DayPlanRepositoryImpl.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */,
-				72D7D30F2ADD07C70062A60F /* UserInfoUseCase.swift in Sources */,
+				72D7D30F2ADD07C70062A60F /* UpdateUserUseCase.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				7278496B2AD56F6300433753 /* PlanWeekSelectViewController.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,
@@ -1001,11 +965,11 @@
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,
+				72A619102AEC069E008ACA84 /* DeleteService.swift in Sources */,
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
 				72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
-				72FA8DDE2AD1012C00F19568 /* FetchImageUseCase.swift in Sources */,
 				728B49592AE3C32F009C1C88 /* DateQuery.swift in Sources */,
 				72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */,
 				729AC4BD2ACA7F8800E910D5 /* ImageSelectionViewModel.swift in Sources */,

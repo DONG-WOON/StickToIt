@@ -7,29 +7,25 @@
 
 import Foundation
 
-protocol FetchPlanUseCase: FetchService {
+protocol FetchPlanUseCase<Query, Model, Entity>: FetchService {
     func loadImageFromDocument(fileName: String, completion: @escaping (Data?) -> Void)
 }
 
-final class FetchPlanUseCaseImpl
-< Repository: PlanRepository<Plan, PlanEntity, PlanQuery> >
-: FetchPlanUseCase
-{
+final class FetchPlanUseCaseImp: FetchPlanUseCase {
     
     typealias Query = PlanQuery
     typealias Model = Plan
-    typealias Repository = Repository
+    typealias Entity = PlanEntity
     
-    let repository: Repository
+    let repository: (any PlanRepository<Query, Model, Entity>)
     
-    init(repository: Repository) {
+    init(repository: some PlanRepository<Query, Model, Entity>) {
         self.repository = repository
     }
-//    func fetchAllR() -> Result<[Plan], Error> {
-//        return repository.fetchAll()
-//    }
+
+    // MARK: Fetch Service
     
-    func fetchAll(completion: @escaping ([Plan]) -> Void) {
+    func fetchAll(completion: @escaping ([Model]) -> Void) {
         let result = repository.fetchAll()
         switch result {
         case .success(let plans):
@@ -39,7 +35,7 @@ final class FetchPlanUseCaseImpl
         }
     }
     
-    func fetch(query: PlanQuery, completion: @escaping (Plan) -> Void) {
+    func fetch(query: Query, completion: @escaping (Model) -> Void) {
         let result = repository.fetch(query: query)
         switch result {
         case .success(let plan):
