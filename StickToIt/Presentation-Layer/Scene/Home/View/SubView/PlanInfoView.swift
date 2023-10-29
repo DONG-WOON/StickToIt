@@ -65,7 +65,8 @@ final class PlanInfoView: UIView {
         self.planNameLabel.sizeToFit()
         
         if let date = plan.lastCertifyingDate {
-            self.lastCertifyingDayLabel.text = "최근 목표 실행일: \(date)"
+            let dateString = DateFormatter.getFullDateString(from: date)
+            self.lastCertifyingDayLabel.text = "최근 목표 실행일: \(dateString)"
         } else {
             self.lastCertifyingDayLabel.text = "최근 목표 실행일: -"
         }

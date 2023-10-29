@@ -52,10 +52,13 @@ final class CameraManager {
                 alert.dismiss(animated: true, completion: nil)
             }
             
-            let goToSetting = UIAlertAction(title: "설정",
-                                            style: .default) { _ in
-                guard let settingURL = URL(string: UIApplication.openSettingsURLString),
-                      UIApplication.shared.canOpenURL(settingURL) else { return }
+            let goToSetting = UIAlertAction(
+                title: "설정",
+                style: .default
+            ) { _ in
+                guard let settingURL = URL(
+                    string: UIApplication.openSettingsURLString
+                ), UIApplication.shared.canOpenURL(settingURL) else { return }
                 UIApplication.shared.open(settingURL, options: [:])
             }
             

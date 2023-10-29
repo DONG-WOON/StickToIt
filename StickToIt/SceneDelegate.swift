@@ -13,10 +13,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
         window = UIWindow(windowScene: windowScene)
         
-        if let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
-           let _ = UUID(uuidString: userIDString) {
+        let userIsExist = checkUserIsExist()
+        
+        if userIsExist {
             window?.rootViewController = TabBarController()
         } else {
             window?.rootViewController = UserSettingViewController(
@@ -33,6 +35,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 options: .transitionCrossDissolve,
                 animations: nil
             )
+        }
+    }
+    
+    func checkUserIsExist() -> Bool {
+        if let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
+            let _ = UUID(uuidString: userIDString) {
+                return true
+        } else {
+            return false
         }
     }
     
