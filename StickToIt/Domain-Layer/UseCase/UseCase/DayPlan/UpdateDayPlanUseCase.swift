@@ -7,9 +7,26 @@
 
 import Foundation
 
-    func save(dayPlanID: UUID, imageData: Data?) async -> String?
-    func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void)
 protocol UpdateDayPlanUseCase<Model, Entity> {
+    
+    associatedtype Model = DayPlan
+    associatedtype Entity = DayPlanEntity
+    
+    func update(
+        entity: DayPlanEntity.Type,
+        matchingWith model: DayPlan,
+        updateHandler: @escaping (Entity) -> Void
+    ) async -> Result<Bool, Error>
+    
+    func saveImageData(
+        _ imageData: Data?,
+        dayPlanID: UUID
+    ) async -> String?
+    
+    func loadImage(
+        dayPlanID: UUID,
+        completion: @escaping (Data?) -> Void
+    )
 }
 
 final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {
@@ -26,10 +43,14 @@ final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {
         self.repository = repository
     }
     
-    func save(entity: DayPlanEntity.Type, matchingWith model: DayPlan, updateHandler: @escaping (Entity) -> Void) async -> Result<Bool, Error> {
+    func update(
+        entity: DayPlanEntity.Type,
+        matchingWith model: DayPlan,
+        updateHandler: @escaping (Entity) -> Void
+    ) async -> Result<Bool, Error> {
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async { [weak self] in
-                self?.repository.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: { error in
+                self?.repository.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onComplete: { error in
                     if let error {
                         continuation.resume(returning: .failure(error))
                     }
@@ -39,9 +60,9 @@ final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {
         }
     }
     
-    func save(dayPlanID: UUID, imageData: Data?) async -> String? {
+    func saveImageData(_ imageData: Data?, dayPlanID: UUID) async -> String? {
         do {
-            let url = try await repository.saveImage(path: dayPlanID.uuidString, imageData: imageData)
+            let url = try await repository.saveImageData(imageData, path: dayPlanID.uuidString)
             return url
         } catch {
             print(error)

@@ -11,8 +11,8 @@ import RxCocoa
 
 final class CreatePlanViewModel {
     // MARK: Properties
-    private let planUseCase: any CreatePlanUseCase<Plan>
-    private let userUseCase: any UpdateUserUseCase
+    private let planUseCase: any CreatePlanUseCase<Plan, PlanEntity>
+    private let userUseCase: any UpdateUserUseCase<User, UserEntity>
     private let mainQueue: DispatchQueue
     
     // MARK: Properties
@@ -26,8 +26,8 @@ final class CreatePlanViewModel {
     
     // MARK: Life Cycle
     init(
-        planUseCase: some CreatePlanUseCase<Plan>,
-        userUseCase: some UpdateUserUseCase,
+        planUseCase: some CreatePlanUseCase<Plan, PlanEntity>,
+        userUseCase: some UpdateUserUseCase<User, UserEntity>,
         mainQueue: DispatchQueue = .main
     ) {
         self.planUseCase = planUseCase
@@ -39,8 +39,8 @@ final class CreatePlanViewModel {
             endDate
         )
         .map { $0.count > 0 && ($1 != nil) }
-        .subscribe(with: self, onNext: { (self, isValied) in
-            self.planIsValidated.accept(isValied)
+        .subscribe(with: self, onNext: { (self, isValidated) in
+            self.planIsValidated.accept(isValidated)
         }).disposed(by: disposeBag)
     }
     
@@ -58,7 +58,11 @@ final class CreatePlanViewModel {
             return
         }
         
-        let allDays =  Calendar.current.dateComponents([.day], from: startDay, to: endDay).day!
+        let allDays =  Calendar.current.dateComponents(
+            [.day],
+            from: startDay,
+            to: endDay
+        ).day!
         
         let initialDayPlanDates = Array(0...allDays + 1).map {
             Calendar.current.date(byAdding: .day, value: $0, to: startDate)!
@@ -72,7 +76,12 @@ final class CreatePlanViewModel {
                 content: nil, imageURL: nil)
         }
         
-        let plan = Plan(id: UUID(), name: planName, targetNumberOfDays: targetNumberOfDays, startDate: startDate, endDate: endDate.value ?? startDate, dayPlans: dayPlans)
+        let plan = Plan(
+            id: UUID(), name: planName,
+            targetNumberOfDays: targetNumberOfDays,
+            startDate: startDate, endDate: endDate.value ?? startDate,
+            dayPlans: dayPlans
+        )
         
         planUseCase.create(plan) { [weak self] result in
             switch result {
@@ -83,10 +92,16 @@ final class CreatePlanViewModel {
                     return
                 }
                 
-                self?.save(planQuery: planQuery, to: userID) { result in
+                self?.save(
+                    planQuery: planQuery,
+                    to: userID
+                ) { result in
                     switch result {
                     case .success:
-                        UserDefaults.standard.setValue(planQuery.id.uuidString, forKey: UserDefaultsKey.currentPlan)
+                        UserDefaults.standard.setValue(
+                            planQuery.id.uuidString,
+                            forKey: UserDefaultsKey.currentPlan
+                        )
                         
                         completion(.success(planQuery))
                     case .failure(let error):
@@ -99,10 +114,14 @@ final class CreatePlanViewModel {
         }
     }
     
-    private func save(planQuery: PlanQuery, to user: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
-        userUseCase.updateUserInfo(userID: user) { entity in
+    private func save(
+        planQuery: PlanQuery,
+        to user: UUID,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        userUseCase.update(userID: user) { entity in
             entity.planQueries.append(planQuery.toEntity())
-        } onFailure: { error in
+        } onComplete: { error in
             if let error {
                 completion(.failure(error))
             }

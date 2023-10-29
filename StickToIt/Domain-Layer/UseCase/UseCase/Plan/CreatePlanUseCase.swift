@@ -8,23 +8,32 @@
 import Foundation
 
 protocol CreatePlanUseCase<Model, Entity> {
+    associatedtype Model
+    associatedtype Entity
+    
+    func create(
+        _ model: Model,
+        completion: @Sendable @escaping (Result<Bool, Error>) -> Void
+    )
 }
 
 final class CreatePlanUseCaseImp: CreatePlanUseCase {
     
-    typealias Query = PlanQuery
     typealias Model = Plan
     typealias Entity = PlanEntity
     
     // MARK: Properties
-    let repository: (any PlanRepository<Query, Model, Entity>)
+    let repository: (any PlanRepository<Model, Entity>)
     
     // MARK: Life Cycle
-    init(repository: some PlanRepository<Query, Model, Entity>) {
+    init(repository: some PlanRepository<Model, Entity>) {
         self.repository = repository
     }
     
-    func create(_ model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
+    func create(
+        _ model: Model,
+        completion: @Sendable @escaping (Result<Bool, Error>) -> Void
+    ) {
         repository.create(model: model, completion: completion)
     }
 }

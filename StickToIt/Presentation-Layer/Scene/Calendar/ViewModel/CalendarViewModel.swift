@@ -79,7 +79,7 @@ extension CalendarViewModel {
             return
         }
         
-        let result = planRepository.fetch(query: query)
+        let result = planRepository.fetch(key: query.id)
         
         switch result {
         case .success(let plan):

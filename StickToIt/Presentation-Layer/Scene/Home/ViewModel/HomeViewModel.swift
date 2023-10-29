@@ -38,7 +38,6 @@ final class HomeViewModel {
         case configureUI
         case showUserInfo(User?)
         case userDeleted
-        
         case setViewsAndDelegate(planIsExist: Bool)
         case loadPlanQueries([PlanQuery])
         case loadPlan(Plan)
@@ -51,10 +50,11 @@ final class HomeViewModel {
     private let disposeBag = DisposeBag()
     
     // MARK: UseCases
-    private let updateUserUseCase: any UpdateUserUseCase<UserEntity, User, UUID>
-    private let fetchUserUseCase: FetchUserUseCase
-    private let fetchPlanUseCase: any FetchPlanUseCase<PlanQuery, Plan, PlanEntity>
-    private let deletePlanUseCase: any DeletePlanUseCase
+    private let updateUserUseCase: any UpdateUserUseCase<User, UserEntity>
+    private let fetchUserUseCase: any FetchUserUseCase<User, UserEntity>
+    private let fetchPlanUseCase: any FetchPlanUseCase<Plan, PlanEntity>
+    private let deletePlanQueryUseCase: any DeletePlanUseCase<PlanQuery, PlanQueryEntity>
+    private let deletePlanUseCase: any DeletePlanUseCase<Plan, PlanEntity>
     
     
     // MARK: Inner Properties
@@ -68,14 +68,16 @@ final class HomeViewModel {
     // MARK: Life Cycle
     
     init(
-        updateUserUseCase: some UpdateUserUseCase<UserEntity, User, UUID>,
-        fetchUserUseCase: FetchUserUseCase,
-        fetchPlanUseCase: some FetchPlanUseCase<PlanQuery, Plan, PlanEntity>,
-        deletePlanUseCase: some DeletePlanUseCase
+        updateUserUseCase: some UpdateUserUseCase<User, UserEntity>,
+        fetchUserUseCase: some FetchUserUseCase<User, UserEntity>,
+        fetchPlanUseCase: some FetchPlanUseCase<Plan, PlanEntity>,
+        deletePlanQueryUseCase: some DeletePlanUseCase<PlanQuery, PlanQueryEntity>,
+        deletePlanUseCase: some DeletePlanUseCase<Plan, PlanEntity>
     ) {
         self.updateUserUseCase = updateUserUseCase
         self.fetchUserUseCase = fetchUserUseCase
         self.fetchPlanUseCase = fetchPlanUseCase
+        self.deletePlanQueryUseCase = deletePlanQueryUseCase
         self.deletePlanUseCase = deletePlanUseCase
     }
     
@@ -164,7 +166,7 @@ extension HomeViewModel {
                 let userID = UUID(uuidString: userIDString) else {
             return
         }
-      
+        
         fetchUserUseCase.fetchUserInfo(key: userID) { [weak self] user in
             self?.user = user
             
@@ -178,7 +180,7 @@ extension HomeViewModel {
     }
     
     private func fetchPlan(_ query: PlanQuery) {
-        fetchPlanUseCase.fetch(query: query) { [weak self] plan in
+        fetchPlanUseCase.fetch(key: query.id) { [weak self] plan in
             guard let _self = self else { return }
             _self.currentPlan = plan
             _self.output.onNext(.loadPlan(plan))
@@ -233,24 +235,6 @@ extension HomeViewModel {
         return dayPlans.filter { $0.week == week }
     }
     
-    private func deletePlan() {
-        guard let currentPlan else {
-            print("플랜이 존재하지 않음")
-            return
-        }
-        
-//        planUseCase?.delete(entity: PlanEntity.self, matchingWith: currentPlan) { [weak self] result in
-//            switch result {
-//            case .success:
-//                self?.deletePlanQuery()
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-    }
-    
-//    private func deletePlanQuery() {
-//        guard let user else { return }
 //
 //
 //

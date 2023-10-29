@@ -22,11 +22,11 @@ final class UserSettingViewModel {
     }
     
     private var userNickname: String = String()
-    private let repository: any UserRepository<User, UserEntity, UUID>
+    private let repository: any UserRepository<User, UserEntity>
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
     
-    init(repository: some UserRepository<User, UserEntity, UUID>) {
+    init(repository: some UserRepository<User, UserEntity>) {
         self.repository = repository
     }
     

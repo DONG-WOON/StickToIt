@@ -16,23 +16,23 @@ final class DIContainer {
     
     // MARK: UseCases
     
-    func makeFetchPlanUseCase() -> some FetchPlanUseCase<PlanQuery, Plan, PlanEntity> {
+    func makeFetchPlanUseCase() -> some FetchPlanUseCase<Plan, PlanEntity> {
         FetchPlanUseCaseImp(repository: planRepository)
     }
     
-    func makeCreatePlanUseCase() -> some CreatePlanUseCase<Plan> {
+    func makeCreatePlanUseCase() -> some CreatePlanUseCase<Plan, PlanEntity> {
         CreatePlanUseCaseImp(repository: planRepository)
     }
     
-    func makeDeletePlanUseCase() -> any DeletePlanUseCase {
+    func makeDeletePlanUseCase() -> some DeletePlanUseCase<Plan, PlanEntity> {
         DeletePlanUseCaseImp(repository: planRepository)
     }
     
-    func makeFetchUserUseCase() -> any FetchUserUseCase {
+    func makeFetchUserUseCase() -> some FetchUserUseCase<User, UserEntity> {
         FetchUserUseCaseImp(repository: userRepository)
     }
     
-    func makeUpdateUserUseCase() -> some UpdateUserUseCase<UserEntity, User, UUID> {
+    func makeUpdateUserUseCase() -> some UpdateUserUseCase<User, UserEntity> {
         UpdateUserUseCaseImp(repository: userRepository)
     }
     

@@ -7,30 +7,33 @@
 
 import Foundation
 
-protocol FetchUserUseCase {
+protocol FetchUserUseCase<Model, Entity> {
+    
+    associatedtype Model
+    associatedtype Entity
+    
     func fetchUserInfo(
         key: UUID,
-        completion: @escaping (User) -> Void
+        completion: @escaping (Model) -> Void
     )
 }
 
 
 final class FetchUserUseCaseImp: FetchUserUseCase {
     
-    typealias Entity = UserEntity
     typealias Model = User
-    typealias ID = UUID
+    typealias Entity = UserEntity
     
-    private let repository: (any UserRepository<User, UserEntity, UUID>)
+    private let repository: (any UserRepository<User, UserEntity>)
 
-    init(repository: some UserRepository<User, UserEntity, UUID>) {
+    init(repository: some UserRepository<User, UserEntity>) {
         self.repository = repository
     
     }
     
     func fetchUserInfo(
-        key: ID,
-        completion: @escaping (User) -> Void
+        key: UUID,
+        completion: @escaping (Model) -> Void
     ) {
         
         let result = repository.fetch(key: key)

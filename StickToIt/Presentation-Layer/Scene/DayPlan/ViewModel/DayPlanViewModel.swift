@@ -78,9 +78,13 @@ final class DayPlanViewModel {
     }
     
     func certify() async throws {
-        let result = await updateDayPlanUseCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan, updateHandler: {
-            $0.isComplete = true
-        })
+        let result = await updateDayPlanUseCase.update(
+            entity: DayPlanEntity.self,
+            matchingWith: dayPlan,
+            updateHandler: {
+                $0.isComplete = true
+            }
+        )
         
         switch result {
         case .success:
@@ -89,10 +93,16 @@ final class DayPlanViewModel {
             throw STIError.certifyingError
         }
     }
-
+    
     func save(with imageData: UIImage?) async throws -> String {
-        let imageData = compressedImageData(imageData, limitSize: Const.Size.kb(10).value)
-        let imageURL = await updateDayPlanUseCase.save(dayPlanID: dayPlan.id, imageData: imageData)
+        let imageData = compressedImageData(
+            imageData,
+            limitSize: Const.Size.kb(10).value
+        )
+        let imageURL = await updateDayPlanUseCase.saveImageData(
+            imageData,
+            dayPlanID: dayPlan.id
+        )
         
         if let imageURL {
             return imageURL
@@ -102,7 +112,10 @@ final class DayPlanViewModel {
     }
     
     func updateImageURL(with imageURL: String) async throws {
-        let result = await updateDayPlanUseCase.save(entity: DayPlanEntity.self, matchingWith: dayPlan) { $0.imageURL = imageURL }
+        let result = await updateDayPlanUseCase.update(
+            entity: DayPlanEntity.self,
+            matchingWith: dayPlan
+        ) { $0.imageURL = imageURL }
         
         switch result {
         case .success:

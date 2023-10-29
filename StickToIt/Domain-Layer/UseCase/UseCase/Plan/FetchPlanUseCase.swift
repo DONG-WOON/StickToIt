@@ -7,19 +7,32 @@
 
 import Foundation
 
-    func loadImageFromDocument(fileName: String, completion: @escaping (Data?) -> Void)
 protocol FetchPlanUseCase<Model, Entity> {
+    
+    associatedtype Model
+    associatedtype Entity
+    
+    func fetchAll(completion: @escaping ([Model]) -> Void)
+    
+    func fetch(
+        key: UUID,
+        completion: @escaping (Model) -> Void
+    )
+    
+    func loadImageFromDocument(
+        fileName: String,
+        completion: @escaping (Data?) -> Void
+    )
 }
 
 final class FetchPlanUseCaseImp: FetchPlanUseCase {
     
-    typealias Query = PlanQuery
     typealias Model = Plan
     typealias Entity = PlanEntity
     
-    let repository: (any PlanRepository<Query, Model, Entity>)
+    let repository: (any PlanRepository<Model, Entity>)
     
-    init(repository: some PlanRepository<Query, Model, Entity>) {
+    init(repository: some PlanRepository<Model, Entity>) {
         self.repository = repository
     }
 
@@ -35,8 +48,11 @@ final class FetchPlanUseCaseImp: FetchPlanUseCase {
         }
     }
     
-    func fetch(query: Query, completion: @escaping (Model) -> Void) {
-        let result = repository.fetch(query: query)
+    func fetch(
+        key: UUID,
+        completion: @escaping (Model) -> Void
+    ) {
+        let result = repository.fetch(key: key)
         switch result {
         case .success(let plan):
             completion(plan)
@@ -45,7 +61,10 @@ final class FetchPlanUseCaseImp: FetchPlanUseCase {
         }
     }
     
-    func loadImageFromDocument(fileName: String, completion: @escaping (Data?) -> Void) {
+    func loadImageFromDocument(
+        fileName: String,
+        completion: @escaping (Data?) -> Void
+    ) {
         do {
             let data = try repository.loadImageFromDocument(fileName: fileName)
             completion(data)

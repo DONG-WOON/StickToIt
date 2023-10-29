@@ -7,41 +7,39 @@
 
 import Foundation
 
-protocol UpdateUserUseCase<Entity, Model, ID> {
-    associatedtype Entity
-    associatedtype Model
-    associatedtype ID
+protocol UpdateUserUseCase<Model, Entity> {
     
-    func updateUserInfo(
+    associatedtype Model
+    associatedtype Entity
+    
+    func update(
         userID: UUID,
         updateHandler: @escaping (UserEntity) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     )
 }
 
 final class UpdateUserUseCaseImp: UpdateUserUseCase {
     
-    typealias Entity = UserEntity
     typealias Model = User
-    typealias ID = UUID
+    typealias Entity = UserEntity
     
-    private let repository: (any UserRepository<User, UserEntity, UUID>)
+    private let repository: (any UserRepository<User, UserEntity>)
 
-    init(repository: some UserRepository<User, UserEntity, UUID>) {
+    init(repository: some UserRepository<User, UserEntity>) {
         self.repository = repository
     
     }
     
-    func updateUserInfo(
+    func update(
         userID: UUID,
         updateHandler: @escaping (UserEntity) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         repository.update(
             userID: userID,
             updateHandler: updateHandler,
-            onFailure: onFailure
+            onComplete: onComplete
         )
-       
     }
 }
