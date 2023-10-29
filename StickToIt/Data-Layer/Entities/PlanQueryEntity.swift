@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 final class PlanQueryEntity: Object {
-    @Persisted var _id: UUID
+    @Persisted(primaryKey: true) var _id: UUID
     @Persisted var planName: String
     
     convenience init(

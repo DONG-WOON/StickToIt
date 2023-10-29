@@ -35,7 +35,7 @@ final class HomeView: UIView {
         planInfoView.update(plan: plan)
     }
     
-    func setDelegate(_ delegate: PlanSettingButtonDelegate) {
+    func setDelegate(_ delegate: PlanInfoViewDelegate) {
         planInfoView.delegate = delegate
     }
 }

@@ -116,7 +116,7 @@ final class HomeViewModel {
                     _self.fetchPlan(planQuery)
                     
                 case .deletePlan:
-                    _self.deletePlan()
+                    _self.removePlanQuery()
                 }
             }
             .disposed(by: disposeBag)
@@ -139,6 +139,9 @@ extension HomeViewModel {
             let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
             
             fetchPlan(currentPlanQuery)
+        } else {
+            guard let firstQuery = user?.planQueries.first else { return }
+            fetchPlan(firstQuery)
         }
     }
     
@@ -163,7 +166,7 @@ extension HomeViewModel {
     
     private func fetchPlanQueriesOfUser() {
         guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
-                let userID = UUID(uuidString: userIDString) else {
+              let userID = UUID(uuidString: userIDString) else {
             return
         }
         
@@ -254,4 +257,35 @@ extension HomeViewModel {
 //            self?.output.onNext(.userDeleted)
 //        }
 //    }
+    private func removePlanQuery() {
+        guard let planID = currentPlan?.id else { print("플랜이 존재하지 않음"); return }
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.currentPlan)
+
+        deletePlanQueryUseCase.delete(
+            entity: PlanQueryEntity.self,
+            key: planID,
+            onComplete: { [weak self] error in
+                if let error {
+                    self?.output.onNext(.alertError(error))
+                    return
+                }
+                self?.deletePlan()
+            }
+        )
+    }
+    
+    private func deletePlan() {
+        guard let currentPlan else { print("플랜이 존재하지 않음"); return }
+        
+        deletePlanUseCase.delete(entity: PlanEntity.self, key: currentPlan.id) { realm, entity in
+            realm.delete(entity.dayPlans)
+            realm.delete(entity)
+        } onComplete: { [weak self] error in
+            if let error {
+                self?.output.onNext(.alertError(error))
+                return
+            }
+            self?.checkPlanIsExist()
+        }
+    }
 }

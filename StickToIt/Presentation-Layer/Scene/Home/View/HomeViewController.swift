@@ -127,7 +127,7 @@ final class HomeViewController: UIViewController {
                 switch event {
                 case .setViewsAndDelegate(planIsExist: let isExist):
                     _self.setViewsAndDelegate(isExist)
-                    
+                    return
                 case .configureUI:
                     _self.configureViews()
                     
@@ -266,6 +266,9 @@ extension HomeViewController {
             
             _view.delegate = self
             
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = nil
+            
             self.view = _view
         }
     }
@@ -375,15 +378,11 @@ extension HomeViewController: HomeImageCollectionViewCellDelegate {
     }
 }
 
-extension HomeViewController: PlanSettingButtonDelegate {
-    func goToPlanSetting() {
-        
-    }
-    
-    func deletePlan() {
+extension HomeViewController: PlanInfoViewDelegate {
+    func trashButtonDidTapped() {
         let alert = UIAlertController(title: "목표 삭제", message: "확인을 누르면 지금까지 달성하신 목표까지 모두 삭제됩니다. 목표를 삭제하시겠습니까?", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
-//            self?.input.onNext(.deletePlan)
+            self?.input.onNext(.deletePlan)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
         

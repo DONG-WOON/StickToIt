@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol PlanSettingButtonDelegate: AnyObject {
-    func goToPlanSetting()
+protocol PlanInfoViewDelegate: AnyObject {
+    func trashButtonDidTapped()
 }
 
 final class PlanInfoView: UIView {
     
-    weak var delegate: PlanSettingButtonDelegate?
+    weak var delegate: PlanInfoViewDelegate?
     
     private let userNameLabel: UILabel = {
         let view = UILabel()
@@ -39,13 +39,13 @@ final class PlanInfoView: UIView {
         return view
     }()
     
-    private lazy var settingButton = ResizableButton(
-        image: UIImage(resource: .gear),
+    private lazy var trashButton = ResizableButton(
+        image: UIImage(resource: .trash),
         symbolConfiguration: .init(scale: .large),
         tintColor: .assetColor(.accent2),
         backgroundColor: .clear,
         target: self,
-        action: #selector(goToSettingButton)
+        action: #selector(trashButtonDidTapped)
     )
     
     override init(frame: CGRect) {
@@ -58,23 +58,6 @@ final class PlanInfoView: UIView {
     required init?(coder: NSCoder) {
         fatalError("error")
     }
-    
-//    func setProgress(_ progress: Double) {
-//        let percentage = Int(progress * 100)
-//        percentageLabel.text = "\(percentage)%"
-//        circleView.setProgress(progress)
-//
-//        switch percentage {
-//        case 0:
-//            imageView.image = UIImage(named: "lets-go")
-//        case 1..<50:
-//            imageView.image = UIImage(named: "great")
-//        case 50...:
-//            imageView.image = UIImage(named: "awesome")
-//        default:
-//            break
-//        }
-//    }
     
     func update(plan: Plan) {
         self.planNameLabel.text = "⌜⛳️ \(plan.name)⌟"
@@ -96,8 +79,8 @@ final class PlanInfoView: UIView {
         userNameLabel.text = "@ \(userName) 님의 목표"
     }
     
-    @objc private func goToSettingButton() {
-        delegate?.goToPlanSetting()
+    @objc private func trashButtonDidTapped() {
+        delegate?.trashButtonDidTapped()
     }
 }
 
@@ -106,14 +89,14 @@ extension PlanInfoView {
     private func configureViews() {
         addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
         rounded()
-        addSubviews([userNameLabel, planNameLabel, settingButton, lastCertifyingDayLabel])
+        addSubviews([userNameLabel, planNameLabel, trashButton, lastCertifyingDayLabel])
     }
     
     private func setConstraints() {
         
         userNameLabel.snp.makeConstraints { make in
             make.top.leading.equalTo(self).inset(10)
-            make.trailing.equalTo(settingButton.snp.leading).offset(-10)
+            make.trailing.equalTo(trashButton.snp.leading).offset(-10)
         }
     
         planNameLabel.snp.makeConstraints { make in
@@ -121,7 +104,7 @@ extension PlanInfoView {
             make.horizontalEdges.equalTo(self).inset(10)
         }
         
-        settingButton.snp.makeConstraints { make in
+        trashButton.snp.makeConstraints { make in
             make.width.height.equalTo(planNameLabel.snp.height)
             make.top.trailing.equalTo(self).inset(10)
         }
@@ -130,17 +113,5 @@ extension PlanInfoView {
             make.top.equalTo(planNameLabel.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(self).inset(10)
         }
-        
-        
-//        circleView.snp.makeConstraints { make in
-//            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-//            make.leading.bottom.equalTo(self).inset(20)
-//            make.height.width.equalTo(self.snp.width).multipliedBy(0.3)
-//        }
-
-//        imageView.snp.makeConstraints { make in
-//            make.trailing.top.bottom.equalTo(self).inset(spacing)
-//            make.height.equalTo(imageView.snp.width)
-//        }
     }
 }

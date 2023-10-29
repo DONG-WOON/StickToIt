@@ -28,6 +28,10 @@ final class DIContainer {
         DeletePlanUseCaseImp(repository: planRepository)
     }
     
+    func makeDeletePlanQueryUseCase() -> some DeletePlanUseCase<PlanQuery, PlanQueryEntity> {
+        DeletePlanQueryUseCaseImp(repository: planQueryRepository)
+    }
+    
     func makeFetchUserUseCase() -> some FetchUserUseCase<User, UserEntity> {
         FetchUserUseCaseImp(repository: userRepository)
     }
@@ -85,6 +89,7 @@ final class DIContainer {
             updateUserUseCase: shared.makeUpdateUserUseCase(),
             fetchUserUseCase: shared.makeFetchUserUseCase(),
             fetchPlanUseCase: shared.makeFetchPlanUseCase(),
+            deletePlanQueryUseCase: shared.makeDeletePlanQueryUseCase(),
             deletePlanUseCase: shared.makeDeletePlanUseCase()
         )
     }

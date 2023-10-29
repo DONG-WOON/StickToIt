@@ -26,7 +26,7 @@ enum Const {
         case aspectratio = "aspectratio"
         case textformat = "textformat"
         case textSize = "textformat.size"
-        case trash = "trash.circle.fill"
+        case trash = "trash"
         case timer = "timer"
         case text = "t.circle"
     }
