@@ -136,6 +136,7 @@ final class HomeViewController: UIViewController {
                     
                 case .showPlanWeekScene(let plan):
                     _self.showStatics(plan: plan)
+                    
                 case .showToast(let title, let message):
                     _self.showToast(title: title, message: message)
                     
@@ -147,9 +148,6 @@ final class HomeViewController: UIViewController {
                     
                 case .loadDayPlans(let dayPlans):
                     _self.takeSnapshot(dayPlans: dayPlans)
-                    
-                case .loadAchievementProgress(let progress):
-                    _self.setAchievementProgress(progress)
                     
                 case .startAnimation:
                     _self.startAnimation()
@@ -169,6 +167,9 @@ final class HomeViewController: UIViewController {
                     
                 case .alertError(let error):
                     _self.showAlert(message: error?.localizedDescription)
+                    
+                case .showKeepGoingMessage(title: let title, message: let message):
+                    self.showKeepGoingAlert(title: title, message: message)
                 }
             }
             .disposed(by: disposeBag)
@@ -233,10 +234,6 @@ extension HomeViewController {
         )
     }
     
-    func setAchievementProgress(_ progress: Double) {
-        (view as? HomeView)?.setProgress(progress)
-    }
-    
     func setEmptyView(user: User?) {
         guard let userName = user?.name else { return }
         (view as? HomeEmptyView)?.titleLabel.text = "\(userName) 님\n목표가 아직없어요"
@@ -295,6 +292,20 @@ extension HomeViewController {
         let okAction = UIAlertAction(title: "확인", style: .default)
         
         alert.addAction(okAction)
+        
+        self.present(alert, animated: true)
+    }
+    
+    func showKeepGoingAlert(title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "+100일", style: .default) { [weak self] _ in
+            self?.input.onNext(.add100DayPlansOfPlan)
+        }
+        let cancelAction = UIAlertAction(title: "닫기", style: .cancel)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
         
         self.present(alert, animated: true)
     }
@@ -388,10 +399,10 @@ extension HomeViewController: PlanInfoViewDelegate {
             self?.input.onNext(.deletePlan)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        
+
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        
+
         self.present(alert, animated: true)
     }
 }

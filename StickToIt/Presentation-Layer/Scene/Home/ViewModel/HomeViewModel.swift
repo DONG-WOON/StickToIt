@@ -19,11 +19,14 @@ final class HomeViewModel {
         case viewDidLoad
         case viewWillAppear
         case viewWillDisappear
+        
         case reloadAll
         case reloadPlan
+        
         case fetchPlan(PlanQuery)
         case planCreated
         case deletePlan
+        case add100DayPlansOfPlan
     }
     
     // MARK: Output
@@ -34,6 +37,7 @@ final class HomeViewModel {
         case startAnimation
         case stopAnimation
         case showToast(title: String?, message: String)
+        case showKeepGoingMessage(title: String?, message: String?)
         
         case configureUI
         case showUserInfo(User?)
@@ -42,7 +46,6 @@ final class HomeViewModel {
         case loadPlanQueries([PlanQuery])
         case loadPlan(Plan)
         case loadDayPlans([DayPlan])
-        case loadAchievementProgress(Double)
         case showCompleteDayPlanCount(Int)
         case alertError(Error?)
         
@@ -55,6 +58,7 @@ final class HomeViewModel {
     private let updateUserUseCase: any UpdateUserUseCase<User, UserEntity>
     private let fetchUserUseCase: any FetchUserUseCase<User, UserEntity>
     private let fetchPlanUseCase: any FetchPlanUseCase<Plan, PlanEntity>
+    private let updatePlanUseCase: any UpdatePlanUseCase<Plan, PlanEntity>
     private let deletePlanQueryUseCase: any DeletePlanUseCase<PlanQuery, PlanQueryEntity>
     private let deletePlanUseCase: any DeletePlanUseCase<Plan, PlanEntity>
     
@@ -73,12 +77,14 @@ final class HomeViewModel {
         updateUserUseCase: some UpdateUserUseCase<User, UserEntity>,
         fetchUserUseCase: some FetchUserUseCase<User, UserEntity>,
         fetchPlanUseCase: some FetchPlanUseCase<Plan, PlanEntity>,
+        updatePlanUseCase: some UpdatePlanUseCase<Plan, PlanEntity>,
         deletePlanQueryUseCase: some DeletePlanUseCase<PlanQuery, PlanQueryEntity>,
         deletePlanUseCase: some DeletePlanUseCase<Plan, PlanEntity>
     ) {
         self.updateUserUseCase = updateUserUseCase
         self.fetchUserUseCase = fetchUserUseCase
         self.fetchPlanUseCase = fetchPlanUseCase
+        self.updatePlanUseCase = updatePlanUseCase
         self.deletePlanQueryUseCase = deletePlanQueryUseCase
         self.deletePlanUseCase = deletePlanUseCase
     }
@@ -119,6 +125,9 @@ final class HomeViewModel {
                     
                 case .deletePlan:
                     _self.removePlanQuery()
+                    
+                case .add100DayPlansOfPlan:
+                    _self.add100DayPlansOfPlan()
                 }
             }
             .disposed(by: disposeBag)
@@ -196,36 +205,46 @@ extension HomeViewModel {
                 to: .now).weekdayOrdinal! + 1
             let dayPlans = _self.loadCurrentWeekDayPlans(plan)
             
-            _self.computeAchievementProgress(of: dayPlans)
             _self.output.onNext(.showUserInfo(_self.user))
             _self.output.onNext(.loadDayPlans(dayPlans))
-            _self.completedDayPlansCount(plan.dayPlans)
+            
+            _self.checkLastCertifyingDate()
+            _self.getCountCompletedDayPlans(with: plan.dayPlans)
         }
     }
     
-    private func completedDayPlansCount(_ dayPlans: [DayPlan]) {
+    private func getCountCompletedDayPlans(with dayPlans: [DayPlan]) {
         let completeDayPlanCount = dayPlans
             .filter { $0.isComplete }.count
         output.onNext(.showCompleteDayPlanCount(completeDayPlanCount))
     }
     
-    private func computeAchievementProgress(of dayPlans: [DayPlan]) {
+    private func showMessage(using dateInterval: Int) {
+        if dateInterval <= 0 {
+            print("오늘")
+        } else if dateInterval == 1 {
+            let message = "어제도 열심히 목표를 이루셨네요!! 오늘도 이어서 달성해주세요~!"
+            output.onNext(.showToast(title: "알림", message: message))
+        } else {
+            let message = "\(dateInterval)일 동안 목표를 달성하지 않으셨네요 ㅠㅠ... 남은기간동안은 꾸준히 해봐요"
+            output.onNext(.showToast(title: "알림", message: message))
+        }
+    }
+    
+    private func checkLastCertifyingDate() {
+        let date = currentPlan?.lastCertifyingDate
+        let lastCompletedDayPlanQuery = DateFormatter.convertToDateQuery(date)
+        let endDateQuery = DateFormatter.convertToDateQuery(currentPlan?.endDate)
         
-        let completedDayPlans = dayPlans.filter { $0.isComplete == true }
-        
-        guard let lastCompletedDayPlan = completedDayPlans.sorted(by: { $0.date < $1.date }).last else { return }
-        
-        let lastCompletedDayPlanQuery = DateFormatter.convertToDateQuery(lastCompletedDayPlan.date)
-        let todayQuery = DateFormatter.convertToDateQuery(.now)
-//        self.useDateQuery(firstQuery: lastCompletedDayPlanQuery, secondQuery: todayQuery)
-        
-        let requiredDayPlanCount = dayPlans
-            .filter { $0.isRequired }.count
-        let completeDayPlanCount = dayPlans
-            .filter { $0.isComplete }.count
-        let progress = Double(completeDayPlanCount) / Double(requiredDayPlanCount)
-        
-        output.onNext(.loadAchievementProgress(progress))
+        if lastCompletedDayPlanQuery?.dateComponents == endDateQuery?.dateComponents {
+            output.onNext(.showKeepGoingMessage(title: "와우!!", message: "작심삼일 목표가 종료되었어요! 매일 매일 열심히 달성하셨나요??\n 목표는 끝냈지만 습관으로 만들기 위해 이어나가는 게 중요합니다! 그런 의미로 100일 더 해보시는건 어떨까요?"))
+        } else {
+            let todayQuery = DateFormatter.convertToDateQuery(.now)
+            
+            let dateInterval = self.calculateDateInterval(firstQuery: lastCompletedDayPlanQuery, secondQuery: todayQuery)
+            
+            showMessage(using: dateInterval)
+        }
     }
     
     private func loadCurrentWeekDayPlans(_ plan: Plan) -> [DayPlan] {
@@ -240,25 +259,52 @@ extension HomeViewModel {
         return dayPlans.filter { $0.week == week }
     }
     
-//
-//
-//
-//        updateUserUseCase.updateUserInfo(userID: user._id) { [currentPlan] entity in
-//            guard
-//                let _id = currentPlan?._id,
-//                let index = entity.planQueries.firstIndex(where: { query in query._id == _id })
-//            else { return }
-//
-//            entity.planQueries.remove(at: index)
-//        } onFailure: { [weak self] error in
-//            if let error {
-//                print(error)
-//                return
-//            }
-//            UserDefaults.standard.removeObject(forKey: Const.Key.currentPlan.rawValue)
-//            self?.output.onNext(.userDeleted)
-//        }
-//    }
+
+    func calculateDateInterval(firstQuery: DateQuery?, secondQuery: DateQuery?) -> Int {
+        guard let firstQuery, let secondQuery else { return 0 }
+        
+        let theNumberOfDaysPassed = Calendar.current.dateComponents([.day], from: firstQuery.date, to: secondQuery.date).day!
+        
+        return theNumberOfDaysPassed
+    }
+
+    func add100DayPlansOfPlan() {
+        guard let plan = currentPlan else { return }
+        let planID = plan.id
+        
+        guard let _endDate = Calendar.current.date(byAdding: .day, value: 100, to: plan.endDate) else { return }
+        
+        let addingDayPlansDates = Array(0...100).map {
+            Calendar.current.date(byAdding: .day, value: $0, to: plan.endDate)!
+        }
+  
+        let dayPlans = addingDayPlansDates.map { date in
+            DayPlan(
+                id: UUID(), isRequired: true,
+                isComplete: false, date: date,
+                week: Calendar.current.dateComponents([.weekOfYear], from: plan.startDate, to: date).weekOfYear! + 1,
+                content: nil, imageURL: nil
+            )
+        }
+        
+        updatePlanUseCase.update(
+            entity: PlanEntity.self,
+            key: planID,
+            updateHandler: { entity in
+                entity.endDate = _endDate
+                entity.targetNumberOfDays += 100
+                entity.dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
+            },
+            onComplete: { [weak self] error in
+                if let error {
+                    self?.output.onNext(.alertError(error))
+                    return
+                }
+                self?.checkPlanIsExist()
+            }
+        )
+    }
+    
     private func removePlanQuery() {
         guard let planID = currentPlan?.id else { print("플랜이 존재하지 않음"); return }
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.currentPlan)

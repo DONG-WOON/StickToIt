@@ -101,6 +101,7 @@
 		72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32D2ADF78F30062A60F /* HomeView.swift */; };
 		72D85FE52AEE071700FCBD2D /* DeletePlanQueryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D85FE42AEE071700FCBD2D /* DeletePlanQueryUseCase.swift */; };
 		72D85FE72AEE1FD200FCBD2D /* PlanQueryRepositoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D85FE62AEE1FD200FCBD2D /* PlanQueryRepositoryImp.swift */; };
+		72D85FE92AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D85FE82AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift */; };
 		72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* PlanRepository.swift */; };
 /* End PBXBuildFile section */
 
@@ -190,6 +191,7 @@
 		72D7D32D2ADF78F30062A60F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		72D85FE42AEE071700FCBD2D /* DeletePlanQueryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlanQueryUseCase.swift; sourceTree = "<group>"; };
 		72D85FE62AEE1FD200FCBD2D /* PlanQueryRepositoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanQueryRepositoryImp.swift; sourceTree = "<group>"; };
+		72D85FE82AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlanUseCase.swift; sourceTree = "<group>"; };
 		72FA8DE82AD19AB000F19568 /* PlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -530,6 +532,7 @@
 			children = (
 				729AC5142ACE91AD00E910D5 /* FetchPlanUseCase.swift */,
 				729AC5172ACE91F200E910D5 /* CreatePlanUseCase.swift */,
+				72D85FE82AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift */,
 				72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */,
 			);
 			path = Plan;
@@ -903,6 +906,7 @@
 				729AC4D22ACB986600E910D5 /* Extension+UIView.swift in Sources */,
 				72D85FE52AEE071700FCBD2D /* DeletePlanQueryUseCase.swift in Sources */,
 				72A619142AEC098A008ACA84 /* FileManagerError.swift in Sources */,
+				72D85FE92AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift in Sources */,
 				72D85FE72AEE1FD200FCBD2D /* PlanQueryRepositoryImp.swift in Sources */,
 				729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */,
 				72A6190A2AEBFC08008ACA84 /* DiContainer.swift in Sources */,

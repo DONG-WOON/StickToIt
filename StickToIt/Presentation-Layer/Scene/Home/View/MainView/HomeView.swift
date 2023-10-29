@@ -23,10 +23,6 @@ final class HomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setProgress(_ progress: Double) {
-//        homeAchievementView.setProgress(progress)
-    }
-    
     func update(user: User?) {
         planInfoView.update(user: user)
     }
