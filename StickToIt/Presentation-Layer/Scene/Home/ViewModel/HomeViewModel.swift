@@ -44,6 +44,8 @@ final class HomeViewModel {
         case loadDayPlans([DayPlan])
         case loadAchievementProgress(Double)
         case showCompleteDayPlanCount(Int)
+        case alertError(Error?)
+        
     }
     
     private let output = PublishSubject<Output>()

@@ -166,6 +166,9 @@ final class HomeViewController: UIViewController {
                     
                 case .userDeleted:
                     _self.reloadAll()
+                    
+                case .alertError(let error):
+                    _self.showAlert(message: error?.localizedDescription)
                 }
             }
             .disposed(by: disposeBag)
@@ -287,8 +290,8 @@ extension HomeViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadPlan), name: .reloadPlan, object: nil)
     }
     
-    func showAlert(message: String) {
-        let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
+    func showAlert(message: String?) {
+        let alert = UIAlertController(title: "알림", message: message ?? "알 수 없는 오류가 발생했습니다." , preferredStyle: .alert)
         let okAction = UIAlertAction(title: "확인", style: .default)
         
         alert.addAction(okAction)

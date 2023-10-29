@@ -9,9 +9,9 @@ import Foundation
 
 enum DatabaseError: Error {
     case invalidDirectory
-    case fetchAll
-    case fetch
-    case filteredFetch
-    case update
-    case delete
+    case fetchAllError
+    case fetchError
+    case filteredFetchError
+    case updateError
+    case deleteError
 }
