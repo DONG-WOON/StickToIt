@@ -24,6 +24,7 @@ struct UserRepositoryImp {
 }
 
 extension UserRepositoryImp: UserRepository {
+    
     typealias Model = User
     typealias Entity = UserEntity
     typealias ID = UUID
@@ -32,16 +33,19 @@ extension UserRepositoryImp: UserRepository {
         guard let entity = databaseManager?
             .fetch(type: Entity.self, key: key)
         else {
-            return .failure(DatabaseError.fetch)
+            return .failure(DatabaseError.fetchError)
         }
         return .success(entity.toDomain())
     }
     
-    func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
+    func create(
+        model: Model,
+        completion: @Sendable @escaping (Result<Bool, Error>
+        ) -> Void) {
         databaseManager?.create(
             model: model,
             to: Entity.self,
-            onFailure: { error in
+            onComplete: { error in
                 if let error {
                     return completion(.failure(error))
                 }
@@ -54,26 +58,42 @@ extension UserRepositoryImp: UserRepository {
         entity: Entity.Type,
         matchingWith model: Model,
         updateHandler: @escaping (Entity) -> Void,
-        onFailure: @escaping @Sendable (Error?) -> Void
+        onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         databaseManager?.update(
             entity: entity,
             matchingWith: model,
             updateHandler: updateHandler,
-            onFailure: onFailure
+            onComplete: onComplete
         )
     }
     
     func update(
         userID: ID,
         updateHandler: @escaping (Entity) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         databaseManager?.update(
             entity: Entity.self,
             key: userID,
             updateHandler: updateHandler,
-            onFailure: onFailure
+            onComplete: onComplete
+        )
+    }
+    
+    func deleteQuery(
+        id: UUID,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        databaseManager?.delete(
+            entity: UserEntity.self,
+            key: id,
+            onComplete: { error in
+                if let error {
+                    completion(.failure(error))
+                }
+                completion(.success(()))
+            }
         )
     }
 }

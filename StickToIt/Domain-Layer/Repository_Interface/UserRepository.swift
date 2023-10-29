@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol UserRepository<Model, Entity, ID> {
+protocol UserRepository<Model, Entity> {
     
     associatedtype Model
     associatedtype Entity
-    associatedtype ID
     
-    func fetch(key: ID) -> Result<Model, Error>
+    func fetch(key: UUID) -> Result<Model, Error>
+    
     func create(
         model: Model,
         completion: @Sendable @escaping (Result<Bool, Error>) -> Void
@@ -23,13 +23,18 @@ protocol UserRepository<Model, Entity, ID> {
         entity: Entity.Type,
         matchingWith model: Model,
         updateHandler: @escaping (Entity) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     )
     
     func update(
-        userID: ID,
+        userID: UUID,
         updateHandler: @escaping (Entity) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
+    )
+    
+    func deleteQuery(
+        id: UUID,
+        completion: @escaping (Result<Void, Error>) -> Void
     )
 }
 

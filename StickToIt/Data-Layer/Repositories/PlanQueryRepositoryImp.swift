@@ -1,14 +1,14 @@
 //
-//  PlanRepositoryImp.swift
+//  PlanQueryRepositoryImp.swift
 //  StickToIt
 //
-//  Created by 서동운 on 10/10/23.
+//  Created by 서동운 on 10/29/23.
 //
 
 import Foundation
 import RealmSwift
 
-struct PlanRepositoryImp {
+struct PlanQueryRepositoryImp {
 
     // MARK: Properties
     private let networkService: NetworkService?
@@ -24,10 +24,10 @@ struct PlanRepositoryImp {
     }
 }
 
-extension PlanRepositoryImp: PlanRepository {
+extension PlanQueryRepositoryImp: PlanRepository {
     
-    typealias Model = Plan
-    typealias Entity = PlanEntity
+    typealias Model = PlanQuery
+    typealias Entity = PlanQueryEntity
     
     func fetchAll() -> Result<[Model], Error> {
         guard let entities = databaseManager?
@@ -63,8 +63,8 @@ extension PlanRepositoryImp: PlanRepository {
     }
     
     func update(
-        entity: PlanEntity.Type,
-        matchingWith model: Plan,
+        entity: Entity.Type,
+        matchingWith model: Model,
         updateHandler: @escaping (Entity) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
@@ -77,7 +77,7 @@ extension PlanRepositoryImp: PlanRepository {
     }
     
     func delete(
-        entity: PlanEntity.Type,
+        entity: Entity.Type,
         key: UUID,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
@@ -89,9 +89,9 @@ extension PlanRepositoryImp: PlanRepository {
     }
     
     func delete(
-        entity: PlanEntity.Type,
+        entity: Entity.Type,
         key: UUID,
-        deleteHandler: @escaping (Realm, PlanEntity) -> Void,
+        deleteHandler: @escaping (Realm, Entity) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         databaseManager?.delete(

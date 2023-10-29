@@ -44,19 +44,27 @@ final class DIContainer {
     
     // MARK: Repository
     
+    lazy var planQueryRepository = makePlanQueryRepository()
     lazy var planRepository = makePlanRepository()
     lazy var userRepository = makeUserRepository()
     lazy var dayPlanRepository = makeDayPlanRepository()
     
     
-    func makePlanRepository() -> any PlanRepository<PlanQuery, Plan, PlanEntity> {
+    func makePlanRepository() -> any PlanRepository<Plan, PlanEntity> {
         PlanRepositoryImp(
             networkService: nil,
             databaseManager: databaseManager
         )
     }
     
-    func makeUserRepository() -> any UserRepository<User, UserEntity, UUID> {
+    func makePlanQueryRepository() -> any PlanRepository<PlanQuery, PlanQueryEntity> {
+        PlanQueryRepositoryImp(
+            networkService: nil,
+            databaseManager: databaseManager
+        )
+    }
+    
+    func makeUserRepository() -> any UserRepository<User, UserEntity> {
         UserRepositoryImp(
             networkService: nil,
             databaseManager: databaseManager

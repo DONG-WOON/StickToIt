@@ -21,12 +21,12 @@ protocol DayPlanRepository<Model, Entity> {
         entity: Entity.Type,
         matchingWith model: Model,
         updateHandler: @escaping (Entity)-> Void,
-        onFailure: @escaping @Sendable (Error?) -> Void
+        onComplete: @escaping @Sendable (Error?) -> Void
     )
     
-    func saveImage(
-        path fileName: String,
-        imageData: Data?
+    func saveImageData(
+        _ imageData: Data?,
+        path fileName: String
     ) async throws -> String?
     
     func loadImageFromDocument(fileName: String) throws -> Data?

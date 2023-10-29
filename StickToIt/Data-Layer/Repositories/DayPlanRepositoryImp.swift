@@ -28,23 +28,50 @@ extension DayPlanRepositoryImp: DayPlanRepository {
     typealias Model = DayPlan
     typealias Entity = DayPlanEntity
     
-    func create(model: Model, completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
-        databaseManager?.create(model: model, to: Entity.self, onFailure: { error in
-            if let error {
-                return completion(.failure(error))
+    func create(
+        model: Model,
+        completion: @Sendable @escaping (Result<Bool, Error>) -> Void
+    ) {
+        databaseManager?.create(
+            model: model,
+            to: Entity.self,
+            onComplete: { error in
+                if let error {
+                    return completion(.failure(error))
+                }
+                return completion(.success(true))
             }
-            return completion(.success(true))
-        })
+        )
     }
     
-    func update(entity: DayPlanEntity.Type, matchingWith model: DayPlan, updateHandler: @escaping (Entity)-> Void,  onFailure: @escaping @Sendable (Error?) -> Void) {
-        databaseManager?.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onFailure: onFailure)
+    func update(
+        entity: DayPlanEntity.Type,
+        matchingWith model: DayPlan,
+        updateHandler: @escaping (Entity)-> Void,
+        onComplete: @escaping @Sendable (Error?) -> Void
+    ) {
+        databaseManager?.update(
+            entity: entity,
+            matchingWith: model,
+            updateHandler: updateHandler,
+            onComplete: onComplete
+        )
     }
     
-    func saveImage(path fileName: String, imageData: Data?) async throws -> String? {
-        guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory }
+    func saveImageData(
+        _ imageData: Data?,
+        path fileName: String
+    ) async throws -> String? {
+        guard let documentDirectory = FileManager.default
+            .urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            ).first
+        else { throw FileManagerError.invalidDirectory }
+        
         let fileURL = documentDirectory.appendingPathComponent("\(fileName).jpeg")
         guard let imageData else { throw FileManagerError.emptyData }
+        
         do {
             try imageData.write(to: fileURL)
             return fileURL.absoluteString
@@ -54,7 +81,13 @@ extension DayPlanRepositoryImp: DayPlanRepository {
     }
     
     func loadImageFromDocument(fileName: String) throws -> Data? {
-        guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory  }
+        guard let documentDirectory = FileManager.default
+            .urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            ).first
+        else { throw FileManagerError.invalidDirectory }
+        
         let fileURL = documentDirectory.appendingPathComponent("\(fileName).jpeg")
         if FileManager.default.fileExists(atPath: fileURL.path) {
             return try Data(contentsOf: fileURL)
@@ -64,7 +97,13 @@ extension DayPlanRepositoryImp: DayPlanRepository {
     }
     
     func deleteImageFromDocument(fileName: String) throws {
-        guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileManagerError.invalidDirectory }
+        guard let documentDirectory = FileManager.default
+            .urls(
+                for: .documentDirectory,
+                in: .userDomainMask)
+                .first
+        else { throw FileManagerError.invalidDirectory }
+        
         let fileURL = documentDirectory.appendingPathComponent(fileName)
 
         if FileManager.default.fileExists(atPath: fileURL.path) {
