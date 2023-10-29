@@ -23,7 +23,6 @@
 		727849772AD697FB00433753 /* BaseViewConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849762AD697FB00433753 /* BaseViewConfigurable.swift */; };
 		727849802AD76A2000433753 /* DayPlanRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278497F2AD76A2000433753 /* DayPlanRepositoryImpl.swift */; };
 		727849852AD77E2000433753 /* UpdateDayPlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849842AD77E2000433753 /* UpdateDayPlanUseCase.swift */; };
-		727849872AD77E4B00433753 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849862AD77E4B00433753 /* UpdateService.swift */; };
 		7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727849892AD79FB400433753 /* Extension+Notification.swift */; };
 		7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498B2AD849B600433753 /* BlurEffectView.swift */; };
 		728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */; };
@@ -78,7 +77,6 @@
 		72A619012AEBDE58008ACA84 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619002AEBDE58008ACA84 /* DatabaseError.swift */; };
 		72A6190A2AEBFC08008ACA84 /* DiContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619092AEBFC08008ACA84 /* DiContainer.swift */; };
 		72A6190C2AEC0647008ACA84 /* DeletePlanUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */; };
-		72A619102AEC069E008ACA84 /* DeleteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A6190F2AEC069E008ACA84 /* DeleteService.swift */; };
 		72A619122AEC06F6008ACA84 /* FetchUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619112AEC06F6008ACA84 /* FetchUserUseCase.swift */; };
 		72A619142AEC098A008ACA84 /* FileManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619132AEC098A008ACA84 /* FileManagerError.swift */; };
 		72A619162AEC0B00008ACA84 /* DayPlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A619152AEC0B00008ACA84 /* DayPlanRepository.swift */; };
@@ -101,8 +99,6 @@
 		72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D3292ADEA7E80062A60F /* UserSettingViewModel.swift */; };
 		72D7D32C2ADF74700062A60F /* HomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */; };
 		72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D32D2ADF78F30062A60F /* HomeView.swift */; };
-		72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE32AD1221200F19568 /* FetchService.swift */; };
-		72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE52AD1222600F19568 /* CreateService.swift */; };
 		72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* PlanRepository.swift */; };
 /* End PBXBuildFile section */
 
@@ -122,7 +118,6 @@
 		727849762AD697FB00433753 /* BaseViewConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewConfigurable.swift; sourceTree = "<group>"; };
 		7278497F2AD76A2000433753 /* DayPlanRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanRepositoryImpl.swift; sourceTree = "<group>"; };
 		727849842AD77E2000433753 /* UpdateDayPlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDayPlanUseCase.swift; sourceTree = "<group>"; };
-		727849862AD77E4B00433753 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		727849892AD79FB400433753 /* Extension+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Notification.swift"; sourceTree = "<group>"; };
 		7278498B2AD849B600433753 /* BlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectView.swift; sourceTree = "<group>"; };
 		728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIColor.swift"; sourceTree = "<group>"; };
@@ -167,7 +162,6 @@
 		72A619002AEBDE58008ACA84 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		72A619092AEBFC08008ACA84 /* DiContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiContainer.swift; sourceTree = "<group>"; };
 		72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlanUseCase.swift; sourceTree = "<group>"; };
-		72A6190F2AEC069E008ACA84 /* DeleteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteService.swift; sourceTree = "<group>"; };
 		72A619112AEC06F6008ACA84 /* FetchUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserUseCase.swift; sourceTree = "<group>"; };
 		72A619132AEC098A008ACA84 /* FileManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerError.swift; sourceTree = "<group>"; };
 		72A619152AEC0B00008ACA84 /* DayPlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanRepository.swift; sourceTree = "<group>"; };
@@ -192,8 +186,6 @@
 		72D7D3292ADEA7E80062A60F /* UserSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingViewModel.swift; sourceTree = "<group>"; };
 		72D7D32B2ADF74700062A60F /* HomeEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyView.swift; sourceTree = "<group>"; };
 		72D7D32D2ADF78F30062A60F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		72FA8DE32AD1221200F19568 /* FetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchService.swift; sourceTree = "<group>"; };
-		72FA8DE52AD1222600F19568 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
 		72FA8DE82AD19AB000F19568 /* PlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -431,7 +423,6 @@
 		729AC4852AC726AA00E910D5 /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
-				729AC5162ACE91B500E910D5 /* Service */,
 				72FA8DE12AD10FAE00F19568 /* UseCase */,
 			);
 			path = UseCase;
@@ -537,17 +528,6 @@
 				72A6190B2AEC0647008ACA84 /* DeletePlanUseCase.swift */,
 			);
 			path = Plan;
-			sourceTree = "<group>";
-		};
-		729AC5162ACE91B500E910D5 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				72FA8DE52AD1222600F19568 /* CreateService.swift */,
-				72FA8DE32AD1221200F19568 /* FetchService.swift */,
-				727849862AD77E4B00433753 /* UpdateService.swift */,
-				72A6190F2AEC069E008ACA84 /* DeleteService.swift */,
-			);
-			path = Service;
 			sourceTree = "<group>";
 		};
 		729AC5192ACE92C200E910D5 /* Database_Interface */ = {
@@ -877,7 +857,6 @@
 				72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */,
 				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* DatabaseManagerImp.swift in Sources */,
-				72FA8DE62AD1222600F19568 /* CreateService.swift in Sources */,
 				7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */,
 				7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */,
 				72A6190C2AEC0647008ACA84 /* DeletePlanUseCase.swift in Sources */,
@@ -885,7 +864,6 @@
 				729AC4DE2ACBBB1A00E910D5 /* BorderedTextField.swift in Sources */,
 				729AC4D72ACBA20400E910D5 /* CreatePlanViewController.swift in Sources */,
 				727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */,
-				72FA8DE42AD1221200F19568 /* FetchService.swift in Sources */,
 				727849722AD6964A00433753 /* DayPlanViewController.swift in Sources */,
 				72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
@@ -913,7 +891,6 @@
 				729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */,
 				72A6190A2AEBFC08008ACA84 /* DiContainer.swift in Sources */,
 				729AC5112ACD4F1200E910D5 /* Extension+DateFormatter.swift in Sources */,
-				727849872AD77E4B00433753 /* UpdateService.swift in Sources */,
 				72A619012AEBDE58008ACA84 /* DatabaseError.swift in Sources */,
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
 				729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */,
@@ -921,7 +898,6 @@
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,
-				72A619102AEC069E008ACA84 /* DeleteService.swift in Sources */,
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
 				72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */,

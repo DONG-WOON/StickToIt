@@ -7,9 +7,9 @@
 
 import Foundation
 
-protocol UpdateDayPlanUseCase<Model, Entity>: UpdateService {
     func save(dayPlanID: UUID, imageData: Data?) async -> String?
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void)
+protocol UpdateDayPlanUseCase<Model, Entity> {
 }
 
 final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {

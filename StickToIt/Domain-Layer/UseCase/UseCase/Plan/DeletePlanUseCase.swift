@@ -7,7 +7,8 @@
 
 import Foundation
 
-protocol DeletePlanUseCase: DeleteService { }
+protocol DeletePlanUseCase<Model, Entity> {
+}
 
 final class DeletePlanUseCaseImp: DeletePlanUseCase {
     

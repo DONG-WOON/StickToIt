@@ -7,7 +7,8 @@
 
 import Foundation
 
-protocol CreatePlanUseCase<Model>: CreateService { }
+protocol CreatePlanUseCase<Model, Entity> {
+}
 
 final class CreatePlanUseCaseImp: CreatePlanUseCase {
     

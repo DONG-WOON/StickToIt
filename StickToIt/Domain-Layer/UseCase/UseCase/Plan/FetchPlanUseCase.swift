@@ -7,8 +7,8 @@
 
 import Foundation
 
-protocol FetchPlanUseCase<Query, Model, Entity>: FetchService {
     func loadImageFromDocument(fileName: String, completion: @escaping (Data?) -> Void)
+protocol FetchPlanUseCase<Model, Entity> {
 }
 
 final class FetchPlanUseCaseImp: FetchPlanUseCase {
