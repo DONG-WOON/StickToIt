@@ -10,7 +10,6 @@ import RealmSwift
 
 struct DatabaseManagerImp: DatabaseManager {
     
-    
     // MARK: Properties
     private let asyncRealm: Realm
     private let realmQueue = DispatchQueue(label: "realm.Queue")
@@ -78,7 +77,7 @@ struct DatabaseManagerImp: DatabaseManager {
     func create<U: Model & Identifiable<UUID>, T: Entity>(
         model: U,
         to entity: T.Type,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         asyncRealm.writeAsync {
             self.asyncRealm.add(
@@ -86,7 +85,7 @@ struct DatabaseManagerImp: DatabaseManager {
             )
         } onComplete: { error in
             underlyingQueue.async {
-                onFailure(error)
+                onComplete(error)
             }
         }
     }
@@ -96,17 +95,17 @@ struct DatabaseManagerImp: DatabaseManager {
         entity: T.Type,
         matchingWith model: U,
         updateHandler: @escaping (T) -> Void,
-        onFailure: @escaping @Sendable (Error?) -> Void
+        onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         guard let fetchedEntity = fetch(type: entity.self, key: model.id) else {
-            onFailure(DatabaseError.update)
+            onComplete(DatabaseError.updateError)
             return
         }
         asyncRealm.writeAsync {
             updateHandler(fetchedEntity)
         } onComplete: { error in
             underlyingQueue.async {
-                onFailure(error)
+                onComplete(error)
             }
         }
     }
@@ -115,38 +114,57 @@ struct DatabaseManagerImp: DatabaseManager {
         entity: T.Type,
         key: UUID,
         updateHandler: @escaping (T) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         guard let fetchedEntity = fetch(type: entity.self, key: key) else {
-            onFailure(DatabaseError.update)
+            onComplete(DatabaseError.updateError)
             return
         }
         asyncRealm.writeAsync {
             updateHandler(fetchedEntity)
         } onComplete: { error in
             underlyingQueue.async {
-                onFailure(error)
+                onComplete(error)
             }
         }
     }
     
     // MARK: Delete
-    func delete<U: Model & Identifiable<UUID>, T: Object & Entity>(
+    func delete<T: Object & Entity>(
         entity: T.Type,
-        matchingWith model: U,
-        deleteHandler: @escaping (T) -> Void,
-        onFailure: @escaping @Sendable (Error?) -> Void
+        key: UUID,
+        deleteHandler: @escaping (Realm, T) -> Void,
+        onComplete: @escaping @Sendable (Error?) -> Void
     ) {
-        guard let fetchedEntity = fetch(type: entity, key: model.id) else {
-            onFailure(DatabaseError.delete)
+        guard let fetchedEntity = fetch(type: entity, key: key) else {
+            onComplete(DatabaseError.deleteError)
             return
         }
         
         asyncRealm.writeAsync {
-            deleteHandler(fetchedEntity)
+            deleteHandler(asyncRealm, fetchedEntity)
         } onComplete: { error in
             underlyingQueue.async {
-                onFailure(error)
+                onComplete(error)
+            }
+        }
+    }
+    
+    func delete<T: Object & Entity>(
+        entity: T.Type,
+        key: UUID,
+        onComplete: @escaping @Sendable (Error?) -> Void
+    ) {
+        guard let fetchedEntity = fetch(type: entity, key: key) else {
+            onComplete(DatabaseError.deleteError)
+            return
+        }
+        
+        asyncRealm.writeAsync {
+            asyncRealm.delete(fetchedEntity)
+        } onComplete: { error in
+            underlyingQueue.async {
+                onComplete(error)
             }
         }
     }

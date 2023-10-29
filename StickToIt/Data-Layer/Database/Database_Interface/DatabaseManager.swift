@@ -11,8 +11,14 @@ import RealmSwift
 protocol DatabaseManager {
     
     // MARK: Read
-    func fetchAll<T: Object & Entity>(type: T.Type) -> Results<T>
-    func fetch<T: Object & Entity>(type: T.Type, key: UUID) -> T?
+    func fetchAll<T: Object & Entity>(
+        type: T.Type
+    ) -> Results<T>
+    
+    func fetch<T: Object & Entity>(
+        type: T.Type,
+        key: UUID
+    ) -> T?
     
     func filteredFetch<T: Object & Entity>(
         type: T.Type,
@@ -23,7 +29,7 @@ protocol DatabaseManager {
     func create<U: Model & Identifiable<UUID>, T: Object & Entity>(
         model: U,
         to entity: T.Type,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     )
     
     // MARK: Update
@@ -31,22 +37,28 @@ protocol DatabaseManager {
         entity: T.Type,
         matchingWith model: U,
         updateHandler: @escaping (T) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     )
     
     func update<T: Object & Entity>(
         entity: T.Type,
         key: UUID,
         updateHandler: @escaping (T) -> Void,
-        onFailure: @Sendable @escaping (Error?) -> Void
+        onComplete: @Sendable @escaping (Error?) -> Void
     )
     
     // MARK: Delete
-    func delete<U: Model & Identifiable<UUID>, T: Object & Entity>(
+    func delete<T: Object & Entity>(
         entity: T.Type,
-        matchingWith model: U,
-        deleteHandler: @escaping (T) -> Void,
-        onFailure: @escaping @Sendable (Error?) -> Void
+        key: UUID,
+        deleteHandler: @escaping (Realm, T) -> Void,
+        onComplete: @escaping @Sendable (Error?) -> Void
+    )
+    
+    func delete<T: Object & Entity>(
+        entity: T.Type,
+        key: UUID,
+        onComplete: @escaping @Sendable (Error?) -> Void
     )
     
     func deleteAll()
