@@ -247,7 +247,7 @@ extension EditImageViewController: UITextViewDelegate {
 
 extension EditImageViewController: BaseViewConfigurable {
     func configureViews() {
-        view.backgroundColor = .assetColor(.accent4)
+        view.backgroundColor = .systemBackground
         
         view.addSubviews(
             [frameView,

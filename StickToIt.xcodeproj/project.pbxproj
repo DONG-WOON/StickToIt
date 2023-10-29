@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		720634E82AEED1DF00852980 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */; };
+		720634EA2AEED39F00852980 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E92AEED39F00852980 /* CalendarCollectionView.swift */; };
 		7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFF92AC2AF77002C3112 /* TabBarController.swift */; };
 		7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */; };
 		7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */; };
@@ -27,7 +29,7 @@
 		7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7278498B2AD849B600433753 /* BlurEffectView.swift */; };
 		728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */; };
 		728B49592AE3C32F009C1C88 /* DateQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728B49582AE3C32F009C1C88 /* DateQuery.swift */; };
-		729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */; };
+		729AC4022AC2F98100E910D5 /* PlanCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4012AC2F98100E910D5 /* PlanCollectionView.swift */; };
 		729AC4082AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */; };
 		729AC4592AC4981D00E910D5 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC4582AC4981D00E910D5 /* RxBlocking */; };
 		729AC45B2AC4981D00E910D5 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 729AC45A2AC4981D00E910D5 /* RxCocoa */; };
@@ -106,6 +108,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
+		720634E92AEED39F00852980 /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		7217AFF92AC2AF77002C3112 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIViewController.swift"; sourceTree = "<group>"; };
 		7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -125,7 +129,7 @@
 		7278498B2AD849B600433753 /* BlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectView.swift; sourceTree = "<group>"; };
 		728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIColor.swift"; sourceTree = "<group>"; };
 		728B49582AE3C32F009C1C88 /* DateQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateQuery.swift; sourceTree = "<group>"; };
-		729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionView.swift; sourceTree = "<group>"; };
+		729AC4012AC2F98100E910D5 /* PlanCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanCollectionView.swift; sourceTree = "<group>"; };
 		729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		729AC4692AC5479D00E910D5 /* DatabaseManagerImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManagerImp.swift; sourceTree = "<group>"; };
 		729AC46B2AC5499600E910D5 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
@@ -665,6 +669,8 @@
 			isa = PBXGroup;
 			children = (
 				72D7D31D2ADE152B0062A60F /* CalendarViewController.swift */,
+				720634E92AEED39F00852980 /* CalendarCollectionView.swift */,
+				720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -715,7 +721,7 @@
 			isa = PBXGroup;
 			children = (
 				729AC4C22ACAFD8200E910D5 /* PlanInfoView.swift */,
-				729AC4012AC2F98100E910D5 /* HomeImageCollectionView.swift */,
+				729AC4012AC2F98100E910D5 /* PlanCollectionView.swift */,
 				729AC4072AC32F5A00E910D5 /* HomeImageCollectionViewCell.swift */,
 			);
 			path = SubView;
@@ -871,8 +877,9 @@
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,
 				729AC5252ACEEBAF00E910D5 /* CameraManager.swift in Sources */,
 				72D7D3282ADEA7D90062A60F /* UserSettingViewController.swift in Sources */,
+				720634EA2AEED39F00852980 /* CalendarCollectionView.swift in Sources */,
 				72D7D3222ADE4A000062A60F /* CalendarViewModel.swift in Sources */,
-				729AC4022AC2F98100E910D5 /* HomeImageCollectionView.swift in Sources */,
+				729AC4022AC2F98100E910D5 /* PlanCollectionView.swift in Sources */,
 				729AC46A2AC5479D00E910D5 /* DatabaseManagerImp.swift in Sources */,
 				7278498C2AD849B600433753 /* BlurEffectView.swift in Sources */,
 				7217B0062AC2BAB4002C3112 /* HomeViewModel.swift in Sources */,
@@ -892,6 +899,7 @@
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */,
+				720634E82AEED1DF00852980 /* CalendarCollectionViewCell.swift in Sources */,
 				72D7D30F2ADD07C70062A60F /* UpdateUserUseCase.swift in Sources */,
 				729AC4DA2ACBA21B00E910D5 /* CreatePlanViewModel.swift in Sources */,
 				729AC4C72ACB012400E910D5 /* NetworkService.swift in Sources */,

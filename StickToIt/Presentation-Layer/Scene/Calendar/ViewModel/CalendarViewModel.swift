@@ -25,7 +25,7 @@ final class CalendarViewModel {
         case configureUI
         case showPlansMenu([PlanQuery])
         case showPlanInfo(Plan)
-        case showDayPlanImage(data: Data?)
+        case showCompletedDayPlans([DayPlan])
     }
     
     private var currentPlanQuery: PlanQuery?
@@ -67,30 +67,9 @@ final class CalendarViewModel {
 }
 
 extension CalendarViewModel {
-    //1
+    
     func eventCount(at date: Date) -> Int {
         return completedPlanNumber(at: date)
-    }
-    
-    //2
-    private func fetchPlanInfo(query: PlanQuery?) {
-        guard let query else {
-            print("Query 없음")
-            return
-        }
-        
-        let result = planRepository.fetch(key: query.id)
-        
-        switch result {
-        case .success(let plan):
-            output.onNext(.showPlanInfo(plan))
-            currentPlan = plan
-            filterCompletedDayPlans(plan.dayPlans)
-            selectDayPlan(at: .now)
-        
-        case .failure(let error):
-            print(error)
-        }
     }
     
     private func fetchPlanQueries() {
@@ -107,39 +86,52 @@ extension CalendarViewModel {
         }
     }
     
-    func selectDayPlan(at date: Date?) {
-        if let plan = currentPlan?.dayPlans.filter({ dayPlan in
-            let _date = dayPlan.date
-            guard let _selectedDate = date else { return false }
-            return DateFormatter.convertDate(from: _selectedDate) == DateFormatter.convertDate(from: _date)
-        }).first {
-            guard plan.imageURL != nil else {
-                output.onNext(.showDayPlanImage(data: nil))
-                return
-            }
-            
-            loadImage(dayPlanID: plan.id)
-        } else {
-            output.onNext(.showDayPlanImage(data: nil))
+    private func fetchPlanInfo(query: PlanQuery?) {
+        guard let query else {
+            print("Query 없음")
             return
+        }
+        
+        let result = planRepository.fetch(key: query.id)
+        
+        switch result {
+        case .success(let plan):
+            output.onNext(.showPlanInfo(plan))
+            currentPlan = plan
+            let completedDayPlans = filterCompletedDayPlans(plan.dayPlans)
+            self.planCompletedDate = completedDayPlans.compactMap { $0.date }
+            
+            let filteredDayPlans = completedDayPlans.filter { Calendar.current.isDate(.now, equalTo: $0.date, toGranularity: .month) }
+            
+            output.onNext(.showCompletedDayPlans(filteredDayPlans))
+        case .failure(let error):
+            print(error)
         }
     }
     
-    private func loadImage(dayPlanID: UUID) {
+    func selectDayPlan(at date: Date?) {
+        guard let plan = currentPlan, let date else { return }
+    
+        let completedDayPlans = filterCompletedDayPlans(plan.dayPlans)
+        
+        let filteredDayPlans = completedDayPlans.filter { Calendar.current.isDate(date, equalTo: $0.date, toGranularity: .month) }
+        
+        output.onNext(.showCompletedDayPlans(filteredDayPlans))
+    }
+    
+    func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
         do {
             let data = try planRepository.loadImageFromDocument(fileName: dayPlanID.uuidString)
-            output.onNext(.showDayPlanImage(data: data))
+            completion(data)
         } catch {
             print(error)
         }
     }
     
     //3
-    func filterCompletedDayPlans(_ dayPlans: [DayPlan]) {
-        let dates = dayPlans
-            .filter { $0.isComplete == true }
-            .compactMap { $0.date }
-        self.planCompletedDate = dates
+    func filterCompletedDayPlans(_ dayPlans: [DayPlan]) -> [DayPlan] {
+        return dayPlans.filter { $0.isComplete == true }
+        
     }
 
     private func completedPlanNumber(at date: Date) -> Int {

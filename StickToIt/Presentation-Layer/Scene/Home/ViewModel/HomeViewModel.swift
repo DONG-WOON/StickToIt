@@ -256,7 +256,8 @@ extension HomeViewModel {
     }
     
     private func filtered(_ dayPlans :[DayPlan], at week: Int) -> [DayPlan] {
-        return dayPlans.filter { $0.week == week }
+        guard let dayPlan = dayPlans.first(where: { Calendar.current.isDateInToday($0.date) }) else { return [] }
+        return [dayPlan]
     }
     
 

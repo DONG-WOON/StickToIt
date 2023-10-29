@@ -10,7 +10,7 @@ import UIKit
 final class HomeView: UIView {
     
     private lazy var planInfoView = PlanInfoView()
-    let collectionView = HomeImageCollectionView()
+    let collectionView = PlanCollectionView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

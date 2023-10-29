@@ -10,10 +10,17 @@ import RxSwift
 
 final class CalendarViewController: UIViewController {
     
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, DayPlan>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, DayPlan>
+    
+    private enum Section: Int, CaseIterable {
+        case main = 0
+    }
+    
+    private var dataSource: DataSource?
     private let viewModel: CalendarViewModel
     private let calendar = StickToItCalendar()
-    private let imageView = UIImageView(backgroundColor: .assetColor(.accent4))
-   
+    private let collectionView = CalendarCollectionView()
     
     private let input = PublishSubject<CalendarViewModel.Input>()
     private let disposeBag = DisposeBag()
@@ -38,7 +45,7 @@ final class CalendarViewController: UIViewController {
                 switch event {
                 case .configureUI:
                     _self.calendar.delegate = self
-                    
+                    _self.configureDataSource()
                     _self.configureViews()
                     _self.setConstraints()
                     
@@ -52,12 +59,8 @@ final class CalendarViewController: UIViewController {
                 case .showPlanInfo(let plan):
                     _self.navigationItem.title = plan.name
                     
-                case .showDayPlanImage(data: let data):
-                    guard let _data = data else {
-                        _self.imageView.image = nil
-                        return
-                    }
-                    _self.imageView.image = UIImage(data: _data)
+                case .showCompletedDayPlans(let dayPlans):
+                    _self.takeSnapshot(dayPlans: dayPlans)
                 }
             }
             .disposed(by: disposeBag)
@@ -74,6 +77,9 @@ final class CalendarViewController: UIViewController {
         
         input.onNext(.viewWillAppear)
     }
+}
+ 
+extension CalendarViewController {
     
     private func checkCurrentPlan(_ planQueries: [PlanQuery]) {
         if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
@@ -85,6 +91,43 @@ final class CalendarViewController: UIViewController {
                 input.onNext(.planMenuTapped(_firstPlanQuery))
             }
         }
+    }
+    
+    private func configureDataSource() {
+        let cellRegistration = UICollectionView
+            .CellRegistration<CalendarCollectionViewCell, DayPlan>
+        { [weak self] cell, indexPath, item in
+            
+            guard let _self = self else { return }
+            guard item.imageURL != nil else { return }
+            
+            _self.viewModel.loadImage(dayPlanID: item.id) { data in
+                if let data {
+                    cell.updateImage(data)
+                }
+            }
+        }
+        
+        self.dataSource = DataSource(
+            collectionView: collectionView,
+            cellProvider: { collectionView, indexPath, item in
+                let cell = collectionView.dequeueConfiguredReusableCell(
+                    using: cellRegistration,
+                    for: indexPath,
+                    item: item
+                )
+
+                return cell
+            }
+        )
+    }
+    
+    func takeSnapshot(dayPlans: [DayPlan]) {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(dayPlans, toSection: .main)
+        
+        dataSource?.apply(snapshot)
     }
 }
 
@@ -111,13 +154,10 @@ extension CalendarViewController: BaseViewConfigurable {
     func configureViews() {
         view.backgroundColor = .systemBackground
         
-        view.addSubviews([calendar, imageView])
+        view.addSubviews([calendar, collectionView])
         
         calendar.layer.borderWidth = 0.5
         calendar.layer.borderColor = UIColor.assetColor(.accent2).cgColor
-        
-        imageView.contentMode = .scaleAspectFill
-        imageView.rounded()
     }
     
     func setConstraints() {
@@ -126,10 +166,10 @@ extension CalendarViewController: BaseViewConfigurable {
             make.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.7)
         }
         
-        imageView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.equalTo(calendar.snp.bottom).offset(20)
-            make.leading.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
-            make.width.equalTo(imageView.snp.height).multipliedBy(0.7)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(calendar)
         }
     }
 }

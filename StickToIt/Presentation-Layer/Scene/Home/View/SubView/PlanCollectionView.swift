@@ -1,5 +1,5 @@
 //
-//  HomeImageCollectionView.swift
+//  PlanCollectionView.swift
 //  StickToIt
 //
 //  Created by 서동운 on 9/26/23.
@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class HomeImageCollectionView: UICollectionView {
+final class PlanCollectionView: UICollectionView {
     
     init() {
         super.init(
@@ -23,7 +23,7 @@ final class HomeImageCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-extension HomeImageCollectionView {
+extension PlanCollectionView {
     
     static func createLayout() -> UICollectionViewLayout {
         
@@ -40,7 +40,7 @@ extension HomeImageCollectionView {
             )
             
             let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
+                widthDimension: .fractionalHeight(0.7),
                 heightDimension: .fractionalHeight(1.0)
             )
             
