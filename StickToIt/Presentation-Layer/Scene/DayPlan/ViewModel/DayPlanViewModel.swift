@@ -80,7 +80,7 @@ final class DayPlanViewModel {
     func certify() async throws {
         let result = await updateDayPlanUseCase.update(
             entity: DayPlanEntity.self,
-            matchingWith: dayPlan,
+            key: dayPlan.id,
             updateHandler: {
                 $0.isComplete = true
             }
@@ -114,7 +114,7 @@ final class DayPlanViewModel {
     func updateImageURL(with imageURL: String) async throws {
         let result = await updateDayPlanUseCase.update(
             entity: DayPlanEntity.self,
-            matchingWith: dayPlan
+            key: dayPlan.id
         ) { $0.imageURL = imageURL }
         
         switch result {

@@ -26,7 +26,7 @@ protocol PlanRepository<Model, Entity> {
     
     func update(
         entity: Entity.Type,
-        matchingWith model: Model,
+        key: UUID,
         updateHandler: @escaping (Entity) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     )

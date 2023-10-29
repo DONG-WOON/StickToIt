@@ -33,12 +33,6 @@ protocol DatabaseManager {
     )
     
     // MARK: Update
-    func update<U: Model & Identifiable<UUID>, T: Object & Entity>(
-        entity: T.Type,
-        matchingWith model: U,
-        updateHandler: @escaping (T) -> Void,
-        onComplete: @Sendable @escaping (Error?) -> Void
-    )
     
     func update<T: Object & Entity>(
         entity: T.Type,

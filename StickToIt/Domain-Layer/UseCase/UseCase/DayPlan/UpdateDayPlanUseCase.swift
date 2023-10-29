@@ -14,7 +14,7 @@ protocol UpdateDayPlanUseCase<Model, Entity> {
     
     func update(
         entity: DayPlanEntity.Type,
-        matchingWith model: DayPlan,
+        key: UUID,
         updateHandler: @escaping (Entity) -> Void
     ) async -> Result<Bool, Error>
     
@@ -45,12 +45,16 @@ final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {
     
     func update(
         entity: DayPlanEntity.Type,
-        matchingWith model: DayPlan,
+        key: UUID,
         updateHandler: @escaping (Entity) -> Void
     ) async -> Result<Bool, Error> {
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async { [weak self] in
-                self?.repository.update(entity: entity, matchingWith: model, updateHandler: updateHandler, onComplete: { error in
+                self?.repository.update(
+                    entity: entity,
+                    key: key,
+                    updateHandler: updateHandler,
+                    onComplete: { error in
                     if let error {
                         continuation.resume(returning: .failure(error))
                     }

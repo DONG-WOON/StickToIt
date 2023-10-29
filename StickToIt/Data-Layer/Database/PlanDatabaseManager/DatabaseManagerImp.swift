@@ -91,24 +91,6 @@ struct DatabaseManagerImp: DatabaseManager {
     }
     
     // MARK: Update
-    func update<U: Model & Identifiable<UUID>, T: Object & Entity>(
-        entity: T.Type,
-        matchingWith model: U,
-        updateHandler: @escaping (T) -> Void,
-        onComplete: @escaping @Sendable (Error?) -> Void
-    ) {
-        guard let fetchedEntity = fetch(type: entity.self, key: model.id) else {
-            onComplete(DatabaseError.updateError)
-            return
-        }
-        asyncRealm.writeAsync {
-            updateHandler(fetchedEntity)
-        } onComplete: { error in
-            underlyingQueue.async {
-                onComplete(error)
-            }
-        }
-    }
     
     func update<T: Object & Entity>(
         entity: T.Type,

@@ -46,13 +46,13 @@ extension DayPlanRepositoryImp: DayPlanRepository {
     
     func update(
         entity: DayPlanEntity.Type,
-        matchingWith model: DayPlan,
+        key: UUID,
         updateHandler: @escaping (Entity)-> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         databaseManager?.update(
             entity: entity,
-            matchingWith: model,
+            key: key,
             updateHandler: updateHandler,
             onComplete: onComplete
         )

@@ -20,13 +20,6 @@ protocol UserRepository<Model, Entity> {
     )
     
     func update(
-        entity: Entity.Type,
-        matchingWith model: Model,
-        updateHandler: @escaping (Entity) -> Void,
-        onComplete: @Sendable @escaping (Error?) -> Void
-    )
-    
-    func update(
         userID: UUID,
         updateHandler: @escaping (Entity) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void

@@ -64,13 +64,13 @@ extension PlanQueryRepositoryImp: PlanRepository {
     
     func update(
         entity: Entity.Type,
-        matchingWith model: Model,
+        key: UUID,
         updateHandler: @escaping (Entity) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         databaseManager?.update(
             entity: entity,
-            matchingWith: model,
+            key: key,
             updateHandler: updateHandler,
             onComplete: onComplete
         )
