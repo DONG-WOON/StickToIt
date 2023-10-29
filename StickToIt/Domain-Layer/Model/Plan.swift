@@ -25,7 +25,11 @@ struct Plan: Identifiable {
         return weekOfYear + 1
     }
     
-//    var completed
+    var lastCertifyingDate: Date? {
+        let completedDayPlans = dayPlans.filter { $0.isComplete == true }
+        
+        return completedDayPlans.sorted(by: { $0.date < $1.date }).last?.date
+    }
     
     init(
         id: UUID,

@@ -63,11 +63,8 @@ final class PlanInfoView: UIView {
         self.planNameLabel.text = "⌜⛳️ \(plan.name)⌟"
         self.planNameLabel.adjustsFontSizeToFitWidth = true
         self.planNameLabel.sizeToFit()
-    
-        let completedDayPlans = plan.dayPlans.filter { $0.isComplete == true }
         
-        if let lastDay = completedDayPlans.sorted(by: { $0.date < $1.date }).last?.date {
-            let date = DateFormatter.getFullDateString(from: lastDay)
+        if let date = plan.lastCertifyingDate {
             self.lastCertifyingDayLabel.text = "최근 목표 실행일: \(date)"
         } else {
             self.lastCertifyingDayLabel.text = "최근 목표 실행일: -"
