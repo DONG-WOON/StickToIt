@@ -21,7 +21,7 @@ extension User: Model {
         
         return .init(
             _id: id,
-            name: name,
+            nickname: nickname,
             planQueries: _planQueries
         )
     }

@@ -17,7 +17,7 @@ extension UserEntity: Entity {
     func toDomain() -> User {
         return .init(
             id: _id,
-            name: name,
+            nickname: nickname,
             planQueries: planQueries.map { $0.toDomain() }
         )
     }

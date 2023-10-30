@@ -9,16 +9,16 @@ import Foundation
 
 struct User: Equatable, Identifiable {
     var id: UUID
-    var name: String
+    var nickname: String
     var planQueries: [PlanQuery]
     
     init(
         id: UUID,
-        name: String,
+        nickname: String,
         planQueries: [PlanQuery]
     ) {
         self.id = id
-        self.name = name
+        self.nickname = nickname
         self.planQueries = planQueries
     }
 }

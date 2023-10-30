@@ -91,6 +91,7 @@ final class HomeViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .subscribe(with: self) { (_self, event) in
                 switch event {
                 case .viewDidLoad:
@@ -186,6 +187,7 @@ extension HomeViewModel {
             
             let planQueries = user.planQueries
             self?.currentPlanCount = planQueries.count
+            
             if !planQueries.isEmpty {
                 self?.output.onNext(.loadPlanQueries(planQueries))
                 self?.fetchCurrentPlan()

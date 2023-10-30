@@ -12,4 +12,5 @@ extension Notification.Name {
     static let reloadAll = Notification.Name("reloadAll")
     static let reloadPlan = Notification.Name("reloadPlan")
     static let planCreated = Notification.Name("planCreated")
+    static let updateNickname = Notification.Name("updateNickname")
 }

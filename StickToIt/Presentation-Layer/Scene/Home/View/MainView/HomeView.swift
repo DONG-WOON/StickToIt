@@ -9,7 +9,7 @@ import UIKit
 
 final class HomeView: UIView {
     
-    private lazy var planInfoView = PlanInfoView()
+    private let planInfoView = PlanInfoView()
     let collectionView = PlanCollectionView()
     
     override init(frame: CGRect) {
@@ -23,8 +23,8 @@ final class HomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(user: User?) {
-        planInfoView.update(user: user)
+    func update(nickname: String) {
+        planInfoView.update(nickname: nickname)
     }
     
     func update(plan: Plan) {

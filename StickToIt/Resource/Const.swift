@@ -52,7 +52,7 @@ enum Const {
         static let subTitle: CGFloat = 21
         
         /// 18
-        static let body: CGFloat = 18
+        static let body: CGFloat = 17
         
         /// 14
         static let description:CGFloat = 14

@@ -67,17 +67,21 @@ final class HomeEmptyView: UIView {
     }
     
     func startAnimation() {
-        UIView.animate(withDuration: 1.1, delay: 0.5, options: [.curveEaseInOut, .autoreverse, .allowUserInteraction, .repeat]) {
-            self.goToCreatePlanButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-        } completion: { _ in
-            self.goToCreatePlanButton.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+        UIView.animate(withDuration: 1.1, delay: 0.5, options: [.curveEaseInOut, .autoreverse, .allowUserInteraction, .repeat]) { [weak self] in
+            self?.goToCreatePlanButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        } completion: { [weak self] _ in
+            self?.goToCreatePlanButton.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
         }
     }
     
     func stopAnimation() {
-        UIView.animate(withDuration: 0) {
-            self.goToCreatePlanButton.transform = .identity
+        UIView.animate(withDuration: 0) { [weak self] in
+            self?.goToCreatePlanButton.transform = .identity
         }
+    }
+    
+    func update(nickname: String) {
+        titleLabel.text = "\(nickname) 님\n목표가 아직없어요"
     }
 }
 

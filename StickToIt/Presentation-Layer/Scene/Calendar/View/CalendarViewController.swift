@@ -44,7 +44,7 @@ final class CalendarViewController: UIViewController {
             .subscribe(with: self) { (_self, event) in
                 switch event {
                 case .configureUI:
-                    _self.calendar.delegate = self
+                    _self.calendar.delegate = _self
                     _self.configureDataSource()
                     _self.configureViews()
                     _self.setConstraints()
@@ -61,6 +61,7 @@ final class CalendarViewController: UIViewController {
                     
                 case .showCompletedDayPlans(let dayPlans):
                     _self.takeSnapshot(dayPlans: dayPlans)
+//                    _self.calendar.reloadData()
                 }
             }
             .disposed(by: disposeBag)
@@ -76,6 +77,10 @@ final class CalendarViewController: UIViewController {
         super.viewWillAppear(animated)
         
         input.onNext(.viewWillAppear)
+    }
+    
+    deinit {
+        print("🔥 ", self)
     }
 }
  
@@ -97,17 +102,17 @@ extension CalendarViewController {
         let cellRegistration = UICollectionView
             .CellRegistration<CalendarCollectionViewCell, DayPlan>
         { [weak self] cell, indexPath, item in
-            
+
             guard let _self = self else { return }
             guard item.imageURL != nil else { return }
-            
+
             _self.viewModel.loadImage(dayPlanID: item.id) { data in
                 if let data {
                     cell.updateImage(data)
                 }
             }
         }
-        
+
         self.dataSource = DataSource(
             collectionView: collectionView,
             cellProvider: { collectionView, indexPath, item in

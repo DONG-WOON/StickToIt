@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		720634E82AEED1DF00852980 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */; };
 		720634EA2AEED39F00852980 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E92AEED39F00852980 /* CalendarCollectionView.swift */; };
+		720634ED2AEED9EB00852980 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634EC2AEED9EB00852980 /* SettingViewController.swift */; };
+		720634F22AEEDA4F00852980 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634F12AEEDA4F00852980 /* SettingViewModel.swift */; };
+		720634FC2AEF725700852980 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634FB2AEF725600852980 /* NotificationViewController.swift */; };
+		720634FE2AEF727400852980 /* DataManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634FD2AEF727400852980 /* DataManagementViewController.swift */; };
+		720635012AEF72EB00852980 /* UserEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635002AEF72EB00852980 /* UserEditingViewModel.swift */; };
+		720635032AEF74F000852980 /* UserEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635022AEF74F000852980 /* UserEditingViewController.swift */; };
+		720635052AEF84BE00852980 /* DataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635042AEF84BE00852980 /* DataManagementViewModel.swift */; };
 		7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFF92AC2AF77002C3112 /* TabBarController.swift */; };
 		7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */; };
 		7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */; };
@@ -110,6 +117,13 @@
 /* Begin PBXFileReference section */
 		720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		720634E92AEED39F00852980 /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
+		720634EC2AEED9EB00852980 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		720634F12AEEDA4F00852980 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
+		720634FB2AEF725600852980 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		720634FD2AEF727400852980 /* DataManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementViewController.swift; sourceTree = "<group>"; };
+		720635002AEF72EB00852980 /* UserEditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditingViewModel.swift; sourceTree = "<group>"; };
+		720635022AEF74F000852980 /* UserEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditingViewController.swift; sourceTree = "<group>"; };
+		720635042AEF84BE00852980 /* DataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementViewModel.swift; sourceTree = "<group>"; };
 		7217AFF92AC2AF77002C3112 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIViewController.swift"; sourceTree = "<group>"; };
 		7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +235,108 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		720634EB2AEED99200852980 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				720634F52AEF6F3C00852980 /* UserEditing */,
+				720634F42AEF6F2A00852980 /* Notification */,
+				720634F32AEF6F1600852980 /* DataManagement */,
+				720634EE2AEEDA3500852980 /* ViewModel */,
+				720634EF2AEEDA3B00852980 /* View */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		720634EE2AEEDA3500852980 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				720634F12AEEDA4F00852980 /* SettingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		720634EF2AEEDA3B00852980 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				720634EC2AEED9EB00852980 /* SettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		720634F32AEF6F1600852980 /* DataManagement */ = {
+			isa = PBXGroup;
+			children = (
+				720634FA2AEF6F8200852980 /* ViewModel */,
+				720634F92AEF6F7C00852980 /* View */,
+			);
+			path = DataManagement;
+			sourceTree = "<group>";
+		};
+		720634F42AEF6F2A00852980 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				720634F82AEF6F7900852980 /* View */,
+				720634F72AEF6F7500852980 /* ViewModel */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		720634F52AEF6F3C00852980 /* UserEditing */ = {
+			isa = PBXGroup;
+			children = (
+				720634FF2AEF72D700852980 /* ViewModel */,
+				720634F62AEF6F7100852980 /* View */,
+			);
+			path = UserEditing;
+			sourceTree = "<group>";
+		};
+		720634F62AEF6F7100852980 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				720635022AEF74F000852980 /* UserEditingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		720634F72AEF6F7500852980 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		720634F82AEF6F7900852980 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				720634FB2AEF725600852980 /* NotificationViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		720634F92AEF6F7C00852980 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				720634FD2AEF727400852980 /* DataManagementViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		720634FA2AEF6F8200852980 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				720635042AEF84BE00852980 /* DataManagementViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		720634FF2AEF72D700852980 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				720635002AEF72EB00852980 /* UserEditingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		7217AFF12AC2AE80002C3112 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +394,11 @@
 			children = (
 				7217AFF62AC2AED7002C3112 /* ViewModel */,
 				7217AFF12AC2AE80002C3112 /* View */,
+				729AC4D32ACBA1C000E910D5 /* CreatePlan */,
+				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
+				7278495B2AD5247300433753 /* EditImage */,
+				7278496E2AD6962400433753 /* DayPlan */,
+				72BA20602AE60A20005F7D90 /* Statics */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -442,14 +563,10 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				72BA20602AE60A20005F7D90 /* Statics */,
 				72D7D3242ADEA7740062A60F /* UserSetting */,
-				72D7D31A2ADE15010062A60F /* Calendar */,
-				7278496E2AD6962400433753 /* DayPlan */,
-				7278495B2AD5247300433753 /* EditImage */,
-				729AC4D32ACBA1C000E910D5 /* CreatePlan */,
-				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
 				7217AFF72AC2AEE3002C3112 /* Home */,
+				72D7D31A2ADE15010062A60F /* Calendar */,
+				720634EB2AEED99200852980 /* Setting */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -857,6 +974,7 @@
 				729AC51C2ACEA1C300E910D5 /* SelectableImageCell.swift in Sources */,
 				7278498A2AD79FB400433753 /* Extension+Notification.swift in Sources */,
 				729AC50D2ACD3F5E00E910D5 /* PaddingView.swift in Sources */,
+				720634FE2AEF727400852980 /* DataManagementViewController.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
 				729AC4DC2ACBA4D500E910D5 /* CreatePlanView.swift in Sources */,
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
@@ -872,6 +990,7 @@
 				72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */,
 				729AC4AF2AC9672500E910D5 /* ImageManager.swift in Sources */,
 				7278496D2AD5702500433753 /* PlanRepositoryImp.swift in Sources */,
+				720635052AEF84BE00852980 /* DataManagementViewModel.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
 				72A9760E2ABB2A8E0021291C /* AppDelegate.swift in Sources */,
 				729AC47E2AC6EBA100E910D5 /* Plan.swift in Sources */,
@@ -890,6 +1009,7 @@
 				727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */,
 				727849722AD6964A00433753 /* DayPlanViewController.swift in Sources */,
 				72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */,
+				720634F22AEEDA4F00852980 /* SettingViewModel.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
 				727849742AD6969E00433753 /* DayPlanViewModel.swift in Sources */,
 				729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */,
@@ -897,6 +1017,8 @@
 				727849852AD77E2000433753 /* UpdateDayPlanUseCase.swift in Sources */,
 				727849802AD76A2000433753 /* DayPlanRepositoryImp.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
+				720634FC2AEF725700852980 /* NotificationViewController.swift in Sources */,
+				720634ED2AEED9EB00852980 /* SettingViewController.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */,
 				720634E82AEED1DF00852980 /* CalendarCollectionViewCell.swift in Sources */,
@@ -925,11 +1047,13 @@
 				72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
+				720635032AEF74F000852980 /* UserEditingViewController.swift in Sources */,
 				729AC50F2ACD447B00E910D5 /* CreatePlanTargetPeriodSettingViewController.swift in Sources */,
 				729AC4B82AC9DE2B00E910D5 /* ImageSelectionViewController.swift in Sources */,
 				7278495F2AD5249600433753 /* EditImageViewController.swift in Sources */,
 				72D7D3172ADD18850062A60F /* PlanQueryEntity.swift in Sources */,
 				72A618FF2AEBDC79008ACA84 /* Keys.swift in Sources */,
+				720635012AEF72EB00852980 /* UserEditingViewModel.swift in Sources */,
 				729AC47A2AC6EB4200E910D5 /* User.swift in Sources */,
 				728B49592AE3C32F009C1C88 /* DateQuery.swift in Sources */,
 				72D7D3132ADD0F630062A60F /* UserRepository.swift in Sources */,

@@ -122,9 +122,10 @@ extension ImageManager {
         
         currentImageCountToFetch.accept(imageCount)
         
-        fetchResult.enumerateObjects { [self] (asset, _, _) in
-            self.imageAssets
-                .accept(self.imageAssets.value + [asset])
+        fetchResult.enumerateObjects { [weak self] (asset, _, _) in
+            guard let images = self?.imageAssets.value else { return }
+            self?.imageAssets
+                .accept(images + [asset])
         }
     }
 }

@@ -82,4 +82,8 @@ extension UserRepositoryImp: UserRepository {
             }
         )
     }
+    
+    func deleteAll(onComplete: @escaping @Sendable (Error?) -> Void)  {
+        databaseManager?.deleteAll(onComplete: onComplete)
+    }
 }

@@ -20,10 +20,10 @@ extension UIViewController {
         UIApplication.shared.open(settingURL, options: [:])
     }
     
-    func showAlert(title: String, message: String, okAction: @escaping () ->  Void) {
+    func showAlert(title: String, message: String, okAction: (() ->  Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "예", style: .default) { _ in
-            okAction()
+            okAction?()
         }
         let cancelAction = UIAlertAction(title: "아니오", style: .cancel)
         

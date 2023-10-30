@@ -17,11 +17,14 @@ final class TabBarController: UITabBarController {
     ).configureTabBarItem(title: "홈", image: UIImage(resource: .houseFill))
         .embedNavigationController()
     
-    let CalendarVC = CalendarViewController(
+    let calendarVC = CalendarViewController(
         viewModel: DIContainer.makeCalendarViewModel())
         .configureTabBarItem(title: "캘린더", image: UIImage(resource: .calendar))
         .embedNavigationController()
         
+    let settingVC = SettingViewController(viewModel: SettingViewModel())
+        .configureTabBarItem(title: "설정", image: UIImage(resource: .gear))
+        .embedNavigationController()
     
     
     // MARK: View Life Cycle
@@ -41,10 +44,14 @@ final class TabBarController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("🔥 ", self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.viewControllers = [homeVC, CalendarVC]
+        self.viewControllers = [homeVC, calendarVC, settingVC]
     }
 }
 

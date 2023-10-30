@@ -89,6 +89,7 @@ final class HomeViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         bind()
+        addNotification()
     }
     
     required init?(coder: NSCoder) {
@@ -96,6 +97,7 @@ final class HomeViewController: UIViewController {
     }
     
     deinit {
+        print("🔥 ", self)
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -127,7 +129,7 @@ final class HomeViewController: UIViewController {
                 switch event {
                 case .setViewsAndDelegate(planIsExist: let isExist):
                     _self.setViewsAndDelegate(isExist)
-                    return
+                    
                 case .configureUI:
                     _self.configureViews()
                     
@@ -156,8 +158,8 @@ final class HomeViewController: UIViewController {
                     _self.stopAnimation()
                     
                 case .showUserInfo(let user):
-                    _self.update(user: user)
-                    _self.setEmptyView(user: user)
+                    guard let user else { return }
+                    _self.update(nickname: user.nickname)
                     
                 case .showCompleteDayPlanCount(let count):
                     _self.completedDayPlansButton.configuration?.title = String(count)
@@ -169,12 +171,10 @@ final class HomeViewController: UIViewController {
                     _self.showAlert(message: error?.localizedDescription)
                     
                 case .showKeepGoingMessage(title: let title, message: let message):
-                    self.showKeepGoingAlert(title: title, message: message)
+                    _self.showKeepGoingAlert(title: title, message: message)
                 }
             }
             .disposed(by: disposeBag)
-        
-        addNotification()
     }
 }
 
@@ -198,8 +198,9 @@ extension HomeViewController {
         self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(asset: .placeholder))
     }
     
-    func update(user: User?) {
-        (view as? HomeView)?.update(user: user)
+    func update(nickname: String) {
+        (view as? HomeView)?.update(nickname: nickname)
+        (view as? HomeEmptyView)?.update(nickname: nickname)
     }
     
     func update(plan: Plan) {
@@ -234,11 +235,6 @@ extension HomeViewController {
         )
     }
     
-    func setEmptyView(user: User?) {
-        guard let userName = user?.name else { return }
-        (view as? HomeEmptyView)?.titleLabel.text = "\(userName) 님\n목표가 아직없어요"
-    }
-    
     func startAnimation() {
         (view as? HomeEmptyView)?.startAnimation()
     }
@@ -252,10 +248,9 @@ extension HomeViewController {
             let _view = HomeView()
             
             _view.setDelegate(self)
+            configureDataSource(of: _view.collectionView)
             
             self.view = _view
-            
-            configureDataSource(of: _view.collectionView)
             
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planListButton)
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: completedDayPlansButton)
@@ -285,6 +280,7 @@ extension HomeViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(planCreated), name: .planCreated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAll), name: .reloadAll, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadPlan), name: .reloadPlan, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUserInfo), name: .updateNickname, object: nil)
     }
     
     func showAlert(message: String?) {
@@ -330,6 +326,11 @@ extension HomeViewController {
     @objc private func completedDayPlansButtonDidTapped() {
         input.onNext(.completedDayPlansButtonDidTapped)
     }
+    
+    @objc private func updateUserInfo(_ notification: Notification) {
+        guard let nickname = notification.userInfo?[NotificationKey.nickname] as? String else { return }
+        update(nickname: nickname)
+    }
 }
 
 extension HomeViewController: CreatePlanButtonDelegate {
@@ -350,28 +351,25 @@ extension HomeViewController {
         let cellRegistration = UICollectionView
             .CellRegistration<HomeImageCollectionViewCell, DayPlan>
         { [weak self] cell, indexPath, item in
-            
-            guard let _self = self else { return }
-            
             cell.dayPlan = item
             
             guard item.imageURL != nil else { return }
             
-            _self.viewModel.loadImage(dayPlanID: item.id) { data in
+            self?.viewModel.loadImage(dayPlanID: item.id) { data in
                 cell.update(imageData: data)
             }
         }
         
-        self.dataSource = DataSource(
+        dataSource = DataSource(
             collectionView: collectionView,
-            cellProvider: { collectionView, indexPath, item in
+            cellProvider: { [weak self] collectionView, indexPath, item in
                 let cell = collectionView.dequeueConfiguredReusableCell(
                     using: cellRegistration,
                     for: indexPath,
                     item: item
                 )
-                
-                cell.delegate = self
+                guard let _self = self else { return UICollectionViewCell() }
+                cell.delegate = _self
                 
                 return cell
             }
