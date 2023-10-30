@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		720634E82AEED1DF00852980 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */; };
 		720634EA2AEED39F00852980 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E92AEED39F00852980 /* CalendarCollectionView.swift */; };
+		720634ED2AEED9EB00852980 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634EC2AEED9EB00852980 /* SettingViewController.swift */; };
+		720634F22AEEDA4F00852980 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634F12AEEDA4F00852980 /* SettingViewModel.swift */; };
 		7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFF92AC2AF77002C3112 /* TabBarController.swift */; };
 		7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */; };
 		7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */; };
@@ -110,6 +112,8 @@
 /* Begin PBXFileReference section */
 		720634E72AEED1DF00852980 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		720634E92AEED39F00852980 /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
+		720634EC2AEED9EB00852980 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		720634F12AEEDA4F00852980 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		7217AFF92AC2AF77002C3112 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIViewController.swift"; sourceTree = "<group>"; };
 		7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +225,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		720634EB2AEED99200852980 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				720634EE2AEEDA3500852980 /* ViewModel */,
+				720634EF2AEEDA3B00852980 /* View */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		720634EE2AEEDA3500852980 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				720634F12AEEDA4F00852980 /* SettingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		720634EF2AEEDA3B00852980 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				720634EC2AEED9EB00852980 /* SettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		7217AFF12AC2AE80002C3112 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,6 +479,7 @@
 				72D7D3242ADEA7740062A60F /* UserSetting */,
 				7217AFF72AC2AEE3002C3112 /* Home */,
 				72D7D31A2ADE15010062A60F /* Calendar */,
+				720634EB2AEED99200852980 /* Setting */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -890,6 +920,7 @@
 				727849632AD524CF00433753 /* EditImageViewModel.swift in Sources */,
 				727849722AD6964A00433753 /* DayPlanViewController.swift in Sources */,
 				72D7D32A2ADEA7E80062A60F /* UserSettingViewModel.swift in Sources */,
+				720634F22AEEDA4F00852980 /* SettingViewModel.swift in Sources */,
 				729AC5212ACEC3A100E910D5 /* CameraCell.swift in Sources */,
 				727849742AD6969E00433753 /* DayPlanViewModel.swift in Sources */,
 				729AC5182ACE91F200E910D5 /* CreatePlanUseCase.swift in Sources */,
@@ -897,6 +928,7 @@
 				727849852AD77E2000433753 /* UpdateDayPlanUseCase.swift in Sources */,
 				727849802AD76A2000433753 /* DayPlanRepositoryImp.swift in Sources */,
 				729AC51E2ACEA51F00E910D5 /* Extension+UIImage.swift in Sources */,
+				720634ED2AEED9EB00852980 /* SettingViewController.swift in Sources */,
 				729AC46C2AC5499600E910D5 /* DatabaseManager.swift in Sources */,
 				72BA20642AE60A39005F7D90 /* StaticsViewController.swift in Sources */,
 				720634E82AEED1DF00852980 /* CalendarCollectionViewCell.swift in Sources */,
