@@ -115,6 +115,7 @@
 		72EBE36F2AF029FC0062B94A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72EBE3712AF029FC0062B94A /* Localizable.strings */; };
 		72EBE3742AF02B220062B94A /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EBE3732AF02B220062B94A /* Extension+String.swift */; };
 		72EBE3762AF02C950062B94A /* StringKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EBE3752AF02C950062B94A /* StringKey.swift */; };
+		72EBE38B2AF059340062B94A /* infoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72EBE38D2AF059340062B94A /* infoPlist.strings */; };
 		72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* PlanRepository.swift */; };
 /* End PBXBuildFile section */
 
@@ -218,6 +219,8 @@
 		72EBE3722AF02A500062B94A /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		72EBE3732AF02B220062B94A /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
 		72EBE3752AF02C950062B94A /* StringKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringKey.swift; sourceTree = "<group>"; };
+		72EBE38C2AF059340062B94A /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/infoPlist.strings; sourceTree = "<group>"; };
+		72EBE38E2AF059380062B94A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/infoPlist.strings; sourceTree = "<group>"; };
 		72FA8DE82AD19AB000F19568 /* PlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -744,6 +747,7 @@
 				72B87E9D2AEFFA3600A6AB9C /* LaunchScreen.storyboard */,
 				72A9761B2ABB2A910021291C /* Info.plist */,
 				72EBE3752AF02C950062B94A /* StringKey.swift */,
+				72EBE38D2AF059340062B94A /* infoPlist.strings */,
 				72EBE3712AF029FC0062B94A /* Localizable.strings */,
 			);
 			path = Application;
@@ -981,6 +985,7 @@
 				72EBE3662AF023F80062B94A /* GoogleService-Info.plist in Resources */,
 				72B87E9E2AEFFA3600A6AB9C /* LaunchScreen.storyboard in Resources */,
 				72EBE3642AF023C60062B94A /* .gitIgnore in Resources */,
+				72EBE38B2AF059340062B94A /* infoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1121,6 +1126,15 @@
 				72EBE3722AF02A500062B94A /* ko */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		72EBE38D2AF059340062B94A /* infoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				72EBE38C2AF059340062B94A /* ko */,
+				72EBE38E2AF059380062B94A /* en */,
+			);
+			name = infoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
