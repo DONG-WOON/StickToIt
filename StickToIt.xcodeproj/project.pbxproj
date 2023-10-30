@@ -278,6 +278,11 @@
 			children = (
 				7217AFF62AC2AED7002C3112 /* ViewModel */,
 				7217AFF12AC2AE80002C3112 /* View */,
+				729AC4D32ACBA1C000E910D5 /* CreatePlan */,
+				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
+				7278495B2AD5247300433753 /* EditImage */,
+				7278496E2AD6962400433753 /* DayPlan */,
+				72BA20602AE60A20005F7D90 /* Statics */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -442,14 +447,9 @@
 		729AC48A2AC81F2300E910D5 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				72BA20602AE60A20005F7D90 /* Statics */,
 				72D7D3242ADEA7740062A60F /* UserSetting */,
-				72D7D31A2ADE15010062A60F /* Calendar */,
-				7278496E2AD6962400433753 /* DayPlan */,
-				7278495B2AD5247300433753 /* EditImage */,
-				729AC4D32ACBA1C000E910D5 /* CreatePlan */,
-				729AC4B92ACA5E2C00E910D5 /* ImageSelection */,
 				7217AFF72AC2AEE3002C3112 /* Home */,
+				72D7D31A2ADE15010062A60F /* Calendar */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
