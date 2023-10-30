@@ -114,7 +114,9 @@ final class ImageSelectionViewController: UIViewController {
     
     func setViewsAndDelegate() {
         if let _mainView = mainView as? ImageSelectionView {
+            
             configureDataSource(of: _mainView.collectionView)
+            
             _mainView.delegate = self
             _mainView.collectionView.delegate = self
             

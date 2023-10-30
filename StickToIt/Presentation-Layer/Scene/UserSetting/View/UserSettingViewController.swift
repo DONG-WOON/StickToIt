@@ -135,7 +135,7 @@ class UserSettingViewController: UIViewController {
             .map{ String($0.prefix(20)) }
             .subscribe(on: MainScheduler.asyncInstance)
             .subscribe(with: self) { (_self, text) in
-                self.nicknameTextField.innerView.text = text
+                _self.nicknameTextField.innerView.text = text
                 _self.input.onNext(.textInput(text: text))
             }
             .disposed(by: disposeBag)

@@ -77,14 +77,14 @@ final class PlanInfoView: UIView {
     }
     
     @objc private func trashButtonDidTapped() {
-        delegate?.trashButtonDidTapped()
+//        delegate?.trashButtonDidTapped()
     }
 }
 
 extension PlanInfoView {
     
     private func configureViews() {
-        addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
+//        addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
         rounded()
         addSubviews([userNickNameLabel, planNameLabel, trashButton, lastCertifyingDayLabel])
     }

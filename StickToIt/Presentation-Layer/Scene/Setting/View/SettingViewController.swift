@@ -32,6 +32,10 @@ final class SettingViewController: UIViewController {
         configureViews()
         setConstraints()
     }
+    
+    deinit {
+        print("🔥 ", self)
+    }
 }
 
 extension SettingViewController {
@@ -84,17 +88,17 @@ extension SettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        viewModel.selectedRowAt(indexPath) { row in
+        viewModel.selectedRowAt(indexPath) { [weak self] row in
             switch row {
             case .editNickname:
                 let vc = UserEditingViewController(viewModel: DIContainer.makeUserEditingViewModel())
-                navigationController?.pushViewController(vc, animated: true)
+                self?.navigationController?.pushViewController(vc, animated: true)
 //            case .notification:
 //                let vc = NotificationViewController()
 //                navigationController?.pushViewController(vc, animated: true)
             case .dataManagement:
                 let vc = DataManagementViewController(viewModel: DIContainer.makeDataManagementViewModel())
-                navigationController?.pushViewController(vc, animated: true)
+                self?.navigationController?.pushViewController(vc, animated: true)
             default:
                 
                 return

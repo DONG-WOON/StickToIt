@@ -89,6 +89,7 @@ final class HomeViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         bind()
+        addNotification()
     }
     
     required init?(coder: NSCoder) {
@@ -96,6 +97,7 @@ final class HomeViewController: UIViewController {
     }
     
     deinit {
+        print("🔥 ", self)
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -127,7 +129,7 @@ final class HomeViewController: UIViewController {
                 switch event {
                 case .setViewsAndDelegate(planIsExist: let isExist):
                     _self.setViewsAndDelegate(isExist)
-                    return
+                    
                 case .configureUI:
                     _self.configureViews()
                     
@@ -169,12 +171,10 @@ final class HomeViewController: UIViewController {
                     _self.showAlert(message: error?.localizedDescription)
                     
                 case .showKeepGoingMessage(title: let title, message: let message):
-                    self.showKeepGoingAlert(title: title, message: message)
+                    _self.showKeepGoingAlert(title: title, message: message)
                 }
             }
             .disposed(by: disposeBag)
-        
-        addNotification()
     }
 }
 
@@ -248,10 +248,9 @@ extension HomeViewController {
             let _view = HomeView()
             
             _view.setDelegate(self)
+            configureDataSource(of: _view.collectionView)
             
             self.view = _view
-            
-            configureDataSource(of: _view.collectionView)
             
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planListButton)
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: completedDayPlansButton)
@@ -330,8 +329,7 @@ extension HomeViewController {
     
     @objc private func updateUserInfo(_ notification: Notification) {
         guard let nickname = notification.userInfo?[NotificationKey.nickname] as? String else { return }
-        self.update(nickname: nickname)
-        
+        update(nickname: nickname)
     }
 }
 
@@ -353,28 +351,25 @@ extension HomeViewController {
         let cellRegistration = UICollectionView
             .CellRegistration<HomeImageCollectionViewCell, DayPlan>
         { [weak self] cell, indexPath, item in
-            
-            guard let _self = self else { return }
-            
             cell.dayPlan = item
             
             guard item.imageURL != nil else { return }
             
-            _self.viewModel.loadImage(dayPlanID: item.id) { data in
+            self?.viewModel.loadImage(dayPlanID: item.id) { data in
                 cell.update(imageData: data)
             }
         }
         
-        self.dataSource = DataSource(
+        dataSource = DataSource(
             collectionView: collectionView,
-            cellProvider: { collectionView, indexPath, item in
+            cellProvider: { [weak self] collectionView, indexPath, item in
                 let cell = collectionView.dequeueConfiguredReusableCell(
                     using: cellRegistration,
                     for: indexPath,
                     item: item
                 )
-                
-                cell.delegate = self
+                guard let _self = self else { return UICollectionViewCell() }
+                cell.delegate = _self
                 
                 return cell
             }

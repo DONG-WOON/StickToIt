@@ -63,6 +63,10 @@ final class CreatePlanViewController: UIViewController {
         mainView.planNameTextField.innerView.becomeFirstResponder()
     }
     
+    deinit {
+        print("🔥 ", self)
+    }
+    
     private func bindViewModel() {
         
         viewModel.planIsValidated
@@ -113,11 +117,11 @@ final class CreatePlanViewController: UIViewController {
         viewModel.endDate
             .bind(with: self) { (_self, date) in
                 guard let _date = date else {
-                    self.mainView.endDateLabel.innerView.text = "종료일을 설정해주세요 ---->"
+                    _self.mainView.endDateLabel.innerView.text = "종료일을 설정해주세요 ---->"
                     return
                 }
                 let endDateString = DateFormatter.getFullDateString(from: _date)
-                self.mainView.endDateLabel.innerView.text = "종료일: \(endDateString)"
+                _self.mainView.endDateLabel.innerView.text = "종료일: \(endDateString)"
                 
                 _self.setTargetNumberOfDays(date: _date)
             }

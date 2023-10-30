@@ -77,6 +77,7 @@ extension DataManagementViewModel {
     }
     
     private func deleteUser() {
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.userID)
         repository.deleteAll { [weak self] error in
             if let error {
                 self?.output.onNext(.showError(error))

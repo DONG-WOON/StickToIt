@@ -44,6 +44,10 @@ final class TabBarController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("🔥 ", self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

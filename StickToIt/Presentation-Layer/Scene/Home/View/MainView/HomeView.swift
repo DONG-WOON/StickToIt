@@ -9,7 +9,7 @@ import UIKit
 
 final class HomeView: UIView {
     
-    private lazy var planInfoView = PlanInfoView()
+    private let planInfoView = PlanInfoView()
     let collectionView = PlanCollectionView()
     
     override init(frame: CGRect) {

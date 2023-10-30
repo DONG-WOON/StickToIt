@@ -51,6 +51,7 @@ final class CalendarViewModel {
              
                 case .viewDidLoad:
                     _self.output.onNext(.configureUI)
+                    
                 case .viewWillAppear, .refresh:
                     _self.fetchPlanQueries()
     
@@ -88,7 +89,6 @@ extension CalendarViewModel {
     
     private func fetchPlanInfo(query: PlanQuery?) {
         guard let query else {
-            print("Query 없음")
             return
         }
         
@@ -99,7 +99,7 @@ extension CalendarViewModel {
             output.onNext(.showPlanInfo(plan))
             currentPlan = plan
             let completedDayPlans = filterCompletedDayPlans(plan.dayPlans)
-            self.planCompletedDate = completedDayPlans.compactMap { $0.date }
+            planCompletedDate = completedDayPlans.compactMap { $0.date }
             
             let filteredDayPlans = completedDayPlans.filter { Calendar.current.isDate(.now, equalTo: $0.date, toGranularity: .month) }
             

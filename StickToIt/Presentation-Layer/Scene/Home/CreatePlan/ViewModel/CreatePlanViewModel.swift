@@ -39,8 +39,8 @@ final class CreatePlanViewModel {
             endDate
         )
         .map { $0.count > 0 && ($1 != nil) }
-        .subscribe(with: self, onNext: { (self, isValidated) in
-            self.planIsValidated.accept(isValidated)
+        .subscribe(with: self, onNext: { _self, isValidated in
+            _self.planIsValidated.accept(isValidated)
         }).disposed(by: disposeBag)
     }
     

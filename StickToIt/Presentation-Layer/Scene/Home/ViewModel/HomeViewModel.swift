@@ -187,6 +187,7 @@ extension HomeViewModel {
             
             let planQueries = user.planQueries
             self?.currentPlanCount = planQueries.count
+            
             if !planQueries.isEmpty {
                 self?.output.onNext(.loadPlanQueries(planQueries))
                 self?.fetchCurrentPlan()
