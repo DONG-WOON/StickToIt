@@ -11,6 +11,7 @@
 		720634EA2AEED39F00852980 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634E92AEED39F00852980 /* CalendarCollectionView.swift */; };
 		720634ED2AEED9EB00852980 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634EC2AEED9EB00852980 /* SettingViewController.swift */; };
 		720634F22AEEDA4F00852980 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634F12AEEDA4F00852980 /* SettingViewModel.swift */; };
+		720634FC2AEF725700852980 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634FB2AEF725600852980 /* NotificationViewController.swift */; };
 		720634FE2AEF727400852980 /* DataManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720634FD2AEF727400852980 /* DataManagementViewController.swift */; };
 		720635012AEF72EB00852980 /* UserEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635002AEF72EB00852980 /* UserEditingViewModel.swift */; };
 		720635032AEF74F000852980 /* UserEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635022AEF74F000852980 /* UserEditingViewController.swift */; };

@@ -55,5 +55,5 @@ protocol DatabaseManager {
         onComplete: @escaping @Sendable (Error?) -> Void
     )
     
-    func deleteAll()
+    func deleteAll(onComplete: @escaping @Sendable (Error?) -> Void) 
 }

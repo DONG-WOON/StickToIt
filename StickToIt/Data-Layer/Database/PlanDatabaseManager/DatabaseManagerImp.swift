@@ -151,7 +151,13 @@ struct DatabaseManagerImp: DatabaseManager {
         }
     }
     
-    func deleteAll() {
-        asyncRealm.deleteAll()
+    func deleteAll(onComplete: @escaping @Sendable (Error?) -> Void) {
+        asyncRealm.writeAsync {
+            asyncRealm.deleteAll()
+        } onComplete: { error in
+            underlyingQueue.async {
+                onComplete(error)
+            }
+        }
     }
 }

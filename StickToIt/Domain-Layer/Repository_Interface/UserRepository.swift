@@ -29,5 +29,7 @@ protocol UserRepository<Model, Entity> {
         id: UUID,
         completion: @escaping (Result<Void, Error>) -> Void
     )
+    
+    func deleteAll(onComplete: @escaping @Sendable (Error?) -> Void) 
 }
 

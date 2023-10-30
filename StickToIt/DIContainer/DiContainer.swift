@@ -128,5 +128,7 @@ final class DIContainer {
         UserEditingViewModel(repository: shared.userRepository)
     }
     
+    static func makeDataManagementViewModel() -> DataManagementViewModel {
+        DataManagementViewModel(repository: shared.userRepository)
     }
 }
