@@ -60,17 +60,17 @@ final class DayPlanViewModel {
                 
             } catch STIError.certifyingError {
                 UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isCertifyingError)
-                DispatchQueue.main.async { [weak self] in
+                DispatchQueue.main.async {
                     failure("인증오류", "인증에 실패했습니다. 다시 시도하겠습니까?")
                 }
             } catch STIError.imageNotSave {
                 UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isSaveImageError)
-                DispatchQueue.main.async { [weak self] in
+                DispatchQueue.main.async {
                     failure("사진 저장 오류", "사진 저장에 실패했습니다. 다시 시도하겠습니까")
                 }
             } catch STIError.imageURLNotSave {
                 UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isSaveImageError)
-                DispatchQueue.main.async { [weak self] in
+                DispatchQueue.main.async {
                     failure("사진 저장 오류", "사진 저장에 실패했습니다. 다시 시도하겠습니까?")
                 }
             }

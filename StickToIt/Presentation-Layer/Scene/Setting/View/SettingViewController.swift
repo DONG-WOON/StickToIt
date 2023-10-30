@@ -120,6 +120,7 @@ extension SettingViewController: BaseViewConfigurable {
         view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
+        title = "설정"
         
         tableView.backgroundColor = .systemBackground
     }

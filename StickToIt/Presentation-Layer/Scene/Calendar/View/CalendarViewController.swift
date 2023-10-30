@@ -61,7 +61,6 @@ final class CalendarViewController: UIViewController {
                     
                 case .showCompletedDayPlans(let dayPlans):
                     _self.takeSnapshot(dayPlans: dayPlans)
-//                    _self.calendar.reloadData()
                 }
             }
             .disposed(by: disposeBag)
@@ -160,9 +159,6 @@ extension CalendarViewController: BaseViewConfigurable {
         view.backgroundColor = .systemBackground
         
         view.addSubviews([calendar, collectionView])
-        
-        calendar.layer.borderWidth = 0.5
-        calendar.layer.borderColor = UIColor.assetColor(.accent2).cgColor
     }
     
     func setConstraints() {

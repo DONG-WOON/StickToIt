@@ -134,13 +134,6 @@ final class CreatePlanViewController: UIViewController {
         let diffOfStartDateAndEndDate = dayInterval + 1
         
         self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
-        
-        let datesFromStartDateToEndDate = Array(0...diffOfStartDateAndEndDate).map { Calendar.current.date(byAdding: .day, value: $0, to: viewModel.startDate)!
-        }
-        
-        let weekdayList = datesFromStartDateToEndDate.map {
-            return Calendar.current.dateComponents([.weekday], from: $0).weekday!
-        }
     }
     
     private func configureViews() {
