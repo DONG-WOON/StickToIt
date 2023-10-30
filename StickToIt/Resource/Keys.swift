@@ -16,4 +16,5 @@ enum UserDefaultsKey {
 
 enum NotificationKey {
     static let imageToUpload = "imageToUpload"
+    static let nickname = "nickname"
 }

@@ -61,6 +61,7 @@ final class CalendarViewController: UIViewController {
                     
                 case .showCompletedDayPlans(let dayPlans):
                     _self.takeSnapshot(dayPlans: dayPlans)
+                    _self.calendar.reloadData()
                 }
             }
             .disposed(by: disposeBag)

@@ -10,18 +10,18 @@ import RealmSwift
 
 final class UserEntity: Object {
     @Persisted(primaryKey: true) var _id: UUID
-    @Persisted var name: String
+    @Persisted var nickname: String
     @Persisted var planQueries: List<PlanQueryEntity>
     
     convenience init(
         _id: UUID,
-        name: String,
+        nickname: String,
         planQueries: List<PlanQueryEntity>
     ) {
         self.init()
         
         self._id = _id
-        self.name = name
+        self.nickname = nickname
         self.planQueries = planQueries
     }
 }

@@ -1,24 +1,27 @@
 //
-//  UserSettingViewModel.swift
+//  UserEditingViewModel.swift
 //  StickToIt
 //
-//  Created by 서동운 on 10/17/23.
+//  Created by 서동운 on 10/30/23.
 //
 
-import Foundation
+import UIKit
 import RxSwift
 
-final class UserSettingViewModel {
+final class UserEditingViewModel {
     
     enum Input {
-        case registerButtonDidTapped
+        case viewDidLoad
+        case editButtonDidTapped
         case textInput(text: String?)
     }
     
     enum Output {
+        case updateNickname(String)
         case userNicknameValidate(Bool)
         case validateError(String?)
-        case completeUserRegistration
+        case completeEditing
+        case showError(Error)
     }
     
     private var userNickname: String = String()
@@ -26,16 +29,20 @@ final class UserSettingViewModel {
     private let output = PublishSubject<Output>()
     private let disposeBag = DisposeBag()
     
+    
     init(repository: some UserRepository<User, UserEntity>) {
         self.repository = repository
     }
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .default))
             .subscribe(with: self) { (_self, event) in
                 switch event {
-                case .registerButtonDidTapped:
-                    _self.register()
+                case .viewDidLoad:
+                    _self.fetchUserInfo()
+                case .editButtonDidTapped:
+                    _self.complete()
                 case .textInput(text: let text):
                     _self.validate(text: text)
                 }
@@ -46,7 +53,23 @@ final class UserSettingViewModel {
     }
 }
 
-extension UserSettingViewModel {
+extension UserEditingViewModel {
+    
+    private func fetchUserInfo() {
+        guard let userIDString = UserDefaults.standard.string(
+            forKey: UserDefaultsKey.userID
+        ), let userID = UUID(uuidString: userIDString) else { return }
+        
+        let result = repository.fetch(key: userID)
+        switch result {
+        case .success(let user):
+            self.userNickname = user.nickname
+            self.output.onNext(.updateNickname(user.nickname))
+        case .failure(let error):
+            self.output.onNext(.showError(error))
+        }
+    }
+    
     private func validate(text: String?) {
         guard let text, !text.isEmpty else {
             output.onNext(.validateError(" "))
@@ -77,16 +100,20 @@ extension UserSettingViewModel {
         userNickname = text
     }
     
-    private func register() {
-        let user = User(id: UUID(), nickname: userNickname, planQueries: [])
-        repository.create(model: user) { [weak self] result in
-            switch result {
-            case .success:
-                UserDefaults.standard.setValue(user.id.uuidString, forKey: UserDefaultsKey.userID)
-                self?.output.onNext(.completeUserRegistration)
-            case .failure(let error):
-                print(error)
+    private func complete() {
+        guard let userIDString = UserDefaults.standard.string(
+            forKey: UserDefaultsKey.userID
+        ), let userID = UUID(uuidString: userIDString) else { return }
+        
+        repository.update(userID: userID) { [userNickname] entity in
+            entity.nickname = userNickname
+        } onComplete: { [weak self, userNickname] error in
+            if let error {
+                self?.output.onNext(.showError(error))
+                return
             }
+            NotificationCenter.default.post(name: .updateNickname, object: nil, userInfo: [NotificationKey.nickname: userNickname])
+            self?.output.onNext(.completeEditing)
         }
     }
 }

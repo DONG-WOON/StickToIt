@@ -38,6 +38,7 @@ extension SettingViewController {
     private func settingTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SettingViewCell")
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         
@@ -60,24 +61,53 @@ extension SettingViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingViewCell", for: indexPath)
         var configuration = cell.defaultContentConfiguration()
         configuration.text = viewModel.rowTitle(at: indexPath)
-        configuration.textProperties.font = .systemFont(ofSize: Const.FontSize.subTitle, weight: .medium)
+        configuration.textProperties.font = .systemFont(ofSize: Const.FontSize.body, weight: .regular)
         
         cell.contentConfiguration = configuration
         cell.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
-     
+        
         if viewModel.isFirstSection(at: indexPath) {
             cell.accessoryType = .disclosureIndicator
-        } else {
-            if viewModel.isVersionInfo(at: indexPath) {
-                let label = UILabel()
-                label.text = "1.0"
-                label.sizeToFit()
-                cell.accessoryView = label
-            }
         }
         
-        
+        if viewModel.isVersionInfo(at: indexPath) {
+            let label = UILabel()
+            label.text = "1.0"
+            label.sizeToFit()
+            cell.accessoryView = label
+        }
         return cell
+    }
+}
+
+extension SettingViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        viewModel.selectedRowAt(indexPath) { row in
+            switch row {
+            case .editNickname:
+                let vc = UserEditingViewController(viewModel: DIContainer.makeUserEditingViewModel())
+                navigationController?.pushViewController(vc, animated: true)
+//            case .notification:
+//                let vc = NotificationViewController()
+//                navigationController?.pushViewController(vc, animated: true)
+            case .dataManagement:
+                let vc = DataManagementViewController(viewModel: DIContainer.makeDataManagementViewModel())
+                navigationController?.pushViewController(vc, animated: true)
+            default:
+                
+                return
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 1 {
+            return false
+        } else {
+            return true
+        }
     }
 }
 

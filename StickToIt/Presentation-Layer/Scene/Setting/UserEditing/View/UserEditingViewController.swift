@@ -1,19 +1,18 @@
 //
-//  UserSettingViewController.swift
+//  UserEditingViewController.swift
 //  StickToIt
 //
-//  Created by 서동운 on 10/17/23.
+//  Created by 서동운 on 10/30/23.
 //
-
 import UIKit
 import RxSwift
 import RxCocoa
 
-class UserSettingViewController: UIViewController {
+class UserEditingViewController: UIViewController {
     
-    private let viewModel: UserSettingViewModel
+    private let viewModel: UserEditingViewModel
     
-    private let input = PublishSubject<UserSettingViewModel.Input>()
+    private let input = PublishSubject<UserEditingViewModel.Input>()
     private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
@@ -44,29 +43,21 @@ class UserSettingViewController: UIViewController {
         return view
     }()
     
-    private var descriptionLabel: UILabel = {
-        let view = UILabel()
-        view.textColor = .label
-        view.text = "- 닉네임은 언제든 다시 수정할 수 있어요"
-        view.font = .systemFont(ofSize: 14)
-        return view
-    }()
-    
-    private lazy var registerButton: ResizableButton = {
+    private lazy var editButton: ResizableButton = {
         let button = ResizableButton(
-            title: "사용자 등록하기",
+            title: "닉네임 변경하기",
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
             backgroundColor: .assetColor(.accent1),
             target: self,
-            action: #selector(registerButtonDidTapped)
+            action: #selector(editButtonDidTapped)
         )
         button.rounded()
         return button
     }()
     
     
-    init(viewModel: UserSettingViewModel) {
+    init(viewModel: UserEditingViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -88,6 +79,17 @@ class UserSettingViewController: UIViewController {
         
         configureViews()
         setConstraints()
+        input.onNext(.viewDidLoad)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     func bind() {
@@ -96,26 +98,11 @@ class UserSettingViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(with: self) { (_self, event) in
                 switch event {
-                case .completeUserRegistration:
-                    
-                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                    let sceneDelegate = windowScene?.delegate as? SceneDelegate
-                    let window = sceneDelegate?.window
-                    let mainVC = TabBarController()
-                    
-                    window?.rootViewController = mainVC
-                    window?.makeKeyAndVisible()
-                    
-                    if let window {
-                        UIView.transition(with: window,
-                                          duration: 0.6,
-                                          options: .transitionCrossDissolve,
-                                          animations: nil)
-                    }
-                    
+                case .completeEditing:
+                    _self.navigationController?.popViewController(animated: true)
                 case .userNicknameValidate(let isValidated):
-                    _self.registerButton.isEnabled = isValidated
-                    _self.registerButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
+                    _self.editButton.isEnabled = isValidated
+                    _self.editButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
                     
                 case .validateError(let errorMessage):
                     guard let errorMessage else {
@@ -125,6 +112,10 @@ class UserSettingViewController: UIViewController {
                     }
                     _self.validateLabel.text = errorMessage
                     _self.validateLabel.textColor = .systemRed
+                case .showError(let error):
+                    _self.showAlert(title: "오류메세지", message: "닉네임을 변경할 수 없습니다. 다음에 다시 시도해주세요!") {}
+                case .updateNickname(let nickname):
+                    _self.nicknameTextField.innerView.text = nickname
                 }
             }
             .disposed(by: disposeBag)
@@ -142,23 +133,21 @@ class UserSettingViewController: UIViewController {
     }
 }
 
-extension UserSettingViewController {
-    @objc func registerButtonDidTapped() {
-        input.onNext(.registerButtonDidTapped)
+extension UserEditingViewController {
+    @objc func editButtonDidTapped() {
+        input.onNext(.editButtonDidTapped)
     }
 }
 
-extension UserSettingViewController: BaseViewConfigurable {
+extension UserEditingViewController: BaseViewConfigurable {
     func configureViews() {
         view.backgroundColor = .systemBackground
         
-        title = "사용자 등록"
+        title = "닉네임 변경"
         
-        view.addSubview(nicknameLabel)
-        view.addSubview(nicknameTextField)
-        view.addSubview(validateLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(registerButton)
+        view.addSubviews(
+            [nicknameLabel, nicknameTextField, validateLabel, editButton]
+        )
     }
     
     func setConstraints() {
@@ -177,12 +166,7 @@ extension UserSettingViewController: BaseViewConfigurable {
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(33)
         }
         
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(validateLabel.snp.bottom).offset(30)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(33)
-        }
-        
-        registerButton.snp.makeConstraints { make in
+        editButton.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
             make.height.equalTo(60)

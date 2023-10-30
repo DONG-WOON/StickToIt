@@ -15,7 +15,7 @@ final class PlanInfoView: UIView {
     
     weak var delegate: PlanInfoViewDelegate?
     
-    private let userNameLabel: UILabel = {
+    private let userNickNameLabel: UILabel = {
         let view = UILabel()
         view.textColor = .label
         view.font = .italicSystemFont(ofSize: Const.FontSize.subTitle)
@@ -72,9 +72,8 @@ final class PlanInfoView: UIView {
         }
     }
     
-    func update(user: User?) {
-        guard let userName = user?.name else { return }
-        userNameLabel.text = "@ \(userName) 님의 목표"
+    func update(nickname: String) {
+        userNickNameLabel.text = "@ \(nickname) 님의 목표"
     }
     
     @objc private func trashButtonDidTapped() {
@@ -87,18 +86,18 @@ extension PlanInfoView {
     private func configureViews() {
         addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
         rounded()
-        addSubviews([userNameLabel, planNameLabel, trashButton, lastCertifyingDayLabel])
+        addSubviews([userNickNameLabel, planNameLabel, trashButton, lastCertifyingDayLabel])
     }
     
     private func setConstraints() {
         
-        userNameLabel.snp.makeConstraints { make in
+        userNickNameLabel.snp.makeConstraints { make in
             make.top.leading.equalTo(self).inset(10)
             make.trailing.equalTo(trashButton.snp.leading).offset(-10)
         }
     
         planNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(userNameLabel.snp.bottom).offset(10)
+            make.top.equalTo(userNickNameLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(self).inset(10)
         }
         

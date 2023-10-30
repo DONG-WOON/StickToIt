@@ -91,6 +91,7 @@ final class HomeViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .subscribe(with: self) { (_self, event) in
                 switch event {
                 case .viewDidLoad:

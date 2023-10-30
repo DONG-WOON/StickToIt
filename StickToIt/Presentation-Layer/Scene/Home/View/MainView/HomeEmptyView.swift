@@ -79,6 +79,10 @@ final class HomeEmptyView: UIView {
             self.goToCreatePlanButton.transform = .identity
         }
     }
+    
+    func update(nickname: String) {
+        titleLabel.text = "\(nickname) 님\n목표가 아직없어요"
+    }
 }
 
 extension HomeEmptyView: BaseViewConfigurable {

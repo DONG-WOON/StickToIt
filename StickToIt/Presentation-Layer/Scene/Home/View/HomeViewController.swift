@@ -156,8 +156,8 @@ final class HomeViewController: UIViewController {
                     _self.stopAnimation()
                     
                 case .showUserInfo(let user):
-                    _self.update(user: user)
-                    _self.setEmptyView(user: user)
+                    guard let user else { return }
+                    _self.update(nickname: user.nickname)
                     
                 case .showCompleteDayPlanCount(let count):
                     _self.completedDayPlansButton.configuration?.title = String(count)
@@ -198,8 +198,9 @@ extension HomeViewController {
         self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(asset: .placeholder))
     }
     
-    func update(user: User?) {
-        (view as? HomeView)?.update(user: user)
+    func update(nickname: String) {
+        (view as? HomeView)?.update(nickname: nickname)
+        (view as? HomeEmptyView)?.update(nickname: nickname)
     }
     
     func update(plan: Plan) {
@@ -232,11 +233,6 @@ extension HomeViewController {
             title: "목표 리스트",
             children: actions
         )
-    }
-    
-    func setEmptyView(user: User?) {
-        guard let userName = user?.name else { return }
-        (view as? HomeEmptyView)?.titleLabel.text = "\(userName) 님\n목표가 아직없어요"
     }
     
     func startAnimation() {
@@ -285,6 +281,7 @@ extension HomeViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(planCreated), name: .planCreated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAll), name: .reloadAll, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadPlan), name: .reloadPlan, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUserInfo), name: .updateNickname, object: nil)
     }
     
     func showAlert(message: String?) {
@@ -329,6 +326,12 @@ extension HomeViewController {
     
     @objc private func completedDayPlansButtonDidTapped() {
         input.onNext(.completedDayPlansButtonDidTapped)
+    }
+    
+    @objc private func updateUserInfo(_ notification: Notification) {
+        guard let nickname = notification.userInfo?[NotificationKey.nickname] as? String else { return }
+        self.update(nickname: nickname)
+        
     }
 }
 

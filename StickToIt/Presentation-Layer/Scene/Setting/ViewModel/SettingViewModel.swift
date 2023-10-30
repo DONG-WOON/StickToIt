@@ -27,10 +27,18 @@ final class SettingViewModel {
             var rows: [String] {
                 switch self {
                 case .first:
-                    return ["닉네임 변경", "알림 설정", "데이터 관리"]
+                    return ["닉네임 변경", "데이터 관리"]
                 case .second:
-                    return ["공지사항", "버전정보"]
+                    return ["오픈소스", "버전정보"]
                 }
+            }
+            
+            enum Row: String {
+                case editNickname
+//                case notification
+                case dataManagement
+                case openSource
+                case versionInfo
             }
         }
     }
@@ -64,6 +72,20 @@ final class SettingViewModel {
     }
     
     func isVersionInfo(at indexPath: IndexPath) -> Bool {
-        indexPath.row == 1
+        indexPath == IndexPath(row: 1, section: 1)
+    }
+    
+    func selectedRowAt(_ indexPath: IndexPath, completion: (Setting.Section.Row) -> Void) {
+        
+        switch indexPath {
+        case IndexPath(row: 0, section: 0):
+            completion(.editNickname)
+//        case IndexPath(row: 1, section: 0):
+//            completion(.notification)
+        case IndexPath(row: 1, section: 0):
+            completion(.dataManagement)
+        default:
+            return
+        }
     }
 }

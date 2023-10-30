@@ -115,18 +115,18 @@ final class DIContainer {
     
     static func makeCalendarViewModel() -> CalendarViewModel {
         CalendarViewModel(
-            planRepository: PlanRepositoryImp(
-                networkService: nil,
-                databaseManager: shared.databaseManager
-            ),
-            userRepository: UserRepositoryImp(
-                networkService: nil,
-                databaseManager: shared.databaseManager
-            )
+            planRepository: shared.planRepository,
+            userRepository: shared.userRepository
         )
     }
     
     static func makeUserSettingViewModel() -> UserSettingViewModel {
-        UserSettingViewModel(repository: shared.makeUserRepository())
+        UserSettingViewModel(repository: shared.userRepository)
+    }
+    
+    static func makeUserEditingViewModel() -> UserEditingViewModel {
+        UserEditingViewModel(repository: shared.userRepository)
+    }
+    
     }
 }
