@@ -29,7 +29,7 @@ final class SettingViewModel {
                 case .first:
                     return ["닉네임 변경", "데이터 관리"]
                 case .second:
-                    return ["오픈소스", "버전정보"]
+                    return ["버전정보"]
                 }
             }
             
@@ -72,7 +72,7 @@ final class SettingViewModel {
     }
     
     func isVersionInfo(at indexPath: IndexPath) -> Bool {
-        indexPath == IndexPath(row: 1, section: 1)
+        indexPath == IndexPath(row: 0, section: 1)
     }
     
     func selectedRowAt(_ indexPath: IndexPath, completion: (Setting.Section.Row) -> Void) {
