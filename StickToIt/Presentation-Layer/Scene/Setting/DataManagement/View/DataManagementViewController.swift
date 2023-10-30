@@ -62,7 +62,7 @@ final class DataManagementViewController: UIViewController {
                     }
                 case .completeBackUP:
                     return
-                case .showError(let error):
+                case .showError:
                     _self.showAlert(title: "삭제 오류", message: "사용자의 정보를 삭제할 수 없습니다. 앱을 삭제 후 다시 설치해주세요!")
                 }
             }

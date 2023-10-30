@@ -112,7 +112,7 @@ class UserEditingViewController: UIViewController {
                     }
                     _self.validateLabel.text = errorMessage
                     _self.validateLabel.textColor = .systemRed
-                case .showError(let error):
+                case .showError(_):
                     _self.showAlert(title: "오류메세지", message: "닉네임을 변경할 수 없습니다. 다음에 다시 시도해주세요!") {}
                 case .updateNickname(let nickname):
                     _self.nicknameTextField.innerView.text = nickname

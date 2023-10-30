@@ -143,7 +143,6 @@ extension ImageSelectionViewController {
 extension ImageSelectionViewController {
     private func configureDataSource(of collectionView: UICollectionView) {
 
-        #warning("항상 고정으로 존재하는 사진찍기 이미지 Cell인데 이런식으로 셀을 등록해서 사용할 필요가 있나.")
         let cameraCellRegistration = UICollectionView
             .CellRegistration<CameraCell, String>
         { cell, indexPath, item in }
