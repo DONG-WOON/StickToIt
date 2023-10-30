@@ -97,10 +97,10 @@ extension DataManagementViewController: UITableViewDelegate {
         
         viewModel.selectedRowAt(indexPath) { [weak self] row in
             switch row {
-            case .backup:
-                return
+//            case .backup:
+//                return
             case .deleteUser:
-                self?.alert(title: "삭제", message: "사용자의 정보를 삭제할까요?") { [weak self] in
+                self?.alert(title: StringKey.delete.localized(), message: StringKey.deleteUserMessage.localized()) { [weak self] in
                     self?.input.onNext(.deleteUser)
                 }
             }
@@ -109,10 +109,10 @@ extension DataManagementViewController: UITableViewDelegate {
     
     func alert(title: String, message: String, okAction: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "예", style: .destructive) { _ in
+        let okAction = UIAlertAction(title: StringKey.yes.localized(), style: .destructive) { _ in
             okAction?()
         }
-        let cancelAction = UIAlertAction(title: "아니오", style: .cancel)
+        let cancelAction = UIAlertAction(title: StringKey.no.localized(), style: .cancel)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)

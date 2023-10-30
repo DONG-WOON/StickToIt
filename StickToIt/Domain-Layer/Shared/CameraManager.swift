@@ -42,18 +42,18 @@ final class CameraManager {
         
         DispatchQueue.main.async {
             let alert = UIAlertController(
-                title: "현재 카메라에 대한 접근 권한이 없습니다.",
-                message: "설정 > 작심삼일 > 카메라에서 접근을 활성화 할 수 있습니다.",
+                title: StringKey.cameraSettingTitle.localized(),
+                message: StringKey.cameraSettingMessage.localized(),
                 preferredStyle: .alert
             )
             
-            let cancel = UIAlertAction(title: "취소",
+            let cancel = UIAlertAction(title: StringKey.cancel.localized(),
                                        style: .cancel) { _ in
                 alert.dismiss(animated: true, completion: nil)
             }
             
             let goToSetting = UIAlertAction(
-                title: "설정",
+                title: StringKey.setting.localized(),
                 style: .default
             ) { _ in
                 guard let settingURL = URL(

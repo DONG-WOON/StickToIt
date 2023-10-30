@@ -42,16 +42,6 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var requiredLabel: PaddingView<UILabel> = {
-        let view = PaddingView<UILabel>()
-        view.innerView.text = "필수"
-        view.innerView.textColor = .white
-        view.innerView.textAlignment = .center
-        view.rounded()
-        view.backgroundColor = .assetColor(.accent2)
-        return view
-    }()
-    
     private let checkMarkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
@@ -101,7 +91,6 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         dayPlan = nil
         imageView.image = nil
         checkMarkImageView.isHidden = true
-        requiredLabel.isHidden = true
         dayNameLabel.innerView.text = nil
         placeholderImageView.isHidden = false
     }
@@ -116,7 +105,6 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     private func update(with dayPlan: DayPlan) {
         dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: dayPlan.date)
-        requiredLabel.isHidden = !dayPlan.isRequired
         checkMarkImageView.isHidden = !dayPlan.isComplete
         
 //        if dayPlan.isComplete {
@@ -151,7 +139,7 @@ extension HomeImageCollectionViewCell {
         //        contentView.addSubview(slideButton)
         
         blurView.addSubviews(
-            [requiredLabel, dayNameLabel, checkMarkImageView]
+            [dayNameLabel, checkMarkImageView]
         )
 
         contentView.addGestureRecognizer(imageTapGesture)
@@ -183,10 +171,6 @@ extension HomeImageCollectionViewCell {
         dayNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(blurView)
             make.leading.equalTo(blurView).inset(10)
-        }
-        
-        requiredLabel.snp.makeConstraints { make in
-            make.top.trailing.bottom.equalTo(blurView).inset(4)
         }
         
         checkMarkImageView.snp.makeConstraints { make in

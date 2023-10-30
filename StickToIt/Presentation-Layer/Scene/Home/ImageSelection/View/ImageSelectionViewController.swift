@@ -38,7 +38,7 @@ final class ImageSelectionViewController: UIViewController {
         imageManager.requestAuth { status in
             switch status {
             case .notDetermined:
-                print("notDetar")
+                print("notDetarmined")
             case .restricted:
                 print("restricted")
             case .denied:

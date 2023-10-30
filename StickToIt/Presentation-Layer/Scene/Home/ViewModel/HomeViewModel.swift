@@ -101,7 +101,7 @@ final class HomeViewModel {
                 case .planCreated:
                     _self.output.onNext(.configureUI)
                     _self.checkPlanIsExist()
-                    _self.output.onNext(.showToast(title: "목표생성완료", message: "목표가 생성되었습니다.\n 열심히 달성해보세요!"))
+                    _self.output.onNext(.showToast(title: StringKey.planCreatedTitle.localized(), message: StringKey.planCreatedMessage.localized()))
                     
                 case .viewWillAppear:
                     _self.output.onNext(.startAnimation)
@@ -225,11 +225,12 @@ extension HomeViewModel {
         if dateInterval <= 0 {
             print("오늘")
         } else if dateInterval == 1 {
-            let message = "어제도 열심히 목표를 이루셨네요!! 오늘도 이어서 달성해주세요~!"
-            output.onNext(.showToast(title: "알림", message: message))
+            let message = StringKey.successTodayMessage.localized()
+            output.onNext(.showToast(title: StringKey.noti.localized(), message: message))
         } else {
-            let message = "\(dateInterval)일 동안 목표를 달성하지 않으셨네요 ㅠㅠ... 남은기간동안은 꾸준히 해봐요"
-            output.onNext(.showToast(title: "알림", message: message))
+            let message =
+            StringKey.failureTodayMessage.localized(with: "\(dateInterval)")
+            output.onNext(.showToast(title: StringKey.noti.localized(), message: message))
         }
     }
     
@@ -239,7 +240,7 @@ extension HomeViewModel {
         let endDateQuery = DateFormatter.convertToDateQuery(currentPlan?.endDate)
         
         if lastCompletedDayPlanQuery?.dateComponents == endDateQuery?.dateComponents {
-            output.onNext(.showKeepGoingMessage(title: "와우!!", message: "작심삼일 목표가 종료되었어요! 매일 매일 열심히 달성하셨나요??\n 목표는 끝냈지만 습관으로 만들기 위해 이어나가는 게 중요합니다! 그런 의미로 100일 더 해보시는건 어떨까요?"))
+            output.onNext(.showKeepGoingMessage(title: StringKey.congratulation.localized(), message: StringKey.keepGoingMessage.localized()))
         } else {
             let todayQuery = DateFormatter.convertToDateQuery(.now)
             

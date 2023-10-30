@@ -19,7 +19,7 @@ final class CreatePlanView: UIScrollView {
     
     let planNameLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표 이름"
+        view.text = StringKey.planName.localized()
         view.textColor = .label
         view.font = .boldSystemFont(ofSize: 17)
         return view
@@ -27,7 +27,7 @@ final class CreatePlanView: UIScrollView {
     
     let planNameDescriptionLabel: UILabel = {
         let view = UILabel()
-        view.text = "작심삼일 목표 이름을 설정해주세요."
+        view.text = StringKey.planNameDescription.localized()
         view.textColor = .secondaryLabel
         view.font = .boldSystemFont(ofSize: 14)
         return view
@@ -46,14 +46,14 @@ final class CreatePlanView: UIScrollView {
             cornerRadius: 10, borderWidth: 0.5,
             borderColor: .assetColor(.accent2)
         )
-        view.placeholder = "예시) 2주간 매일 달리기"
+        view.placeholder = StringKey.planNamePlaceholder.localized()
         view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
         return view
     }()
     
     let planStartDateLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표 시작일"
+        view.text = StringKey.planStartDate.localized()
         view.textColor = .label
         view.font = .boldSystemFont(ofSize: 17)
         return view
@@ -61,14 +61,14 @@ final class CreatePlanView: UIScrollView {
     
     let planStartDateDescriptionLabel: UILabel = {
         let view = UILabel()
-        view.text = "작심삼일 목표 시작일을 설정해주세요.\n여러분의 목표 실행을 위해 오늘 바로 시작하시는건 어떤가요?"
+        view.text = StringKey.planStartDateDescription.localized()
         view.textColor = .secondaryLabel
         view.font = .boldSystemFont(ofSize: 14)
         return view
     }()
 
     lazy var planStartDateSegment: UISegmentedControl = {
-        let view = UISegmentedControl(items: ["오늘", "내일"])
+        let view = UISegmentedControl(items: [StringKey.today.localized(), StringKey.tomorrow.localized()])
         view.selectedSegmentIndex = 0
         view.selectedSegmentTintColor = .assetColor(.accent1)
         view.tintColor = .white
@@ -94,7 +94,7 @@ final class CreatePlanView: UIScrollView {
     
     let planTargetPeriodLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표 종료일"
+        view.text = StringKey.planTargetPeriodLabel.localized()
         view.textColor = .label
         view.font = .boldSystemFont(ofSize: 17)
         return view
@@ -102,7 +102,7 @@ final class CreatePlanView: UIScrollView {
     
     let planEndDateDescriptionLabel: UILabel = {
         let view = UILabel()
-        view.text = "목표일을 설정해주세요. 적어도 3일은 하시겠죠? "
+        view.text = StringKey.planEndDateDescriptionLabel.localized()
         view.textColor = .secondaryLabel
         view.font = .boldSystemFont(ofSize: 14)
         
@@ -112,7 +112,7 @@ final class CreatePlanView: UIScrollView {
     let endDateLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
         view.bordered(borderWidth: 0.7, borderColor: .assetColor(.accent2))
-        view.innerView.text = "종료일을 설정해주세요 ---->"
+        view.innerView.text = StringKey.endDateTitle.localized()
         view.innerView.backgroundColor = .clear
         view.backgroundColor = .assetColor(.accent4).withAlphaComponent(0.3)
         view.innerView.textColor = .label
@@ -134,7 +134,7 @@ final class CreatePlanView: UIScrollView {
     let descriptionLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.text = "목표는 인당 최대 5개까지만 추가할 수 있습니다"
+        view.text = StringKey.addPlanAlert.localized()
         view.textColor = .label
         view.font = .systemFont(ofSize: 14)
         return view
@@ -172,7 +172,7 @@ final class CreatePlanView: UIScrollView {
     func update(plan: Plan) {
         planNameLabel.text = plan.name
 
-        endDateLabel.innerView.text = "종료일: \(DateFormatter.getFullDateString(from: plan.endDate))"
+        endDateLabel.innerView.text = StringKey.endDateTitleSetting.localized(with: " \(DateFormatter.getFullDateString(from: plan.endDate))")
     }
 }
 

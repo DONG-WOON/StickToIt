@@ -19,7 +19,7 @@ class UserEditingViewController: UIViewController {
     
     private let nicknameLabel: UILabel = {
         let view = UILabel()
-        view.text = "닉네임"
+        view.text = StringKey.nickname.localized()
         view.textColor = .label
         view.font = .systemFont(ofSize: 20, weight: .semibold)
         return view
@@ -34,7 +34,7 @@ class UserEditingViewController: UIViewController {
     
     private lazy var nicknameTextField: PaddingView<UITextField> = {
         let view = PaddingView<UITextField>()
-        view.innerView.placeholder = "닉네임 1자 이상 20자 이하"
+        view.innerView.placeholder = StringKey.nicknamePlaceholder.localized()
         view.innerView.textColor = .label
         view.innerView.borderStyle = .none
         view.innerView.clearButtonMode = .whileEditing
@@ -45,7 +45,7 @@ class UserEditingViewController: UIViewController {
     
     private lazy var editButton: ResizableButton = {
         let button = ResizableButton(
-            title: "닉네임 변경하기",
+            title: StringKey.edit.localized(),
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
             backgroundColor: .assetColor(.accent1),
@@ -106,14 +106,14 @@ class UserEditingViewController: UIViewController {
                     
                 case .validateError(let errorMessage):
                     guard let errorMessage else {
-                        _self.validateLabel.text = "유효한 닉네임 입니다."
+                        _self.validateLabel.text = StringKey.validateNicknameLabel.localized()
                         _self.validateLabel.textColor = .assetColor(.accent1)
                         return
                     }
                     _self.validateLabel.text = errorMessage
                     _self.validateLabel.textColor = .systemRed
                 case .showError(_):
-                    _self.showAlert(title: "오류메세지", message: "닉네임을 변경할 수 없습니다. 다음에 다시 시도해주세요!") {}
+                    _self.showAlert(title: StringKey.noti.localized(), message: "닉네임을 변경할 수 없습니다. 다음에 다시 시도해주세요!") {}
                 case .updateNickname(let nickname):
                     _self.nicknameTextField.innerView.text = nickname
                 }

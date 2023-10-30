@@ -15,7 +15,7 @@ final class ImageSelectionView: UIView, BaseViewConfigurable {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .assetColor(.accent2)
         configuration.baseForegroundColor = .white
-        configuration.title = "설정에서 사진 접근 권한을 허용하러 가기"
+        configuration.title = StringKey.goToPhotoSetting.localized()
         configuration.titleAlignment = .center
         let button = UIButton(configuration: configuration)
         

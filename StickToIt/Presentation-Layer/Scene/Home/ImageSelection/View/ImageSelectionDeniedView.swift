@@ -16,7 +16,7 @@ final class ImageSelectionDeniedView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "사진 접근 권한을 허용해주세요"
+        label.text = StringKey.photoPermission.localized()
         label.textColor = .label
         label.font = .boldSystemFont(ofSize: 20)
         return label
@@ -27,7 +27,7 @@ final class ImageSelectionDeniedView: UIView {
         label.textColor = .label
         label.numberOfLines = 2
         label.textAlignment = .center
-        label.text = "설정 > 작심삼일 > 사진 탭에서\n 앨범 접근을 활성화 할 수 있습니다."
+        label.text = StringKey.photoSettingMessage.localized()
         label.font = .systemFont(ofSize: 17)
         return label
     }()
@@ -35,7 +35,7 @@ final class ImageSelectionDeniedView: UIView {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .assetColor(.accent2)
         configuration.baseForegroundColor = .white
-        configuration.title = "사진 접근 허용하기"
+        configuration.title = StringKey.goToPhotoSetting.localized()
         let button = UIButton(configuration: configuration)
         return button
     }()

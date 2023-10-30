@@ -47,7 +47,7 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      
      private lazy var okButton: ResizableButton = {
           let button = ResizableButton(
-               title: "확인",
+               title: StringKey.done.localized(),
                font: .boldSystemFont(ofSize: 18),
                tintColor: .white,
                backgroundColor: .assetColor(.accent1),

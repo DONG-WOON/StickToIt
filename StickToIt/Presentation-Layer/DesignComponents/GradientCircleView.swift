@@ -42,7 +42,8 @@ class GradientCircleView: RingProgressView {
         }
 
         let percentage = Int(progress * 100)
-        percentageLabel.text = "목표 달성률\n\(percentage)%"
+        percentageLabel.text = "\("Achievement".localized()) \n\(percentage)%"
+        percentageLabel.sizeToFit()
     }
     
     required init?(coder: NSCoder) {

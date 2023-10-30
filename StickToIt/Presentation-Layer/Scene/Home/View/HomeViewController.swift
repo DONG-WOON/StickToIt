@@ -26,14 +26,14 @@ final class HomeViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     private lazy var createPlanAction = UIAction(
-        title: "목표 추가하기",
+        title: StringKey.addPlan.localized(),
         image: UIImage(resource: .plus),
         handler: { [weak self] _ in
             guard let planCount = self?.viewModel.currentPlanCount else { return }
             if planCount < 5 {
                 self?.input.onNext(.createPlanButtonDidTapped)
             } else {
-                self?.showAlert(message: "계획은 최대 5개까지만 추가할 수 있습니다.")
+                self?.showAlert(message: StringKey.addPlanAlert.localized())
             }
         }
     )
@@ -230,7 +230,7 @@ extension HomeViewController {
         actions.append(settingMenu)
         
         planListButton.menu = UIMenu(
-            title: "목표 리스트",
+            title: StringKey.planList.localized(),
             children: actions
         )
     }
@@ -284,8 +284,8 @@ extension HomeViewController {
     }
     
     func showAlert(message: String?) {
-        let alert = UIAlertController(title: "알림", message: message ?? "알 수 없는 오류가 발생했습니다." , preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "확인", style: .default)
+        let alert = UIAlertController(title: StringKey.noti.localized(), message: message ?? "알 수 없는 오류가 발생했습니다." , preferredStyle: .alert)
+        let okAction = UIAlertAction(title: StringKey.done.localized(), style: .default)
         
         alert.addAction(okAction)
         
@@ -295,10 +295,10 @@ extension HomeViewController {
     func showKeepGoingAlert(title: String?, message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let okAction = UIAlertAction(title: "+100일", style: .default) { [weak self] _ in
+        let okAction = UIAlertAction(title: StringKey.add100Days.localized(), style: .default) { [weak self] _ in
             self?.input.onNext(.add100DayPlansOfPlan)
         }
-        let cancelAction = UIAlertAction(title: "닫기", style: .cancel)
+        let cancelAction = UIAlertAction(title: StringKey.close.localized(), style: .cancel)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)
@@ -392,11 +392,11 @@ extension HomeViewController: HomeImageCollectionViewCellDelegate {
 
 extension HomeViewController: PlanInfoViewDelegate {
     func trashButtonDidTapped() {
-        let alert = UIAlertController(title: "목표 삭제", message: "확인을 누르면 지금까지 달성하신 목표까지 모두 삭제됩니다. 목표를 삭제하시겠습니까?", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: StringKey.deletePlan.localized(), message: StringKey.deletePlanMessage.localized(), preferredStyle: .alert)
+        let okAction = UIAlertAction(title: StringKey.delete.localized(), style: .destructive) { [weak self] _ in
             self?.input.onNext(.deletePlan)
         }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        let cancelAction = UIAlertAction(title: StringKey.cancel.localized(), style: .cancel)
 
         alert.addAction(okAction)
         alert.addAction(cancelAction)

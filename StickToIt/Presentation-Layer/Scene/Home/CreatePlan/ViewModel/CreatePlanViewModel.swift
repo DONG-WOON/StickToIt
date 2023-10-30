@@ -48,7 +48,7 @@ final class CreatePlanViewModel {
     func createPlan(completion: @escaping (Result<PlanQuery, Error>) -> Void) {
         
         guard let planName = try? planName.value() else {
-            completion(.failure(NSError(domain: "목표 이름이 없어요.", code:    -1001)))
+            completion(.failure(NSError(domain: "목표 이름이 없어요.", code: -1001)))
             return
         }
         

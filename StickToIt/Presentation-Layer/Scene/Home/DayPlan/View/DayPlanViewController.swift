@@ -38,7 +38,7 @@ final class DayPlanViewController: UIViewController {
     
     private lazy var weekDayLabel: PaddingView<UILabel> = {
        let paddingView = PaddingView<UILabel>()
-        paddingView.innerView.text = "1주차"
+        paddingView.innerView.text = "1Week"
         paddingView.innerView.font = .monospacedSystemFont(ofSize: Const.FontSize.body, weight: .semibold)
         paddingView.innerView.backgroundColor = .clear
         paddingView.backgroundColor = .assetColor(.accent4)
@@ -68,16 +68,6 @@ final class DayPlanViewController: UIViewController {
         let view = UIButton(configuration: configuration)
         view.addTarget(self, action: #selector(addImageButtonAction), for: .touchUpInside)
         
-        return view
-    }()
-    
-    private lazy var requiredLabel: PaddingView<UILabel> = {
-        let view = PaddingView<UILabel>()
-        view.innerView.text = "필수"
-        view.innerView.textColor = .white
-        view.innerView.textAlignment = .center
-        view.rounded()
-        view.backgroundColor = .assetColor(.accent2)
         return view
     }()
     
@@ -166,7 +156,7 @@ final class DayPlanViewController: UIViewController {
         if !viewModel.dayPlan.isComplete {
             if DateFormatter.getFullDateString(from: .now) == dateString {
                 addImageButton.isEnabled = true
-                certifyButton.setTitle("인증하기 ✨", for: .normal)
+                certifyButton.setTitle(StringKey.certify.localized(), for: .normal)
             } else if DateFormatter.getFullDateString(from: .now) > dateString {
                 addImageButton.isEnabled = false
                 addImageButton.configuration?.image = UIImage(asset: .placeholder)
@@ -180,14 +170,12 @@ final class DayPlanViewController: UIViewController {
             }
         } else {
             addImageButton.isEnabled = false
-            certifyButton.setTitle("인증 완료 ✨", for: .normal)
+            certifyButton.setTitle(StringKey.certified.localized(), for: .normal)
         }
-        
-        requiredLabel.isHidden = !viewModel.dayPlan.isRequired
         
         checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
         
-        weekDayLabel.innerView.text = "\(viewModel.dayPlan.week)주차"
+        weekDayLabel.innerView.text = "\(viewModel.dayPlan.week) Week"
         
         viewModel.loadImage { [weak self] data in
             if let imageData = data {
@@ -233,7 +221,7 @@ extension DayPlanViewController: BaseViewConfigurable {
             [imageView, blurView, addImageButton, weekDayLabel]
         )
         blurView.addSubviews(
-            [requiredLabel, dateLabel, checkMarkImageView]
+            [dateLabel, checkMarkImageView]
         )
     }
     
@@ -264,10 +252,6 @@ extension DayPlanViewController: BaseViewConfigurable {
         dateLabel.snp.makeConstraints { make in
             make.leading.equalTo(blurView).inset(10)
             make.centerY.equalTo(blurView)
-        }
-        
-        requiredLabel.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalTo(blurView).inset(4)
         }
         
         checkMarkImageView.snp.makeConstraints { make in

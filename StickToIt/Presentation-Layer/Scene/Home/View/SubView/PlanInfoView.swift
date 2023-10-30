@@ -66,14 +66,14 @@ final class PlanInfoView: UIView {
         
         if let date = plan.lastCertifyingDate {
             let dateString = DateFormatter.getFullDateString(from: date)
-            self.lastCertifyingDayLabel.text = "최근 목표 실행일: \(dateString)"
+            self.lastCertifyingDayLabel.text = StringKey.lastExecutionDate.localized(with: "\(dateString)")
         } else {
-            self.lastCertifyingDayLabel.text = "최근 목표 실행일: -"
+            self.lastCertifyingDayLabel.text = "-"
         }
     }
     
     func update(nickname: String) {
-        userNickNameLabel.text = "@ \(nickname) 님의 목표"
+        userNickNameLabel.text = StringKey.userNicknameLabel.localized(with: "\(nickname)")
     }
     
     @objc private func trashButtonDidTapped() {

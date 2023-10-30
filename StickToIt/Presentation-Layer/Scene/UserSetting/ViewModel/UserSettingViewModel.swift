@@ -55,19 +55,19 @@ extension UserSettingViewModel {
         }
         
         if text.contains(" ") || text.contains("\n") {
-            output.onNext(.validateError("공백이나 줄바꿈 문자는 사용할 수 없습니다."))
+            output.onNext(.validateError(StringKey.validateLineBreak.localized()))
             output.onNext(.userNicknameValidate(false))
             return
         }
                 
         if text.count < 2 {
-            output.onNext(.validateError("2자 이상으로 입력해주세요!"))
+            output.onNext(.validateError(StringKey.overTwoCharacter.localized()))
             output.onNext(.userNicknameValidate(false))
             return
         }
         
         if text.count > 20 {
-            output.onNext(.validateError("20자 이하로 입력해주세요"))
+            output.onNext(.validateError(StringKey.lessThan20.localized()))
             output.onNext(.userNicknameValidate(false))
             return
         }

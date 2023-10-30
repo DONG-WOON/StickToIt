@@ -22,10 +22,10 @@ extension UIViewController {
     
     func showAlert(title: String, message: String, okAction: (() ->  Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "예", style: .default) { _ in
+        let okAction = UIAlertAction(title: StringKey.yes.localized(), style: .default) { _ in
             okAction?()
         }
-        let cancelAction = UIAlertAction(title: "아니오", style: .cancel)
+        let cancelAction = UIAlertAction(title: StringKey.no.localized(), style: .cancel)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)

@@ -18,18 +18,18 @@ final class SettingViewModel {
             var header: String {
                 switch self {
                 case .first:
-                    return "개인 설정"
+                    return StringKey.personalSetting.localized()
                 case .second:
-                    return "앱 정보"
+                    return StringKey.appInfo.localized()
                 }
             }
             
             var rows: [String] {
                 switch self {
                 case .first:
-                    return ["닉네임 변경", "데이터 관리"]
+                    return [StringKey.editNickname.localized(), StringKey.dataManagement.localized()]
                 case .second:
-                    return ["버전정보"]
+                    return [StringKey.versionInfo.localized()]
                 }
             }
             

@@ -112,6 +112,9 @@
 		72EBE3662AF023F80062B94A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72EBE3652AF023F80062B94A /* GoogleService-Info.plist */; };
 		72EBE3692AF025310062B94A /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 72EBE3682AF025310062B94A /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		72EBE36B2AF025310062B94A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 72EBE36A2AF025310062B94A /* FirebaseCrashlytics */; };
+		72EBE36F2AF029FC0062B94A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72EBE3712AF029FC0062B94A /* Localizable.strings */; };
+		72EBE3742AF02B220062B94A /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EBE3732AF02B220062B94A /* Extension+String.swift */; };
+		72EBE3762AF02C950062B94A /* StringKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EBE3752AF02C950062B94A /* StringKey.swift */; };
 		72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FA8DE82AD19AB000F19568 /* PlanRepository.swift */; };
 /* End PBXBuildFile section */
 
@@ -211,6 +214,10 @@
 		72D85FE82AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlanUseCase.swift; sourceTree = "<group>"; };
 		72EBE3632AF023C60062B94A /* .gitIgnore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitIgnore; sourceTree = "<group>"; };
 		72EBE3652AF023F80062B94A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		72EBE3702AF029FC0062B94A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		72EBE3722AF02A500062B94A /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		72EBE3732AF02B220062B94A /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
+		72EBE3752AF02C950062B94A /* StringKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringKey.swift; sourceTree = "<group>"; };
 		72FA8DE82AD19AB000F19568 /* PlanRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -423,6 +430,7 @@
 				729AC5222ACEE0AE00E910D5 /* Extension+CGSize.swift */,
 				727849892AD79FB400433753 /* Extension+Notification.swift */,
 				728B494E2ADFFF3C009C1C88 /* Extension+UIColor.swift */,
+				72EBE3732AF02B220062B94A /* Extension+String.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -735,6 +743,8 @@
 				72A9760F2ABB2A8E0021291C /* SceneDelegate.swift */,
 				72B87E9D2AEFFA3600A6AB9C /* LaunchScreen.storyboard */,
 				72A9761B2ABB2A910021291C /* Info.plist */,
+				72EBE3752AF02C950062B94A /* StringKey.swift */,
+				72EBE3712AF029FC0062B94A /* Localizable.strings */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -935,11 +945,12 @@
 			};
 			buildConfigurationList = 72A976052ABB2A8E0021291C /* Build configuration list for PBXProject "StickToIt" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 72A976012ABB2A8E0021291C;
 			packageReferences = (
@@ -965,6 +976,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72EBE36F2AF029FC0062B94A /* Localizable.strings in Resources */,
 				72A976172ABB2A910021291C /* Assets.xcassets in Resources */,
 				72EBE3662AF023F80062B94A /* GoogleService-Info.plist in Resources */,
 				72B87E9E2AEFFA3600A6AB9C /* LaunchScreen.storyboard in Resources */,
@@ -1026,6 +1038,7 @@
 				729AC4C32ACAFD8200E910D5 /* PlanInfoView.swift in Sources */,
 				72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */,
 				729AC4AF2AC9672500E910D5 /* ImageManager.swift in Sources */,
+				72EBE3762AF02C950062B94A /* StringKey.swift in Sources */,
 				7278496D2AD5702500433753 /* PlanRepositoryImp.swift in Sources */,
 				720635052AEF84BE00852980 /* DataManagementViewModel.swift in Sources */,
 				7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */,
@@ -1082,6 +1095,7 @@
 				729AC4702AC5A95800E910D5 /* PlanEntity.swift in Sources */,
 				729AC5232ACEE0AE00E910D5 /* Extension+CGSize.swift in Sources */,
 				72D7D32E2ADF78F30062A60F /* HomeView.swift in Sources */,
+				72EBE3742AF02B220062B94A /* Extension+String.swift in Sources */,
 				7217B0022AC2B2AF002C3112 /* Const.swift in Sources */,
 				729AC4722AC5AA9100E910D5 /* UserEntity.swift in Sources */,
 				720635032AEF74F000852980 /* UserEditingViewController.swift in Sources */,
@@ -1099,11 +1113,24 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		72EBE3712AF029FC0062B94A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				72EBE3702AF029FC0062B94A /* en */,
+				72EBE3722AF02A500062B94A /* ko */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		72A9761C2ABB2A910021291C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1165,6 +1192,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1229,7 +1257,8 @@
 				INFOPLIST_FILE = StickToIt/Application/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "작심삼일";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 편집하시려면 사진 라이브러리 접근을 허용해주세요.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "이 앱이 사용자의 카메라에 접근하는 것을 허용하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "이 앱이 사용자의 앨범에 접근하는 것을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1263,7 +1292,8 @@
 				INFOPLIST_FILE = StickToIt/Application/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "작심삼일";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 편집하시려면 사진 라이브러리 접근을 허용해주세요.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "이 앱이 사용자의 카메라에 접근하는 것을 허용하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "이 앱이 사용자의 앨범에 접근하는 것을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

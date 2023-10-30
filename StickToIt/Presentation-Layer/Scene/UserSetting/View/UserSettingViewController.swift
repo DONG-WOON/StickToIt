@@ -20,7 +20,7 @@ class UserSettingViewController: UIViewController {
     
     private let nicknameLabel: UILabel = {
         let view = UILabel()
-        view.text = "닉네임"
+        view.text = StringKey.nickname.localized()
         view.textColor = .label
         view.font = .systemFont(ofSize: 20, weight: .semibold)
         return view
@@ -35,7 +35,7 @@ class UserSettingViewController: UIViewController {
     
     private lazy var nicknameTextField: PaddingView<UITextField> = {
         let view = PaddingView<UITextField>()
-        view.innerView.placeholder = "닉네임 1자 이상 20자 이하"
+        view.innerView.placeholder = StringKey.nicknamePlaceholder.localized()
         view.innerView.textColor = .label
         view.innerView.borderStyle = .none
         view.innerView.clearButtonMode = .whileEditing
@@ -47,14 +47,14 @@ class UserSettingViewController: UIViewController {
     private var descriptionLabel: UILabel = {
         let view = UILabel()
         view.textColor = .label
-        view.text = "- 닉네임은 언제든 다시 수정할 수 있어요"
+        view.text = StringKey.userSettingDescriptionLabel.localized()
         view.font = .systemFont(ofSize: 14)
         return view
     }()
     
     private lazy var registerButton: ResizableButton = {
         let button = ResizableButton(
-            title: "사용자 등록하기",
+            title: StringKey.register.localized(),
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
             backgroundColor: .assetColor(.accent1),
@@ -119,7 +119,7 @@ class UserSettingViewController: UIViewController {
                     
                 case .validateError(let errorMessage):
                     guard let errorMessage else {
-                        _self.validateLabel.text = "유효한 닉네임 입니다."
+                        _self.validateLabel.text = StringKey.validateNicknameLabel.localized()
                         _self.validateLabel.textColor = .assetColor(.accent1)
                         return
                     }
@@ -152,7 +152,7 @@ extension UserSettingViewController: BaseViewConfigurable {
     func configureViews() {
         view.backgroundColor = .systemBackground
         
-        title = "사용자 등록"
+        title = StringKey.register.localized()
         
         view.addSubview(nicknameLabel)
         view.addSubview(nicknameTextField)

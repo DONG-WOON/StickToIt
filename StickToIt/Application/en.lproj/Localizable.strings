@@ -1,0 +1,96 @@
+/* 
+  Localizable.strings
+  StickToIt
+
+  Created by 서동운 on 10/31/23.
+  
+*/
+
+
+"Yes" = "Yes";
+"No" = "No";
+"cancel" = "Cancel";
+"close" = "Close";
+"delete" = "Delete";
+"warning" = "Warning";
+
+
+"setting" = "Setting";
+"done" = "Done";
+"Achievement" = "Achievement";
+"validateLineBreak" = "Space or line break characters are not allowed.";
+
+"overTwoCharacter
+" = "Please enter more than 2 characters!";
+"lessThan20" = "Please enter no more than 20 characters";
+"nickname" = "Nickname";
+"nicknamePlaceholder" = " 1 or more and 20 or less characters";
+
+"cameraSettingTitle" = "You do not currently have access to the camera.";
+
+"photoPermission" = "Please grant me permission to access";
+"cameraSettingMessage" = "You can enable access on Settings > StickToIt > Camera.";
+"photoSettingMessage" = "You can enable access on Settings > StickToIt > Photo.";
+"goToPhotoSettingMessage" = "Go to grant photo access in settings";
+"goToPhotoSetting" = "Allow photo access";
+"userSettingDescriptionLabel" = "- You can change the nickname any time";
+"register" = "사용자 등록";
+"validateNicknameLabel" = "This is a valid nickname.";
+
+"planCreatedTitle" = "Plan Created";
+"planCreatedMessage" = "Plan have been created.\n Work hard to achieve it!";
+"successTodayMessage" = "You achieved your goal yesterday too!! Please continue to achieve it today!";
+"noti" = "Notify";
+"failureTodayMessage" = "You haven't achieved your goal in %@ days... Do it steadily for the rest of the Plan Days";
+"congratulation" = "Congratulation!!";
+"keepGoingMessage" = "why don't you do it for another 100 days";
+"addPlan" = "Add Plan";
+"addPlanAlert" = "You can only add up to five plans.";
+"planList" = "Plan List";
+"add100Days" = "+100days";
+"deletePlan" = "Delete Plan";
+
+"deletePlanMessage" = "Are you sure you want to delete";
+"Add Plan Right Now" = "Add Plan Right Now~!";
+
+"emptyViewNicknameLabel" = " %@ \nYou don't have a Plan yet.";
+"userNicknameLabel" = "@ %@'s Plan";
+"lastExecutionDate" = "Last Execution Date: %@";
+"createPlan" = "Create Plan";
+"endDateTitle" = "Please set an end date ---->";
+
+"endDateTitleSetting" = "End Date: %@";
+"dismissMessage" = "Please set an End date, Are you sure you want to close";
+
+
+
+"planName" = "Plan Name";
+
+"planNameDescription" = "Please set the Plan Name";
+
+"planNamePlaceholder" = "ex) Running Every Two Weeks";
+
+"planStartDate" = "Start Date";
+
+"planStartDateDescription" = "Please set a target start date.\nWhy don't you start today to implement your goals";
+"today" = "Today";
+"tomorrow" = "Tomorrow";
+"planTargetPeriodLabel" = "EndDate";
+"planEndDateDescriptionLabel" = "Please set an End date. You'll do it for at least three days, right?";
+"fontSize" = "Font Size";
+"upload" = "Upload";
+"certify" = "Certify ✨";
+"certified" = "Certified ✨";
+"edit" = "Edit";
+"backup" = "백업(지원 예정)";
+//Backup (to be supported)
+
+
+"deleteUser" = "Delete Account";
+"deleteUserMessage" = "Are you sure delete your Account?";
+
+"personalSetting" = "Personal Setting";
+"appInfo" = "App Info";
+"editNickname" = "Edit Nickname";
+"dataManagement" = "Data Management";
+"versionInfo" = "Version Info";

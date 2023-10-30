@@ -28,7 +28,7 @@ final class CreatePlanViewController: UIViewController {
     
     private lazy var createButton: ResizableButton = {
         let button = ResizableButton(
-            title: "목표 생성하기",
+            title: StringKey.createPlan.localized(),
             font: .boldSystemFont(ofSize: 20),
             tintColor: .white,
             backgroundColor: .assetColor(.accent1),
@@ -117,11 +117,11 @@ final class CreatePlanViewController: UIViewController {
         viewModel.endDate
             .bind(with: self) { (_self, date) in
                 guard let _date = date else {
-                    _self.mainView.endDateLabel.innerView.text = "종료일을 설정해주세요 ---->"
+                    _self.mainView.endDateLabel.innerView.text = StringKey.endDateTitle.localized()
                     return
                 }
                 let endDateString = DateFormatter.getFullDateString(from: _date)
-                _self.mainView.endDateLabel.innerView.text = "종료일: \(endDateString)"
+                _self.mainView.endDateLabel.innerView.text = StringKey.endDateTitleSetting.localized(with: "\(endDateString)")
                 
                 _self.setTargetNumberOfDays(date: _date)
             }
@@ -137,7 +137,7 @@ final class CreatePlanViewController: UIViewController {
     }
     
     private func configureViews() {
-        self.title = "작심삼일 목표 생성"
+        self.title = StringKey.createPlan.localized()
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
@@ -165,16 +165,16 @@ final class CreatePlanViewController: UIViewController {
     
     @objc private func dismissButtonDidTapped() {
         let alert = UIAlertController(
-            title: "주의",
-            message: "지금 닫으면 작성한 내용은 사라집니다. 그래도 나가시겠습니까?",
+            title: StringKey.warning.localized(),
+            message: StringKey.dismissMessage.localized(),
             preferredStyle: .alert
         )
         let okAction = UIAlertAction(
-            title: "예",
+            title: StringKey.yes.localized(),
             style: .destructive) { _ in
             self.dismiss(animated: true)
         }
-        let cancelAction = UIAlertAction(title: "아니오", style: .cancel)
+        let cancelAction = UIAlertAction(title: StringKey.no.localized(), style: .cancel)
         
         alert.addAction(okAction)
         alert.addAction(cancelAction)

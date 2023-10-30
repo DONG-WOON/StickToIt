@@ -17,7 +17,7 @@ final class HomeEmptyView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "목표가 아직 없어요."
+        label.text = StringKey.emptyViewTitle.localized()
         label.textAlignment = .center
         label.textColor = .label
         label.numberOfLines = 0
@@ -31,7 +31,7 @@ final class HomeEmptyView: UIView {
         label.textColor = .label
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = "지금 당장 작심삼일 목표를 추가해보세요~!"
+        label.text = "Add Plan Right Now".localized()
         label.font = .systemFont(ofSize: Const.FontSize.body)
         return label
     }()
@@ -81,7 +81,7 @@ final class HomeEmptyView: UIView {
     }
     
     func update(nickname: String) {
-        titleLabel.text = "\(nickname) 님\n목표가 아직없어요"
+        titleLabel.text = StringKey.emptyViewNicknameLabel.localized(with: "\(nickname)")
     }
 }
 

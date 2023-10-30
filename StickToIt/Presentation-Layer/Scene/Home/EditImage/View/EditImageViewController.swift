@@ -102,7 +102,7 @@ final class EditImageViewController: UIViewController {
     
     let fontSizeLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
-        view.innerView.text = "글자 크기"
+        view.innerView.text = StringKey.fontSize.localized()
         view.innerView.textColor = .label
         view.innerView.textAlignment = .left
         view.innerView.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -123,7 +123,7 @@ final class EditImageViewController: UIViewController {
     }()
     
     private lazy var editCompleteButton = ResizableButton(
-        title: "사진 올리기",
+        title: StringKey.upload.localized(),
         symbolConfiguration: .init(scale: .large),
         tintColor: .label, target: self,
         action: #selector(editCompleteButtonDidTapped)

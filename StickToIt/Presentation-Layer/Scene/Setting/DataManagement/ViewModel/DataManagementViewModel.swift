@@ -21,21 +21,21 @@ import RxSwift
 final class DataManagementViewModel {
     
     enum Row: Int, CaseIterable {
-        case backup
+//        case backup
         case deleteUser
         
         var title: String {
             switch self {
-            case .backup:
-                return "백업(지원 예정)"
+//            case .backup:
+//                return "백업(지원 예정)"
             case .deleteUser:
-                return "계정 삭제"
+                return StringKey.deleteUser.localized()
             }
         }
     }
     
     enum Input {
-        case backup
+//        case backup
         case deleteUser
     }
     
@@ -59,8 +59,8 @@ final class DataManagementViewModel {
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .subscribe(with: self) { _self, event in
                 switch event {
-                case .backup:
-                    _self.backup()
+//                case .backup:
+//                    _self.backup()
                 case .deleteUser:
                     _self.deleteUser()
                 }
@@ -105,15 +105,15 @@ extension DataManagementViewModel {
     }
     
     func isDeleteUser(at indexPath: IndexPath) -> Bool {
-        indexPath.row == 1
+        indexPath.row == 0
     }
     
     func selectedRowAt(_ indexPath: IndexPath, completion: (Row) -> Void) {
         
         switch indexPath {
+//        case IndexPath(row: 0, section: 0):
+//            completion(.backup)
         case IndexPath(row: 0, section: 0):
-            completion(.backup)
-        case IndexPath(row: 1, section: 0):
             completion(.deleteUser)
         default:
             return
