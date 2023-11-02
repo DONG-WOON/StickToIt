@@ -15,7 +15,7 @@ protocol UpdateDayPlanUseCase<Model, Entity> {
     func update(
         entity: DayPlanEntity.Type,
         key: UUID,
-        updateHandler: @escaping (Entity) -> Void
+        updateHandler: @escaping (Entity?) -> Void
     ) async -> Result<Bool, Error>
     
     func saveImageData(
@@ -46,7 +46,7 @@ final class UpdateDayPlanUseCaseImp: UpdateDayPlanUseCase {
     func update(
         entity: DayPlanEntity.Type,
         key: UUID,
-        updateHandler: @escaping (Entity) -> Void
+        updateHandler: @escaping (Entity?) -> Void
     ) async -> Result<Bool, Error> {
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async { [weak self] in

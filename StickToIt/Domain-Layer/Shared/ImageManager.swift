@@ -27,18 +27,21 @@ final class ImageManager {
     
     // MARK: Life Cycle
     init() {
+        let imageAssetsCount = imageAssets
+            .map { $0.count }
+        let currentImageCount = currentImageCountToFetch
+            .map{ $0 }
+        
         _ = Observable
             .combineLatest(
-                imageAssets
-                    .map { $0.count },
-                currentImageCountToFetch
-                    .map{ $0 }
+               imageAssetsCount,
+               currentImageCount
             )
             .filter { $0.0 == $0.1 && $0 != (0,0) }
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, isEnabled) in
-                _self.completion?(_self.imageAssets.value)
-                _self.imageAssets.accept([])
+            .subscribe(with: self) { (owner, isEnabled) in
+                owner.completion?(owner.imageAssets.value)
+                owner.imageAssets.accept([])
             }
             .disposed(by: disposeBag)
     }

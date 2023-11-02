@@ -40,6 +40,7 @@ extension HomeView: BaseViewConfigurable {
     
     func configureViews() {
         backgroundColor = .clear
+        
         addSubview(collectionView)
         addSubview(planInfoView)
     }
@@ -48,13 +49,14 @@ extension HomeView: BaseViewConfigurable {
         
         planInfoView.snp.makeConstraints { make in
             make.bottom.equalTo(collectionView.snp.top).offset(-15)
-            make.width.equalTo(safeAreaLayoutGuide).multipliedBy(0.85)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.top.equalTo(safeAreaLayoutGuide).inset(20)
-            make.centerX.equalTo(safeAreaLayoutGuide)
         }
         
         collectionView.snp.makeConstraints { make in
-            make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.bottom.lessThanOrEqualTo(safeAreaLayoutGuide).inset(0)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(collectionView.snp.width).multipliedBy(1.2)
         }
     }
 }

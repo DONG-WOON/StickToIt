@@ -36,12 +36,13 @@ final class FetchUserUseCaseImp: FetchUserUseCase {
         completion: @escaping (Model) -> Void
     ) {
         
-        let result = repository.fetch(key: key)
-        switch result {
-        case .success(let user):
-            completion(user)
-        case .failure(let failure):
-            print(failure)
+        repository.fetch(key: key) { result in
+            switch result {
+            case .success(let user):
+                completion(user)
+            case .failure(let failure):
+                print(failure)
+            }
         }
     }
 }

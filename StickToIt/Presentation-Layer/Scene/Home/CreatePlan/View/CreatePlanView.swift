@@ -105,6 +105,7 @@ final class CreatePlanView: UIScrollView {
         view.text = StringKey.planEndDateDescriptionLabel.localized()
         view.textColor = .secondaryLabel
         view.font = .boldSystemFont(ofSize: 14)
+        view.numberOfLines = 0
         
         return view
     }()
@@ -247,7 +248,7 @@ extension CreatePlanView {
         
         planEndDateDescriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(planTargetPeriodLabel.snp.bottom).offset(10)
-            make.leading.equalTo(contentLayoutGuide).inset(20)
+            make.horizontalEdges.equalTo(contentLayoutGuide).inset(20)
         }
         
         endDateLabel.snp.makeConstraints { make in

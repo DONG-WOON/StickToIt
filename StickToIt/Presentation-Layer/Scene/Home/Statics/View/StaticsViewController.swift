@@ -53,14 +53,14 @@ final class StaticsViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { _self, event in
+            .subscribe(with: self) { owner, event in
                 switch event {
                 case .configureUI:
-                    _self.configureViews()
-                    _self.setConstraints()
+                    owner.configureViews()
+                    owner.setConstraints()
                 case .showProgress(let progress):
-                    _self.setPlantImage(progress)
-                    _self.progressView.setProgress(progress)
+                    owner.setPlantImage(progress)
+                    owner.progressView.setProgress(progress)
                 }
             }
             .disposed(by: disposeBag)

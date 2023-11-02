@@ -62,7 +62,6 @@ final class HomeViewModel {
     private let deletePlanQueryUseCase: any DeletePlanUseCase<PlanQuery, PlanQueryEntity>
     private let deletePlanUseCase: any DeletePlanUseCase<Plan, PlanEntity>
     
-    
     // MARK: Inner Properties
     
     private var user: User?
@@ -91,44 +90,47 @@ final class HomeViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
-            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
-            .subscribe(with: self) { (_self, event) in
+            .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .viewDidLoad:
-                    _self.output.onNext( .configureUI)
-                    _self.checkPlanIsExist()
+                    owner.output.onNext( .configureUI)
+                    owner.checkPlanIsExist()
                     
                 case .planCreated:
-                    _self.output.onNext(.configureUI)
-                    _self.checkPlanIsExist()
-                    _self.output.onNext(.showToast(title: StringKey.planCreatedTitle.localized(), message: StringKey.planCreatedMessage.localized()))
+                    owner.output.onNext(.configureUI)
+                    owner.checkPlanIsExist()
+                    owner.output.onNext(.showToast(
+                        title: StringKey.planCreatedTitle.localized(),
+                        message: StringKey.planCreatedMessage.localized())
+                    )
                     
                 case .viewWillAppear:
-                    _self.output.onNext(.startAnimation)
+                    owner.output.onNext(.startAnimation)
                     
                 case .viewWillDisappear:
-                    _self.output.onNext(.stopAnimation)
+                    owner.output.onNext(.stopAnimation)
                     
                 case .reloadAll:
-                    _self.fetchPlanQueriesOfUser()
+                    owner.fetchPlanQueriesOfUser()
                     
                 case .reloadPlan:
-                    _self.fetchCurrentPlan()
+                    owner.fetchCurrentPlan()
                     
                 case .createPlanButtonDidTapped:
-                    _self.output.onNext(.showCreatePlanScene)
+                    owner.output.onNext(.showCreatePlanScene)
                     
                 case .completedDayPlansButtonDidTapped:
-                    _self.output.onNext(.showPlanWeekScene(_self.currentPlan))
+                    owner.output.onNext(.showPlanWeekScene(owner.currentPlan))
                     
                 case .fetchPlan(let planQuery):
-                    _self.fetchPlan(planQuery)
+                    owner.fetchPlan(planQuery)
                     
                 case .deletePlan:
-                    _self.removePlanQuery()
+                    owner.removePlanQuery()
                     
                 case .add100DayPlansOfPlan:
-                    _self.add100DayPlansOfPlan()
+                    owner.add100DayPlansOfPlan()
                 }
             }
             .disposed(by: disposeBag)
@@ -144,18 +146,6 @@ final class HomeViewModel {
 }
 
 extension HomeViewModel {
-    
-    private func fetchCurrentPlan() {
-        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
-            
-            let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
-            
-            fetchPlan(currentPlanQuery)
-        } else {
-            guard let firstQuery = user?.planQueries.first else { return }
-            fetchPlan(firstQuery)
-        }
-    }
     
     private func checkPlanIsExist() {
         guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
@@ -195,6 +185,18 @@ extension HomeViewModel {
         }
     }
     
+    private func fetchCurrentPlan() {
+        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+            
+            let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
+            
+            fetchPlan(currentPlanQuery)
+        } else {
+            guard let firstQuery = user?.planQueries.first else { return }
+            fetchPlan(firstQuery)
+        }
+    }
+    
     private func fetchPlan(_ query: PlanQuery) {
         fetchPlanUseCase.fetch(key: query.id) { [weak self] plan in
             guard let _self = self else { return }
@@ -221,19 +223,6 @@ extension HomeViewModel {
         output.onNext(.showCompleteDayPlanCount(completeDayPlanCount))
     }
     
-    private func showMessage(using dateInterval: Int) {
-        if dateInterval <= 0 {
-            print("오늘")
-        } else if dateInterval == 1 {
-            let message = StringKey.successTodayMessage.localized()
-            output.onNext(.showToast(title: StringKey.noti.localized(), message: message))
-        } else {
-            let message =
-            StringKey.failureTodayMessage.localized(with: "\(dateInterval)")
-            output.onNext(.showToast(title: StringKey.noti.localized(), message: message))
-        }
-    }
-    
     private func checkLastCertifyingDate() {
         let date = currentPlan?.lastCertifyingDate
         let lastCompletedDayPlanQuery = DateFormatter.convertToDateQuery(date)
@@ -250,6 +239,19 @@ extension HomeViewModel {
         }
     }
     
+    private func showMessage(using dateInterval: Int) {
+        if dateInterval <= 0 {
+            print("오늘")
+        } else if dateInterval == 1 {
+            let message = StringKey.successTodayMessage.localized()
+            output.onNext(.showToast(title: StringKey.noti.localized(), message: message))
+        } else {
+            let message =
+            StringKey.failureTodayMessage.localized(with: "\(dateInterval)")
+            output.onNext(.showToast(title: StringKey.noti.localized(), message: message))
+        }
+    }
+    
     private func loadCurrentWeekDayPlans(_ plan: Plan) -> [DayPlan] {
         guard let currentWeek else {
             print("current Week 없음")
@@ -258,9 +260,8 @@ extension HomeViewModel {
         return filtered(plan.dayPlans, at: currentWeek)
     }
     
-    private func filtered(_ dayPlans :[DayPlan], at week: Int) -> [DayPlan] {
-        guard let dayPlan = dayPlans.first(where: { Calendar.current.isDateInToday($0.date) }) else { return [] }
-        return [dayPlan]
+    private func filtered(_ dayPlans: [DayPlan], at week: Int) -> [DayPlan] {
+        return dayPlans.filter { $0.week == week }
     }
     
 
@@ -272,7 +273,7 @@ extension HomeViewModel {
         return theNumberOfDaysPassed
     }
 
-    func add100DayPlansOfPlan() {
+    private func add100DayPlansOfPlan() {
         guard let plan = currentPlan else { return }
         let planID = plan.id
         
@@ -295,9 +296,9 @@ extension HomeViewModel {
             entity: PlanEntity.self,
             key: planID,
             updateHandler: { entity in
-                entity.endDate = _endDate
-                entity.targetNumberOfDays += 100
-                entity.dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
+                entity?.endDate = _endDate
+                entity?.targetNumberOfDays += 100
+                entity?.dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
             },
             onComplete: { [weak self] error in
                 if let error {
@@ -330,8 +331,9 @@ extension HomeViewModel {
         guard let currentPlan else { print("플랜이 존재하지 않음"); return }
         
         deletePlanUseCase.delete(entity: PlanEntity.self, key: currentPlan.id) { realm, entity in
-            realm.delete(entity.dayPlans)
-            realm.delete(entity)
+            guard let _entity = entity else { return }
+            realm.delete(_entity.dayPlans)
+            realm.delete(_entity)
         } onComplete: { [weak self] error in
             if let error {
                 self?.output.onNext(.alertError(error))

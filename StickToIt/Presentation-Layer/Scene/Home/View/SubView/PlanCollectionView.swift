@@ -15,7 +15,8 @@ final class PlanCollectionView: UICollectionView {
             frame: .zero,
             collectionViewLayout: Self.createLayout()
         )
-        self.backgroundColor = .clear
+        self.rounded()
+        self.addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
         self.isScrollEnabled = false
     }
     
@@ -33,14 +34,14 @@ extension PlanCollectionView {
             let spacing = 10.0
             
             let edgeInset = NSDirectionalEdgeInsets(
-                top: 0,
+                top: spacing,
                 leading: spacing,
                 bottom: spacing,
                 trailing: spacing
             )
             
             let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalHeight(0.7),
+                widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)
             )
             

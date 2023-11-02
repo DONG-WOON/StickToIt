@@ -98,32 +98,56 @@ extension ImageCollectionView {
             
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
-            
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalWidth(1 / 2)
             )
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
-                subitem: item,
-                count: 2
-            )
             
-            group.interItemSpacing = .fixed(5.0)
-            
-            let section = NSCollectionLayoutSection(group: group)
-            
-            let spacing = 10.0
-            let sectionInset = NSDirectionalEdgeInsets(
-                top: spacing,
-                leading: spacing,
-                bottom: spacing,
-                trailing: spacing
-            )
-            
-            section.contentInsets = sectionInset
-            
-            return section
+            if #available(iOS 16.0, *) {
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    repeatingSubitem: item,
+                    count: 2
+                )
+                
+                group.interItemSpacing = .fixed(5.0)
+                
+                let section = NSCollectionLayoutSection(group: group)
+                
+                let spacing = 10.0
+                let sectionInset = NSDirectionalEdgeInsets(
+                    top: spacing,
+                    leading: spacing,
+                    bottom: spacing,
+                    trailing: spacing
+                )
+                
+                section.contentInsets = sectionInset
+                
+                return section
+            } else {
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    subitem: item,
+                    count: 2
+                )
+                
+                group.interItemSpacing = .fixed(5.0)
+                
+                let section = NSCollectionLayoutSection(group: group)
+                
+                let spacing = 10.0
+                let sectionInset = NSDirectionalEdgeInsets(
+                    top: spacing,
+                    leading: spacing,
+                    bottom: spacing,
+                    trailing: spacing
+                )
+                
+                section.contentInsets = sectionInset
+                
+                return section
+            }
         }
         return layout
     }

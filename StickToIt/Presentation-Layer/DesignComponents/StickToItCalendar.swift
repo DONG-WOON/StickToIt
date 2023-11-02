@@ -10,7 +10,7 @@ import SnapKit
 import FSCalendar
 
 @objc protocol StickToItCalendarDelegate: AnyObject {
-    func calendarView(didSelectAt date: Date?)
+    func calendarView(didSelectAt date: Date)
     @objc optional func calendarWillDisplay(date: Date)
     @objc optional func numberOfEventsFor(date: Date) -> Int
     @objc optional func eventDefaultColorsFor(date: Date) -> [UIColor]?
@@ -111,7 +111,7 @@ final class StickToItCalendar: UIView {
         calendar.locale = .current
         
         
-        calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: CustomCalendarCell.identifier)
+//        calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: CustomCalendarCell.identifier)
     }
     
     private func setCalendarWeekdayView() {
@@ -191,13 +191,6 @@ final class StickToItCalendar: UIView {
 
 extension StickToItCalendar: FSCalendarDataSource {
     
-    // 커스텀 셀 구성
-    func calendar(_ calendar: FSCalendar, cellFor date: Date, at monthPosition: FSCalendarMonthPosition) -> FSCalendarCell {
-        let cell = calendar.dequeueReusableCell(withIdentifier: CustomCalendarCell.identifier, for: date, at: monthPosition) as! CustomCalendarCell
-        // 셀의 설정
-        return cell
-    }
-    
     // 캘린더에서 볼수있는 미니멈 날짜
     func minimumDate(for calendar: FSCalendar) -> Date {
         if let minimumDate = minimumDate {
@@ -264,54 +257,11 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-        return .assetColor(.accent2) // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
+        
+        return .assetColor(.accent1) // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
         return .white // nil을 해주어도 white로 설정되어있어서 black로 해주어야 함.
-    }
-}
-
-
-// MARK: - CustomCalendarCell
-
-final class CustomCalendarCell: FSCalendarCell {
-    
-    // MARK: - Properties
-    private let underBar: UIView = {
-        let view = UIView(backgroundColor: .assetColor(.accent1))
-        view.rounded(cornerRadius: 2)
-        view.isHidden = true
-        return view
-    }()
-    
-    
-    override var isSelected: Bool {
-        didSet {
-            underBar.isHidden = !isSelected // 선택된 상태에 따라 layer 보이기/숨기기
-        }
-    }
-    
-    // MARK: - Initialization
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setUnderBar()
-    
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    // MARK: - Actions
-    
-    private func setUnderBar() {
-        self.insertSubview(underBar, at: 0)
-        
-        underBar.snp.makeConstraints { make in
-            make.bottom.horizontalEdges.equalTo(self).inset(4)
-            make.height.equalTo(4)
-        }
     }
 }

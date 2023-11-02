@@ -33,11 +33,12 @@ final class StaticsViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
-            .subscribe(with: self) { _self, event in
+            .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .subscribe(with: self) { owner, event in
                 switch event {
                 case .viewDidLoad:
-                    _self.output.onNext(.configureUI)
-                    _self.output.onNext(.showProgress(_self.percentageOfCompleteDays()))
+                    owner.output.onNext(.configureUI)
+                    owner.output.onNext(.showProgress(owner.percentageOfCompleteDays()))
                 }
             }
             .disposed(by: disposeBag)

@@ -21,7 +21,7 @@ protocol DeletePlanUseCase<Model, Entity> {
     func delete(
         entity: Entity.Type,
         key: UUID,
-        deleteHandler: @escaping (Realm, Entity) -> Void,
+        deleteHandler: @escaping (Realm, Entity?) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     )
 }
@@ -55,7 +55,7 @@ final class DeletePlanUseCaseImp: DeletePlanUseCase {
     func delete(
         entity: PlanEntity.Type,
         key: UUID,
-        deleteHandler: @escaping (Realm, PlanEntity) -> Void,
+        deleteHandler: @escaping (Realm, PlanEntity?) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         repository.delete(

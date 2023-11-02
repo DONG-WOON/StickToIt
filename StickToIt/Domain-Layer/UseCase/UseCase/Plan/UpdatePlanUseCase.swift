@@ -15,7 +15,7 @@ protocol UpdatePlanUseCase<Model, Entity> {
     func update(
         entity: Entity.Type,
         key: UUID,
-        updateHandler: @escaping (Entity) -> Void,
+        updateHandler: @escaping (Entity?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     )
 }
@@ -34,7 +34,7 @@ final class UpdatePlanUseCaseImp: UpdatePlanUseCase {
     func update(
         entity: PlanEntity.Type,
         key: UUID,
-        updateHandler: @escaping (PlanEntity) -> Void,
+        updateHandler: @escaping (PlanEntity?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         repository.update(

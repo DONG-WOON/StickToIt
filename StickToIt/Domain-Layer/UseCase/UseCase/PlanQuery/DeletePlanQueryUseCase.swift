@@ -36,7 +36,7 @@ final class DeletePlanQueryUseCaseImp: DeletePlanUseCase {
     func delete(
         entity: Entity.Type,
         key: UUID,
-        deleteHandler: @escaping (Realm, Entity) -> Void,
+        deleteHandler: @escaping (Realm, Entity?) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         repository.delete(

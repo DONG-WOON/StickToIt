@@ -125,53 +125,53 @@ final class HomeViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, event) in
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .setViewsAndDelegate(planIsExist: let isExist):
-                    _self.setViewsAndDelegate(isExist)
+                    owner.setViewsAndDelegate(isExist)
                     
                 case .configureUI:
-                    _self.configureViews()
+                    owner.configureViews()
                     
                 case .showCreatePlanScene:
-                    _self.showCreatePlanScene()
+                    owner.showCreatePlanScene()
                     
                 case .showPlanWeekScene(let plan):
-                    _self.showStatics(plan: plan)
+                    owner.showStatics(plan: plan)
                     
                 case .showToast(let title, let message):
-                    _self.showToast(title: title, message: message)
+                    owner.showToast(title: title, message: message)
                     
                 case .loadPlanQueries(let planQueries):
-                    _self.setPlanListButtonMenu(with: planQueries)
+                    owner.setPlanListButtonMenu(with: planQueries)
                     
                 case .loadPlan(let plan):
-                    _self.update(plan: plan)
+                    owner.update(plan: plan)
                     
                 case .loadDayPlans(let dayPlans):
-                    _self.takeSnapshot(dayPlans: dayPlans)
+                    owner.takeSnapshot(dayPlans: dayPlans)
                     
                 case .startAnimation:
-                    _self.startAnimation()
+                    owner.startAnimation()
                     
                 case .stopAnimation:
-                    _self.stopAnimation()
+                    owner.stopAnimation()
                     
                 case .showUserInfo(let user):
                     guard let user else { return }
-                    _self.update(nickname: user.nickname)
+                    owner.update(nickname: user.nickname)
                     
                 case .showCompleteDayPlanCount(let count):
-                    _self.completedDayPlansButton.configuration?.title = String(count)
+                    owner.completedDayPlansButton.configuration?.title = String(count)
                     
                 case .userDeleted:
-                    _self.reloadAll()
+                    owner.reloadAll()
                     
                 case .alertError(let error):
-                    _self.showAlert(message: error?.localizedDescription)
+                    owner.showAlert(message: error?.localizedDescription)
                     
                 case .showKeepGoingMessage(title: let title, message: let message):
-                    _self.showKeepGoingAlert(title: title, message: message)
+                    owner.showKeepGoingAlert(title: title, message: message)
                 }
             }
             .disposed(by: disposeBag)
@@ -194,10 +194,12 @@ extension HomeViewController {
         self.present(vc, animated: true)
     }
     
+    @MainActor
     func showToast(title: String?, message: String) {
         self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(asset: .placeholder))
     }
     
+    @MainActor
     func update(nickname: String) {
         (view as? HomeView)?.update(nickname: nickname)
         (view as? HomeEmptyView)?.update(nickname: nickname)
@@ -377,7 +379,7 @@ extension HomeViewController {
     }
 }
 
-extension HomeViewController: HomeImageCollectionViewCellDelegate {
+extension HomeViewController: ImageCellDelegate {
     
     func imageDidSelected(_ dayPlan: DayPlan) {
         

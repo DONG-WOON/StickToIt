@@ -14,7 +14,7 @@ protocol UpdateUserUseCase<Model, Entity> {
     
     func update(
         userID: UUID,
-        updateHandler: @escaping (UserEntity) -> Void,
+        updateHandler: @escaping (UserEntity?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     )
 }
@@ -33,7 +33,7 @@ final class UpdateUserUseCaseImp: UpdateUserUseCase {
     
     func update(
         userID: UUID,
-        updateHandler: @escaping (UserEntity) -> Void,
+        updateHandler: @escaping (UserEntity?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         repository.update(

@@ -39,12 +39,13 @@ final class FetchPlanUseCaseImp: FetchPlanUseCase {
     // MARK: Fetch Service
     
     func fetchAll(completion: @escaping ([Model]) -> Void) {
-        let result = repository.fetchAll()
-        switch result {
-        case .success(let plans):
-            completion(plans)
-        case .failure(let error):
-            print(error)
+        repository.fetchAll { result in
+            switch result {
+            case .success(let models):
+                completion(models)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
@@ -52,12 +53,13 @@ final class FetchPlanUseCaseImp: FetchPlanUseCase {
         key: UUID,
         completion: @escaping (Model) -> Void
     ) {
-        let result = repository.fetch(key: key)
-        switch result {
-        case .success(let plan):
-            completion(plan)
-        case .failure(let error):
-            print(error)
+        repository.fetch(key: key) { result in
+            switch result {
+            case .success(let plan):
+                completion(plan)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
