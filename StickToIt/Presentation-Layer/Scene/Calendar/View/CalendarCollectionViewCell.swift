@@ -7,12 +7,19 @@
 
 import UIKit
 
+
 final class CalendarCollectionViewCell: UICollectionViewCell {
     
-    private let imageView: UIImageView = {
+    weak var delegate: ImageCellDelegate?
+    
+    var dayPlan: DayPlan?
+    
+    private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.bordered(borderWidth: 0.5)
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageDidTapped)))
         return view
     }()
     
@@ -36,17 +43,21 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
     func updateImage(_ data: Data) {
         imageView.image = UIImage(data: data)
     }
+    
+    @objc func imageDidTapped() {
+        guard let dayPlan else { return }
+        delegate?.imageDidSelected(dayPlan)
+    }
 }
 
 extension CalendarCollectionViewCell {
     private func configureViews() {
         contentView.addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
-        contentView.rounded()
+        contentView.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
         contentView.addSubview(imageView)
     }
     
     private func setConstraints() {
-        
         imageView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
