@@ -80,6 +80,7 @@ final class HomeEmptyView: UIView {
         }
     }
     
+    @MainActor
     func update(nickname: String) {
         titleLabel.text = StringKey.emptyViewNicknameLabel.localized(with: "\(nickname)")
     }

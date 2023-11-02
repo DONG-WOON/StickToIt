@@ -331,7 +331,9 @@ extension HomeViewController {
     
     @objc private func updateUserInfo(_ notification: Notification) {
         guard let nickname = notification.userInfo?[NotificationKey.nickname] as? String else { return }
-        update(nickname: nickname)
+        DispatchQueue.main.async { [weak self] in
+            self?.update(nickname: nickname)
+        }
     }
 }
 
