@@ -84,6 +84,8 @@ enum StringKey {
     static let certifyingErrorMessage = "certifyingErrorMessage"
     static let saveImageErrorMessage = "saveImageErrorMessage"
     static let deleteUserErrorMessage = "deleteUserErrorMessage"
+    static let certificationFailed = "certificationFailed"
+    static let addImageTitle = "addImageTitle"
 }
 
 

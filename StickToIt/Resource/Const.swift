@@ -29,6 +29,7 @@ enum Const {
         case trash = "trash"
         case timer = "timer"
         case text = "t.circle"
+        case xmarkCircleFill = "xmark.circle.fill"
     }
     
     enum AssetImage: String {

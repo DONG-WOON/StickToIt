@@ -82,3 +82,5 @@
 "certifyingErrorMessage" = "인증에 실패했습니다. 다시 시도하겠습니까?";
 "saveImageErrorMessage" = "사진이 제대로 저장되지않았어요.인증사진만 다시 저장하시겠어요?";
 "deleteUserErrorMessage" = "사용자의 정보를 삭제할 수 없습니다. 앱을 삭제 후 다시 설치해주세요!";
+"certificationFailed" = "인증 실패";
+"addImageTitle" = "사진 추가";

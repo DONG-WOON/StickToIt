@@ -83,3 +83,5 @@
 "certifyingErrorMessage" = "Authentication failed. Would you like to try again?";
 "saveImageErrorMessage" = "The picture was not saved. Would you like to save the photo again?";
 "deleteUserErrorMessage" = "You cannot delete your information. Please delete the app and reinstall it!";
+"certificationFailed" = "Certification Failed";
+"addImageTitle" = "add Photo";

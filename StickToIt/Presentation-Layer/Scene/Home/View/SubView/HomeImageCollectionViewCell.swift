@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol HomeImageCollectionViewCellDelegate: AnyObject {
+protocol ImageCellDelegate: AnyObject {
     func imageDidSelected(_ dayPlan: DayPlan)
 }
 
@@ -20,7 +20,15 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         }
     }
     
-//    private let slideButton = SlideActionButton()
+    private let todayLabel: PaddingView<UILabel> = {
+        let view = PaddingView<UILabel>()
+        view.innerView.text = StringKey.today.localized()
+        view.backgroundColor = .assetColor(.accent1)
+        view.innerView.textColor = .white
+        view.rounded()
+        view.isHidden = true
+        return view
+    }()
     
     private let imageView: UIImageView = {
         let view = UIImageView()
@@ -51,7 +59,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    weak var delegate: HomeImageCollectionViewCellDelegate?
+    weak var delegate: ImageCellDelegate?
     
     lazy var placeholderImageView: UIImageView = {
         let view = UIImageView(image: UIImage(asset: .placeholder))
@@ -63,7 +71,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     
     private lazy var weekDayLabel: PaddingView<UILabel> = {
        let paddingView = PaddingView<UILabel>()
-        paddingView.innerView.text = "1주차"
+        paddingView.innerView.text = StringKey.week.localized(with: "1")
         paddingView.innerView.font = .monospacedSystemFont(ofSize: Const.FontSize.body, weight: .semibold)
         paddingView.innerView.backgroundColor = .clear
         paddingView.backgroundColor = .assetColor(.accent4)
@@ -93,6 +101,7 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         checkMarkImageView.isHidden = true
         dayNameLabel.innerView.text = nil
         placeholderImageView.isHidden = false
+        todayLabel.isHidden = true
     }
     
     // MARK: Methods
@@ -106,14 +115,18 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
     private func update(with dayPlan: DayPlan) {
         dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: dayPlan.date)
         checkMarkImageView.isHidden = !dayPlan.isComplete
+        if DateFormatter.getFullDateString(from: dayPlan.date) < DateFormatter.getFullDateString(from: .now) {
+            todayLabel.isHidden = false
+            todayLabel.backgroundColor = .systemGray2
+            todayLabel.innerView.text = StringKey.certificationFailed.localized()
+        } else if Calendar.current.isDateInToday(dayPlan.date) {
+            todayLabel.innerView.text = StringKey.today.localized()
+            todayLabel.isHidden = false
+        } else {
+            todayLabel.isHidden = true
+        }
         
-//        if dayPlan.isComplete {
-//            slideButton.complete()
-//        } else {
-//            slideButton.reset()
-//        }
-        
-        weekDayLabel.innerView.text = "\(dayPlan.week)주차"
+        weekDayLabel.innerView.text = StringKey.week.localized(with: "\(dayPlan.week)")
     }
     
 }
@@ -129,17 +142,15 @@ extension HomeImageCollectionViewCell {
 extension HomeImageCollectionViewCell {
     private func configureViews() {
         
-        contentView.addBlurEffect(.assetColor(.accent4).withAlphaComponent(0.3))
+        contentView.addBlurEffect(.assetColor(.accent4))
         contentView.rounded()
         
         contentView.addSubviews(
             [placeholderImageView, imageView, blurView, weekDayLabel]
         )
         
-        //        contentView.addSubview(slideButton)
-        
         blurView.addSubviews(
-            [dayNameLabel, checkMarkImageView]
+            [dayNameLabel, checkMarkImageView, todayLabel]
         )
 
         contentView.addGestureRecognizer(imageTapGesture)
@@ -170,19 +181,19 @@ extension HomeImageCollectionViewCell {
         
         dayNameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(blurView)
-            make.leading.equalTo(blurView).inset(10)
+            make.leading.equalTo(blurView).inset(0)
         }
         
         checkMarkImageView.snp.makeConstraints { make in
             make.width.height.equalTo(20)
             make.centerY.equalTo(blurView)
-            make.leading.equalTo(dayNameLabel.snp.trailing).offset(15)
+            make.leading.equalTo(dayNameLabel.snp.trailing).offset(5)
         }
         
-//        slideButton.snp.makeConstraints { make in
-//            make.horizontalEdges.equalTo(contentView).inset(3)
-//            make.height.equalTo(50)
-//            make.bottom.equalTo(contentView).inset(3)
-//        }
+        todayLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(blurView)
+            make.leading.lessThanOrEqualTo(checkMarkImageView.snp.trailing)
+            make.trailing.equalTo(blurView.snp.trailing).inset(5)
+        }
     }
 }

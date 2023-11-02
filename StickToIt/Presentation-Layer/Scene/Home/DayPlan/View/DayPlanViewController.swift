@@ -65,7 +65,7 @@ final class DayPlanViewController: UIViewController {
     private lazy var addImageButton: UIButton = {
         
         var configuration = UIButton.Configuration.plain()
-        configuration.title = "사진 추가"
+        configuration.title = StringKey.addImageTitle.localized()
         configuration.image = UIImage(resource: .plus)
         configuration.titleAlignment = .center
         configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
@@ -75,7 +75,7 @@ final class DayPlanViewController: UIViewController {
         
         let view = UIButton(configuration: configuration)
         view.addTarget(self, action: #selector(addImageButtonAction), for: .touchUpInside)
-        
+        view.isHidden = true
         return view
     }()
     
@@ -155,35 +155,42 @@ final class DayPlanViewController: UIViewController {
     }
     
     func bind() {
-        
         let _date = viewModel.dayPlan.date
         let dateString = DateFormatter.getFullDateString(from: _date)
         self.dateLabel.innerView.text = dateString
         
+        //인증 안 했을때
         if !viewModel.dayPlan.isComplete {
             if DateFormatter.getFullDateString(from: .now) == dateString {
-                addImageButton.isEnabled = true
+                
+                addImageButton.isHidden = false
                 placeholderImageView.isHidden = true
+                checkMarkImageView.isHidden = true
                 certifyButton.setTitle(StringKey.certify.localized(), for: .normal)
+                
             } else if DateFormatter.getFullDateString(from: .now) > dateString {
-                addImageButton.isEnabled = false
+                
                 addImageButton.isHidden = true
                 placeholderImageView.isHidden = false
-                addImageButton.configuration?.title = nil
+                checkMarkImageView.image = UIImage(resource: .xmarkCircleFill)
+                checkMarkImageView.isHidden = false
                 certifyButton.setTitle(StringKey.notCertified.localized(), for: .normal)
+                
             } else if DateFormatter.getFullDateString(from: .now) < dateString {
-                addImageButton.isEnabled = false
+                
                 addImageButton.isHidden = true
                 placeholderImageView.isHidden = false
-                addImageButton.configuration?.title = nil
+                checkMarkImageView.isHidden = true
                 certifyButton.setTitle(StringKey.todayIsNotCertifyingDay.localized(), for: .normal)
+                
             }
+        // 인증 했을때
         } else {
-            addImageButton.isEnabled = false
+            addImageButton.isHidden = true
             certifyButton.setTitle(StringKey.certified.localized(), for: .normal)
+            checkMarkImageView.isHidden = false
+            checkMarkImageView.image = UIImage(resource: .checkedCircle)
         }
-        
-        checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
         
         weekDayLabel.innerView.text = StringKey.week.localized(with: "\(viewModel.dayPlan.week)")
         
