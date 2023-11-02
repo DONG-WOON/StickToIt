@@ -41,26 +41,26 @@ final class CalendarViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, event) in
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .configureUI:
-                    _self.calendar.delegate = _self
-                    _self.configureDataSource()
-                    _self.configureViews()
-                    _self.setConstraints()
+                    owner.calendar.delegate = owner
+                    owner.configureDataSource()
+                    owner.configureViews()
+                    owner.setConstraints()
                     
                 case .reload:
-                    _self.calendar.reloadData()
+                    owner.calendar.reloadData()
                     
                 case .showPlansMenu(let planQueries):
-                    _self.calendar.select(date: .now)
-                    _self.checkCurrentPlan(planQueries)
+                    owner.calendar.select(date: .now)
+                    owner.checkCurrentPlan(planQueries)
                     
                 case .showPlanInfo(let plan):
-                    _self.navigationItem.title = plan.name
+                    owner.navigationItem.title = plan.name
                     
                 case .showCompletedDayPlans(let dayPlans):
-                    _self.takeSnapshot(dayPlans: dayPlans)
+                    owner.takeSnapshot(dayPlans: dayPlans)
                 }
             }
             .disposed(by: disposeBag)
@@ -75,7 +75,7 @@ final class CalendarViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        input.onNext(.viewWillAppear)
+//        input.onNext(.viewWillAppear)
     }
     
     deinit {
@@ -103,6 +103,9 @@ extension CalendarViewController {
         { [weak self] cell, indexPath, item in
 
             guard let _self = self else { return }
+            
+            cell.dayPlan = item
+        
             guard item.imageURL != nil else { return }
 
             _self.viewModel.loadImage(dayPlanID: item.id) { data in
@@ -114,12 +117,15 @@ extension CalendarViewController {
 
         self.dataSource = DataSource(
             collectionView: collectionView,
-            cellProvider: { collectionView, indexPath, item in
+            cellProvider: { [weak self] collectionView, indexPath, item in
                 let cell = collectionView.dequeueConfiguredReusableCell(
                     using: cellRegistration,
                     for: indexPath,
                     item: item
                 )
+                
+                guard let _self = self else { return UICollectionViewCell() }
+                cell.delegate = _self
 
                 return cell
             }
@@ -128,6 +134,7 @@ extension CalendarViewController {
     
     func takeSnapshot(dayPlans: [DayPlan]) {
         var snapshot = Snapshot()
+        
         snapshot.appendSections([.main])
         snapshot.appendItems(dayPlans, toSection: .main)
         
@@ -135,9 +142,20 @@ extension CalendarViewController {
     }
 }
 
+extension CalendarViewController: ImageCellDelegate {
+    func imageDidSelected(_ dayPlan: DayPlan) {
+        let vc = DayPlanViewController(
+            viewModel: DIContainer.makeDayPlanViewModel(dayPlan: dayPlan)
+        ).embedNavigationController()
+        
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+    }
+}
+
 extension CalendarViewController: StickToItCalendarDelegate {
     
-    func calendarView(didSelectAt date: Date?) {
+    func calendarView(didSelectAt date: Date) {
         input.onNext(.didSelect(date))
     }
     // 2

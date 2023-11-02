@@ -46,20 +46,21 @@ final class CalendarViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
-            .subscribe(with: self) { (_self, event) in
+            .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .subscribe(with: self) { (owner, event) in
                 switch event {
              
                 case .viewDidLoad:
-                    _self.output.onNext(.configureUI)
+                    owner.output.onNext(.configureUI)
                     
                 case .viewWillAppear, .refresh:
-                    _self.fetchPlanQueries()
+                    owner.fetchPlanQueries()
     
                 case .planMenuTapped(let planQuery):
-                    _self.fetchPlanInfo(query: planQuery)
+                    owner.fetchPlanInfo(query: planQuery)
                     
                 case .didSelect(let date):
-                    _self.selectDayPlan(at: date)
+                    owner.selectDayPlan(at: date)
                 }
             }
             .disposed(by: disposeBag)
@@ -76,14 +77,14 @@ extension CalendarViewModel {
     private func fetchPlanQueries() {
         guard let uuidString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID), let userID = UUID(uuidString: uuidString) else { return }
         
-        let result = userRepository.fetch(key: userID)
-        
-        switch result {
-        case .success(let user):
-            let planQueries = user.planQueries
-            output.onNext(.showPlansMenu(planQueries))
-        case .failure(let error):
-            print(error)
+        userRepository.fetch(key: userID) { [weak self] result in
+            switch result {
+            case .success(let user):
+                let planQueries = user.planQueries
+                self?.output.onNext(.showPlansMenu(planQueries))
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
@@ -92,20 +93,20 @@ extension CalendarViewModel {
             return
         }
         
-        let result = planRepository.fetch(key: query.id)
-        
-        switch result {
-        case .success(let plan):
-            output.onNext(.showPlanInfo(plan))
-            currentPlan = plan
-            let completedDayPlans = filterCompletedDayPlans(plan.dayPlans)
-            planCompletedDate = completedDayPlans.compactMap { $0.date }
-            
-            let filteredDayPlans = completedDayPlans.filter { Calendar.current.isDate(.now, equalTo: $0.date, toGranularity: .month) }
-            
-            output.onNext(.showCompletedDayPlans(filteredDayPlans))
-        case .failure(let error):
-            print(error)
+        planRepository.fetch(key: query.id) { [weak self] result in
+            switch result {
+            case .success(let plan):
+                self?.output.onNext(.showPlanInfo(plan))
+                self?.currentPlan = plan
+                guard let completedDayPlans = self?.filterCompletedDayPlans(plan.dayPlans) else { return }
+                self?.planCompletedDate = completedDayPlans.compactMap { $0.date }
+                
+                let filteredDayPlans = completedDayPlans.filter { Calendar.current.isDate(.now, equalTo: $0.date, toGranularity: .month) }
+                
+                self?.output.onNext(.showCompletedDayPlans(filteredDayPlans))
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     

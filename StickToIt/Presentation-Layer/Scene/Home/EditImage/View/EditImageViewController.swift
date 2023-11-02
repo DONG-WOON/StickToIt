@@ -158,11 +158,11 @@ final class EditImageViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { _self, event in
+            .subscribe(with: self) { owner, event in
                 switch event {
                 case .ConfigureUI:
-                    _self.configureViews()
-                    _self.setConstraints()
+                    owner.configureViews()
+                    owner.setConstraints()
                 }
             }
             .disposed(by: disposeBag)
@@ -321,7 +321,7 @@ extension EditImageViewController: BaseViewConfigurable {
         }
         
         fontSizeLabel.snp.makeConstraints { make in
-            make.top.equalTo(textColorButton.snp.bottom).offset(10)
+            make.top.equalTo(textColorButton.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(frameView)
             make.height.equalTo(40)
         }
@@ -448,7 +448,6 @@ extension EditImageViewController {
             if let textView = (gesture.view as? UITextView) {
                 textView.becomeFirstResponder()
             }
-            print("sefsefsef")
         @unknown default:
             return
         }
@@ -458,7 +457,6 @@ extension EditImageViewController {
     
         switch gesture.state {
         case .began:
-            print("began")
             trashView.isHidden = false
         case.changed:
             guard let gestureView = gesture.view else { return }

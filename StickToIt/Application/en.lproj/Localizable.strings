@@ -13,30 +13,23 @@
 "close" = "Close";
 "delete" = "Delete";
 "warning" = "Warning";
-
-
 "setting" = "Setting";
 "done" = "Done";
 "Achievement" = "Achievement";
 "validateLineBreak" = "Space or line break characters are not allowed.";
-
-"overTwoCharacter
-" = "Please enter more than 2 characters!";
+"overTwoCharacter" = "Please enter more than 2 characters!";
 "lessThan20" = "Please enter no more than 20 characters";
 "nickname" = "Nickname";
 "nicknamePlaceholder" = " 1 or more and 20 or less characters";
-
 "cameraSettingTitle" = "You do not currently have access to the camera.";
-
 "photoPermission" = "Please grant me permission to access";
 "cameraSettingMessage" = "You can enable access on Settings > StickToIt > Camera.";
 "photoSettingMessage" = "You can enable access on Settings > StickToIt > Photo.";
 "goToPhotoSettingMessage" = "Go to grant photo access in settings";
 "goToPhotoSetting" = "Allow photo access";
 "userSettingDescriptionLabel" = "- You can change the nickname any time";
-"register" = "사용자 등록";
+"register" = "Register";
 "validateNicknameLabel" = "This is a valid nickname.";
-
 "planCreatedTitle" = "Plan Created";
 "planCreatedMessage" = "Plan have been created.\n Work hard to achieve it!";
 "successTodayMessage" = "You achieved your goal yesterday too!! Please continue to achieve it today!";
@@ -49,29 +42,19 @@
 "planList" = "Plan List";
 "add100Days" = "+100days";
 "deletePlan" = "Delete Plan";
-
 "deletePlanMessage" = "Are you sure you want to delete";
 "Add Plan Right Now" = "Add Plan Right Now~!";
-
 "emptyViewNicknameLabel" = " %@ \nYou don't have a Plan yet.";
 "userNicknameLabel" = "@ %@'s Plan";
 "lastExecutionDate" = "Last Execution Date: %@";
 "createPlan" = "Create Plan";
 "endDateTitle" = "Please set an end date ---->";
-
 "endDateTitleSetting" = "End Date: %@";
-"dismissMessage" = "Please set an End date, Are you sure you want to close";
-
-
-
+"dismissMessage" = "If you close it now, contents will disappear that you fill in. Would you still like to leave?";
 "planName" = "Plan Name";
-
 "planNameDescription" = "Please set the Plan Name";
-
 "planNamePlaceholder" = "ex) Running Every Two Weeks";
-
 "planStartDate" = "Start Date";
-
 "planStartDateDescription" = "Please set a target start date.\nWhy don't you start today to implement your goals";
 "today" = "Today";
 "tomorrow" = "Tomorrow";
@@ -82,15 +65,21 @@
 "certify" = "Certify ✨";
 "certified" = "Certified ✨";
 "edit" = "Edit";
-"backup" = "백업(지원 예정)";
-//Backup (to be supported)
-
-
+"backup" = "Backup";
 "deleteUser" = "Delete Account";
 "deleteUserMessage" = "Are you sure delete your Account?";
-
 "personalSetting" = "Personal Setting";
 "appInfo" = "App Info";
 "editNickname" = "Edit Nickname";
 "dataManagement" = "Data Management";
 "versionInfo" = "Version Info";
+"week" = "Week %@";
+"calendar" = "Calendar";
+"home" = "Home";
+"forDaysLabel" = "For %@ days";
+"createPlanErrorMessage" = "Unable to create the current study. If you're still having problems, please contact us on the Setting";
+"notCertified" = "Unfortunately, I couldn't certifying 🥲";
+"todayIsNotCertifyingDay" = "Can't certify it yet, but please keep doing it";
+"certifyingErrorMessage" = "Authentication failed. Would you like to try again?";
+"saveImageErrorMessage" = "The picture was not saved. Would you like to save the photo again?";
+"deleteUserErrorMessage" = "You cannot delete your information. Please delete the app and reinstall it!";

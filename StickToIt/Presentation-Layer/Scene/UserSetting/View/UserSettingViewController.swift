@@ -94,7 +94,7 @@ class UserSettingViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, event) in
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .completeUserRegistration:
                     
@@ -114,17 +114,17 @@ class UserSettingViewController: UIViewController {
                     }
                     
                 case .userNicknameValidate(let isValidated):
-                    _self.registerButton.isEnabled = isValidated
-                    _self.registerButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
+                    owner.registerButton.isEnabled = isValidated
+                    owner.registerButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
                     
                 case .validateError(let errorMessage):
                     guard let errorMessage else {
-                        _self.validateLabel.text = StringKey.validateNicknameLabel.localized()
-                        _self.validateLabel.textColor = .assetColor(.accent1)
+                        owner.validateLabel.text = StringKey.validateNicknameLabel.localized()
+                        owner.validateLabel.textColor = .assetColor(.accent1)
                         return
                     }
-                    _self.validateLabel.text = errorMessage
-                    _self.validateLabel.textColor = .systemRed
+                    owner.validateLabel.text = errorMessage
+                    owner.validateLabel.textColor = .systemRed
                 }
             }
             .disposed(by: disposeBag)

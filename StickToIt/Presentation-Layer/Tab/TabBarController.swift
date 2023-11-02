@@ -14,18 +14,17 @@ final class TabBarController: UITabBarController {
     
     let homeVC = HomeViewController(
         viewModel: DIContainer.makeHomeViewModel()
-    ).configureTabBarItem(title: "홈", image: UIImage(resource: .houseFill))
+    ).configureTabBarItem(title: StringKey.home.localized(), image: UIImage(resource: .houseFill))
         .embedNavigationController()
     
     let calendarVC = CalendarViewController(
         viewModel: DIContainer.makeCalendarViewModel())
-        .configureTabBarItem(title: "캘린더", image: UIImage(resource: .calendar))
+        .configureTabBarItem(title: StringKey.calendar.localized(), image: UIImage(resource: .calendar))
         .embedNavigationController()
         
     let settingVC = SettingViewController(viewModel: SettingViewModel())
-        .configureTabBarItem(title: "설정", image: UIImage(resource: .gear))
+        .configureTabBarItem(title: StringKey.setting.localized(), image: UIImage(resource: .gear))
         .embedNavigationController()
-    
     
     // MARK: View Life Cycle
 

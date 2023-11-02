@@ -60,7 +60,7 @@ final class PlanInfoView: UIView {
     }
     
     func update(plan: Plan) {
-        self.planNameLabel.text = "⌜⛳️ \(plan.name)⌟"
+        self.planNameLabel.text = "⛳️ ⌜\(plan.name)⌟"
         self.planNameLabel.adjustsFontSizeToFitWidth = true
         self.planNameLabel.sizeToFit()
         
@@ -68,7 +68,7 @@ final class PlanInfoView: UIView {
             let dateString = DateFormatter.getFullDateString(from: date)
             self.lastCertifyingDayLabel.text = StringKey.lastExecutionDate.localized(with: "\(dateString)")
         } else {
-            self.lastCertifyingDayLabel.text = "-"
+            self.lastCertifyingDayLabel.text = StringKey.lastExecutionDate.localized(with: "-")
         }
     }
     

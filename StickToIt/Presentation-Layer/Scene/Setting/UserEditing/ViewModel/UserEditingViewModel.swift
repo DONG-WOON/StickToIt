@@ -36,15 +36,15 @@ final class UserEditingViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
-            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .default))
-            .subscribe(with: self) { (_self, event) in
+            .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .viewDidLoad:
-                    _self.fetchUserInfo()
+                    owner.fetchUserInfo()
                 case .editButtonDidTapped:
-                    _self.complete()
+                    owner.complete()
                 case .textInput(text: let text):
-                    _self.validate(text: text)
+                    owner.validate(text: text)
                 }
             }
             .disposed(by: disposeBag)
@@ -60,13 +60,14 @@ extension UserEditingViewModel {
             forKey: UserDefaultsKey.userID
         ), let userID = UUID(uuidString: userIDString) else { return }
         
-        let result = repository.fetch(key: userID)
-        switch result {
-        case .success(let user):
-            self.userNickname = user.nickname
-            self.output.onNext(.updateNickname(user.nickname))
-        case .failure(let error):
-            self.output.onNext(.showError(error))
+        repository.fetch(key: userID) { result in
+            switch result {
+            case .success(let user):
+                self.userNickname = user.nickname
+                self.output.onNext(.updateNickname(user.nickname))
+            case .failure(let error):
+                self.output.onNext(.showError(error))
+            }
         }
     }
     
@@ -106,7 +107,7 @@ extension UserEditingViewModel {
         ), let userID = UUID(uuidString: userIDString) else { return }
         
         repository.update(userID: userID) { [userNickname] entity in
-            entity.nickname = userNickname
+            entity?.nickname = userNickname
         } onComplete: { [weak self, userNickname] error in
             if let error {
                 self?.output.onNext(.showError(error))

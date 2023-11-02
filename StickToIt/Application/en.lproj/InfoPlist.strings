@@ -1,0 +1,12 @@
+/* 
+  infoPlist.strings
+  StickToIt
+
+  Created by 서동운 on 10/31/23.
+  
+*/
+"NSPhotoLibraryAddUsageDescription" = "camera is used to capture the photo that certify day plan, and decorate the photo, but the photo is not saved our database. just only be saved in app.";
+
+"NSCameraUsageDescription" = "camera is used to capture the photo that certify day plan, and decorate the photo, but the photo is not saved our database. just only be saved in app.";
+
+"NSPhotoLibraryUsageDescription" = "your photo is used to certify day plan, and decorate the photo, but the photo is not saved our database. just only be saved in app.";

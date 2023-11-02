@@ -96,26 +96,26 @@ class UserEditingViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, event) in
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .completeEditing:
-                    _self.navigationController?.popViewController(animated: true)
+                    owner.navigationController?.popViewController(animated: true)
                 case .userNicknameValidate(let isValidated):
-                    _self.editButton.isEnabled = isValidated
-                    _self.editButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
+                    owner.editButton.isEnabled = isValidated
+                    owner.editButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
                     
                 case .validateError(let errorMessage):
                     guard let errorMessage else {
-                        _self.validateLabel.text = StringKey.validateNicknameLabel.localized()
-                        _self.validateLabel.textColor = .assetColor(.accent1)
+                        owner.validateLabel.text = StringKey.validateNicknameLabel.localized()
+                        owner.validateLabel.textColor = .assetColor(.accent1)
                         return
                     }
-                    _self.validateLabel.text = errorMessage
-                    _self.validateLabel.textColor = .systemRed
+                    owner.validateLabel.text = errorMessage
+                    owner.validateLabel.textColor = .systemRed
                 case .showError(_):
-                    _self.showAlert(title: StringKey.noti.localized(), message: "닉네임을 변경할 수 없습니다. 다음에 다시 시도해주세요!") {}
+                    owner.showAlert(title: StringKey.noti.localized(), message: "닉네임을 변경할 수 없습니다. 다음에 다시 시도해주세요!") {}
                 case .updateNickname(let nickname):
-                    _self.nicknameTextField.innerView.text = nickname
+                    owner.nicknameTextField.innerView.text = nickname
                 }
             }
             .disposed(by: disposeBag)
@@ -125,9 +125,9 @@ class UserEditingViewController: UIViewController {
             .asObservable()
             .map{ String($0.prefix(20)) }
             .subscribe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { (_self, text) in
-                _self.nicknameTextField.innerView.text = text
-                _self.input.onNext(.textInput(text: text))
+            .subscribe(with: self) { (owner, text) in
+                owner.nicknameTextField.innerView.text = text
+                owner.input.onNext(.textInput(text: text))
             }
             .disposed(by: disposeBag)
     }
@@ -143,7 +143,7 @@ extension UserEditingViewController: BaseViewConfigurable {
     func configureViews() {
         view.backgroundColor = .systemBackground
         
-        title = "닉네임 변경"
+        title = StringKey.editNickname.localized()
         
         view.addSubviews(
             [nicknameLabel, nicknameTextField, validateLabel, editButton]

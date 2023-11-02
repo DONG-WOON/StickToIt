@@ -27,16 +27,12 @@ final class DayPlanViewModel {
         self.updateDayPlanUseCase = updateDayPlanUseCase
         self.mainQueue = mainQueue
     }
-        
-    func viewDidLoad() {
-        
-    }
     
     func checkError(handler: (String, String) -> Void) {
         if UserDefaults.standard.bool(forKey: UserDefaultsKey.isCertifyingError) {
-            handler(UserDefaultsKey.isCertifyingError, "인증이 실패했어요. 오늘 다시 시도해주세요!")
+            handler(UserDefaultsKey.isCertifyingError, StringKey.certifyingErrorMessage.localized())
         } else if UserDefaults.standard.bool(forKey: UserDefaultsKey.isSaveImageError) {
-            handler(UserDefaultsKey.isSaveImageError, "사진이 제대로 저장되지않았어요 ㅠㅠ 인증사진만 다시 저장하시겠어요?")
+            handler(UserDefaultsKey.isSaveImageError, StringKey.saveImageErrorMessage.localized())
         }
     }
     
@@ -61,17 +57,17 @@ final class DayPlanViewModel {
             } catch STIError.certifyingError {
                 UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isCertifyingError)
                 DispatchQueue.main.async {
-                    failure("인증오류", "인증에 실패했습니다. 다시 시도하겠습니까?")
+                    failure(StringKey.noti.localized(), StringKey.certifyingErrorMessage.localized())
                 }
             } catch STIError.imageNotSave {
                 UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isSaveImageError)
                 DispatchQueue.main.async {
-                    failure("사진 저장 오류", "사진 저장에 실패했습니다. 다시 시도하겠습니까")
+                    failure(StringKey.noti.localized(), StringKey.saveImageErrorMessage.localized())
                 }
             } catch STIError.imageURLNotSave {
                 UserDefaults.standard.setValue(true, forKey: UserDefaultsKey.isSaveImageError)
                 DispatchQueue.main.async {
-                    failure("사진 저장 오류", "사진 저장에 실패했습니다. 다시 시도하겠습니까?")
+                    failure(StringKey.noti.localized(), StringKey.saveImageErrorMessage.localized())
                 }
             }
         }
@@ -82,7 +78,7 @@ final class DayPlanViewModel {
             entity: DayPlanEntity.self,
             key: dayPlan.id,
             updateHandler: {
-                $0.isComplete = true
+                $0?.isComplete = true
             }
         )
         
@@ -115,7 +111,7 @@ final class DayPlanViewModel {
         let result = await updateDayPlanUseCase.update(
             entity: DayPlanEntity.self,
             key: dayPlan.id
-        ) { $0.imageURL = imageURL }
+        ) { $0?.imageURL = imageURL }
         
         switch result {
         case .success:

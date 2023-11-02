@@ -15,7 +15,7 @@ class GradientCircleView: RingProgressView {
         label.font = .boldSystemFont(ofSize: Const.FontSize.body)
         label.textColor = .label
         label.textAlignment = .center
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         return label
     }()
     
@@ -42,7 +42,7 @@ class GradientCircleView: RingProgressView {
         }
 
         let percentage = Int(progress * 100)
-        percentageLabel.text = "\("Achievement".localized()) \n\(percentage)%"
+        percentageLabel.text = "\("Achievement".localized())\n\(percentage)%"
         percentageLabel.sizeToFit()
     }
     

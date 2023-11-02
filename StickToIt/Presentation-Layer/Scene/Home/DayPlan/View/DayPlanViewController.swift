@@ -36,9 +36,17 @@ final class DayPlanViewController: UIViewController {
         return view
     }()
     
+    lazy var placeholderImageView: UIImageView = {
+        let view = UIImageView(image: UIImage(asset: .placeholder))
+        view.backgroundColor = .clear
+        view.contentMode = .scaleToFill
+        view.tintColor = .label
+        return view
+    }()
+    
     private lazy var weekDayLabel: PaddingView<UILabel> = {
        let paddingView = PaddingView<UILabel>()
-        paddingView.innerView.text = "1Week"
+        paddingView.innerView.text = StringKey.week.localized(with: "\(1)")
         paddingView.innerView.font = .monospacedSystemFont(ofSize: Const.FontSize.body, weight: .semibold)
         paddingView.innerView.backgroundColor = .clear
         paddingView.backgroundColor = .assetColor(.accent4)
@@ -129,19 +137,18 @@ final class DayPlanViewController: UIViewController {
         
         viewModel.checkError { [weak self] key, message in
             if key == UserDefaultsKey.isCertifyingError {
-                self?.showAlert(title: "인증오류", message: message) {
+                self?.showAlert(title: StringKey.noti.localized(), message: message) {
                     self?.addImageButton.isEnabled = true
                     self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
                 }
             } else {
-                self?.showAlert(title: "사진 저장 오류", message: message) {
+                self?.showAlert(title: StringKey.noti.localized(), message: message) {
                     self?.addImageButton.isEnabled = true
                     self?.certifyButton.setTitle("인증하기 ✨", for: .normal)
                 }
             }
         }
-        
-        viewModel.viewDidLoad()
+ 
         addNotification()
         configureViews()
         setConstraints()
@@ -156,17 +163,20 @@ final class DayPlanViewController: UIViewController {
         if !viewModel.dayPlan.isComplete {
             if DateFormatter.getFullDateString(from: .now) == dateString {
                 addImageButton.isEnabled = true
+                placeholderImageView.isHidden = true
                 certifyButton.setTitle(StringKey.certify.localized(), for: .normal)
             } else if DateFormatter.getFullDateString(from: .now) > dateString {
                 addImageButton.isEnabled = false
-                addImageButton.configuration?.image = UIImage(asset: .placeholder)
+                addImageButton.isHidden = true
+                placeholderImageView.isHidden = false
                 addImageButton.configuration?.title = nil
-                certifyButton.setTitle("아쉽게도 인증 못했어요 🥲", for: .normal)
+                certifyButton.setTitle(StringKey.notCertified.localized(), for: .normal)
             } else if DateFormatter.getFullDateString(from: .now) < dateString {
                 addImageButton.isEnabled = false
-                addImageButton.configuration?.image = UIImage(asset: .placeholder)
+                addImageButton.isHidden = true
+                placeholderImageView.isHidden = false
                 addImageButton.configuration?.title = nil
-                certifyButton.setTitle("지금처럼 꾸준히 해주세요!", for: .normal)
+                certifyButton.setTitle(StringKey.todayIsNotCertifyingDay.localized(), for: .normal)
             }
         } else {
             addImageButton.isEnabled = false
@@ -175,7 +185,7 @@ final class DayPlanViewController: UIViewController {
         
         checkMarkImageView.isHidden = !viewModel.dayPlan.isComplete
         
-        weekDayLabel.innerView.text = "\(viewModel.dayPlan.week) Week"
+        weekDayLabel.innerView.text = StringKey.week.localized(with: "\(viewModel.dayPlan.week)")
         
         viewModel.loadImage { [weak self] data in
             if let imageData = data {
@@ -187,21 +197,21 @@ final class DayPlanViewController: UIViewController {
         }
         
         viewModel.isValidated
-            .subscribe(with: self) { (_self, isValidated) in
-                _self.certifyButton.isEnabled = isValidated
-                _self.certifyButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
+            .subscribe(with: self) { (owner, isValidated) in
+                owner.certifyButton.isEnabled = isValidated
+                owner.certifyButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
             }
             .disposed(by: disposeBag)
         
         viewModel.isLoading
             .observe(on: MainScheduler.asyncInstance)
-            .bind(with: self) { (_self, isLoading) in
+            .bind(with: self) { (owner, isLoading) in
                 if isLoading {
-                    _self.indicatorView.startAnimating()
+                    owner.indicatorView.startAnimating()
                 } else {
-                    _self.indicatorView.stopAnimating()
+                    owner.indicatorView.stopAnimating()
                 }
-                _self.indicatorView.isHidden = !isLoading
+                owner.indicatorView.isHidden = !isLoading
             }
             .disposed(by: disposeBag)
     }
@@ -218,7 +228,7 @@ extension DayPlanViewController: BaseViewConfigurable {
             [borderContainerView, certifyButton, indicatorView]
         )
         borderContainerView.addSubviews(
-            [imageView, blurView, addImageButton, weekDayLabel]
+            [imageView, placeholderImageView, blurView, addImageButton, weekDayLabel]
         )
         blurView.addSubviews(
             [dateLabel, checkMarkImageView]
@@ -237,6 +247,12 @@ extension DayPlanViewController: BaseViewConfigurable {
         imageView.snp.makeConstraints { make in
             make.top.equalTo(borderContainerView).offset(4)
             make.horizontalEdges.equalTo(blurView)
+        }
+        
+        placeholderImageView.snp.makeConstraints { make in
+            make.center.equalTo(imageView)
+            make.width.equalTo(imageView).multipliedBy(0.3)
+            make.height.equalTo(placeholderImageView.snp.width)
         }
         
         weekDayLabel.snp.makeConstraints { make in

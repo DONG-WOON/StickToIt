@@ -32,12 +32,13 @@ final class UserSettingViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
-            .subscribe(with: self) { (_self, event) in
+            .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .subscribe(with: self) { (owner, event) in
                 switch event {
                 case .registerButtonDidTapped:
-                    _self.register()
+                    owner.register()
                 case .textInput(text: let text):
-                    _self.validate(text: text)
+                    owner.validate(text: text)
                 }
             }
             .disposed(by: disposeBag)

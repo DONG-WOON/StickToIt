@@ -6,43 +6,29 @@
   
 */
 
-
-
-
 "Yes" = "예";
 "No" = "아니오";
 "cancel" = "취소";
 "close" = "닫기";
 "delete" = "삭제";
 "warning" = "주의";
-
-
 "setting" = "설정";
 "done" = "확인";
 "Achievement" = "목표달성률";
 "validateLineBreak" = "공백이나 줄바꿈 문자는 사용할 수 없습니다.";
-//"Space or line break characters are not allowed."
-
 "overTwoCharacter" = "2자 이상으로 입력해주세요!";
-//Please enter more than 2 characters!
 "lessThan20" = "20자 이하로 입력해주세요";
-//"Please enter no more than 20 characters"
 "nickname" = "닉네임";
 "nicknamePlaceholder" = "닉네임 1자 이상 20자 이하";
-
 "cameraSettingTitle" = "현재 카메라에 대한 접근 권한이 없습니다.";
-
 "photoPermission" = "사진 접근 권한을 허용해주세요";
 "cameraSettingMessage" = "설정 > 작심삼일 > 카메라에서 접근을 활성화 할 수 있습니다.";
 "photoSettingMessage" = "설정 > 작심삼일 > 사진 탭에서\n 앨범 접근을 활성화 할 수 있습니다.";
 "goToPhotoSettingMessage" = "설정에서 사진 접근 권한을 허용하러 가기";
 "goToPhotoSetting" = "사진 접근 허용하기";
 "userSettingDescriptionLabel" = "- 닉네임은 언제든 다시 수정할 수 있어요";
-//- You can change the nickname any time"
 "register" = "사용자 등록";
 "validateNicknameLabel" = "유효한 닉네임 입니다.";
-//"This is a valid nickname."
-
 "planCreatedTitle" = "목표생성완료";
 "planCreatedMessage" = "목표가 생성되었습니다.\n 열심히 달성해보세요!";
 "successTodayMessage" = "어제도 열심히 목표를 이루셨네요!! 오늘도 이어서 달성해주세요~!";
@@ -52,32 +38,22 @@
 "keepGoingMessage" = "작심삼일 목표가 종료되었어요! 매일 매일 열심히 달성하셨나요??\n 목표는 끝냈지만 습관으로 만들기 위해 이어나가는 게 중요합니다! 그런 의미로 100일 더 해보시는건 어떨까요?";
 "addPlan" = "목표 추가하기";
 "addPlanAlert" = "목표는 최대 5개까지만 추가할 수 있습니다.";
-//"You can only add up to five plans."
 "planList" = "목표 리스트";
 "add100Days" = "+100일";
 "deletePlan" = "목표 삭제";
-
 "deletePlanMessage" = "확인을 누르면 지금까지 달성하신 목표까지 모두 삭제됩니다. 목표를 삭제하시겠습니까?";
 "Add Plan Right Now" = "지금 당장 작심삼일 목표를 추가해보세요~!";
-
 "emptyViewNicknameLabel" = " %@ 님\n목표가 아직없어요";
-
 "userNicknameLabel" = "@ %@ 님의 목표";
 "lastExecutionDate" = "최근 목표 실행일: %@";
 "createPlan" = "목표 생성";
 "endDateTitle" = "종료일을 설정해주세요 ---->";
-
 "endDateTitleSetting" = "종료일: %@";
 "dismissMessage" = "지금 닫으면 작성한 내용은 사라집니다. 그래도 나가시겠습니까?";
-
 "planName" = "목표 이름";
-
 "planNameDescription" = "작심삼일 목표 이름을 설정해주세요.";
-
 "planNamePlaceholder" = "예시) 2주간 매일 달리기";
-
 "planStartDate" = "목표 시작일";
-
 "planStartDateDescription" = "작심삼일 목표 시작일을 설정해주세요.\n여러분의 목표 실행을 위해 오늘 바로 시작하시는건 어떤가요?";
 "today" = "오늘";
 "tomorrow" = "내일";
@@ -89,13 +65,20 @@
 "certified" = "인증 완료 ✨";
 "edit" = "변경하기";
 "backup" = "백업(지원 예정)";
-
-
 "deleteUser" = "계정 삭제";
 "deleteUserMessage" = "사용자의 정보를 삭제할까요?";
-
 "personalSetting" = "개인 설정";
 "appInfo" = "앱 정보";
 "editNickname" = "닉네임 변경";
 "dataManagement" = "데이터 관리";
 "versionInfo" = "버전정보";
+"week" = "%@ 주차";
+"calendar" = "캘린더";
+"home" = "홈";
+"forDaysLabel" = "%@ 일 동안";
+"createPlanErrorMessage" = "현재 스터디를 생성할 수 없습니다. 계속해서 문제가 있다면 설정탭에서 문의 주세요!";
+"notCertified" = "아쉽게도 인증 못했어요 🥲";
+"todayIsNotCertifyingDay" = "아직 인증할 수 없지만, 지금처럼 꾸준히 해주세요!";
+"certifyingErrorMessage" = "인증에 실패했습니다. 다시 시도하겠습니까?";
+"saveImageErrorMessage" = "사진이 제대로 저장되지않았어요.인증사진만 다시 저장하시겠어요?";
+"deleteUserErrorMessage" = "사용자의 정보를 삭제할 수 없습니다. 앱을 삭제 후 다시 설치해주세요!";

@@ -43,7 +43,7 @@ final class DataManagementViewController: UIViewController {
         viewModel
             .transform(input: input.asObserver())
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self) { _self, event in
+            .subscribe(with: self) { owner, event in
                 switch event {
                 case .completeDeleteUser:
                     let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
@@ -63,7 +63,10 @@ final class DataManagementViewController: UIViewController {
                 case .completeBackUP:
                     return
                 case .showError:
-                    _self.showAlert(title: "삭제 오류", message: "사용자의 정보를 삭제할 수 없습니다. 앱을 삭제 후 다시 설치해주세요!")
+                    owner.showAlert(
+                        title: StringKey.noti.localized(),
+                        message: StringKey.deleteUserErrorMessage.localized()
+                    )
                 }
             }
             .disposed(by: disposeBag)

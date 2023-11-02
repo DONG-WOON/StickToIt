@@ -8,6 +8,7 @@
 import Foundation
 
 enum StringKey {
+    
     static let yes = "Yes"
     static let no = "No"
     static let done = "done"
@@ -28,7 +29,6 @@ enum StringKey {
     static let planCreatedMessage = "planCreatedMessage"
     static let successTodayMessage = "successTodayMessage"
     static let noti = "noti"
-    
     static let failureTodayMessage = "failureTodayMessage"
     static let keepGoingMessage = "keepGoingMessage"
     static let congratulation = "congratulation"
@@ -39,17 +39,12 @@ enum StringKey {
     static let deletePlan = "deletePlan"
     static let deletePlanMessage = "deletePlanMessage"
     static let emptyViewNicknameLabel = "emptyViewNicknameLabel"
-    
     static let userNicknameLabel = "userNicknameLabel"
-    
     static let lastExecutionDate = "lastExecutionDate"
-    
     static let createPlan = "createPlan"
-
     static let endDateTitle = "endDateTitle"
     static let endDateTitleSetting = "endDateTitleSetting"
     static let dismissMessage = "dismissMessage"
-    
     static let planName = "planName"
     static let planNameDescription = "planNameDescription"
     static let planNamePlaceholder = "planNamePlaceholder"
@@ -59,20 +54,15 @@ enum StringKey {
     static let tomorrow = "tomorrow"
     static let planTargetPeriodLabel = "planTargetPeriodLabel"
     static let planEndDateDescriptionLabel = "planEndDateDescriptionLabel"
-    
     static let fontSize = "fontSize"
     static let upload = "upload"
-    
     static let certify = "certify"
-    
     static let certified = "certified"
     static let edit = "edit"
-    
     static let validateNicknameLabel = "validateNicknameLabel"
     static let backup = "backup"
     static let deleteUser = "deleteUser"
     static let deleteUserMessage = "deleteUserMessage"
-    
     static let personalSetting = "personalSetting"
     static let appInfo = "appInfo"
     static let editNickname = "editNickname"
@@ -84,6 +74,16 @@ enum StringKey {
     static let lessThan20 = "lessThan20"
     static let userSettingDescriptionLabel = "userSettingDescriptionLabel"
     static let emptyViewTitle = "emptyViewTitle"
+    static let week = "week"
+    static let calendar = "calendar"
+    static let home = "home"
+    static let forDaysLabel = "forDaysLabel"
+    static let createPlanErrorMessage = "createPlanErrorMessage"
+    static let notCertified = "notCertified"
+    static let todayIsNotCertifyingDay = "todayIsNotCertifyingDay"
+    static let certifyingErrorMessage = "certifyingErrorMessage"
+    static let saveImageErrorMessage = "saveImageErrorMessage"
+    static let deleteUserErrorMessage = "deleteUserErrorMessage"
 }
 
 

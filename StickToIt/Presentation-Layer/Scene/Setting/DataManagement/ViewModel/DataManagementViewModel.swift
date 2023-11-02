@@ -56,13 +56,13 @@ final class DataManagementViewModel {
     
     func transform(input: PublishSubject<Input>) -> PublishSubject<Output> {
         input
-            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
-            .subscribe(with: self) { _self, event in
+            .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .subscribe(with: self) { owner, event in
                 switch event {
 //                case .backup:
 //                    _self.backup()
                 case .deleteUser:
-                    _self.deleteUser()
+                    owner.deleteUser()
                 }
             }
             .disposed(by: disposeBag)
