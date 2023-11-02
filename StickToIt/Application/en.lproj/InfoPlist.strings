@@ -10,3 +10,5 @@
 "NSCameraUsageDescription" = "camera is used to capture the photo that certify day plan, and decorate the photo, but the photo is not saved our database. just only be saved in app.";
 
 "NSPhotoLibraryUsageDescription" = "your photo is used to certify day plan, and decorate the photo, but the photo is not saved our database. just only be saved in app.";
+
+"CFBundleDisplayName" = "StickToIt3";

@@ -12,4 +12,4 @@
 
 "NSPhotoLibraryUsageDescription" = "작심삼일이 인증사진을 등록하는 기능 사용을 위해 사진에 접근하도록 허용합니다. 작심3일에서 사진 정보는 수집하지 않습니다.";
 
-
+"CFBundleDisplayName" = "작심3일";
