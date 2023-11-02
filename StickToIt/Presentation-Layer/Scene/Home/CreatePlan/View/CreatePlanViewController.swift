@@ -12,12 +12,11 @@ import RxCocoa
 final class CreatePlanViewController: UIViewController {
     
     private let viewModel: CreatePlanViewModel
-
+    private let input = PublishSubject<CreatePlanViewModel.Input>()
     private let disposeBag = DisposeBag()
     
     // MARK: UI Properties
-    
-    let mainView = CreatePlanView()
+    private let mainView = CreatePlanView()
     
     private lazy var dismissButton = ResizableButton(
         image: UIImage(resource: .xmark),
@@ -26,23 +25,22 @@ final class CreatePlanViewController: UIViewController {
         action: #selector(dismissButtonDidTapped)
     )
     
-    private lazy var createButton: ResizableButton = {
-        let button = ResizableButton(
-            title: StringKey.createPlan.localized(),
-            font: .boldSystemFont(ofSize: 20),
-            tintColor: .white,
-            backgroundColor: .assetColor(.accent1),
-            target: self,
-            action: #selector(createButtonDidTapped)
-        )
-        button.rounded()
-        return button
-    }()
+    private lazy var createButton = ResizableButton(
+        title: StringKey.createPlan.localized(),
+        font: .boldSystemFont(ofSize: 20),
+        tintColor: .white,
+        backgroundColor: .assetColor(.accent1),
+        target: self,
+        action: #selector(createButtonDidTapped)
+    )
     
+    
+    // MARK: Life Cycle
     init(viewModel: CreatePlanViewModel) {
         self.viewModel = viewModel
-        
         super.init(nibName: nil, bundle: nil)
+        
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -52,9 +50,7 @@ final class CreatePlanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindViewModel()
-        configureViews()
-        setConstraints()
+        input.onNext(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,92 +59,111 @@ final class CreatePlanViewController: UIViewController {
         mainView.planNameTextField.innerView.becomeFirstResponder()
     }
     
-    deinit {
-        print("🔥 ", self)
-    }
-    
-    private func bindViewModel() {
-        
-        viewModel.planIsValidated
-            .bind(with: self) { (_self, isValidated) in
-                _self.createButton.isEnabled = isValidated
-                _self.createButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
+    private func bind() {
+        viewModel
+            .transform(input: input.asObserver())
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(with: self) { owner, output in
+                switch output {
+                case .configureUI:
+                    owner.configureViews()
+                    owner.setConstraints()
+                    
+                case .updateEndDateTitle(let dateString):
+                    owner.updateEndDateTitle(dateString)
+                    
+                case .planIsValidated(let isValidated):
+                    owner.updateCreateButton(isValidated: isValidated)
+                    
+                case .createPlanCompleted:
+                    owner.goBackHome()
+                    
+                case .showAlert(let message):
+                    owner.showAlert(
+                        title: StringKey.noti.localized(),
+                        message: message
+                    )
+                    
+                case .presentCalendar(withStartDate: let startDate, endDate: let endDate):
+                    owner.presentCalendarVC(with: startDate, endDate: endDate)
+                }
             }
             .disposed(by: disposeBag)
-        
         
         mainView.planNameTextField
             .innerView.rx.text
             .orEmpty
-            .asObservable()
             .map { String($0.prefix(20)) }
-            .subscribe(with: self) { (_self, text) in
-                _self.mainView.planNameTextField.innerView.text = text
-                _self.mainView.planNameMaximumTextNumberLabel.text = "\(text.count) / 20"
-                _self.viewModel.planName.onNext(text)
-                
-                if !text.isEmpty {
-                    _self.mainView.planNameTextField.bordered(borderWidth: 1, borderColor: .assetColor(.accent1))
-                } else {
-                    _self.mainView.planNameTextField.bordered(borderWidth: 0.5, borderColor: .assetColor(.accent1))
-                }
+            .bind(with: self) { owner, text in
+                owner.mainView.planNameTextField.innerView.text = text
+                owner.mainView.planNameMaximumTextNumberLabel.text = "\(text.count) / 20"
+                owner.updateTextFieldBorder(text: text)
+                owner.input.onNext(.planNameTextInput(text))
             }
             .disposed(by: disposeBag)
         
         mainView.planStartDateSegment.rx.selectedSegmentIndex
-            .asObservable()
-            .subscribe(with: self) { _self, index in
-                switch index {
-                case 0:
-                    _self.viewModel.startDate = .now
-                    _self.viewModel.endDate.accept(nil)
-                    _self.mainView.planNameTextField.innerView.resignFirstResponder()
-                case 1:
-                    let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now)!
-                    _self.viewModel.startDate = tomorrow
-                    _self.viewModel.endDate.accept(nil)
-                    _self.mainView.planNameTextField.innerView.resignFirstResponder()
-                default:
-                    return
-                }
-            }
-            .disposed(by: disposeBag)
-        
-        viewModel.endDate
-            .bind(with: self) { (_self, date) in
-                guard let _date = date else {
-                    _self.mainView.endDateLabel.innerView.text = StringKey.endDateTitle.localized()
-                    return
-                }
-                let endDateString = DateFormatter.getFullDateString(from: _date)
-                _self.mainView.endDateLabel.innerView.text = StringKey.endDateTitleSetting.localized(with: "\(endDateString)")
-                
-                _self.setTargetNumberOfDays(date: _date)
-            }
+            .bind(with: input, onNext: { owner, index in
+                owner.onNext(.startDateSelected(index))
+            })
             .disposed(by: disposeBag)
     }
+}
+
+extension CreatePlanViewController {
     
-    func setTargetNumberOfDays(date: Date) {
-        guard let dayInterval = Calendar.current.dateComponents([.day], from: viewModel.startDate, to: date).day else { return }
-        
-        let diffOfStartDateAndEndDate = dayInterval + 1
-        
-        self.viewModel.targetNumberOfDays = diffOfStartDateAndEndDate
+    private func updateTextFieldBorder(text: String) {
+        mainView.planNameTextField.bordered(
+            borderWidth: !text.isEmpty ? 1 : 0.5,
+            borderColor: .assetColor(.accent1)
+        )
     }
     
-    private func configureViews() {
+    private func updateCreateButton(isValidated: Bool) {
+        createButton.isEnabled = isValidated
+        createButton.backgroundColor = isValidated ? .assetColor(.accent1) : .gray
+    }
+    
+    private func updateEndDateTitle(_ text: String) {
+        mainView.endDateLabel.innerView.text = StringKey.endDateTitleSetting.localized(with: text)
+    }
+    
+    private func goBackHome() {
+        NotificationCenter.default.post(name: .planCreated, object: nil)
+        self.dismiss(animated: true)
+    }
+    
+    @MainActor
+    private func presentCalendarVC(with startDate: Date, endDate: Date) {
+        let popupVC = CreatePlanTargetPeriodSettingViewController(
+            startDate: startDate,
+            endDate: endDate
+        )
+        
+        popupVC.delegate = self
+        popupVC.modalTransitionStyle = .crossDissolve
+        popupVC.modalPresentationStyle = .overFullScreen
+        
+        present(popupVC, animated: true)
+    }
+}
+
+extension CreatePlanViewController: BaseViewConfigurable {
+    
+    func configureViews() {
         self.title = StringKey.createPlan.localized()
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
         
         mainView.buttonDelegate = self
+        createButton.rounded()
         
         view.addSubview(mainView)
         view.addSubview(createButton)
     }
     
-    private func setConstraints() {
+    func setConstraints() {
         
         mainView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
@@ -161,7 +176,6 @@ final class CreatePlanViewController: UIViewController {
             make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-10)
         }
     }
-    
     
     @objc private func dismissButtonDidTapped() {
         let alert = UIAlertController(
@@ -183,37 +197,20 @@ final class CreatePlanViewController: UIViewController {
     }
     
     @objc private func createButtonDidTapped() {
-        viewModel.createPlan { [weak self] result in
-            switch result {
-            case .success(let planQuery):
-                NotificationCenter.default.post(name: .planCreated, object: planQuery)
-                self?.dismiss(animated: true)
-            case .failure:
-                print("목표 생성 실패, 잠시 후 다시 시도해주세요!")
-            }
-        }
+        input.onNext(.createPlanButtonDidTapped)
     }
 }
 
 extension CreatePlanViewController: CalendarButtonProtocol {
     
     func endDateSettingButtonDidTapped() {
-        let endDate = viewModel.endDate.value
-        let twoDaysLater = Calendar.current.date(byAdding: .day, value: 2, to: viewModel.startDate)!
-        let defaultDate = DateFormatter.convertDate(from: twoDaysLater)!
-        let popupVC = CreatePlanTargetPeriodSettingViewController(startDate: viewModel.startDate, endDate: endDate ?? defaultDate)
-        popupVC.delegate = self
-        
-        popupVC.modalTransitionStyle = .crossDissolve
-        popupVC.modalPresentationStyle = .overFullScreen
-        
-        present(popupVC, animated: true)
+        input.onNext(.calendarButtonDidTapped)
     }
 }
 
 extension CreatePlanViewController: PlanTargetNumberOfDaysSettingDelegate {
     
-    func okButtonDidTapped(date: Date?) {
-        self.viewModel.endDate.accept(date)
+    func okButtonDidTapped(date: Date) {
+        input.onNext(.endDateIsSelected(date: date))
     }
 }

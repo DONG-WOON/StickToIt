@@ -6,29 +6,21 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol PlanTargetNumberOfDaysSettingDelegate: AnyObject {
      
-     func okButtonDidTapped(date: Date?)
+     func okButtonDidTapped(date: Date)
 }
 
 final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      
      weak var delegate: PlanTargetNumberOfDaysSettingDelegate?
      
-     private var startDate: Date
-     private var date: Date? {
-          willSet {
-               guard let  _newValue = newValue else { return }
-               guard let days = Calendar.current.dateComponents([.day], from: startDate, to: _newValue).day else { return }
-               if DateFormatter.getFullDateString(from: startDate)
-                    == DateFormatter.getFullDateString(from: .now) {
-                    self.dDayLabel.innerView.text = "오늘부터 \(days + 2) 동안"
-               } else {
-                    self.dDayLabel.innerView.text = "내일부터 \(days + 2) 동안"
-               }
-          }
-     }
+     private var startDate = BehaviorRelay(value: Date.now)
+     private let endDate = BehaviorRelay(value: Date.now.addDays(2))
+     private let disposable = DisposeBag()
      
      let containerView: UIView = {
           let view = UIView(backgroundColor: .systemBackground)
@@ -66,14 +58,27 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      )
      
      init(startDate: Date, endDate: Date) {
-          self.startDate = startDate
-          self.date = endDate
+          self.startDate.accept(startDate)
+          self.endDate.accept(endDate)
           
           super.init(nibName: nil, bundle: nil)
+          
+          bind()
      }
      
      required init?(coder: NSCoder) {
           fatalError("init(coder:) has not been implemented")
+     }
+     
+     func bind() {
+          Observable.combineLatest(startDate, endDate)
+               .map { (DateFormatter.convertDate(from: $0)!, DateFormatter.convertDate(from: $1)!) }
+               .map { startDate, endDate in
+                    let days = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day!
+                    return StringKey.forDaysLabel.localized(with: "\(days + 1)")
+               }
+               .bind(to: dDayLabel.innerView.rx.text)
+               .disposed(by: disposable)
      }
      
      override func viewDidLoad() {
@@ -84,17 +89,17 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
           
           calendar.delegate = self
           
-          calendar.setMinimumDate(
-               Calendar
-                    .current
-                    .date(
-                         byAdding: .day,
-                         value: 2,
-                         to: startDate
-                    )
-          )
+          startDate
+               .subscribe(with: self) { owner, date in
+                    owner.calendar.setMinimumDate(date.addDays(2))
+               }
+               .dispose()
           
-          calendar.select(date: date)
+          endDate
+               .subscribe(with: self) { owner, date in
+                    owner.calendar.select(date: date)
+               }
+               .dispose()
      }
      
      @objc private func dismissButtonDidTapped() {
@@ -102,16 +107,16 @@ final class CreatePlanTargetPeriodSettingViewController: UIViewController {
      }
      
      @objc private func okButtonDidTapped() {
-          delegate?.okButtonDidTapped(date: date)
+          delegate?.okButtonDidTapped(date: endDate.value)
           self.dismiss(animated: true)
      }
 }
 
 extension CreatePlanTargetPeriodSettingViewController: StickToItCalendarDelegate {
      
-     func calendarView(didSelectAt date: Date?) {
+     func calendarView(didSelectAt date: Date) {
           
-          self.date = date
+          endDate.accept(date)
           
           UIView.animate(withDuration: 0.4) {
                self.dDayLabel.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
