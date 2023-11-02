@@ -10,12 +10,21 @@ import MKRingProgressView
 
 class GradientCircleView: RingProgressView {
     
+    let percentageTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: Const.FontSize.body)
+        label.textColor = .label
+        label.text = "Achievement".localized()
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        return label
+    }()
+    
     let percentageLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: Const.FontSize.body)
         label.textColor = .label
         label.textAlignment = .center
-        label.numberOfLines = 2
         return label
     }()
     
@@ -26,10 +35,17 @@ class GradientCircleView: RingProgressView {
         self.endColor = .assetColor(.accent1)
         self.ringWidth = 20
         
-        self.addSubview(percentageLabel)
+        self.addSubviews([percentageTitleLabel, percentageLabel])
+        
+        percentageTitleLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(self.snp.centerY)
+            make.centerX.equalTo(self)
+            make.width.lessThanOrEqualTo(self).multipliedBy(0.5)
+        }
         
         percentageLabel.snp.makeConstraints { make in
-            make.center.equalTo(self)
+            make.top.equalTo(self.snp.centerY)
+            make.centerX.equalTo(self)
             make.width.lessThanOrEqualTo(self).multipliedBy(0.5)
         }
     }
@@ -42,8 +58,7 @@ class GradientCircleView: RingProgressView {
         }
 
         let percentage = Int(progress * 100)
-        percentageLabel.text = "\("Achievement".localized())\n\(percentage)%"
-        percentageLabel.sizeToFit()
+        percentageLabel.text = "\(percentage)%"
     }
     
     required init?(coder: NSCoder) {
