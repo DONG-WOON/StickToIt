@@ -12,7 +12,10 @@ protocol UserRepository<Model, Entity> {
     associatedtype Model
     associatedtype Entity
     
-    func fetch(key: UUID) -> Result<Model, Error>
+    func fetch(
+        key: UUID,
+        completion: @escaping (Result<Model, Error>) -> Void
+    )
     
     func create(
         model: Model,
@@ -21,7 +24,7 @@ protocol UserRepository<Model, Entity> {
     
     func update(
         userID: UUID,
-        updateHandler: @escaping (Entity) -> Void,
+        updateHandler: @escaping (Entity?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     )
     

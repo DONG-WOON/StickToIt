@@ -12,18 +12,15 @@ protocol DatabaseManager {
     
     // MARK: Read
     func fetchAll<T: Object & Entity>(
-        type: T.Type
-    ) -> Results<T>
+        type: T.Type,
+        completion: @escaping (Results<T>) -> Void
+    )
     
     func fetch<T: Object & Entity>(
         type: T.Type,
-        key: UUID
-    ) -> T?
-    
-    func filteredFetch<T: Object & Entity>(
-        type: T.Type,
-        _ filtered: (T) -> Bool
-    ) -> [T]
+        key: UUID,
+        completion: @escaping (T?) -> Void
+    )
     
     // MARK: Create
     func create<U: Model & Identifiable<UUID>, T: Object & Entity>(
@@ -37,7 +34,7 @@ protocol DatabaseManager {
     func update<T: Object & Entity>(
         entity: T.Type,
         key: UUID,
-        updateHandler: @escaping (T) -> Void,
+        updateHandler: @escaping (T?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     )
     
@@ -45,7 +42,7 @@ protocol DatabaseManager {
     func delete<T: Object & Entity>(
         entity: T.Type,
         key: UUID,
-        deleteHandler: @escaping (Realm, T) -> Void,
+        deleteHandler: @escaping (Realm, T?) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     )
     

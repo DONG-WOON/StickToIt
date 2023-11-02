@@ -13,7 +13,6 @@ final class DIContainer {
     
     lazy var databaseManager = DatabaseManagerImp()
     
-    
     // MARK: UseCases
     
     func makeFetchPlanUseCase() -> some FetchPlanUseCase<Plan, PlanEntity> {
@@ -47,8 +46,6 @@ final class DIContainer {
     func makeUpdateDayPlanUseCase() -> some UpdateDayPlanUseCase<DayPlan, DayPlanEntity> {
         UpdateDayPlanUseCaseImp(repository: dayPlanRepository)
     }
-    
-    
     
     // MARK: Repository
     

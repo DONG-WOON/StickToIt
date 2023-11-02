@@ -29,22 +29,21 @@ extension PlanQueryRepositoryImp: PlanRepository {
     typealias Model = PlanQuery
     typealias Entity = PlanQueryEntity
     
-    func fetchAll() -> Result<[Model], Error> {
-        guard let entities = databaseManager?
-            .fetchAll(type: Entity.self)
-        else {
-            return .failure(DatabaseError.fetchAllError)
+    func fetchAll(completion: @escaping (Result<[Model], Error>) -> Void) {
+        databaseManager?.fetchAll(type: Entity.self) { results in
+            let entity = results.compactMap { $0 }
+            completion(.success(entity.map({ $0.toDomain() })))
         }
-        return .success(entities.map { $0.toDomain() })
     }
     
-    func fetch(key: UUID) -> Result<Model, Error> {
-        guard let entity = databaseManager?
-            .fetch(type: Entity.self, key: key)
-        else {
-            return .failure(DatabaseError.fetchError)
+    func fetch(key: UUID, completion: @escaping (Result<Model, Error>) -> Void) {
+        databaseManager?.fetch(type: Entity.self, key: key) { entity in
+            guard let _entity = entity?.toDomain() else {
+                completion(.failure(DatabaseError.fetchError))
+                return
+            }
+            completion(.success(_entity))
         }
-        return .success(entity.toDomain())
     }
     
     func create(
@@ -65,7 +64,7 @@ extension PlanQueryRepositoryImp: PlanRepository {
     func update(
         entity: Entity.Type,
         key: UUID,
-        updateHandler: @escaping (Entity) -> Void,
+        updateHandler: @escaping (Entity?) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         databaseManager?.update(
@@ -91,7 +90,7 @@ extension PlanQueryRepositoryImp: PlanRepository {
     func delete(
         entity: Entity.Type,
         key: UUID,
-        deleteHandler: @escaping (Realm, Entity) -> Void,
+        deleteHandler: @escaping (Realm, Entity?) -> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     ) {
         databaseManager?.delete(

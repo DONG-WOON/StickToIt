@@ -28,14 +28,19 @@ extension UserRepositoryImp: UserRepository {
     typealias Model = User
     typealias Entity = UserEntity
     typealias ID = UUID
-
-    func fetch(key: ID) -> Result<Model, Error> {
-        guard let entity = databaseManager?
-            .fetch(type: Entity.self, key: key)
-        else {
-            return .failure(DatabaseError.fetchError)
-        }
-        return .success(entity.toDomain())
+    
+    func fetch(
+        key: ID,
+        completion: @escaping (Result<Model, Error>) -> Void
+    ) {
+        databaseManager?
+            .fetch(type: Entity.self, key: key) { entity in
+                guard let entity else {
+                    completion(.failure(DatabaseError.fetchError))
+                    return
+                }
+                completion(.success(entity.toDomain()))
+            }
     }
     
     func create(
@@ -56,7 +61,7 @@ extension UserRepositoryImp: UserRepository {
     
     func update(
         userID: ID,
-        updateHandler: @escaping (Entity) -> Void,
+        updateHandler: @escaping (Entity?) -> Void,
         onComplete: @Sendable @escaping (Error?) -> Void
     ) {
         databaseManager?.update(

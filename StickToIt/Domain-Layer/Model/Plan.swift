@@ -10,10 +10,10 @@ import Foundation
 
 struct Plan: Identifiable {
     let id: UUID
-    let name: String
-    let targetNumberOfDays: Int
-    let startDate: Date
-    let endDate: Date
+    var name: String
+    var targetNumberOfDays: Int
+    var startDate: Date
+    var endDate: Date
     var dayPlans: [DayPlan]
     
     var totalWeek: Int {

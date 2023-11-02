@@ -20,7 +20,7 @@ protocol DayPlanRepository<Model, Entity> {
     func update(
         entity: Entity.Type,
         key: UUID,
-        updateHandler: @escaping (Entity)-> Void,
+        updateHandler: @escaping (Entity?)-> Void,
         onComplete: @escaping @Sendable (Error?) -> Void
     )
     
