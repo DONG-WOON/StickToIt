@@ -78,10 +78,10 @@
 "home" = "Home";
 "forDaysLabel" = "For %@ days";
 "createPlanErrorMessage" = "Unable to create the current study. If you're still having problems, please contact us on the Setting";
-"notCertified" = "Unfortunately, I couldn't certifying 🥲";
-"todayIsNotCertifyingDay" = "Can't certify it yet, but please keep doing it";
+"notCertified" = "Certification Failed🥲";
+"todayIsNotCertifyingDay" = "Can't Certify Yet";
 "certifyingErrorMessage" = "Authentication failed. Would you like to try again?";
 "saveImageErrorMessage" = "The picture was not saved. Would you like to save the photo again?";
 "deleteUserErrorMessage" = "You cannot delete your information. Please delete the app and reinstall it!";
 "certificationFailed" = "Certification Failed";
-"addImageTitle" = "add Photo";
+"addImageTitle" = "Add Photo";

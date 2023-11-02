@@ -78,7 +78,7 @@
 "forDaysLabel" = "%@ 일 동안";
 "createPlanErrorMessage" = "현재 스터디를 생성할 수 없습니다. 계속해서 문제가 있다면 설정탭에서 문의 주세요!";
 "notCertified" = "아쉽게도 인증 못했어요 🥲";
-"todayIsNotCertifyingDay" = "아직 인증할 수 없지만, 지금처럼 꾸준히 해주세요!";
+"todayIsNotCertifyingDay" = "아직 인증할 수 없어요!";
 "certifyingErrorMessage" = "인증에 실패했습니다. 다시 시도하겠습니까?";
 "saveImageErrorMessage" = "사진이 제대로 저장되지않았어요.인증사진만 다시 저장하시겠어요?";
 "deleteUserErrorMessage" = "사용자의 정보를 삭제할 수 없습니다. 앱을 삭제 후 다시 설치해주세요!";

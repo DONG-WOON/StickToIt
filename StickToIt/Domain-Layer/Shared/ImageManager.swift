@@ -62,7 +62,7 @@ final class ImageManager {
         completion: @escaping (PHAuthorizationStatus) -> Void
     ) {
         PHPhotoLibrary.requestAuthorization(
-            for: .readWrite,
+            for: .addOnly,
             handler: completion
         )
     }

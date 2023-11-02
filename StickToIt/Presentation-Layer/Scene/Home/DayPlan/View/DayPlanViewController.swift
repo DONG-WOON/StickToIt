@@ -45,7 +45,7 @@ final class DayPlanViewController: UIViewController {
     }()
     
     private lazy var weekDayLabel: PaddingView<UILabel> = {
-       let paddingView = PaddingView<UILabel>()
+        let paddingView = PaddingView<UILabel>()
         paddingView.innerView.text = StringKey.week.localized(with: "\(1)")
         paddingView.innerView.font = .monospacedSystemFont(ofSize: Const.FontSize.body, weight: .semibold)
         paddingView.innerView.backgroundColor = .clear
@@ -54,7 +54,7 @@ final class DayPlanViewController: UIViewController {
         paddingView.addBlurEffect()
         return paddingView
     }()
-
+    
     private let dateLabel: PaddingView<UILabel> = {
         let view = PaddingView<UILabel>()
         view.innerView.font = .systemFont(ofSize: 19)
@@ -148,58 +148,41 @@ final class DayPlanViewController: UIViewController {
                 }
             }
         }
- 
+        
         addNotification()
         configureViews()
         setConstraints()
     }
     
     func bind() {
-        let _date = viewModel.dayPlan.date
-        let dateString = DateFormatter.getFullDateString(from: _date)
-        self.dateLabel.innerView.text = dateString
         
-        //인증 안 했을때
-        if !viewModel.dayPlan.isComplete {
-            if DateFormatter.getFullDateString(from: .now) == dateString {
-                
-                addImageButton.isHidden = false
-                placeholderImageView.isHidden = true
-                checkMarkImageView.isHidden = true
-                certifyButton.setTitle(StringKey.certify.localized(), for: .normal)
-                
-            } else if DateFormatter.getFullDateString(from: .now) > dateString {
-                
-                addImageButton.isHidden = true
-                placeholderImageView.isHidden = false
-                checkMarkImageView.image = UIImage(resource: .xmarkCircleFill)
-                checkMarkImageView.isHidden = false
-                certifyButton.setTitle(StringKey.notCertified.localized(), for: .normal)
-                
-            } else if DateFormatter.getFullDateString(from: .now) < dateString {
-                
-                addImageButton.isHidden = true
-                placeholderImageView.isHidden = false
-                checkMarkImageView.isHidden = true
-                certifyButton.setTitle(StringKey.todayIsNotCertifyingDay.localized(), for: .normal)
-                
+        viewModel.dayPlan
+            .map { DateFormatter.getFullDateString(from: $0.date) }
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(to: dateLabel.innerView.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.dayPlan
+            .map {
+                (isComplete: $0.isComplete,
+                 dateString: DateFormatter.getFullDateString(from: $0.date))
             }
-        // 인증 했을때
-        } else {
-            addImageButton.isHidden = true
-            certifyButton.setTitle(StringKey.certified.localized(), for: .normal)
-            checkMarkImageView.isHidden = false
-            checkMarkImageView.image = UIImage(resource: .checkedCircle)
-        }
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, value in
+                owner.updateUI(value)
+            }
+            .disposed(by: disposeBag)
         
-        weekDayLabel.innerView.text = StringKey.week.localized(with: "\(viewModel.dayPlan.week)")
+        viewModel.dayPlan
+            .map { StringKey.week.localized(with: "\($0.week)") }
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(to: weekDayLabel.innerView.rx.text)
+            .disposed(by: disposeBag)
         
         viewModel.loadImage { [weak self] data in
             if let imageData = data {
                 self?.addImageButton.isHidden = true
                 self?.imageView.image = UIImage(data: imageData)
-            } else {
-                self?.addImageButton.isHidden = false
             }
         }
         
@@ -221,6 +204,40 @@ final class DayPlanViewController: UIViewController {
                 owner.indicatorView.isHidden = !isLoading
             }
             .disposed(by: disposeBag)
+    }
+    
+    func updateUI(_ value: (isComplete: Bool, dateString: String)) {
+        if !value.isComplete {
+            if DateFormatter.getFullDateString(from: .now) == value.dateString {
+                
+                addImageButton.isHidden = false
+                placeholderImageView.isHidden = true
+                checkMarkImageView.isHidden = true
+                certifyButton.setTitle(StringKey.certify.localized(), for: .normal)
+                
+            } else if DateFormatter.getFullDateString(from: .now) > value.dateString {
+                
+                addImageButton.isHidden = true
+                placeholderImageView.isHidden = false
+                checkMarkImageView.image = UIImage(resource: .xmarkCircleFill)?.withTintColor(.red, renderingMode: .alwaysOriginal)
+                checkMarkImageView.isHidden = false
+                certifyButton.setTitle(StringKey.notCertified.localized(), for: .normal)
+                
+            } else if DateFormatter.getFullDateString(from: .now) < value.dateString {
+                
+                addImageButton.isHidden = true
+                placeholderImageView.isHidden = false
+                checkMarkImageView.isHidden = true
+                certifyButton.setTitle(StringKey.todayIsNotCertifyingDay.localized(), for: .normal)
+            }
+            // 인증 했을때
+        } else {
+            addImageButton.isHidden = true
+            placeholderImageView.isHidden = true
+            certifyButton.setTitle(StringKey.certified.localized(), for: .normal)
+            checkMarkImageView.isHidden = false
+            checkMarkImageView.image = UIImage(resource: .checkedCircle)
+        }
     }
 }
 
@@ -349,7 +366,7 @@ extension DayPlanViewController {
                 self?.certifyButtonDidTapped()
             }
         }
-
+        
     }
     
     @objc private func dismissButtonDidTapped() {

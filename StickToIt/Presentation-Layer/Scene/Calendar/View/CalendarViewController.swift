@@ -75,7 +75,7 @@ final class CalendarViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        input.onNext(.viewWillAppear)
+        input.onNext(.viewWillAppear)
     }
     
     deinit {

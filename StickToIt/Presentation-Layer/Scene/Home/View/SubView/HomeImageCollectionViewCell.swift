@@ -116,13 +116,22 @@ final class HomeImageCollectionViewCell: UICollectionViewCell {
         dayNameLabel.innerView.text = DateFormatter.getFullDateString(from: dayPlan.date)
         checkMarkImageView.isHidden = !dayPlan.isComplete
         if DateFormatter.getFullDateString(from: dayPlan.date) < DateFormatter.getFullDateString(from: .now) {
-            todayLabel.isHidden = false
+            
+            todayLabel.isHidden = true
             todayLabel.backgroundColor = .systemGray2
-            todayLabel.innerView.text = StringKey.certificationFailed.localized()
+            checkMarkImageView.isHidden = false
+            checkMarkImageView.image = dayPlan.isComplete ? UIImage(resource: .checkedCircle)?.withTintColor(.systemGreen) : UIImage(resource: .xmarkCircleFill)?.withTintColor(.red, renderingMode: .alwaysOriginal)
+
         } else if Calendar.current.isDateInToday(dayPlan.date) {
+            
             todayLabel.innerView.text = StringKey.today.localized()
             todayLabel.isHidden = false
+            
+            checkMarkImageView.image = dayPlan.isComplete ? UIImage(resource: .checkedCircle) : nil
+            checkMarkImageView.isHidden = false
+            
         } else {
+            checkMarkImageView.isHidden = true
             todayLabel.isHidden = true
         }
         
@@ -192,7 +201,6 @@ extension HomeImageCollectionViewCell {
         
         todayLabel.snp.makeConstraints { make in
             make.centerY.equalTo(blurView)
-            make.leading.lessThanOrEqualTo(checkMarkImageView.snp.trailing)
             make.trailing.equalTo(blurView.snp.trailing).inset(5)
         }
     }

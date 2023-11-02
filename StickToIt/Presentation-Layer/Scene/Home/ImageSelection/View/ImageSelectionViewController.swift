@@ -105,9 +105,9 @@ final class ImageSelectionViewController: UIViewController {
     
     private func bindUI() {
         imageDataList
-            .bind(with: self) { (_self, datas) in
+            .bind(with: self) { (owner, datas) in
                 let id = datas.map { $0.localIdentifier }
-                _self.takeSnapshot(item: id, toSection: .main)
+                owner.takeSnapshot(item: id, toSection: .main)
             }
             .disposed(by: disposeBag)
     }

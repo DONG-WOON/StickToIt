@@ -12,20 +12,17 @@ import RxCocoa
 final class DayPlanViewModel {
     // MARK: Properties
     private let updateDayPlanUseCase: any UpdateDayPlanUseCase<DayPlan, DayPlanEntity>
-    private let mainQueue: DispatchQueue
     
-    var dayPlan: DayPlan
+    var dayPlan: BehaviorRelay<DayPlan>
     var isValidated = BehaviorRelay(value: false)
     var isLoading = BehaviorRelay(value: false)
     
     init(
         dayPlan: DayPlan,
-        updateDayPlanUseCase: some UpdateDayPlanUseCase<DayPlan, DayPlanEntity>,
-        mainQueue: DispatchQueue = .main
+        updateDayPlanUseCase: some UpdateDayPlanUseCase<DayPlan, DayPlanEntity>
     ) {
-        self.dayPlan = dayPlan
+        self.dayPlan = BehaviorRelay(value: dayPlan)
         self.updateDayPlanUseCase = updateDayPlanUseCase
-        self.mainQueue = mainQueue
     }
     
     func checkError(handler: (String, String) -> Void) {
@@ -76,7 +73,7 @@ final class DayPlanViewModel {
     func certify() async throws {
         let result = await updateDayPlanUseCase.update(
             entity: DayPlanEntity.self,
-            key: dayPlan.id,
+            key: dayPlan.value.id,
             updateHandler: {
                 $0?.isComplete = true
             }
@@ -97,7 +94,7 @@ final class DayPlanViewModel {
         )
         let imageURL = await updateDayPlanUseCase.saveImageData(
             imageData,
-            dayPlanID: dayPlan.id
+            dayPlanID: dayPlan.value.id
         )
         
         if let imageURL {
@@ -110,7 +107,7 @@ final class DayPlanViewModel {
     func updateImageURL(with imageURL: String) async throws {
         let result = await updateDayPlanUseCase.update(
             entity: DayPlanEntity.self,
-            key: dayPlan.id
+            key: dayPlan.value.id
         ) { $0?.imageURL = imageURL }
         
         switch result {
@@ -122,7 +119,7 @@ final class DayPlanViewModel {
     }
     
     func loadImage(completion: @escaping (Data?) -> Void) {
-        updateDayPlanUseCase.loadImage(dayPlanID: dayPlan.id) { data in
+        updateDayPlanUseCase.loadImage(dayPlanID: dayPlan.value.id) { data in
             completion(data)
         }
     }
