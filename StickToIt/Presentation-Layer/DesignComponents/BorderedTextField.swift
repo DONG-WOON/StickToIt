@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BorderedTextField: BorderedView<UITextField> {
+final class BorderedTextField: PaddingView<UITextField> {
     
     var placeholder: String? {
         get { innerView.placeholder }

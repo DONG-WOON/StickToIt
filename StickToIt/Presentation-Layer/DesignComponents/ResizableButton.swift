@@ -16,10 +16,10 @@ final class ResizableButton: UIButton {
         symbolConfiguration: UIImage.SymbolConfiguration? = .init(scale: .default),
         font: UIFont? = nil,
         tintColor: UIColor?,
-        backgroundColor: UIColor? = .systemBackground,
+        backgroundColor: UIColor? = .clear,
         imageAlignment: UISemanticContentAttribute? = .forceLeftToRight,
         target: Any?,
-        action: Selector
+        action: Selector? = nil
     ) {
         self.init()
         
@@ -31,7 +31,7 @@ final class ResizableButton: UIButton {
         }
         
         if let title {
-            self.setTitle(title + " ", for: .normal)
+            self.setTitle(title, for: .normal)
         }
         
         if let imageAlignment {
@@ -45,6 +45,8 @@ final class ResizableButton: UIButton {
         
         self.setImage(image, for: .normal)
         
-        self.addTarget(target, action: action, for: .touchUpInside)
+        if let action {
+            self.addTarget(target, action: action, for: .touchUpInside)
+        }
     }
 }

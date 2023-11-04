@@ -8,28 +8,43 @@
 import Foundation
 
 
-struct Plan {
-    private(set) var _id: UUID
+struct Plan: Identifiable {
+    let id: UUID
     var name: String
-    var targetPeriod: Int
+    var targetNumberOfDays: Int
     var startDate: Date
-    var executionDaysOfWeek: Set<Week>
-    //    let endDate: String // startDate 기점으로 시간결졍?
-    var weeklyPlans: [WeeklyPlan]
+    var endDate: Date
+    var dayPlans: [DayPlan]
+    
+    var totalWeek: Int {
+        return Calendar.current.dateComponents([.weekOfYear], from: startDate, to: endDate).weekOfYear! + 1
+    }
+    
+    var currentWeek: Int {
+        let weekOfYear = Calendar.current.dateComponents([.weekOfYear], from: startDate, to: Date.now).weekOfYear!
+        return weekOfYear + 1
+    }
+    
+    var lastCertifyingDate: Date? {
+        let completedDayPlans = dayPlans.filter { $0.isComplete == true }
+        
+        return completedDayPlans.sorted(by: { $0.date < $1.date }).last?.date
+    }
     
     init(
-        _id: UUID,
+        id: UUID,
         name: String,
-        targetPeriod: Int,
+        targetNumberOfDays: Int,
         startDate: Date,
-        executionDaysOfWeek: Set<Week>,
-        weeklyPlans: [WeeklyPlan]
+        endDate: Date,
+        dayPlans: [DayPlan]
     ) {
-        self._id = _id
+        self.id = id
         self.name = name
-        self.targetPeriod = targetPeriod
+        self.targetNumberOfDays = targetNumberOfDays
         self.startDate = startDate
-        self.executionDaysOfWeek = executionDaysOfWeek
-        self.weeklyPlans = weeklyPlans
+        self.endDate = endDate
+        self.dayPlans = dayPlans
     }
+    
 }

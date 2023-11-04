@@ -8,50 +8,60 @@
 import Foundation
 import RealmSwift
 
-extension User {
-    func toEntity() -> UserEntity {
-        return .init(name: name)
-    }
+protocol Model<Entity> {
+    associatedtype Entity: Object
+    func toEntity() -> Entity
 }
 
-extension Plan {
-    func toEntity() -> PlanEntity {
+extension User: Model {
+    func toEntity() -> UserEntity {
         
-        let _executionDaysOfWeek = MutableSet<Week>()
-        _executionDaysOfWeek.insert(objectsIn: executionDaysOfWeek)
-        
-        let _weeklyPlans = List<WeeklyPlanEntity>()
-        _weeklyPlans.append(objectsIn: weeklyPlans.map { $0.toEntity() })
+        let _planQueries = List<PlanQueryEntity>()
+        _planQueries.append(objectsIn: planQueries.map { $0.toEntity() })
         
         return .init(
-            name: name,
-            targetPeriod: targetPeriod,
-            startDate: startDate,
-            executionDaysOfWeek: _executionDaysOfWeek,
-            weeklyPlans: _weeklyPlans
+            _id: id,
+            nickname: nickname,
+            planQueries: _planQueries
         )
     }
 }
 
-extension WeeklyPlan {
-    func toEntity() -> WeeklyPlanEntity {
-        
+extension PlanQuery: Model {
+    func toEntity() -> PlanQueryEntity {
+        return .init(
+            _id: id,
+            planName: planName
+        )
+    }
+}
+
+extension Plan: Model {
+    func toEntity() -> PlanEntity {
+    
         let _dayPlans = List<DayPlanEntity>()
         _dayPlans.append(objectsIn: dayPlans.map { $0.toEntity() })
         
         return .init(
-            week: week,
+            _id: id,
+            name: name,
+            targetNumberOfDays: targetNumberOfDays,
+            startDate: startDate,
+            endDate: endDate,
             dayPlans: _dayPlans
         )
     }
 }
 
-extension DayPlan {
+extension DayPlan: Model {
     func toEntity() -> DayPlanEntity {
         return .init(
             date: date,
-            imageURL: imageURL,
-            content: content
+            isRequired: isRequired,
+            isComplete: isComplete,
+            week: week,
+            content: content,
+            imageURL: imageURL
         )
     }
 }

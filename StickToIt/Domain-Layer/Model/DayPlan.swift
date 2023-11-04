@@ -7,23 +7,31 @@
 
 import Foundation
 
-struct DayPlan {
-    var _id: UUID
+struct DayPlan: Hashable, Identifiable {
+    var id: UUID
+    let isRequired: Bool
+    var isComplete: Bool
     var date: Date
-    var imageURL: String
-    var content: String
-    
-    #warning("image Data or image file 결정")
+    var week: Int
+    var content: String?
+    var imageURL: String?
+
     
     init(
-        _id: UUID,
-         date: Date,
-         imageURL: String,
-        content: String
+        id: UUID,
+        isRequired: Bool,
+        isComplete: Bool,
+        date: Date,
+        week: Int,
+        content: String?,
+        imageURL: String?
     ) {
-        self._id = _id
+        self.id = id
+        self.isRequired = isRequired
+        self.isComplete = isComplete
         self.date = date
-        self.imageURL = imageURL
+        self.week = week
         self.content = content
+        self.imageURL = imageURL
     }
 }

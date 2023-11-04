@@ -8,188 +8,338 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class HomeViewController: UIViewController {
     
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, DayPlan>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, DayPlan>
     
     private enum Section: Int, CaseIterable {
         case main = 0
-        case last
     }
     
-    let viewModel = HomeViewModel(
-        useCase: FetchPlanUseCaseImpl(
-            repository: FetchPlanRepositoryImpl(
-                networkService: nil,
-                databaseManager: PlanDatabaseManager()
-            )
-        )
-    )
+    let viewModel: HomeViewModel
     
-    private var dataSource: DataSource!
+    private var dataSource: DataSource?
+    private let input = PublishSubject<HomeViewModel.Input>()
     private let disposeBag = DisposeBag()
     
     private lazy var createPlanAction = UIAction(
-        title: "계획 추가하기",
+        title: StringKey.addPlan.localized(),
         image: UIImage(resource: .plus),
-        handler: { _ in
-            let vc = CreatePlanViewController()
-                .embedNavigationController()
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
-        }
-    )
-    
-    private lazy var settingAction = UIAction(
-        title: "내 계획 설정하기",
-        image: UIImage(resource: .gear),
-        handler: { _ in
-
+        handler: { [weak self] _ in
+            guard let planCount = self?.viewModel.currentPlanCount else { return }
+            if planCount < 5 {
+                self?.input.onNext(.createPlanButtonDidTapped)
+            } else {
+                self?.showAlert(message: StringKey.addPlanAlert.localized())
+            }
         }
     )
     
     // MARK: UI Properties
     
-    private lazy var planTitleButton: ResizableButton = {
-        let button = ResizableButton(
-            title: "계획 설정",
-            image: UIImage(resource: .chevronDown),
-            symbolConfiguration: .init(font: .systemFont(ofSize: 17), scale: .small),
-            tintColor: .label,
-            imageAlignment: .forceRightToLeft,
-            target: self,
-            action: #selector(planTitleButtonDidTapped)
+    private lazy var planListButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.imagePadding = 7
+        configuration.image = UIImage(resource: .listBullet)
+        configuration.preferredSymbolConfigurationForImage = .init(scale: .medium)
+        configuration.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 0)
+        configuration.titleAlignment = .leading
+        configuration.baseForegroundColor = .label
+        
+        let bottomMenu = UIMenu(
+            options: .displayInline,
+            children: [createPlanAction]
         )
         
-        let bottomMenu = UIMenu(title: "", options: .displayInline, children: [createPlanAction,settingAction])
-        button.menu = UIMenu(children:[bottomMenu])
+        let button = UIButton(configuration: configuration)
+        button.menu = UIMenu(children: [bottomMenu])
         button.changesSelectionAsPrimaryAction = false
         button.showsMenuAsPrimaryAction = true
+        
         return button
     }()
     
-    private lazy var calendarButton = ResizableButton(
-        image: UIImage(resource: .calendar),
-        symbolConfiguration: .init(scale: .large),
-        tintColor: .label,
-        target: self,
-        action: #selector(calendarButtonDidTapped)
-    )
+    private lazy var completedDayPlansButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.cornerStyle = .capsule
+        configuration.title = "0"
+        configuration.image = UIImage(resource: .checkedCircle)?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.assetColor(.accent1))
+        
+        configuration.imagePadding = 10
+        configuration.preferredSymbolConfigurationForImage = .init(scale: .large)
+        configuration.baseForegroundColor = .black
+        configuration.baseBackgroundColor = .assetColor(.accent4)
+        
+        let button = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(completedDayPlansButtonDidTapped), for: .touchUpInside)
+        return button
+    }()
     
-    private lazy var currentWeekTitleButton = ResizableButton(
-        title: "WEEK 1",
-        image: UIImage(resource: .chevronRight),
-        symbolConfiguration: .init(scale: .large),
-        font: .boldSystemFont(ofSize: 30),
-        tintColor: .label, imageAlignment: .forceRightToLeft,
-        target: self,
-        action: #selector(currentWeekTitleButtonDidTapped)
-    )
-
-    private lazy var homeAchievementView = AchievementView()
-//    private let activityIndicator = UIActivityIndicatorView(style: .large)
-    
-    private let weeklyPlansPhotoCollectionView = HomeImageCollectionView()
+    private var mainView: UIView?
     
     // MARK: View Life Cycle
+    
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        
+        bind()
+        addNotification()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("🔥 ", self)
+        NotificationCenter.default.removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureDataSource()
-        bindViewModel()
-        viewModel.viewDidLoad()
-        
-        configureViews()
-        setAttributes()
-        
-        homeAchievementView.circleView.animate()
-        
-        takeSnapshot()
+        input.onNext(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewModel.reload()
+        input.onNext(.viewWillAppear)
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        setConstraints()
+        input.onNext(.viewWillDisappear)
     }
     
     // MARK: Methods
     
-    func bindViewModel() {
-        
-        viewModel.userPlanList
-            .subscribe(with: self) { (_self, userPlanQueries) in
-                var actions: [UIMenuElement] = []
-                
-                userPlanQueries.forEach { planQuery in
-                    actions.append(
-                        UIAction(title: planQuery.planName) { _ in
-                        _self.viewModel.fetchPlan(planQuery)
-                    })
+    func bind() {
+        viewModel
+            .transform(input: input.asObserver())
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(with: self) { (owner, event) in
+                switch event {
+                case .setViewsAndDelegate(planIsExist: let isExist):
+                    owner.setViewsAndDelegate(isExist)
+                    
+                case .configureUI:
+                    owner.configureViews()
+                    
+                case .showCreatePlanScene:
+                    owner.showCreatePlanScene()
+                    
+                case .showPlanWeekScene(let plan):
+                    owner.showStatics(plan: plan)
+                    
+                case .showToast(let title, let message):
+                    owner.showToast(title: title, message: message)
+                    
+                case .loadPlanQueries(let planQueries):
+                    owner.setPlanListButtonMenu(with: planQueries)
+                    
+                case .loadPlan(let plan):
+                    owner.update(plan: plan)
+                    
+                case .loadDayPlans(let dayPlans):
+                    owner.takeSnapshot(dayPlans: dayPlans)
+                    
+                case .startAnimation:
+                    owner.startAnimation()
+                    
+                case .stopAnimation:
+                    owner.stopAnimation()
+                    
+                case .showUserInfo(let user):
+                    guard let user else { return }
+                    owner.update(nickname: user.nickname)
+                    
+                case .showCompleteDayPlanCount(let count):
+                    owner.completedDayPlansButton.configuration?.title = String(count)
+                    
+                case .userDeleted:
+                    owner.reloadAll()
+                    
+                case .alertError(let error):
+                    owner.showAlert(message: error?.localizedDescription)
+                    
+                case .showKeepGoingMessage(title: let title, message: let message):
+                    owner.showKeepGoingAlert(title: title, message: message)
                 }
-                
-                guard let firstPlanQuery = userPlanQueries.first else { return }
-                
-                _self.viewModel.fetchPlan(firstPlanQuery)
-                _self.planTitleButton.setTitle(firstPlanQuery.planName + " ", for: .normal)
-                
-                let bottomMenu = UIMenu(
-                    options: .displayInline,
-                    children: [_self.createPlanAction, _self.settingAction]
-                )
-                actions.append(bottomMenu)
-                
-                _self.planTitleButton.menu = UIMenu(children: actions)
             }
             .disposed(by: disposeBag)
-        
-        viewModel.currentPlan
-            .map { $0.targetPeriod / 7 < 1 ? 1 : $0.targetPeriod / 7 }
-            .subscribe(with: self) { (_self, week) in
-                #warning("현재 몇주차인지~")
-//                _self.currentWeekTitleButton.setTitle("WEEK \(week)", for: .normal)
-            }
-            .disposed(by: disposeBag)
-        
-        viewModel.currentWeek
-            .subscribe(with: self) { (_self, week) in
-                _self.viewModel.fetchWeeklyPlan(of: week)
-            }
-            .disposed(by: disposeBag)
-    }
-    
-    func takeSnapshot() {
-        var snapshot = Snapshot()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(["1", "2", "3", "4", "5"] + ["last"], toSection: .main)
-        dataSource.apply(snapshot)
     }
 }
+
+extension HomeViewController {
+    func showCreatePlanScene() {
+        let vc = CreatePlanViewController(viewModel: DIContainer.makeCreatePlanViewModel())
+            .embedNavigationController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+    }
+    
+    func showStatics(plan: Plan?) {
+        guard let plan else { return }
+        let vc = StaticsViewController(viewModel: StaticsViewModel(plan: plan))
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        self.present(vc, animated: true)
+    }
+    
+    @MainActor
+    func showToast(title: String?, message: String) {
+        self.view.makeToast(message, duration: 4, position: .center, title: title, image: UIImage(asset: .placeholder))
+    }
+    
+    @MainActor
+    func update(nickname: String) {
+        (view as? HomeView)?.update(nickname: nickname)
+        (view as? HomeEmptyView)?.update(nickname: nickname)
+    }
+    
+    func update(plan: Plan) {
+        (view as? HomeView)?.update(plan: plan)
+    }
+    
+    func setPlanListButtonMenu(with planQuery: [PlanQuery]) {
+        var actions: [UIMenuElement] = []
+        
+        let queryActions = planQuery
+            .map { query in
+                UIAction(
+                    title: query.planName
+                ) { [weak self] _ in
+                    UserDefaults.standard.setValue(query.id.uuidString, forKey: UserDefaultsKey.currentPlan)
+                    self?.input.onNext(.fetchPlan(query))
+                }
+            }
+        
+        actions.append(contentsOf: queryActions)
+        
+        let settingMenu = UIMenu(
+            options: .displayInline,
+            children: [createPlanAction]
+        )
+        
+        actions.append(settingMenu)
+        
+        planListButton.menu = UIMenu(
+            title: StringKey.planList.localized(),
+            children: actions
+        )
+    }
+    
+    func startAnimation() {
+        (view as? HomeEmptyView)?.startAnimation()
+    }
+    
+    func stopAnimation() {
+        (view as? HomeEmptyView)?.stopAnimation()
+    }
+    
+    func setViewsAndDelegate(_ planIsExist: Bool) {
+        if planIsExist {
+            let _view = HomeView()
+            
+            _view.setDelegate(self)
+            configureDataSource(of: _view.collectionView)
+            
+            self.view = _view
+            
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planListButton)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: completedDayPlansButton)
+            
+            self.input.onNext(.reloadAll)
+        } else {
+            let _view = HomeEmptyView()
+            
+            _view.delegate = self
+            
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = nil
+            
+            self.view = _view
+        }
+    }
+    
+    func takeSnapshot(dayPlans: [DayPlan]) {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(dayPlans, toSection: .main)
+        
+        dataSource?.apply(snapshot)
+    }
+    
+    func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(planCreated), name: .planCreated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadAll), name: .reloadAll, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadPlan), name: .reloadPlan, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUserInfo), name: .updateNickname, object: nil)
+    }
+    
+    func showAlert(message: String?) {
+        let alert = UIAlertController(title: StringKey.noti.localized(), message: message ?? "알 수 없는 오류가 발생했습니다." , preferredStyle: .alert)
+        let okAction = UIAlertAction(title: StringKey.done.localized(), style: .default)
+        
+        alert.addAction(okAction)
+        
+        self.present(alert, animated: true)
+    }
+    
+    func showKeepGoingAlert(title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: StringKey.add100Days.localized(), style: .default) { [weak self] _ in
+            self?.input.onNext(.add100DayPlansOfPlan)
+        }
+        let cancelAction = UIAlertAction(title: StringKey.close.localized(), style: .cancel)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
+    }
+}
+
 // MARK: - @objc Method
 
 extension HomeViewController {
     
-    @objc private func planTitleButtonDidTapped() {
-        
+    @objc private func planCreated() {
+        input.onNext(.planCreated)
     }
     
-    @objc private func calendarButtonDidTapped() {
-        let vc = UIViewController()
-        navigationController?.pushViewController(vc, animated: true)
+    @objc private func reloadAll() {
+        input.onNext(.reloadAll)
     }
     
-    @objc private func currentWeekTitleButtonDidTapped() {
-        let vc = UIViewController()
-        navigationController?.pushViewController(vc, animated: true)
+    @objc private func reloadPlan() {
+        input.onNext(.reloadPlan)
+    }
+    
+    @objc private func completedDayPlansButtonDidTapped() {
+        input.onNext(.completedDayPlansButtonDidTapped)
+    }
+    
+    @objc private func updateUserInfo(_ notification: Notification) {
+        guard let nickname = notification.userInfo?[NotificationKey.nickname] as? String else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.update(nickname: nickname)
+        }
+    }
+}
+
+extension HomeViewController: CreatePlanButtonDelegate {
+    func createPlan() {
+        input.onNext(.createPlanButtonDidTapped)
     }
 }
 
@@ -197,82 +347,64 @@ extension HomeViewController {
     // MARK: Configure
     
     private func configureViews() {
-        view.addSubview(currentWeekTitleButton)
-        view.addSubview(weeklyPlansPhotoCollectionView)
-//        view.addSubview(activityIndicator)
-        view.addSubview(homeAchievementView)
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: planTitleButton)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: calendarButton)
+        view.backgroundColor = .systemBackground
     }
     
-    private func setAttributes() {
-//        activityIndicator.isHidden = true
-
-    }
-    
-    private func setConstraints() {
-        currentWeekTitleButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
-        }
-        weeklyPlansPhotoCollectionView.snp.makeConstraints { make in
-            make.bottom.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(weeklyPlansPhotoCollectionView.snp.width)
-        }
-//        activityIndicator.snp.makeConstraints { make in
-//            make.center.equalTo(view)
-//        }
-        homeAchievementView.snp.makeConstraints { make in
-            make.top.equalTo(currentWeekTitleButton.snp.bottom).offset(20)
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
-            make.bottom.equalTo(weeklyPlansPhotoCollectionView.snp.top).offset(-20)
-        }
-    }
-    
-    private func configureDataSource() {
+    private func configureDataSource(of collectionView: UICollectionView) {
         
         let cellRegistration = UICollectionView
-            .CellRegistration<HomeImageCollectionViewCell, String>
-        { cell, indexPath, item in
+            .CellRegistration<HomeImageCollectionViewCell, DayPlan>
+        { [weak self] cell, indexPath, item in
+            cell.dayPlan = item
+            
+            guard item.imageURL != nil else { return }
+            
+            self?.viewModel.loadImage(dayPlanID: item.id) { data in
+                cell.update(imageData: data)
+            }
         }
         
-        self.dataSource = DataSource(
-            collectionView: weeklyPlansPhotoCollectionView,
-            cellProvider: { collectionView, indexPath, item in
+        dataSource = DataSource(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, item in
                 let cell = collectionView.dequeueConfiguredReusableCell(
                     using: cellRegistration,
                     for: indexPath,
                     item: item
                 )
-                cell.delegate = self
+                guard let _self = self else { return UICollectionViewCell() }
+                cell.delegate = _self
+                
                 return cell
             }
         )
     }
 }
 
-extension HomeViewController: HomeImageCollectionViewCellDelegate {
+extension HomeViewController: ImageCellDelegate {
     
-    func addImageButtonDidTapped() {
-        let vc = ImageSelectionViewController(imageManager: ImageManager())
-            .embedNavigationController()
+    func imageDidSelected(_ dayPlan: DayPlan) {
+        
+        let vc = DayPlanViewController(
+            viewModel: DIContainer.makeDayPlanViewModel(dayPlan: dayPlan)
+        ).embedNavigationController()
         
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
-    
-    func editImageButtonDidTapped() {
-        
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let edit = UIAlertAction(title: "편집", style: .default)
-        let delete = UIAlertAction(title: "삭제", style: .destructive)
-        let cancel = UIAlertAction(title: "취소", style: .cancel)
-        
-        alert.addAction(edit)
-        alert.addAction(delete)
-        alert.addAction(cancel)
-        
+}
+
+extension HomeViewController: PlanInfoViewDelegate {
+    func trashButtonDidTapped() {
+        let alert = UIAlertController(title: StringKey.deletePlan.localized(), message: StringKey.deletePlanMessage.localized(), preferredStyle: .alert)
+        let okAction = UIAlertAction(title: StringKey.delete.localized(), style: .destructive) { [weak self] _ in
+            self?.input.onNext(.deletePlan)
+        }
+        let cancelAction = UIAlertAction(title: StringKey.cancel.localized(), style: .cancel)
+
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+
         self.present(alert, animated: true)
     }
 }

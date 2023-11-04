@@ -10,21 +10,29 @@ import RealmSwift
 
 final class DayPlanEntity: Object {
     @Persisted(primaryKey: true) var _id: UUID
+    @Persisted var isRequired: Bool
+    @Persisted var isComplete: Bool
     @Persisted var date: Date
-    @Persisted var imageURL: String
-    @Persisted var content: String
-    
-    #warning("image Data or image file 결정")
+    @Persisted var week: Int
+    @Persisted var content: String?
+    @Persisted var imageURL: String?
+    @Persisted(originProperty: "dayPlans") var plan: LinkingObjects<PlanEntity>
     
     convenience init(
         date: Date,
-        imageURL: String,
-        content: String
+        isRequired: Bool,
+        isComplete: Bool,
+        week: Int,
+        content: String?,
+        imageURL: String?
     ) {
         self.init()
         
         self.date = date
-        self.imageURL = imageURL
+        self.isRequired = isRequired
+        self.isComplete = isComplete
+        self.week = week
         self.content = content
+        self.imageURL = imageURL
     }
 }

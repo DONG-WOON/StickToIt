@@ -9,8 +9,12 @@ import UIKit
 import SnapKit
 import FSCalendar
 
-protocol StickToItCalendarDelegate: AnyObject {
+@objc protocol StickToItCalendarDelegate: AnyObject {
     func calendarView(didSelectAt date: Date)
+    @objc optional func calendarWillDisplay(date: Date)
+    @objc optional func numberOfEventsFor(date: Date) -> Int
+    @objc optional func eventDefaultColorsFor(date: Date) -> [UIColor]?
+    @objc optional func pageDidChange(on date: Date)
 }
 
 final class StickToItCalendar: UIView {
@@ -19,13 +23,13 @@ final class StickToItCalendar: UIView {
     
     private var minimumDate: Date? { didSet { calendar.reloadData() } }
     private var maximumDate: Date? { didSet { calendar.reloadData() } }
-    var currentDate: Date = Date()
+    var currentDate: Date = Date.now
     
     private let calendar = FSCalendar()
     weak var delegate: StickToItCalendarDelegate?
     
     /// CalendarHeaderView
-    private let customHeaderView = UIView(backgroundColor: .systemBackground)
+    private let customHeaderView = UIView(backgroundColor: .clear)
     
     private let monthLabel: UILabel = {
         let titleLabel = UILabel()
@@ -38,12 +42,12 @@ final class StickToItCalendar: UIView {
     
     private lazy var leftButton = ResizableButton(
         image: UIImage(resource: .chevronLeft),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
+        symbolConfiguration: .init(scale: .large), tintColor: .assetColor(.accent2),
         target: self, action: #selector(moveToPreviousMonth)
     )
     private lazy var rightButton = ResizableButton(
         image: UIImage(resource: .chevronRight),
-        symbolConfiguration: .init(scale: .large), tintColor: .systemIndigo,
+        symbolConfiguration: .init(scale: .large), tintColor: .assetColor(.accent2),
         target: self, action: #selector(moveToNextMonth)
     )
     
@@ -81,7 +85,7 @@ final class StickToItCalendar: UIView {
     // 해당날짜를 선택된 것으로 표시해주는 메소드
     func select(date: Date?) {
         guard let date = date else { return }
-        monthLabel.text = DateFormatter.monthYearFormatter.string(from: date)
+        monthLabel.text = DateFormatter.formatToString(format: .calendarHeader, from: date)
         calendar.select(date)
     }
     
@@ -104,20 +108,22 @@ final class StickToItCalendar: UIView {
         
         calendar.headerHeight = 0
         calendar.appearance.headerMinimumDissolvedAlpha = 0
-        calendar.locale = Locale(identifier: "ko_KR")
-        calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: CustomCalendarCell.identifier)
+        calendar.locale = .current
+        
+        
+//        calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: CustomCalendarCell.identifier)
     }
     
     private func setCalendarWeekdayView() {
         
         calendar.weekdayHeight = 40
         calendar.appearance.weekdayFont = UIFont.boldSystemFont(ofSize: 16)
-        calendar.appearance.weekdayTextColor = .systemIndigo
+        calendar.appearance.weekdayTextColor = .assetColor(.accent2)
     }
     
     private func setCalendarDaysView() {
         
-        calendar.appearance.todayColor = .systemIndigo
+        calendar.appearance.todayColor = .assetColor(.accent2)
         calendar.appearance.titleDefaultColor = .label
         calendar.appearance.titleTodayColor = .systemBackground
         calendar.appearance.titleFont = UIFont.boldSystemFont(ofSize: 16)
@@ -185,13 +191,6 @@ final class StickToItCalendar: UIView {
 
 extension StickToItCalendar: FSCalendarDataSource {
     
-    // 커스텀 셀 구성
-    func calendar(_ calendar: FSCalendar, cellFor date: Date, at monthPosition: FSCalendarMonthPosition) -> FSCalendarCell {
-        let cell = calendar.dequeueReusableCell(withIdentifier: CustomCalendarCell.identifier, for: date, at: monthPosition) as! CustomCalendarCell
-        // 셀의 설정
-        return cell
-    }
-    
     // 캘린더에서 볼수있는 미니멈 날짜
     func minimumDate(for calendar: FSCalendar) -> Date {
         if let minimumDate = minimumDate {
@@ -216,7 +215,7 @@ extension StickToItCalendar: FSCalendarDataSource {
     
     // 이벤트 발생 날짜에 필요한 만큼 개수 반환 (최대 3개)
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        return 0
+        return delegate?.numberOfEventsFor?(date: date) ?? 0
     }
 }
 
@@ -226,11 +225,11 @@ extension StickToItCalendar: FSCalendarDelegate {
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let today = calendar.currentPage
-        monthLabel.text = DateFormatter.monthYearFormatter.string(from: today)
+        monthLabel.text = DateFormatter.formatToString(format: .calendarHeader, from: today)
+        delegate?.pageDidChange?(on: today)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        
         delegate?.calendarView(didSelectAt: date)
         
         // 현재 캘린더에서 보이는 이전달 또는 다음달의 날짜를 누르면 해당 달로 이동하도록 하는 부분
@@ -241,14 +240,7 @@ extension StickToItCalendar: FSCalendarDelegate {
 
     func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         
-//        let dateComponents = date.convertToDateComponents([.year, .month, .day])
-//        let today = Date().convertToDateComponents([.year, .month, .day])
-//        let todayCell = cell as? CustomCalendarCell
-//        if dateComponents == today {
-//            todayCell?.setTodayBorderLayerIsHidden(false)
-//        } else {
-//            todayCell?.setTodayBorderLayerIsHidden(true)
-//        }
+        delegate?.calendarWillDisplay?(date: date)
     }
 }
 // MARK: - FSCalendarDelegateAppearance
@@ -257,7 +249,7 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
 
     // 스터디 스케쥴 북마크컬러에따라 컬러 지정
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]? {
-        return nil
+        return delegate?.eventDefaultColorsFor?(date: date)
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
@@ -265,48 +257,11 @@ extension StickToItCalendar: FSCalendarDelegateAppearance {
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-        return UIColor.clear // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
+        
+        return .assetColor(.accent1) // nil을 해주어도 blue로 설정되어있어서 clear로 해주어야 함.
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
-        return .label // nil을 해주어도 white로 설정되어있어서 black로 해주어야 함.
-    }
-}
-
-
-// MARK: - CustomCalendarCell
-
-final class CustomCalendarCell: FSCalendarCell {
-    
-    // MARK: - Properties
-    
-    private let selectionLayer = CAShapeLayer()
-    private let todayBorderLayer = CAShapeLayer()
-    
-    override var isSelected: Bool {
-        didSet {
-            selectionLayer.isHidden = !isSelected // 선택된 상태에 따라 layer 보이기/숨기기
-        }
-    }
-    
-    // MARK: - Initialization
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setSelectionLayer()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    // MARK: - Actions
-    
-    private func setSelectionLayer() {
-        selectionLayer.fillColor = UIColor.systemIndigo.cgColor
-        selectionLayer.path = UIBezierPath(roundedRect: self.bounds.insetBy(dx: 6.0, dy: 1.0), cornerRadius: 6).cgPath
-        selectionLayer.isHidden = true
-        
-        self.layer.insertSublayer(selectionLayer, at: 0)
+        return .white // nil을 해주어도 white로 설정되어있어서 black로 해주어야 함.
     }
 }

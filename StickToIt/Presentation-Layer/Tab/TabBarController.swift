@@ -12,10 +12,19 @@ final class TabBarController: UITabBarController {
 
     // MARK: Properties
     
-    let homeVC = HomeViewController()
-        .configureTabBarItem(title: "Home", image: UIImage(resource: .houseFill))
+    let homeVC = HomeViewController(
+        viewModel: DIContainer.makeHomeViewModel()
+    ).configureTabBarItem(title: StringKey.home.localized(), image: UIImage(resource: .houseFill))
         .embedNavigationController()
     
+    let calendarVC = CalendarViewController(
+        viewModel: DIContainer.makeCalendarViewModel())
+        .configureTabBarItem(title: StringKey.calendar.localized(), image: UIImage(resource: .calendar))
+        .embedNavigationController()
+        
+    let settingVC = SettingViewController(viewModel: SettingViewModel())
+        .configureTabBarItem(title: StringKey.setting.localized(), image: UIImage(resource: .gear))
+        .embedNavigationController()
     
     // MARK: View Life Cycle
 
@@ -26,6 +35,7 @@ final class TabBarController: UITabBarController {
         
         let tabBarAppearance = UITabBar.appearance()
         tabBarAppearance.tintColor = .label
+        tabBarAppearance.barTintColor = .black
         tabBarAppearance.isTranslucent = true
     }
 
@@ -33,10 +43,14 @@ final class TabBarController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("🔥 ", self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.viewControllers = [homeVC]
+        self.viewControllers = [homeVC, calendarVC, settingVC]
     }
 }
 

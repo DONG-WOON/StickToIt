@@ -8,46 +8,54 @@
 import Foundation
 import RealmSwift
 
-extension UserEntity {
+protocol Entity<Model> {
+    associatedtype Model
+    func toDomain() -> Model
+}
+
+extension UserEntity: Entity {
     func toDomain() -> User {
         return .init(
-            _id: _id,
-            name: name,
-            plans: plans.map { $0.toDomain() }
+            id: _id,
+            nickname: nickname,
+            planQueries: planQueries.map { $0.toDomain() }
         )
     }
 }
 
-extension PlanEntity {
+extension PlanQueryEntity: Entity {
+    func toDomain() -> PlanQuery {
+        .init(
+            id: _id,
+            planName: planName
+        )
+    }
+}
+
+extension PlanEntity: Entity {
     func toDomain() -> Plan {
 
         return .init(
-            _id: _id,
+            id: _id,
             name: name,
-            targetPeriod: targetPeriod,
+            targetNumberOfDays: targetNumberOfDays,
             startDate: startDate,
-            executionDaysOfWeek: Set(executionDaysOfWeek),
-            weeklyPlans: weeklyPlans.map { $0.toDomain() }
-        )
-    }
-}
-
-extension WeeklyPlanEntity {
-    func toDomain() -> WeeklyPlan {
-        return .init(
-            week: week,
+            endDate: endDate,
             dayPlans: dayPlans.map { $0.toDomain() }
         )
     }
 }
 
-extension DayPlanEntity {
+extension DayPlanEntity: Entity {
     func toDomain() -> DayPlan {
         return .init(
-            _id: _id,
+            id: _id,
+            isRequired: isRequired,
+            isComplete: isComplete,
             date: date,
-            imageURL: imageURL,
-            content: content
+            week: week,
+            content: content,
+            imageURL: imageURL
         )
     }
 }
