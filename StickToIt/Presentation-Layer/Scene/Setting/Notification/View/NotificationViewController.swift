@@ -70,19 +70,18 @@ extension NotificationViewController {
                 cellIdentifier: NotificationViewCell.identifier,
                 cellType: NotificationViewCell.self)
             ) { [weak self] row, item, cell in
-                guard let _self = self else { return }
                 
                 if row == 0 {
-                    cell.setUpSwitchRow(isOn: notiInfo.isAllowed) { isAllowed in
-                        (_self.mainView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NotificationViewCell)?.isHidden = !isAllowed
-                        _self.viewModel.switchChanged(isAllowed)
+                    cell.setUpSwitchRow(isOn: notiInfo.isAllowed) { [weak self] isAllowed in
+                        (self?.mainView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NotificationViewCell)?.isHidden = !isAllowed
+                        self?.viewModel.switchChanged(isAllowed)
                     }
                 }
                 
                 if row == 1 {
                     cell.isHidden = !notiInfo.isAllowed
-                    cell.setUpPickerRow(time: notiInfo.time) { time in
-                        _self.viewModel.dateChanged(time)
+                    cell.setUpPickerRow(time: notiInfo.time) { [weak self] time in
+                        self?.viewModel.dateChanged(time)
                     }
                 }
             }

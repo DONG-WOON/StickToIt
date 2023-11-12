@@ -27,8 +27,7 @@ final class SettingViewModel {
             var rows: [String] {
                 switch self {
                 case .first:
-                    return
-                    [
+                    return [
                         StringKey.editNickname.localized(),
                         StringKey.notification.localized(),
                         StringKey.dataManagement.localized()
