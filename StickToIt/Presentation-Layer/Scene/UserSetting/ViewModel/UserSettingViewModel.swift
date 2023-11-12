@@ -43,7 +43,7 @@ final class UserSettingViewModel {
             }
             .disposed(by: disposeBag)
         
-        return output.asObserver()
+        return output
     }
 }
 

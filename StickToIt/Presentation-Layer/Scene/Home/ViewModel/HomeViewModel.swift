@@ -124,7 +124,7 @@ final class HomeViewModel {
                     owner.output.onNext(.showPlanWeekScene(owner.currentPlan))
                     
                 case .fetchPlan(let planQuery):
-                    owner.fetchPlan(planQuery)
+                    owner.fetchPlan(planQuery.id)
                     
                 case .deletePlan:
                     owner.removePlanQuery()
@@ -135,7 +135,7 @@ final class HomeViewModel {
             }
             .disposed(by: disposeBag)
         
-        return output.asObserver()
+        return output
     }
     
     func loadImage(dayPlanID: UUID, completion: @escaping (Data?) -> Void) {
@@ -149,9 +149,8 @@ extension HomeViewModel {
     
     private func checkPlanIsExist() {
         guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
-              let userID = UUID(uuidString: userIDString) else {
-            return
-        }
+              let userID = UUID(uuidString: userIDString)
+        else { return }
         
         fetchUserUseCase.fetchUserInfo(key: userID) { [weak self] user in
             let planQueries = user.planQueries
@@ -168,9 +167,8 @@ extension HomeViewModel {
     
     private func fetchPlanQueriesOfUser() {
         guard let userIDString = UserDefaults.standard.string(forKey: UserDefaultsKey.userID),
-              let userID = UUID(uuidString: userIDString) else {
-            return
-        }
+              let userID = UUID(uuidString: userIDString)
+        else { return }
         
         fetchUserUseCase.fetchUserInfo(key: userID) { [weak self] user in
             self?.user = user
@@ -186,19 +184,17 @@ extension HomeViewModel {
     }
     
     private func fetchCurrentPlan() {
-        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
-            
-            let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
-            
-            fetchPlan(currentPlanQuery)
+        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan),
+           let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+            fetchPlan(currentPlanID)
         } else {
-            guard let firstQuery = user?.planQueries.first else { return }
-            fetchPlan(firstQuery)
+            guard let firstPlanID = user?.planQueries.first?.id else { return }
+            fetchPlan(firstPlanID)
         }
     }
     
-    private func fetchPlan(_ query: PlanQuery) {
-        fetchPlanUseCase.fetch(key: query.id) { [weak self] plan in
+    private func fetchPlan(_ id: UUID) {
+        fetchPlanUseCase.fetch(key: id) { [weak self] plan in
             guard let _self = self else { return }
             _self.currentPlan = plan
             _self.output.onNext(.loadPlan(plan))

@@ -39,7 +39,7 @@ final class CalendarViewController: UIViewController {
     
     private func bind() {
         viewModel
-            .transform(input: input.asObserver())
+            .transform(input: input)
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(with: self) { (owner, event) in
                 switch event {
@@ -86,13 +86,13 @@ final class CalendarViewController: UIViewController {
 extension CalendarViewController {
     
     private func checkCurrentPlan(_ planQueries: [PlanQuery]) {
-        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan), let currentPlanID = UUID(uuidString: currentPlanQueryString) {
+        if let currentPlanQueryString = UserDefaults.standard.string(forKey: UserDefaultsKey.currentPlan),
+           let currentPlanID = UUID(uuidString: currentPlanQueryString) {
             
-            let currentPlanQuery = PlanQuery(id: currentPlanID, planName: "")
-            input.onNext(.planMenuTapped(currentPlanQuery))
+            input.onNext(.planMenuTapped(currentPlanID))
         } else {
-            if let _firstPlanQuery = planQueries.first {
-                input.onNext(.planMenuTapped(_firstPlanQuery))
+            if let _firstPlanQueryID = planQueries.first?.id {
+                input.onNext(.planMenuTapped(_firstPlanQueryID))
             }
         }
     }

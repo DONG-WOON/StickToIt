@@ -12,6 +12,8 @@ enum UserDefaultsKey {
     static let userID = "userID"
     static let isCertifyingError = "isCertifyingError"
     static let isSaveImageError = "isSaveImageError"
+    static let localNotificationIsAllowed = "localNotificationIsAllowed"
+    static let localNotificationDate = "localNotificationDate"
 }
 
 enum NotificationKey {

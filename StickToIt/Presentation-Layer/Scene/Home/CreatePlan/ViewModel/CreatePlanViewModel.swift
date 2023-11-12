@@ -77,7 +77,7 @@ final class CreatePlanViewModel {
             }
             .disposed(by: disposeBag)
         
-        return output.asObserver()
+        return output
     }
 }
 
