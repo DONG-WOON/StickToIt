@@ -33,7 +33,7 @@ final class EditImageViewModel {
             .disposed(by: disposeBag)
         
         
-        return output.asObserver()
+        return output
     }
 }
 

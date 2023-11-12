@@ -27,7 +27,12 @@ final class SettingViewModel {
             var rows: [String] {
                 switch self {
                 case .first:
-                    return [StringKey.editNickname.localized(), StringKey.dataManagement.localized()]
+                    return
+                    [
+                        StringKey.editNickname.localized(),
+                        StringKey.notification.localized(),
+                        StringKey.dataManagement.localized()
+                    ]
                 case .second:
                     return [StringKey.versionInfo.localized()]
                 }
@@ -35,8 +40,9 @@ final class SettingViewModel {
             
             enum Row: String {
                 case editNickname
-//                case notification
+                case notification
                 case dataManagement
+                
                 case openSource
                 case versionInfo
             }
@@ -80,9 +86,9 @@ final class SettingViewModel {
         switch indexPath {
         case IndexPath(row: 0, section: 0):
             completion(.editNickname)
-//        case IndexPath(row: 1, section: 0):
-//            completion(.notification)
         case IndexPath(row: 1, section: 0):
+            completion(.notification)
+        case IndexPath(row: 2, section: 0):
             completion(.dataManagement)
         default:
             return

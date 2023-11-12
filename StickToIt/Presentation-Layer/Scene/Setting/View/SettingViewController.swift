@@ -33,6 +33,12 @@ final class SettingViewController: UIViewController {
         setConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     deinit {
         print("🔥 ", self)
     }
@@ -75,8 +81,11 @@ extension SettingViewController: UITableViewDataSource {
         }
         
         if viewModel.isVersionInfo(at: indexPath) {
+            let bundleInfo = Bundle.main.infoDictionary
+            let version = bundleInfo?["CFBundleShortVersionString"] as? String
+            
             let label = UILabel()
-            label.text = "1.0"
+            label.text = version ?? ""
             label.sizeToFit()
             cell.accessoryView = label
         }
@@ -91,16 +100,22 @@ extension SettingViewController: UITableViewDelegate {
         viewModel.selectedRowAt(indexPath) { [weak self] row in
             switch row {
             case .editNickname:
-                let vc = UserEditingViewController(viewModel: DIContainer.makeUserEditingViewModel())
+                let vc = UserEditingViewController(
+                    viewModel: DIContainer.makeUserEditingViewModel()
+                )
                 self?.navigationController?.pushViewController(vc, animated: true)
-//            case .notification:
-//                let vc = NotificationViewController()
-//                navigationController?.pushViewController(vc, animated: true)
+            case .notification:
+                let vc = NotificationViewController(
+                    viewModel: DIContainer.makeNotificationViewModel()
+                )
+                self?.tabBarController?.tabBar.isHidden = true
+                self?.navigationController?.pushViewController(vc, animated: true)
             case .dataManagement:
-                let vc = DataManagementViewController(viewModel: DIContainer.makeDataManagementViewModel())
+                let vc = DataManagementViewController(
+                    viewModel: DIContainer.makeDataManagementViewModel()
+                )
                 self?.navigationController?.pushViewController(vc, animated: true)
             default:
-                
                 return
             }
         }

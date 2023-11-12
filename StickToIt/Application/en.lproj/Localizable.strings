@@ -34,7 +34,7 @@
 "planCreatedMessage" = "Plan have been created.\n Work hard to achieve it!";
 "successTodayMessage" = "You achieved your goal yesterday too!! Please continue to achieve it today!";
 "noti" = "Notify";
-"failureTodayMessage" = "You haven't achieved your goal in %@ days... Do it steadily for the rest of the Plan Days";
+"failureTodayMessage" = "You haven't achieved your plan in %@ days... Do it steadily for the rest of the Plan Days";
 "congratulation" = "Congratulation!!";
 "keepGoingMessage" = "why don't you do it for another 100 days";
 "addPlan" = "Add Plan";
@@ -85,3 +85,8 @@
 "deleteUserErrorMessage" = "You cannot delete your information. Please delete the app and reinstall it!";
 "certificationFailed" = "Certification Failed";
 "addImageTitle" = "Add Photo";
+"notification" = "Notification Setting";
+"localNotificationTitle" = "Certify Today's Plan";
+"localNotificationSubTitle" = "Click Now to Certify";
+"notiTimeTitle" = "Notification Time";
+"notiSwitchTitle" = "Notification Allow";

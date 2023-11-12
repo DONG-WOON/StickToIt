@@ -15,7 +15,7 @@ final class CalendarViewModel {
     enum Input {
         case viewWillAppear
         case viewDidLoad
-        case planMenuTapped(PlanQuery?)
+        case planMenuTapped(UUID)
         case refresh
         case didSelect(Date?)
     }
@@ -56,15 +56,15 @@ final class CalendarViewModel {
                 case .viewWillAppear, .refresh:
                     owner.fetchPlanQueries()
     
-                case .planMenuTapped(let planQuery):
-                    owner.fetchPlanInfo(query: planQuery)
+                case .planMenuTapped(let id):
+                    owner.fetchPlanInfo(ofPlanID: id)
                     
                 case .didSelect(let date):
                     owner.selectDayPlan(at: date)
                 }
             }
             .disposed(by: disposeBag)
-        return output.asObserver()
+        return output
     }
 }
 
@@ -88,12 +88,9 @@ extension CalendarViewModel {
         }
     }
     
-    private func fetchPlanInfo(query: PlanQuery?) {
-        guard let query else {
-            return
-        }
+    private func fetchPlanInfo(ofPlanID id: UUID) {
         
-        planRepository.fetch(key: query.id) { [weak self] result in
+        planRepository.fetch(key: id) { [weak self] result in
             switch result {
             case .success(let plan):
                 self?.output.onNext(.showPlanInfo(plan))
@@ -132,7 +129,6 @@ extension CalendarViewModel {
     //3
     func filterCompletedDayPlans(_ dayPlans: [DayPlan]) -> [DayPlan] {
         return dayPlans.filter { $0.isComplete == true }
-        
     }
 
     private func completedPlanNumber(at date: Date) -> Int {

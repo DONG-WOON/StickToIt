@@ -84,3 +84,8 @@
 "deleteUserErrorMessage" = "사용자의 정보를 삭제할 수 없습니다. 앱을 삭제 후 다시 설치해주세요!";
 "certificationFailed" = "인증 실패";
 "addImageTitle" = "사진 추가";
+"notification" = "알림 설정";
+"localNotificationTitle" = "오늘도 인증해주세요!";
+"localNotificationSubTitle" = "지금 눌러서 인증하러가기";
+"notiTimeTitle" = "알림 시간";
+"notiSwitchTitle" = "알림 허용";
