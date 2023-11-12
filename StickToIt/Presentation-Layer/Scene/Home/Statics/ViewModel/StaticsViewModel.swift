@@ -43,7 +43,7 @@ final class StaticsViewModel {
             }
             .disposed(by: disposeBag)
         
-        return output.asObserver()
+        return output
     }
 }
 extension StaticsViewModel {

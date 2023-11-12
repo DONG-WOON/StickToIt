@@ -49,7 +49,7 @@ final class UserEditingViewModel {
             }
             .disposed(by: disposeBag)
         
-        return output.asObserver()
+        return output
     }
 }
 

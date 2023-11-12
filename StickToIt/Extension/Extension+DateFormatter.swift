@@ -13,6 +13,7 @@ extension DateFormatter {
     
     enum Format: String {
         case calendarHeader = "MMM yyyy"
+        case time = "HH:mm"
     }
     
     static func formatToString(format: Format, from date: Date) -> String {

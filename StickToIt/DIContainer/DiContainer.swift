@@ -128,4 +128,10 @@ final class DIContainer {
     static func makeDataManagementViewModel() -> DataManagementViewModel {
         DataManagementViewModel(repository: shared.userRepository)
     }
+    
+    static func makeNotificationViewModel() -> NotificationViewModel {
+        NotificationViewModel(
+            fetchUserUseCase: shared.makeFetchUserUseCase()
+        )
+    }
 }

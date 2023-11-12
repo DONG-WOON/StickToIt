@@ -156,7 +156,7 @@ final class EditImageViewController: UIViewController {
     
     private func bind() {
         viewModel
-            .transform(input: input.asObserver())
+            .transform(input: input)
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(with: self) { owner, event in
                 switch event {
