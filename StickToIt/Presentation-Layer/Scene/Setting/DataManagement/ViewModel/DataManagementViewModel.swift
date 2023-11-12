@@ -8,16 +8,6 @@
 import Foundation
 import RxSwift
 
-//
-//  SettingViewModel.swift
-//  StickToIt
-//
-//  Created by 서동운 on 10/30/23.
-//
-
-import Foundation
-import RxSwift
-
 final class DataManagementViewModel {
     
     enum Row: Int, CaseIterable {
@@ -67,7 +57,7 @@ final class DataManagementViewModel {
             }
             .disposed(by: disposeBag)
         
-        return output.asObserver()
+        return output
     }
 }
 

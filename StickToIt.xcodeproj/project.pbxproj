@@ -16,6 +16,10 @@
 		720635012AEF72EB00852980 /* UserEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635002AEF72EB00852980 /* UserEditingViewModel.swift */; };
 		720635032AEF74F000852980 /* UserEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635022AEF74F000852980 /* UserEditingViewController.swift */; };
 		720635052AEF84BE00852980 /* DataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720635042AEF84BE00852980 /* DataManagementViewModel.swift */; };
+		720FC37A2AFF7E0C005EB32D /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720FC3792AFF7E0C005EB32D /* NotificationViewModel.swift */; };
+		720FC37C2AFF81CC005EB32D /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720FC37B2AFF81CC005EB32D /* NotificationView.swift */; };
+		720FC37E2B00B66D005EB32D /* NotificationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720FC37D2B00B66D005EB32D /* NotificationViewCell.swift */; };
+		720FC3822B00F83B005EB32D /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720FC3812B00F83B005EB32D /* NotificationManager.swift */; };
 		7217AFFA2AC2AF77002C3112 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFF92AC2AF77002C3112 /* TabBarController.swift */; };
 		7217AFFD2AC2B146002C3112 /* Extension+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */; };
 		7217AFFF2AC2B1A9002C3112 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */; };
@@ -130,6 +134,10 @@
 		720635002AEF72EB00852980 /* UserEditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditingViewModel.swift; sourceTree = "<group>"; };
 		720635022AEF74F000852980 /* UserEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditingViewController.swift; sourceTree = "<group>"; };
 		720635042AEF84BE00852980 /* DataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementViewModel.swift; sourceTree = "<group>"; };
+		720FC3792AFF7E0C005EB32D /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
+		720FC37B2AFF81CC005EB32D /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		720FC37D2B00B66D005EB32D /* NotificationViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewCell.swift; sourceTree = "<group>"; };
+		720FC3812B00F83B005EB32D /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7217AFF92AC2AF77002C3112 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7217AFFC2AC2B146002C3112 /* Extension+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIViewController.swift"; sourceTree = "<group>"; };
 		7217AFFE2AC2B1A9002C3112 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -315,6 +323,7 @@
 		720634F72AEF6F7500852980 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				720FC3792AFF7E0C005EB32D /* NotificationViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -323,6 +332,8 @@
 			isa = PBXGroup;
 			children = (
 				720634FB2AEF725600852980 /* NotificationViewController.swift */,
+				720FC37B2AFF81CC005EB32D /* NotificationView.swift */,
+				720FC37D2B00B66D005EB32D /* NotificationViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -593,6 +604,7 @@
 			children = (
 				729AC4AE2AC9672500E910D5 /* ImageManager.swift */,
 				729AC5242ACEEBAF00E910D5 /* CameraManager.swift */,
+				720FC3812B00F83B005EB32D /* NotificationManager.swift */,
 				72D7D3182ADD2EC80062A60F /* UserDefaultWrapper.swift */,
 			);
 			path = Shared;
@@ -1033,6 +1045,7 @@
 				729AC50D2ACD3F5E00E910D5 /* PaddingView.swift in Sources */,
 				720634FE2AEF727400852980 /* DataManagementViewController.swift in Sources */,
 				729AC4742AC5C32900E910D5 /* DayPlanEntity.swift in Sources */,
+				720FC37A2AFF7E0C005EB32D /* NotificationViewModel.swift in Sources */,
 				729AC4DC2ACBA4D500E910D5 /* CreatePlanView.swift in Sources */,
 				729AC4C12ACAFD2800E910D5 /* GradientCircleView.swift in Sources */,
 				728B494F2ADFFF3C009C1C88 /* Extension+UIColor.swift in Sources */,
@@ -1046,6 +1059,7 @@
 				729AC4C32ACAFD8200E910D5 /* PlanInfoView.swift in Sources */,
 				72FA8DE92AD19AB000F19568 /* PlanRepository.swift in Sources */,
 				729AC4AF2AC9672500E910D5 /* ImageManager.swift in Sources */,
+				720FC37E2B00B66D005EB32D /* NotificationViewCell.swift in Sources */,
 				72EBE3762AF02C950062B94A /* StringKey.swift in Sources */,
 				7278496D2AD5702500433753 /* PlanRepositoryImp.swift in Sources */,
 				720635052AEF84BE00852980 /* DataManagementViewModel.swift in Sources */,
@@ -1096,7 +1110,9 @@
 				72D85FE52AEE071700FCBD2D /* DeletePlanQueryUseCase.swift in Sources */,
 				72A619142AEC098A008ACA84 /* FileManagerError.swift in Sources */,
 				72D85FE92AEE7F9F00FCBD2D /* UpdatePlanUseCase.swift in Sources */,
+				720FC3822B00F83B005EB32D /* NotificationManager.swift in Sources */,
 				72D85FE72AEE1FD200FCBD2D /* PlanQueryRepositoryImp.swift in Sources */,
+				720FC37C2AFF81CC005EB32D /* NotificationView.swift in Sources */,
 				729AC4822AC6F68900E910D5 /* Entity+Mapping.swift in Sources */,
 				72A6190A2AEBFC08008ACA84 /* DiContainer.swift in Sources */,
 				729AC5112ACD4F1200E910D5 /* Extension+DateFormatter.swift in Sources */,

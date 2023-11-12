@@ -66,6 +66,7 @@ enum StringKey {
     static let personalSetting = "personalSetting"
     static let appInfo = "appInfo"
     static let editNickname = "editNickname"
+    static let notification = "notification"
     static let dataManagement = "dataManagement"
     static let versionInfo = "versionInfo"
     static let setting = "setting"
@@ -86,6 +87,10 @@ enum StringKey {
     static let deleteUserErrorMessage = "deleteUserErrorMessage"
     static let certificationFailed = "certificationFailed"
     static let addImageTitle = "addImageTitle"
+    static let localNotificationTitle = "localNotificationTitle"
+    static let localNotificationSubTitle = "localNotificationSubTitle"
+    static let notiTimeTitle = "notiTimeTitle"
+    static let notiSwitchTitle = "notiSwitchTitle"
 }
 
 
